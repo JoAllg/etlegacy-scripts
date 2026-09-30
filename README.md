@@ -113,6 +113,17 @@ picking a class switches to its tab, a reset returns to Base, a mod switch reloa
 that mod. It keeps running across game restarts. Requires `logfile 2` (set in
 `default/cvars.cfg`). Details: `tools/keymap/README.md`.
 
+## Agent skills
+
+The repo ships project skills in `.claude/skills/` (`.agents` links to `.claude`), usable by
+[Claude Code](https://claude.com/claude-code) and every agent that reads `.agents/skills/`
+(`/<name>` or picked up automatically):
+
+| Skill | Use |
+| --- | --- |
+| `keymap` | regenerates `tools/keymap/keymap.html` and names new binds in `labels.json`; after bind, class script or menu layer changes |
+| `vsay-highlight` | colors all vsay texts and echo menus with the `VSAY_*` / `MENU_*` colors from `settings.conf`, previews and changes them, highlights key words; after `tools/voicemenu.py` or new vsay texts |
+
 ## Where things live
 
 | Path | Contents |
