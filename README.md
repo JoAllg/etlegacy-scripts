@@ -50,8 +50,8 @@ the mod folders).
    `user.example.cfg` settings to your `user.cfg` and lists them.
 
    A real `profiles/` folder the game already created in a mod folder (e.g.
-   `~/.etlegacy/legacy/profiles/`) is not replaced, only warned about: that mod keeps using the old
-   profile. Move the folder away and rerun.
+   `~/.etlegacy/legacy/profiles/`) would hide this repo; the script asks to rename it to
+   `profiles.bak_<date>`.
 
 3. Put your player name into `user.cfg` (name + the `PGDN` name cycle) and adjust fps, mouse,
    fov, refresh rate, fullscreen resolution and network rates. It is gitignored.

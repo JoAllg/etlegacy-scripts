@@ -27,7 +27,8 @@
 # 3. Deletes broken symlinks at the top level of each mod directory
 # 4. Symlinks HOMEPATH/profiles -> this repo (the repo can live anywhere); asks before replacing a
 #    folder or a symlink to another path (a folder is renamed to profiles.bak_<date>, not deleted).
-#    Creates mod directories and symlinks into each:
+#    Creates mod directories and symlinks into each (a real profiles folder the game created there
+#    is renamed to profiles.bak_<date> after asking):
 #    profiles -> this repo (engine profile folder: etconfig.cfg, defaultprofile.dat, user.cfg)
 #    profile  -> this repo's PROFILE folder (all cfg exec paths: exec profile/...)
 # 5. Backs up GUID key files to guid_backup/<key>_<date> and symlinks them into the mod directories
@@ -40,7 +41,8 @@
 # - Broken symlinks at the top level of each mod directory are deleted first,
 #   including ones this script did not create
 # - Existing symlinks are replaced to ensure they point to the correct locations
-# - profiles, profile and maps: real files/directories are PRESERVED with orange
+# - profiles: a real directory is renamed to profiles.bak_<date> after asking (kept if declined)
+# - profile and maps: real files/directories are PRESERVED with orange
 #   warning messages; remove them manually if you want to replace them
 # - GUID keys: a real key file in a mod directory is backed up, then replaced by a symlink.
 #   If it differs from guid_backup/<key>, you are asked which one to keep (default: guid_backup)
@@ -336,6 +338,14 @@ link_dir() {
 	fi
 }
 
+# move_aside <path>: asks to rename a real folder at <path> to <path>.bak_<date>; true if <path> is free now
+move_aside() {
+	[ -e "$1" ] && [ ! -L "$1" ] || return 0
+	local backup="$1.bak_$(date +%F_%H%M%S)"
+	echo -e "    ${ORANGE}⚠️  $1 is a real folder, not a link to this repo${NC}"
+	ask "    Move it to ${backup##*/} and link $REPO there? [y/N]" n && mv "$1" "$backup" && echo "    - Moved $1 -> $backup"
+}
+
 # 4. Create mod folders and symlink the profile folders into each
 echo -e "\n${CYAN}📁 Creating mod folders and symlinking profiles...${NC}"
 
@@ -345,14 +355,8 @@ if [ "$(readlink -f "$HOME_LINK")" != "$REPO" ]; then
 	if [ -L "$HOME_LINK" ]; then
 		echo -e "  ${ORANGE}⚠️  $HOME_LINK links to $(readlink "$HOME_LINK"), not this repo${NC}"
 		ask "  Replace it with a link to $REPO? [y/N]" n && link_dir "$REPO" "$HOME_LINK"
-	elif [ -e "$HOME_LINK" ]; then
-		backup="$HOME_LINK.bak_$(date +%F_%H%M%S)"
-		echo -e "  ${ORANGE}⚠️  $HOME_LINK exists and is not this repo${NC}"
-		if ask "  Move it to ${backup##*/} and link $REPO there? [y/N]" n; then
-			mv "$HOME_LINK" "$backup" && echo "    - Moved $HOME_LINK -> $backup" && link_dir "$REPO" "$HOME_LINK"
-		fi
 	else
-		link_dir "$REPO" "$HOME_LINK"
+		move_aside "$HOME_LINK" && link_dir "$REPO" "$HOME_LINK"
 	fi
 fi
 
@@ -360,6 +364,7 @@ for mod in $MODS; do
 	mod_dir="$HOMEPATH/$mod"
 	echo "  Processing mod: $mod"
 	mkdir -p "$mod_dir"
+	move_aside "$mod_dir/profiles"  # a profiles folder the game created there would hide user.cfg
 	link_dir "$REPO" "$mod_dir/profiles"
 	link_dir "$REPO/$PROFILE" "$mod_dir/$PROFILE_LINK"
 done
