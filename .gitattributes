@@ -1,0 +1,7 @@
+# LF everywhere: the engine reads cfg and location files with either line ending
+* text=auto eol=lf
+
+# third-party and extracted game files stay byte-identical
+Others/** -text
+assets/** -text
+guid_backup/** -text

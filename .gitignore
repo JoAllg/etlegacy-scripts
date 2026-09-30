@@ -1,0 +1,27 @@
+# Personal
+user.cfg
+settings.conf
+guid_backup/
+tools/vsaycolors.html
+default/scripts/vsays/vsaycolors.tsv
+default/scripts/vsays/servers/
+
+## etlegacy generated
+default/profile.pid
+default/etconfig.cfg
+
+# Local files
+Others/
+archive/
+assets/
+research/
+TODO.md
+
+.claude/settings.local.json
+CLAUDE.local.md
+
+__pycache__/
+
+# Local WIP
+default/scripts/vsays/vsays_custom.cfg
+default/scripts/vsays/chat_function.cfg
