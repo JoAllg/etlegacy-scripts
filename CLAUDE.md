@@ -28,7 +28,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
    ├─ deploy.sh          setup (settings.conf) + mod-folder symlinks + GUID key backups
    ├─ settings.conf      machine-specific values (fs_homepath, fs_basepath, game binary, profile) and personal preferences (VSAY_* vsay text colors, MENU_* echo menu colors), written by deploy.sh, not in version control; read by the Python tools via tools/settings.py
    ├─ .claude/rules/     path-scoped rules for special files (autoexecs, exec chain, mods, key layers)
-   ├─ docs/              background documentation for Claude/humans
+   ├─ docs/              background documentation for Claude/humans; mirrored to the GitHub wiki by .github/workflows/wiki.yml (Home.md, _Sidebar.md = wiki index/navigation)
    ├─ default/           LIVE profile used in game
    │  ├─ definitions.cfg general definitions (all mods), re-exec'd by F3; state.cfg = start values of state
    │  ├─ cvars.cfg, binds_default.cfg, binds_custom.cfg

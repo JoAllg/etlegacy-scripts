@@ -123,7 +123,7 @@ that mod. It keeps running across game restarts. Requires `logfile 2` (set in
 | `default/scripts/` | class scripts, spawn menu, voicechat, general scripts |
 | `default/mods/<mod>/` | per-mod `autoexec.cfg` and the values that differ per mod |
 | `default/autoexecs/`, `default/maps/` | per-map spawnpoints and location name overrides |
-| `docs/` | game knowledge (`gameplay.md`), load order, scripting patterns, conventions, key names, colors, characters |
+| `docs/` | mirrored to the [wiki](https://github.com/JoAllg/etlegacy-scripts/wiki) on push (`.github/workflows/wiki.yml`): game knowledge (`gameplay.md`), load order, scripting patterns, conventions, key names, colors, characters |
 | `tools/` | keymap renderer, generators for spawnpoints and server voice menus, nitmod stock shield (`tools/README.md`) |
 
 ## Developing
