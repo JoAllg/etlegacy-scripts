@@ -9,8 +9,7 @@ description: Regenerate the keyboard + mouse keymap (tools/keymap/keymap.html) a
 
 ## Steps
 
-1. `python3 tools/keymap/keymap.py --missing` (repeat with `--mod legacy`; mods bind different commands, e.g. `+attack2` vs `weapalt`).
-   Each entry: the command, `keys` where it appears (`F6 -> MOUSE2` = shown on MOUSE2 while hovering F6), `expands` (one alias level), `at` (file:line).
+1. `python3 tools/keymap/keymap.py --missing` (repeat with `--mod legacy`; mods bind different commands, e.g. `+attack2` vs `weapalt`). Each entry: the command, `keys` where it appears (`F6 -> MOUSE2` = shown on MOUSE2 while hovering F6), `expands` (one alias level), `at` (file:line).
 2. For every unlabeled command read `at` (the bind or alias and its comments) when `expands` does not make the purpose obvious. Add `"<command exactly as printed>": "<Label>"` to `labels.json`:
    - 1–2 words, max ~16 chars, English, what the player does, not how (`Med pack`, not `weapon6 hold`).
    - Same action, same name: mod variants (`+attack2` / `weapalt` = `Alt fire`), hold and toggle variants of one feature (`+vstr crouchON crouchOFF` and `vstr crouchswitch` = `Crouch`).

@@ -8,6 +8,7 @@ Standards used in the live scripts. Not enforced everywhere yet — follow them 
   - `bind ...` (active): default is kept
   - `//bind ...`: key is used/overwritten by my own scripts in another cfg
   - `////bind ...`: key is not used at all
+
   When a script takes over a default key, change its line to `//`; when a key is freed, mark it `////`.
 - `binds_custom.cfg`: basic overrides and weapon binds.
 - Feature scripts bind their own keys directly in their block (`bind F8 "vstr soundToggle"`).

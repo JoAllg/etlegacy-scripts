@@ -17,8 +17,7 @@ Renaming `nitmod_2.3.5.pk3` doesn't help: nitmod's `ui/menus.txt` loads ~50 menu
 
 ## Install
 
-The files are game assets, so the pk3 is built from your own `etmain/pak*.pk3` (`BASEPATH` of
-`settings.conf`) and written to `<HOMEPATH>/nitmod/`. `deploy.sh` offers to run it; manually:
+The files are game assets, so the pk3 is built from your own `etmain/pak*.pk3` (`BASEPATH` of `settings.conf`) and written to `<HOMEPATH>/nitmod/`. `deploy.sh` offers to run it; manually:
 
 ```
 python3 tools/stock_shield/stock_shield.py

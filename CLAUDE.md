@@ -115,7 +115,9 @@ Jaymod (final 2.2.0):
 - Site: [https://jaymod.clanfu.org/](https://jaymod.clanfu.org/) ; archived source + doc/: [https://github.com/budjb/jaymod](https://github.com/budjb/jaymod)
 
 etpub: [https://www.etpub.org/docs_client_20100628.html](https://www.etpub.org/docs_client_20100628.html)
+
 silEnT: [https://sites.google.com/site/peyoteet/enemy-territory-resources/mods/silent-mod/client-manual-0-8-2](https://sites.google.com/site/peyoteet/enemy-territory-resources/mods/silent-mod/client-manual-0-8-2)
+
 ETJump: [https://etjump.readthedocs.io/en/latest/client/etjump_cvars.html](https://etjump.readthedocs.io/en/latest/client/etjump_cvars.html) , [https://etjump.readthedocs.io/en/latest/client/client_commands.html](https://etjump.readthedocs.io/en/latest/client/client_commands.html) , source [https://github.com/etjump/etjump](https://github.com/etjump/etjump)
 
 General ET scripting: knowledge summary and guide links in `docs/scripting.md`.

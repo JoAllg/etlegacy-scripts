@@ -40,8 +40,10 @@ Type `/com_hunk` then press `Tab` to show options for similar cvars. Press `Tab`
 ## Commands
 ### +prone
 >I guess you can rather think of it in this way: +prone will always toggle the current prone state, but since it is a +command, you need to release it as well, otherwise you just keep toggling, this is a bit more logical perhaps cause you do not press -prone to stand up, you press +prone
-Same for +activate
-However it is difficult to include +activate in the same execution as +prone?
+>
+> Same for +activate
+>
+> However it is difficult to include +activate in the same execution as +prone?
 
 ## Settings
 Checked against the ET: Legacy source (2026-09) and the decompiled nitmod 2.3.5 `qagame`. Old guides (e.g. [fearless-assassins](https://fearless-assassins.com/forums/topic/92394-somethings-not-right/)) describe vanilla 2.60b and are partly outdated.
@@ -84,4 +86,5 @@ https://te666.forumotion.com/t522-interpreting-the-lagometer-rate-fps-snaps-etc#
 >Advanced Lagometer consists of two lines - bottom and top. The bottom line advances one pixel per each snapshot received from server (by default they are being sent at 20 snapshots per second rate), while the top one advances one pixel per each frame that is rendered by client. Thus, if the machine framerate was 20 per second, both lines - top and bottom - would run at the same speed.
 >
 > Bottom bars correspond to delay before sending a snapshot by a server and receiving it by a client (so called "ping"). The shorter the bar, the smaller the ping was. Red bars mean that the frame has not arrived on time, yellow ones - that the snapshot was suppressed to stay under the rate limit. 
+>
 > Top bars can be drawn in blue or in yellow. While server shapshots are usually received at lower rate as the client framerate, the software interpolates position and movements until it gets an update from a server, when it adjusts own state accordingly. The height of upper bars is proportional to the interpolated time between snapshots received (so as long as they come regularly, it stays below the "zero line" and is drawn in blue), or - if snapshots stop to arrive on time - is extrapolated after the last snapshot expected (then bars crosse the "zero line" and are drawn in yellow). If those bars stay yellow for too long, client is forced to interpolate its frames beyond the "reasonable level" and finally, when the snapshot arrives, the prediction turns out to hardly correspond to the server-side version, which results in a jerky, uncontinuous movement of scenery (obviously lowering the quality of gameplay).
