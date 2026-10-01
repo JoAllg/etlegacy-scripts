@@ -18,13 +18,13 @@ After the header, in this order:
 ```
 // Settings
 exec autoexec_mod.cfg  // this mod's autoexec.cfg, only after a mod switch (fs_game change doesn't re-exec it)
-exec profile/scripts/spawn/generic_spawnpoints.cfg  // generic list first, so the previous map's spawnpoints are gone
 set spawnSelectorMap "vstr spawnSelector3"
-// Spawnpoints, // Echo spawnpoints, // Announce spawnpoints: spawnp*, echosp*, spawnsay* (spawnpsr/-psb come from generic_spawnpoints.cfg; set them only if the map needs other values)
+// Spawnpoints: spawnpsr/-psb (menu: echo list + binds of this map's keys), then spawnp*
+// Echo spawnpoints, // Announce spawnpoints: echosp*, spawnsay*
 echo ^5>>> AUTOEXEC_MAP LOADED!
 ```
 - `exec autoexec_mod.cfg` comes first, so a mod switch reloads the chain before the map's values are set.
-- `generic_spawnpoints.cfg` comes before the spawnpoints: the aliases survive map and mod changes, so otherwise the previous map's would remain.
+- `spawnpsr`/`spawnpsb` bind exactly the keys of the map's `spawnp<k><r|b>` (`"vstr echosp<r|b>; bind 1 vstr spawnp0<r|b>; ..."`): the aliases survive map and mod changes, and `spawnSelector3` unbinds all layer keys first, so a spawnpoint of the previous map is on no key. Adding or removing a spawnpoint by hand means updating the bind list and the `echosp<r|b>` list too. No map autoexec execs `generic_spawnpoints.cfg`.
 - Every `spawnp<k><r|b>` closes the menu itself: `setspawnpt N; vstr resetSpawnSelector; set spawnsay vstr spawnsay<i>; vstr playSelect;`.
 - File name: `autoexec_<map>.cfg` in lowercase.
 
@@ -34,8 +34,9 @@ Two kinds, told apart by the header:
 
 ## `autoexec_default.cfg`
 
-- Same two exec lines, then the fallback `spawnSelectorMap` (`vstr spawnSelector3`; legacy: `spawnmenu` in `mods/legacy/`), last line `echo ^5>>> AUTOEXEC_DEFAULT LOADED!`.
-- Mods that run it after every map file (etpub, silEnT) get an empty `mods/<mod>/autoexec_default.cfg`, because it must not undo the map's settings.
+- `exec autoexec_mod.cfg`, then the fallback `spawnSelectorMap`, last line `echo ^5>>> AUTOEXEC_DEFAULT LOADED!`.
+- `default/autoexecs/autoexec_default.cfg` (`vstr spawnSelector3`) also execs `profile/scripts/spawn/generic_spawnpoints.cfg`, the generic menu that replaces the previous map's; it is the only file that execs it. A mod with its own menu command needs no list (legacy: `spawnmenu` in `mods/legacy/`).
+- Mods that run it after every map file (etpub, silEnT) get a `mods/<mod>/autoexec_default.cfg` without spawnpoints (only `exec autoexec_mod.cfg`), because it must not undo the map's settings.
 
 ## Team autoexecs
 

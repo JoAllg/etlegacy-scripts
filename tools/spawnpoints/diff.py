@@ -6,9 +6,12 @@ in any order (key order is a matter of taste).
 
 Usage: tools/spawnpoints/diff.py [--spawns] [map ...]
        --spawns  ignore label-only differences (compare setspawnpt values only)
+       tools/spawnpoints/diff.py --selftest
 """
+import argparse
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -41,9 +44,8 @@ def menu(path):
     return out
 
 
-def main(args):
-    spawns_only = "--spawns" in args
-    maps = [a.lower() for a in args if not a.startswith("--")]
+def main(maps, spawns_only):
+    maps = [m.lower() for m in maps]
     generated = {p.stem[9:]: p for p in GENERATED.glob("autoexec_*.cfg")}
     live = {p.stem[9:]: p for p in LIVE.glob("autoexec_*.cfg")}
     names = maps or sorted(generated.keys() & live.keys())
@@ -69,5 +71,20 @@ def main(args):
               f"{len(live.keys() - generated.keys())} only live, {len(generated.keys() - live.keys())} only generated")
 
 
+def selftest():
+    with tempfile.NamedTemporaryFile("w", suffix=".cfg", encoding="latin1") as f:
+        f.write('set spawnp0r "setspawnpt 3; vstr resetSpawnSelector"\nset spawnp0b "vstr spawnp0r;"\n'
+                'set spawnp1b ""\nset echosp0r "echo ^31. ^iTunnel (east)"\nset echosp0b "vstr echosp0r"\n')
+        f.flush()
+        got = menu(Path(f.name))
+    assert got == {("r", 0): ("3", "Tunnel (east)"), ("b", 0): ("3", "Tunnel (east)"), ("b", 1): ("-", "")}, got
+    print("selftest ok")
+
+
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("maps", nargs="*", metavar="map")
+    ap.add_argument("--spawns", action="store_true")
+    ap.add_argument("--selftest", action="store_true")
+    a = ap.parse_args()
+    selftest() if a.selftest else main(a.maps, a.spawns)

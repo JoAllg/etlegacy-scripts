@@ -2,6 +2,7 @@
 - [Game knowledge](gameplay.md)
 - [Autoexec behavior](autoexec.md)
 - [Config scripting](scripting.md)
+- [Limitations](limitations.md)
 - [Script conventions](conventions.md)
 - [Commands](commands.md)
 - [nitmod commands](commands_nitmod.md)

@@ -2,8 +2,10 @@
 """Build the nitmod stock shield pk3 from the stock etmain pk3s and install it into the nitmod folder.
 
 Usage: python3 tools/stock_shield/stock_shield.py   (see README.md next to it)
+       python3 tools/stock_shield/stock_shield.py --selftest
 The files are game assets (ET EULA), so the pk3 is built from the local game instead of being shipped.
 """
+import argparse
 import sys
 import zipfile
 from pathlib import Path
@@ -58,5 +60,18 @@ def main():
     print(f"wrote {out} ({len(FILES)} files)")
 
 
+def selftest():
+    """Every listed file exists in the local stock paks (reads only)."""
+    assert len(set(FILES)) == len(FILES), [f for f in FILES if FILES.count(f) > 1]
+    names = set()
+    for p in PAKS:
+        with zipfile.ZipFile(BASEPATH / "etmain" / p) as z:
+            names |= set(z.namelist())
+    assert not set(FILES) - names, sorted(set(FILES) - names)
+    print("selftest ok")
+
+
 if __name__ == "__main__":
-    main()
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--selftest", action="store_true")
+    selftest() if ap.parse_args().selftest else main()

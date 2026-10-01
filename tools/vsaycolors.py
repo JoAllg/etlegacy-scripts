@@ -12,9 +12,9 @@
   done                marks all texts of the todo as reviewed (left plain on purpose)
   --selftest
 """
+import argparse
 import html
 import re
-import sys
 from pathlib import Path
 
 from settings import MENU, PROFILE, REPO, VSAY
@@ -259,11 +259,18 @@ PALETTE = palette()
 
 
 def main():
-    args = sys.argv[1:]
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("command", nargs="?", choices=["status", "preview", "apply", "todo", "done"])
+    ap.add_argument("roles", nargs="*", metavar="role=^c", help="preview only")
+    ap.add_argument("--selftest", action="store_true")
+    a = ap.parse_args()
+    if a.selftest:
+        return selftest()
+    if not a.command or (a.roles and a.command != "preview"):
+        ap.error("one command; role=^c only with preview")
+    args = [a.command, *a.roles]
     colors = dict(VSAY)
     old, old_menu, reviewed = read_record()
-    if args == ["--selftest"]:
-        return selftest()
     if args == ["status"]:
         for r in ROLES:
             print(f"VSAY_{r.upper():<9} {colors[r]}  {PALETTE[idx(colors[r][1])]}" + (f"  (last apply: {old[r]})" if old and old.get(r) != colors[r] else ""))
@@ -289,8 +296,6 @@ def main():
             print(f"{f.relative_to(REPO)}:{n + 1} {cmd} {vsay} {text}")
     elif args == ["done"]:
         write_record(old or colors, old_menu, reviewed | {(cmd, vsay.lower(), plain(text)) for _, _, cmd, vsay, text in todo(colors, reviewed)})
-    else:
-        sys.exit(__doc__)
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # Tools
 
-Optional Python 3 helpers (stdlib only). They read the game paths and color preferences from `settings.conf` (via `settings.py`), so run `deploy.sh` first. Most have a `--selftest`.
+Optional Python 3 helpers (stdlib only). They read the game paths and color preferences from `settings.conf` (via `settings.py`), so run `deploy.sh` first. All have a `--selftest` and reject unknown arguments.
 
 ## keymap/
 

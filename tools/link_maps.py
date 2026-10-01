@@ -9,7 +9,12 @@ in etmain/ (they would override it in every mod), and pk3s with a shader file th
 stock one with other content or breaks the shader parser (see shader_problem).
 Several pk3s with the same map: the newest wins, originals over server re-packs.
 Rerunnable: all symlinks from etmain/ into dlcache/ are replaced.
+
+Usage: tools/link_maps.py
+       tools/link_maps.py --selftest
 """
+import argparse
+import io
 import re
 import sys
 import zipfile
@@ -134,5 +139,24 @@ def main():
     print(f"{len(winners)} map pk3s linked for {len(best)} maps")
 
 
+def selftest():
+    def pk3(**files):
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as z:
+            for name, text in files.items():
+                z.writestr(f"scripts/{name}.shader", text)
+        return buf
+
+    assert tokens(b'a // c\n{ "b c" } /* d */ e') == [b"a", b"{", b'"b c"', b"}", b"e"]
+    stock = {"scripts/common.shader": b"white\n{\n}\n"}
+    assert shader_problem(pk3(x=b"textures/a\r\n{\n\t{\n\t\tmap a.tga\n\t}\n}\n"), stock) is None
+    assert shader_problem(pk3(common=b"white\r\n{\r\n}\r\n"), stock) is None  # stock file, same content
+    assert shader_problem(pk3(common=b"white\n{\nmap x\n}\n"), stock) == "changes stock scripts/common.shader"
+    assert shader_problem(pk3(x=b"Made by me\ntextures/a\n{\n}\n"), stock).startswith("breaks shader parsing in scripts/x.shader at 'Made'")
+    print("selftest ok")
+
+
 if __name__ == "__main__":
-    main()
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--selftest", action="store_true")
+    selftest() if ap.parse_args().selftest else main()

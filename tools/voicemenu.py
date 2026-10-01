@@ -22,8 +22,8 @@ Usage: tools/voicemenu.py <clan> <pk3> [tag]
        tools/voicemenu.py --selftest
 Rerun after the server ships a new pack; the old pages of that clan are replaced.
 """
+import argparse
 import re
-import sys
 import zipfile
 from pathlib import Path
 
@@ -309,11 +309,17 @@ QM_MENU_END''')
 
 
 def main():
-    if sys.argv[1:] == ["--selftest"]:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("clan", nargs="?")
+    ap.add_argument("pk3", nargs="?")
+    ap.add_argument("tag", nargs="?")
+    ap.add_argument("--selftest", action="store_true")
+    a = ap.parse_args()
+    if a.selftest:
         return selftest()
-    if len(sys.argv) not in (3, 4):
-        sys.exit(__doc__)
-    clan, pk3 = sys.argv[1], Path(sys.argv[2]).expanduser()
+    if not a.pk3:
+        ap.error("clan and pk3 are required")
+    clan, pk3 = a.clan, Path(a.pk3).expanduser()
     with zipfile.ZipFile(pk3) as z:
         menu_text = z.read(MENU).decode("latin-1")
         menus, heads = parse(menu_text), titles(menu_text)
@@ -326,7 +332,7 @@ def main():
     out = OUT / clan
     old = read_pages(out)
     kept = {k: text for k, (_, _, text) in old.items() if text}
-    files, new = render(clan, pk3.name, menus, stock_pages(menus, stock_menus), tag=sys.argv[3] if len(sys.argv) == 4 else None,
+    files, new = render(clan, pk3.name, menus, stock_pages(menus, stock_menus), tag=a.tag,
                         texts=texts, kept=kept, heads=heads)
     out.mkdir(parents=True, exist_ok=True)
     for f in out.glob("*.cfg"):

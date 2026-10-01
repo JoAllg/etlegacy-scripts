@@ -1,0 +1,86 @@
+# Limitations of config scripts
+
+What the scripts of this profile cannot do, why, and the workarounds. Syntax and patterns: [Config scripting](scripting.md).
+
+## Scripts cannot read the game state
+
+A cfg script can only run commands and set cvars. It has no conditions and cannot read a cvar, the player state or a server answer (`vstr` only runs the text of a cvar, `src/qcommon/cmd.c` `Cmd_Vstr_f`). Every toggle, cycle and layer therefore keeps its own guess of the state in an alias, and the guess is only right as long as the script is the only thing that changes the state.
+
+### State that goes out of sync
+
+| Script | Guess | Goes wrong when |
+|---|---|---|
+| Prone toggle (`scripts/movement.cfg` `proneToggle`) | prone or standing, with the FOV and crosshair size of that stance | the game ends prone itself: death, jump, double-tap back, water, mounting an MG (`src/game/bg_pmove.c` `PM_CheckProne`); or it refuses to go prone (no room, prone delay). The next press would then prone with the normal FOV; `resetProne` repairs it on the jump key, the kill key and a class change (workaround 5) |
+| Weapon binds (`binds_custom.cfg` `weapon<n>`, `weaponSwitch`) | the weapon in hand, with its FPS, MOUSE1 bind and autoreload | the game switches the weapon: out of ammo, pickup, death, a bank the class does not have, weapon switch by mouse wheel. The kill key resets the settings to those of the primary weapon (`resetWeapon`) |
+| Class keys (`class/cs_backend.cfg`) | team, class and weapon variant | the server refuses or changes it (team full or locked, class or weapon limit, auto balance; not tested in game), or the class is chosen in the limbo menu |
+| Restore aliases (`<cvar>Normal`, e.g. `crosshairSizeNormal`) | the value to return to | another script or the menu changed the cvar without updating the alias (crosshair size cycle), or the server enforces a value |
+| Cvar toggles (HUD, voice sounds, demo recording) | on or off | the value was changed in the options menu or by the server; the recording stopped on its own (leaving the server) |
+
+### Workarounds
+
+Ordered from "cannot go wrong" to "repairs afterwards":
+
+1. **Hold instead of toggle** (`+vstr <on> <off>`): the key is the state, so there is nothing to remember. Used by the crouch key, the quick equipment keys and the stats key. Does not help where the game command itself is a toggle (`+prone` switches the stance on every press).
+2. **Absolute instead of relative commands**: a step sets its values (`cg_fov 90`), never "the other one". Each press of a cycle then leaves a known state even if the previous one was lost. A real cvar with the engine's `toggle`/`cycle` command keeps the state in the game, so it cannot differ from it; this only fits a single cvar without side effects.
+3. **A cycle updates the restore alias it competes with**: the FPS cycle (`scripts/display.cfg`) sets `maxFpsNormal` together with `com_maxfps`, so the weapon binds return to the chosen value. Every cycle over a cvar that has a `<cvar>Normal` alias needs this.
+4. **One reset alias per feature, called from every event the scripts do see** ([Config scripting](scripting.md), "Extension points and shared resets"): `reset<Feature>` puts the guess and the game back to the start state, and `resetToggles` collects them. Events a script sees are its own keys: class and team keys (`classHook`), the kill key, the jump key, `F4`; in legacy also the team and class autoexecs, which run on a respawn after a team or class change ([Autoexec behavior](autoexec.md)). A plain death and respawn is not visible to a script.
+5. **Reset on keys that end the state anyway**: jumping always ends prone, so the jump key resets the prone guess (`proneStand`, `scripts/movement.cfg`); the kill key ends the life, so it runs `resetTemporary` (`scripts/scripts.cfg`: menu layers, toggles, weapon settings). This repairs the guess exactly where the game changed it behind the script's back.
+6. **A manual repair key**: `F4` closes all layers, resets the toggles and releases all `+` commands. Last resort for everything the other points miss.
+
+A new toggle or cycle should name in its comment which of these it relies on.
+
+## Timing depends on the frame rate
+
+`wait n` counts runs of the command buffer (two per client frame), not time, and stops the whole buffer including key presses and releases ([Config scripting](scripting.md), `wait`). A script with waits is tuned for one `com_maxfps` and runs faster or slower at another; while it waits, no other key command is processed.
+
+Workarounds: no wait where a hold key does the job; a countdown that re-queues itself through `+vstr` keeps key commands flowing (grenade auto-throw, `class/cs_classcripts.cfg`); keep waits as short as the action allows.
+
+The waits in the scripts are tuned for `com_maxfps 125`, where `wait n` lasts n × 4 ms (n × 500 / FPS in general):
+
+| Wait | At 125 FPS | Used by | Kind |
+|---|---|---|---|
+| `wait 2`, `wait 3` | 1 to 1.5 frames | quick equipment keys, arty, popups, second wait of the jump | frames: the game needs one frame to take a command, at any FPS |
+| `wait 5` | 20 ms | grenade auto-throw tick (145 ticks = 2.9 s, fuse 4 s) | time |
+| `wait 10` | 40 ms | jump (sprint before the jump), voice chat close | time |
+| `wait 40` | 160 ms | dynamite: weapon switch before `+attack` | time |
+| `wait 50` | 200 ms | team join hook | time |
+| `wait 100` | 400 ms | dynamite: plant, then arm | time |
+
+At another FPS the time waits are wrong by the factor 125 / FPS: at 76 FPS the grenade countdown takes 4.8 s (longer than the fuse), at 250 FPS the dynamite `+attack` comes after 80 ms instead of 160 ms. The FPS cycle (END) and `maxFpsLow` (pistols, sniper mode: 71 FPS in nitmod and jaymod) change the frame rate while playing.
+
+### Suggested: wait aliases that follow the FPS (not implemented)
+
+`wait` takes no variable and scripts cannot calculate, so the time waits become aliases that hold a `wait` of the right length for the current FPS, and the scripts chain them:
+
+- Three units cover every time wait in use: `wait20`, `wait40`, `wait200` (milliseconds). Frame waits (`wait 2`, `wait 3`) stay literal.
+
+| Now (tuned for 125 FPS) | Time | With the aliases |
+|---|---|---|
+| `wait 5` | 20 ms | `vstr wait20` |
+| `wait 10` | 40 ms | `vstr wait40` |
+| `wait 40` | 160 ms | `vstr wait40; vstr wait40; vstr wait40; vstr wait40` |
+| `wait 50` | 200 ms | `vstr wait200` |
+| `wait 100` | 400 ms | `vstr wait200; vstr wait200` |
+
+- One value alias per frame rate sets the FPS and the three waits together, so they cannot differ: `set fpsSet125 "com_maxfps 125; set wait20 wait 5; set wait40 wait 10; set wait200 wait 50"`. The count is ms × FPS / 500, rounded:
+
+| `com_maxfps` | `wait20` | `wait40` | `wait200` |
+|---|---|---|---|
+| 71 | `wait 3` | `wait 6` | `wait 28` |
+| 76 | `wait 3` | `wait 6` | `wait 30` |
+| 125 | `wait 5` | `wait 10` | `wait 50` |
+| 200 | `wait 8` | `wait 16` | `wait 80` |
+| 250 | `wait 10` | `wait 20` | `wait 100` |
+| 333 | `wait 13` | `wait 27` | `wait 133` |
+| 500 | `wait 20` | `wait 40` | `wait 200` |
+
+- `maxFpsNormal` and `maxFpsLow` become `vstr fpsSet<n>`. Everything that changes the frame rate already runs one of the two (weapon binds, sniper mode) or sets `maxFpsNormal` (FPS cycle), so the waits follow without further state: `user.cfg` only chooses the default (`set maxFpsNormal "vstr fpsSet125"`), a step of the FPS cycle runs `set maxFpsNormal vstr fpsSet250; vstr fpsSet250`.
+- Cost: 7 `fpsSet<n>` and 3 wait aliases (cvar limit below).
+- Remaining error: rounding (up to 6 % at 71 FPS for `wait20`), and a frame rate below `com_maxfps` (the waits get longer, as they do now).
+
+## Limits of the engine
+
+- 2048 cvars including every alias (`MAX_CVARS`, `src/qcommon/cvar.c`): nitmod with this profile uses about 1900. Pages with many entries bind their keys directly instead of defining aliases (server voice chat pages).
+- 1024 characters per command line (`MAX_CMD_LINE`), no nested quotes: an alias cannot contain a quoted string, so an action with several commands needs its own alias.
+- `reset <alias>` returns to the first value of the game session, not to the value in the cfg ([Config scripting](scripting.md), `reset`).
+- A server can enforce cvar values; a script does not notice it. `F3` restores the definitions afterwards.

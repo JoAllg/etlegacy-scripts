@@ -28,7 +28,7 @@ Standards used in the live scripts. Not enforced everywhere yet — follow them 
 | `+vstr <feature>ON <feature>OFF`                         | hold press/release aliases                               | `crouchON`/`crouchOFF`, `statisticsON`/`statisticsOFF`                                        |
 | `cycle<Feature>` + `<feature><Value>`                    | manual cycle pointer and steps named by their value      | `cycleCrosshairColor` → `crosshairColorCyan`, `cycleGamma` → `gamma175`, `cycleFPS` → `fps71` |
 | `cycle<Feature>Up` / `Down` + `<feature><Value>`         | bidirectional cycle pointers                             | `cycleCrosshairSizeUp` / `Down` → `crosshairSize15`                                           |
-| `reset<Feature>`                                         | shared cleanup used by every exit path                   | `resetSniper`, `resetToggles`, `resetLayers`, `resetTeamBinds`, `resetVoiceChat`          |
+| `reset<Feature>`                                         | shared cleanup used by every exit path                   | `resetSniper`, `resetProne`, `resetToggles`, `resetLayers`, `resetTemporary`, `resetTeamBinds`, `resetVoiceChat`          |
 | `play<Sound>`                                            | sound command aliases (`scripts/common.cfg`)             | `playSelect`, `playCancel`, `playFilter`                                                      |
 | `null`                                                   | empty no-op alias for disabled hooks                     | `set preJoinHookb vstr null`                                                                  |
 

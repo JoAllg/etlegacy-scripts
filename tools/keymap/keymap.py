@@ -814,7 +814,8 @@ def selftest(mod):
     medic = next(v["keys"] for v in data if v["name"].startswith("Medic"))
     assert medic["MOUSE4"]["c"] == "+vstr weapon6Medpack_ON weapon6Medpack_OFF"
     assert {"1", "7", "TAB"} <= set(base["v"]["a"]), base["v"]
-    assert {"1", "0", "US_EQUALS"} <= set(base["ENTER"]["a"]), base["ENTER"]
+    spawn = base["ENTER"]["a"]  # fueldump axis: 4 spawnpoints, the other number keys are free while the menu is open
+    assert spawn["4"][0][2] == "vstr spawnp3r" and spawn["5"][0][0] == "(unbound)" and "0" not in spawn, spawn
     assert "MOUSE2" in base["F5"]["a"] and base["F5"]["t"] == "cycle", base["F5"]
     scoped = next(v["keys"] for v in data if v["name"].startswith("Covops: fg42"))
     assert "MOUSE3" not in base, base["MOUSE3"]  # sniper mode only with a scope

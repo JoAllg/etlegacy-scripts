@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////////////
 ```
 
-Config, scripts and keybinds for **Wolfenstein: Enemy Territory** on **ET: Legacy**, one script set for every mod (legacy, nitmod, etpub, jaymod, silEnT, ETJump): class scripts, spawnpoint autoexecs, a voicechat menu, weapon-switch and network toggles, plus a keymap tool that renders the live binds as a keyboard overview.
+Config, scripts and keybinds for **Wolfenstein: Enemy Territory** on **ET: Legacy**, one script set for every mod (legacy, nitmod, jaymod; etpub, silEnT and ETJump with default values, not tested in game): class scripts, spawnpoint autoexecs, a voicechat menu, weapon-switch and network toggles, plus a keymap tool that renders the live binds as a keyboard overview.
 
 ## Requirements
 

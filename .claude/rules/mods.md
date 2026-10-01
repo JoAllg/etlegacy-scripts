@@ -16,7 +16,7 @@ One folder per mod; `deploy.sh` symlinks its `autoexec*` and `mod_*` files into 
 | `autoexec_default.cfg` (optional) | only for mods that run it (`docs/autoexec.md`); overrides `default/autoexecs/autoexec_default.cfg` |
 | `README.md` (optional) | differences compared to plain legacy |
 
-- Folders: `legacy/`, `nitmod/` (full set), `jaymod/` (no `autoexec_mod.cfg`), `etpub/` and `silent/` (only an empty `autoexec_default.cfg`, the chain never runs there), `example/` (template, not live, not linked).
+- Folders: `legacy/`, `nitmod/` (full set, tested), `jaymod/` (no `autoexec_mod.cfg`), `etpub/`, `silent/`, `etjump/` (full set with the general default values, not tested in game; etpub and silEnT add an `autoexec_default.cfg` without spawnpoints), `example/` (template, not live, not linked).
 - A change that applies to every mod is made in all folders including `example/`: apart from the mod name and the documented differences the same file is identical everywhere.
 - Header description (below the title): identical for the same file in every mod folder (`example/` included, no "Template:"); mod differences go in comments after the header.
 - Name new dispatch files `mod_<name>.cfg`, with `mod` as the literal word, and exec them by bare name from `default/definitions.cfg`.
