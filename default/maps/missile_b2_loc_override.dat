@@ -2,7 +2,7 @@
 // Map name       C2 Missile B2                        //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 22                //
+// Recommended    cg_locations, cg_locationMaxChars 22 //
 // Last edited    29-06-2009                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

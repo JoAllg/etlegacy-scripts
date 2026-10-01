@@ -2,7 +2,7 @@
 // Map name       Sottevast B3                         //
 // Locations by   Dersaidin                            //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 20                //
+// Recommended    cg_locations, cg_locationMaxChars 20 //
 // Last edited    25-12-2006                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

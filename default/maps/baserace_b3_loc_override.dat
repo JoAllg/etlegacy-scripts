@@ -2,7 +2,7 @@
 // Map name       Base Race (B3)                       //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 30                //
+// Recommended    cg_locations, cg_locationMaxChars 30 //
 // Last edited    28-05-2006                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

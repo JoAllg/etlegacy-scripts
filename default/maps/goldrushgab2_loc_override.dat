@@ -2,7 +2,7 @@
 // Map name       Goldrush-GA                          //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 25                //
+// Recommended    cg_locations, cg_locationMaxChars 25 //
 // Last edited    17-07-2006                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

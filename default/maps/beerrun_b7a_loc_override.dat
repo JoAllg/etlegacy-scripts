@@ -2,7 +2,7 @@
 // Map name       Beer Run (B7a)                       //
 // Locations by   Ifurita                              //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 20                //
+// Recommended    cg_locations, cg_locationMaxChars 20 //
 // Last edited    14-11-2008                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

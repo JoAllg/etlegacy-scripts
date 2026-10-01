@@ -2,7 +2,7 @@
 // Map name       Supply Depot                         //
 // Locations by   KingJackaL                           //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 27                //
+// Recommended    cg_locations, cg_locationMaxChars 27 //
 // Last edited    15-10-2007                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

@@ -2,7 +2,7 @@
 // Map name       [UJE]Vulcano Escape                  //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 25                //
+// Recommended    cg_locations, cg_locationMaxChars 25 //
 // Last edited    18-07-2009                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

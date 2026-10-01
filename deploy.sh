@@ -32,7 +32,8 @@
 #    profiles -> this repo (engine profile folder: etconfig.cfg, defaultprofile.dat, user.cfg)
 #    profile  -> this repo's PROFILE folder (all cfg exec paths: exec profile/...)
 # 5. Backs up GUID key files to guid_backup/<key>_<date> and symlinks them into the mod directories
-# 6. Symlinks map autoexecs and location overrides for AUTOEXEC_MODS
+# 6. Symlinks map autoexecs for AUTOEXEC_MODS and the location overrides to HOMEPATH/etmain/maps
+#    (etmain is in every mod's search path); removes links to the same folder from the mod directories
 # 7. Symlinks the mod-specific autoexec* and mod_* files
 # 8. Offers to build the nitmod stock shield pk3 from the stock etmain pk3s (tools/stock_shield/README.md)
 #
@@ -56,7 +57,7 @@
 # - Common mods: etmain, legacy, etpub, nitmod, silent, jaymod, etjump
 MODS="etmain legacy etpub nitmod silent jaymod etjump"
 
-# AUTOEXEC_MODS: Mods that get the map/team autoexecs of <profile>/autoexecs/ and the maps folder
+# AUTOEXEC_MODS: Mods that get the map/team autoexecs of <profile>/autoexecs/
 # - Every mod that runs event autoexecs (docs/autoexec.md); jaymod runs none
 # - These should be a subset of the MODS list above
 AUTOEXEC_MODS="legacy etpub silent etjump nitmod"
@@ -445,13 +446,24 @@ for mod in $AUTOEXEC_MODS; do
 	else
 		echo -e "    ${RED}⚠️  WARNING:${NC} Autoexecs directory not found"
 	fi
-
-	if [ -d "$REPO/$PROFILE/maps" ]; then
-		link_dir "$REPO/$PROFILE/maps" "$mod_dir/maps"
-	else
-		echo -e "    ${RED}⚠️  WARNING:${NC} Maps directory not found"
-	fi
 done
+
+# etmain is in the search path of every mod, so one link serves all of them
+echo -e "\n${CYAN}🗺️  Symlinking location overrides...${NC}"
+if [ -d "$REPO/$PROFILE/maps" ]; then
+	mkdir -p "$HOMEPATH/etmain"
+	link_dir "$REPO/$PROFILE/maps" "$HOMEPATH/etmain/maps"
+	# a link to the same folder in a mod folder would outrank the mod's own pk3s
+	for mod in $MODS; do
+		mod_maps="$HOMEPATH/$mod/maps"
+		if [ "$mod" != etmain ] && [ -L "$mod_maps" ] && [ "$(readlink -f "$mod_maps")" = "$(readlink -f "$REPO/$PROFILE/maps")" ]; then
+			rm "$mod_maps"
+			echo "    - Removed $mod_maps (etmain/maps covers it)"
+		fi
+	done
+else
+	echo -e "    ${RED}⚠️  WARNING:${NC} Maps directory not found"
+fi
 
 # 7. Symlink mod-specific autoexec files
 # Only autoexec* and mod_* files: the game looks them up in the mod folder (search path), all other cfgs are exec'd via profile/ paths

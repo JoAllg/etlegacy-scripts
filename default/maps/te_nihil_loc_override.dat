@@ -2,7 +2,7 @@
 // Map name       Nihil (TE)                           //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 10                //
+// Recommended    cg_locations, cg_locationMaxChars 10 //
 // Last edited    12-06-2007                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

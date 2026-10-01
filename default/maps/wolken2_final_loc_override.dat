@@ -2,7 +2,7 @@
 // Map name       Battle of Wolken 2                   //
 // Locations by   chr1s                                //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 30                //
+// Recommended    cg_locations, cg_locationMaxChars 30 //
 // Last edited    16-07-2007                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

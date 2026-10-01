@@ -2,7 +2,7 @@
 // Map name       Frost Competition Edition B3         //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 25                //
+// Recommended    cg_locations, cg_locationMaxChars 25 //
 // Last edited    03-03-2007                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

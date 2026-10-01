@@ -2,7 +2,7 @@
 // Map name       Tower and Slider (CTF)               //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 10                //
+// Recommended    cg_locations, cg_locationMaxChars 10 //
 // Last edited    08-08-2006                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

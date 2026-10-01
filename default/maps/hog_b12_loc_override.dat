@@ -2,7 +2,7 @@
 // Map name       Heart of Gold B12                    //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 20                //
+// Recommended    cg_locations, cg_locationMaxChars 20 //
 // Last edited    31-07-2006                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

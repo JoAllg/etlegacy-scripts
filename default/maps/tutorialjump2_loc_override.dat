@@ -2,7 +2,7 @@
 // Map name       Tutorialjump 2                       //
 // Locations by   PALE                                 //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 20                //
+// Recommended    cg_locations, cg_locationMaxChars 20 //
 // Last edited    06-08-2008                           //
 /////////////////////////////////////////////////////////
 2014 -2241 -110 "Allies Start"

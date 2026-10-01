@@ -2,7 +2,7 @@
 // Map name       Pta. Desert Village                  //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 16                //
+// Recommended    cg_locations, cg_locationMaxChars 16 //
 // Last edited    22-10-2007                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

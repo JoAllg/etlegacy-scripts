@@ -2,7 +2,7 @@
 // Map name       SW Battery B3                        //
 // Locations by   Rain                                 //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 27                //
+// Recommended    cg_locations, cg_locationMaxChars 27 //
 // Last edited    07-08-2008                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

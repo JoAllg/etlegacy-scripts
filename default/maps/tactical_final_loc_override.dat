@@ -2,7 +2,7 @@
 // Map name       Tactical                             //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 10                //
+// Recommended    cg_locations, cg_locationMaxChars 10 //
 // Last edited    26-07-2009                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

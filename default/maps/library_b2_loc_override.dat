@@ -2,7 +2,7 @@
 // Map name       Library B2                           //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 21                //
+// Recommended    cg_locations, cg_locationMaxChars 21 //
 // Last edited    14-02-2012                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

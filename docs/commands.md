@@ -103,7 +103,7 @@ nitmod: `+attack2` instead, see `docs/commands_nitmod.md`.
 | `mp_fireteamadmin` | open fireteam admin menu (invite/promote/kick) |
 | `selectbuddy <num>` | select a fireteam buddy slot |
 | `ignore <clientname>` / `unignore <clientname>` | mute / unmute a player's chat |
-| `loc` | print current location name |
+| `loc <open\|close\|save\|add\|rename\|move\|remove\|dump\|reload>` | location editor, cheat protected ([locations.md](locations.md)) |
 | `oinfo` | print objective info |
 
 Chat and voice chat details (`src/game/g_cmds.c` `G_Say`, `G_Voice_f`, `G_Voice`; `src/cgame/cg_servercmds.c` `CG_VoiceChatLocal`):

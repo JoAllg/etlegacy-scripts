@@ -2,7 +2,7 @@
 // Map name       Return To The Radar                  //
 // Locations by   Rain                                 //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 25                //
+// Recommended    cg_locations, cg_locationMaxChars 25 //
 // Last edited    09-04-2007                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

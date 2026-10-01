@@ -2,7 +2,7 @@
 // Map name       Return 2 Goldrush                    //
 // Locations by   Rain                                 //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 25                //
+// Recommended    cg_locations, cg_locationMaxChars 25 //
 // Last edited    12-06-2006                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

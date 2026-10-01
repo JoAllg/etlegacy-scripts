@@ -2,7 +2,7 @@
 // Map name       Den of Lions                         //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 30                //
+// Recommended    cg_locations, cg_locationMaxChars 30 //
 // Last edited    06-07-2009                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

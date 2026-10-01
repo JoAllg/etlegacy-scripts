@@ -2,7 +2,7 @@
 // Map name       Fata Morgana                         //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 15                //
+// Recommended    cg_locations, cg_locationMaxChars 15 //
 // Last edited    07-08-2009                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

@@ -10,7 +10,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
 
 **ET: Legacy source code:** a local checkout of [etlegacy](https://github.com/etlegacy/etlegacy); its path is in `CLAUDE.local.md` (not in version control). The local config of the installed game is in `~/.etlegacy/etlegacy`. If unsure about a behavior (e.g. the docs don't mention it), look it up in that code instead of assuming. Engine: `src/qcommon`, `src/client`; legacy mod: `src/cgame` (client-side cvars/commands, autoexecs), `src/game`, `src/ui`. This source only covers the engine and the **legacy** mod — nitmod, etpro, jaymod etc. are closed/other codebases, so for those rely on their docs or in-game `/cvarlist`/`/cmdlist`, and say when something is unverified.
 
-**Background docs:** read the files in `docs/` for background information before working on related topics (e.g. `docs/autoexec.md`: config load order and which mods support map/team/class autoexecs; `docs/scripting.md`: config scripting syntax, patterns and limits; `docs/conventions.md`: my naming and structure standards; `docs/commands.md`: legacy console commands, chat/vsay syntax; `docs/commands_nitmod.md`: nitmod differences; `docs/gameplay.md`: console, FPS/network settings, recoil/spread, tips; `docs/keybinds.md`: `bind` key names incl. mouse and German layout; `docs/colors.md`: `^` color codes with hex values; `docs/special_chars.md`: ET font character map; `docs/publishing-risks.md`: what still exposes private/third-party content if the repo is published).
+**Background docs:** read the files in `docs/` for background information before working on related topics (e.g. `docs/autoexec.md`: config load order and which mods support map/team/class autoexecs; `docs/scripting.md`: config scripting syntax, patterns and limits; `docs/conventions.md`: my naming and structure standards; `docs/commands.md`: legacy console commands, chat/vsay syntax; `docs/commands_nitmod.md`: nitmod differences; `docs/gameplay.md`: console, FPS/network settings, recoil/spread, tips; `docs/locations.md`: map location files (`default/maps/`), lookup order and format in legacy and nitmod; `docs/keybinds.md`: `bind` key names incl. mouse and German layout; `docs/colors.md`: `^` color codes with hex values; `docs/special_chars.md`: ET font character map; `docs/publishing-risks.md`: what still exposes private/third-party content if the repo is published).
 
 **File rules:** special-case rules (what a file must contain, what it must not set, per-folder procedures) live in `.claude/rules/`, loaded automatically for matching paths. Put new rules of that kind there, not in `docs/` or this file.
 
@@ -19,7 +19,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
 ```
 ~/.etlegacy/              fs_homepath (HOMEPATH in settings.conf)
 ├─ <mod>/                game mod folders (legacy, nitmod, etpub, jaymod, silent, etjump, etmain):
-│                        pk3s/binaries + symlinks into the repo (profiles, profile, autoexec*, maps)
+│                        pk3s/binaries + symlinks into the repo (profiles, profile, autoexec*; etmain: maps)
 └─ profiles -> <repo>    symlink to this repo (deploy.sh)
 
 <repo>/                  THIS REPO, can live anywhere; tools find the game via settings.conf, never via the repo location
@@ -27,7 +27,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
    ├─ user.cfg           personal settings (name, fps, mouse, fov, refresh rate, resolution, net rates), not in version control; user.example.cfg = template
    ├─ deploy.sh          setup (settings.conf) + mod-folder symlinks + GUID key backups
    ├─ settings.conf      machine-specific values (fs_homepath, fs_basepath, game binary, profile) and personal preferences (VSAY_* vsay text colors, MENU_* echo menu colors), written by deploy.sh, not in version control; read by the Python tools via tools/settings.py
-   ├─ .claude/rules/     path-scoped rules for special files (autoexecs, exec chain, mods, key layers)
+   ├─ .claude/rules/     path-scoped rules, one topic per file (autoexecs, exec-chain, layers, mods, maps, class, vsays, cvars-binds, hud, tools, research, docs)
    ├─ docs/              background documentation for Claude/humans; mirrored to the GitHub wiki by .github/workflows/wiki.yml (Home.md, _Sidebar.md = wiki index/navigation)
    ├─ default/           LIVE profile used in game
    │  ├─ definitions.cfg general definitions (all mods), re-exec'd by F3; state.cfg = start values of state
@@ -49,7 +49,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
    └─ guid_backup/       OFF-LIMITS
 ```
 
-Symlinks (`deploy.sh`): `<fs_homepath>/profiles -> <repo>` (convenience, the game does not use it; asks before replacing a folder or other link there); every mod folder gets `profiles -> <repo>` (engine profile folder: etconfig.cfg, defaultprofile.dat, `exec profiles/user.cfg`) and `profile -> <repo>/<PROFILE>` (so cfg paths are written `profile/...`, independent of the profile name); `default/mods/<mod>/autoexec*` and `mod_*` → `<fs_homepath>/<mod>/` (the game finds them through the mod search path, which is how `exec mod_general.cfg` reaches the current mod's file; `mods/example/` is skipped); `default/autoexecs/*` and `default/maps/` → mod folder for `legacy etpub silent etjump nitmod`; `guid_backup/<key>` → mod folders (real key files the game wrote are backed up to `guid_backup/<key>_<date>` first).
+Symlinks (`deploy.sh`): `<fs_homepath>/profiles -> <repo>` (convenience, the game does not use it; asks before replacing a folder or other link there); every mod folder gets `profiles -> <repo>` (engine profile folder: etconfig.cfg, defaultprofile.dat, `exec profiles/user.cfg`) and `profile -> <repo>/<PROFILE>` (so cfg paths are written `profile/...`, independent of the profile name); `default/mods/<mod>/autoexec*` and `mod_*` → `<fs_homepath>/<mod>/` (the game finds them through the mod search path, which is how `exec mod_general.cfg` reaches the current mod's file; `mods/example/` is skipped); `default/autoexecs/*` → mod folder for `AUTOEXEC_MODS` (`legacy etpub silent etjump nitmod`); `default/maps/` → `<fs_homepath>/etmain/maps` (etmain is in every mod's search path, so one link serves all mods; `docs/locations.md`); `guid_backup/<key>` → mod folders (real key files the game wrote are backed up to `guid_backup/<key>_<date>` first).
 
 ## Only the exec chain is live
 

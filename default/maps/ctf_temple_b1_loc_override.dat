@@ -2,7 +2,7 @@
 // Map name       CTF Temple Beta                      //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 15                //
+// Recommended    cg_locations, cg_locationMaxChars 15 //
 // Last edited    06-08-2008                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////

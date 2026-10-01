@@ -5,6 +5,7 @@
 - [Script conventions](conventions.md)
 - [Commands](commands.md)
 - [nitmod commands](commands_nitmod.md)
+- [Location files](locations.md)
 - [Key names](keybinds.md)
 - [Color codes](colors.md)
 - [Special characters](special_chars.md)

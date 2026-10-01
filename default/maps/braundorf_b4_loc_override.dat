@@ -2,8 +2,8 @@
 // Map name       Braundorf (B4)                       //
 // Locations by   antman                               //
 // Modified by    antman                               //
-// Recommended    b_locationMaxChars 26                //
-// Last edited    20-10-2009                           //
+// Recommended    cg_locations, cg_locationMaxChars 26 //
+// Last edited    10-10-2010                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 1916 1461 128 "^1Bunker Controls"
