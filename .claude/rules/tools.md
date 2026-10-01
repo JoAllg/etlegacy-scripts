@@ -13,7 +13,7 @@ What each tool does and its usage line: `tools/README.md` and the module docstri
 - Python 3, standard library only, no new dependencies.
 - Machine paths and preferences come only from `settings.conf` through `tools/settings.py` (`HOMEPATH`, `BASEPATH`, `GAME_BIN`, `PROFILE`, `REPO`, `VSAY`, `MENU`, ...): never hard-code a path, never derive the game folder from the repo location. Scripts in a subfolder add `tools/` to `sys.path` first.
 - A new setting needs three places: `tools/settings.py`, its detection/default in `deploy.sh` (only missing values are appended, existing ones never changed), and the `settings.conf` line in `CLAUDE.md`.
-- cfg, location and pk3 text files are not UTF-8: a tool that writes them back reads and writes `latin1`, so ET font characters (`docs/special_chars.md`) survive.
+- cfg, location and pk3 text files have no fixed encoding: classic mods draw 8-bit bytes, legacy decodes UTF-8 (`docs/special_chars.md`). A tool that writes them back reads and writes `latin1`, which keeps every byte as it is; UTF-8 would re-encode the bytes above 0x7F.
 - Every tool with logic has a `--selftest` (plain `assert`s, prints `selftest ok`): run it after a change and extend it for new logic. `ponytail:` comments mark deliberate shortcuts with their ceiling.
 - Tools are rerunnable: a rerun keeps what the user edited (vsay texts, the settings block of a map autoexec) and reports what it added or removed.
 - A new tool gets a section in `tools/README.md` and a line in the `CLAUDE.md` folder tree; the usage stays in the docstring.

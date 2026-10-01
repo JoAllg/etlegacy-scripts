@@ -296,7 +296,7 @@ def main(args):
         result = analyse(ents, loc)
         if result is None or not any(result[t][0] for t, *_ in TEAMS):
             continue
-        (OUT / f"autoexec_{mapname.lower()}.cfg").write_text(render(mapname, title, pk3.name, result))
+        (OUT / f"autoexec_{mapname.lower()}.cfg").write_text(render(mapname, title, pk3.name, result), encoding="latin1")
         written += 1
     print(f"{written} autoexecs written to {OUT}")
 

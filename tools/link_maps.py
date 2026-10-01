@@ -13,6 +13,7 @@ Rerunnable: all symlinks from etmain/ into dlcache/ are replaced.
 import re
 import sys
 import zipfile
+from pathlib import Path
 
 from settings import BASEPATH, HOMEPATH
 

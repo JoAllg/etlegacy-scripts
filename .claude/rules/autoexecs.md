@@ -39,7 +39,7 @@ Two kinds, told apart by the header:
 
 ## Team autoexecs
 
-- `autoexec_axis.cfg` / `autoexec_allies.cfg` set `spawnSelector4` (`vstr spawnpsr` / `vstr spawnpsb`) and reset the post-join hooks.
+- `autoexec_axis.cfg` / `autoexec_allies.cfg` set `spawnSelector4` (`vstr spawnpsr` / `vstr spawnpsb`). No hook resets: legacy runs them on the first spawn and after every `vid_restart` (`src/cgame/cg_playerstate.c` `CG_Respawn`), which would re-arm a join hook that just ran.
 - `autoexec_spectator.cfg` runs `vstr ta_Spectator` (spectator binds, e.g. SPACE plain jump). Legacy runs team autoexecs from the first snapshot too (`cg_snapshot.c` → `CG_Respawn`), so it also covers server join.
 
 ## All autoexecs

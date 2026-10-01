@@ -34,7 +34,6 @@ OUT = REPO / PROFILE / "scripts/vsays/servers"
 EXEC = "profile/scripts/vsays/servers"  # the profile link of deploy.sh in each mod folder
 MENU = "ui/wm_quickmessageAlt.menu"
 KEYS = "1234567890"
-PAGE_KEYS = [*KEYS, "TAB"]  # keys a page unbinds when it doesn't use them
 STOCK = [HOMEPATH / "etmain/pak0.pk3", BASEPATH / "etmain/pak0.pk3"]
 COLORS = {"vsay_team": VSAY["team"], "vsay": VSAY["global"], "punct": VSAY["punct"]}
 
@@ -108,7 +107,7 @@ def read_pages(folder):
     """{(cmd, vsay): (page, key, text or None)} of the pages a previous run wrote."""
     pages = {}
     for f in sorted(folder.glob("*.cfg")):
-        for key, cmd, vsay, text in re.findall(r'^bind (\S+) "(vsay(?:_team)?) (\w+)(?: (.*?))?; vstr resetVoiceChat"$', f.read_text(), re.M):
+        for key, cmd, vsay, text in re.findall(r'^bind (\S+) "(vsay(?:_team)?) (\w+)(?: (.*?))?; vstr resetVoiceChat"$', f.read_text(encoding="latin1"), re.M):
             pages.setdefault((cmd, vsay.lower()), (f.name, key, text or None))
     return pages
 
@@ -245,9 +244,8 @@ def render(clan, pk3name, menus, stock={}, root="wm_quickmessageAlt", tag=None, 
             binds.append(line)
             if sub:
                 todo.append((sub, re.sub(r"^(\^?\w?\d+\^?\w?\.|TAB)\s*", "", label).strip()))
-        used = {b.split()[1] for b in binds}
-        binds += [f"unbind {k}" for k in PAGE_KEYS if k not in used]  # no action of the parent page stays on the key
-        files[name + ".cfg"] = "\n".join(lines + binds) + "\n"
+        # unbindNumbers (binds_custom.cfg) frees every layer key first, so no action of the parent page stays on a key
+        files[name + ".cfg"] = "\n".join(lines + ["vstr unbindNumbers"] + binds) + "\n"
     return files, vsays
 
 
@@ -303,7 +301,8 @@ QM_MENU_END''')
     assert [v for v, _ in extra] == ["E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "EGV"], extra
     add_extra(menus, "x", extra)
     files, _ = render("x", "x.pk3", menus, stock, texts=texts, colors=col, menu_colors=mc)
-    assert f'bind TAB "exec {EXEC}/x/extra1.cfg"' in files["x.cfg"] and "unbind TAB" in files["fun.cfg"] and "unbind 0" in files["x.cfg"]
+    assert f'bind TAB "exec {EXEC}/x/extra1.cfg"' in files["x.cfg"] and "unbind TAB" not in files["fun.cfg"]
+    assert files["fun.cfg"].index("\nvstr unbindNumbers\n") < files["fun.cfg"].index("\nbind 1 "), files["fun.cfg"]
     assert 'bind 1 "vsay EGV ^ltext egv; vstr resetVoiceChat"' in files["extra2.cfg"] and f'bind TAB "exec {EXEC}/x/extra1.cfg"' in files["extra2.cfg"]
     assert 'echo "[x] ^8More sounds (not in the server menu):"' in files["extra1.cfg"], files["extra1.cfg"]
     print("selftest ok")
@@ -333,7 +332,7 @@ def main():
     for f in out.glob("*.cfg"):
         f.unlink()
     for name, text in files.items():
-        (out / name).write_text(text)
+        (out / name).write_text(text, encoding="latin1")
     print(f"{out.relative_to(REPO)}: {len(files)} pages, {len(extra)} vsays not in the server menu: {' '.join(v for v, _ in extra)}")
     print("\n".join(report(old, new)) if old else f"{len(new)} vsays")
 

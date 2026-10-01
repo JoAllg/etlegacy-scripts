@@ -14,7 +14,7 @@ The client looks in `maps/` of the mod search path and takes the first file it f
 | 2 | `maps/<map>_loc_override.dat` | yes | yes | replaces the file the map ships |
 | 3 | `maps/<map>_loc.dat` | yes | yes | shipped by the mapper in the map pk3 |
 
-- `<map>` is the map name as the server reports it; on Linux the file name must match its case (`StarGate_1945_loc_override.dat`).
+- `<map>` is the lowercase map name in legacy: `CG_LoadObjectiveData` lowercases the name the server reports in place (`src/cgame/cg_main.c`, `Q_strlwr(cgs.rawmapname)`), and it runs before `CG_LoadLocations`. A loose file is opened by its exact name on Linux, so `stargate_1945_loc_override.dat` is found and `StarGate_1945_loc_override.dat` is not. Whether nitmod lowercases the name is unverified, so `default/maps/` keeps a link in the reported case for such maps.
 - Files are not merged: the first file found supplies all locations of the map.
 - Loose `.dat` files are also read on pure servers, so the overrides work on every server.
 - `deploy.sh` symlinks `default/maps/` to `<fs_homepath>/etmain/maps`. `etmain` is in the search path of every mod, so this one link serves all of them. A `_loc_override.dat` of the same map in the mod folder or its pk3s (legacy's own, a server pack) is found first and wins; a `_loc.dat` anywhere loses, because the override name is looked up first.

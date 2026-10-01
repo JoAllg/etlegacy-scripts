@@ -10,7 +10,7 @@
   "+objectives": "Objectives",
   "+reload": "Reload",
   "+scores": "Scores",
-  "+sprint": "Sprint",
+  "+vstr sprintON sprintOFF": "Sprint",
   "+zoom": "Binoculars",
   "+vstr airstrikeON airstrikeOFF": "Air strike",
   "+vstr autosprintON autosprintOFF": "Fire + Sprint",
