@@ -28,6 +28,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
    ├─ defaultprofile.dat active profile name ("default")
    ├─ user.cfg           personal settings (name, fps, mouse, fov, refresh rate, resolution, net rates), not in version control; user.example.cfg = template
    ├─ deploy.sh          setup (settings.conf) + mod-folder symlinks + GUID key backups
+   ├─ play.sh            starts the game (arguments go to the game): deploy.sh without questions, tools/link_maps.py, tools/spawnpoints/spawnpoints.py, then servermenu.sh + keymap-live.sh in the background until the game exits (only tool errors are printed, the game's output is hidden); play32.sh = the same with the 32-bit client (GAME_BIN_I386)
    ├─ settings.conf      machine-specific values (fs_homepath, fs_basepath, game binary, profile) and personal preferences (VSAY_* vsay text colors, MENU_* echo menu colors), written by deploy.sh, not in version control; read by the Python tools via tools/settings.py
    ├─ .claude/rules/     path-scoped rules, one topic per file (autoexecs, exec-chain, layers, mods, maps, class, vsays, cvars-binds, hud, tools, research, docs)
    ├─ docs/              background documentation for Claude/humans; mirrored to the GitHub wiki by .github/workflows/wiki.yml (Home.md, _Sidebar.md = wiki index/navigation)

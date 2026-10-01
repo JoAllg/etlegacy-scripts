@@ -5,6 +5,8 @@ paths:
   - "deploy.sh"
   - "keymap-live.sh"
   - "servermenu.sh"
+  - "play.sh"
+  - "play32.sh"
 ---
 
 # Tools (Python helpers, deploy.sh)

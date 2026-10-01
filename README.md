@@ -45,6 +45,13 @@ Windows support is not planned, but only the setup is Linux-specific: the cfgs r
 
 4. Start the game. The profile is `default`; the mod's `autoexec.cfg` runs the whole chain.
 
+   ```sh
+   ./play.sh [game arguments]    # e.g. ./play.sh +set fs_game nitmod +connect <ip>
+   ./play32.sh [game arguments]  # 32-bit client, for i386-only mods
+   ```
+
+   `play.sh` reruns `deploy.sh` (without questions: each takes its safe default) , `tools/link_maps.py` and `tools/spawnpoints/spawnpoints.py`, then starts the game with the [server menu](#server-menu) helper and the [live keymap](#live-view-while-playing) next to it; both stop when the game exits. The terminal shows the warnings of these tools, not the game's output (that is in `<fs_homepath>/<mod>/etconsole.log`).
+
 ## In game
 
 - `F3` re-execs the definitions (after a server enforced its own values); `F1` is the full reset.
