@@ -24,7 +24,7 @@ set spawnSelectorMap "vstr spawnSelector3"
 echo ^5>>> AUTOEXEC_MAP LOADED!
 ```
 - `exec autoexec_mod.cfg` comes first, so a mod switch reloads the chain before the map's values are set.
-- `spawnpsr`/`spawnpsb` bind exactly the keys of the map's `spawnp<k><r|b>` (`"vstr echosp<r|b>; bind 1 vstr spawnp0<r|b>; ..."`): the aliases survive map and mod changes, and `spawnSelector3` unbinds all layer keys first, so a spawnpoint of the previous map is on no key. Adding or removing a spawnpoint by hand means updating the bind list and the `echosp<r|b>` list too. No map autoexec execs `generic_spawnpoints.cfg`.
+- `spawnpsr`/`spawnpsb` bind exactly the keys of the map's `spawnp<k><r|b>` (`"vstr echosp<r|b>; bind 1 vstr spawnp0<r|b>; ..."`): the aliases survive map and mod changes, and `spawnSelector4` unbinds the number row first, so a spawnpoint of the previous map is on no key. Adding or removing a spawnpoint by hand means updating the bind list and the `echosp<r|b>` list too. No map autoexec execs `generic_spawnpoints.cfg`.
 - Every `spawnp<k><r|b>` closes the menu itself: `setspawnpt N; vstr resetSpawnSelector; set spawnsay vstr spawnsay<i>; vstr playSelect;`.
 - File name: `autoexec_<map>.cfg` in lowercase.
 
@@ -40,7 +40,7 @@ Two kinds, told apart by the header:
 
 ## Team autoexecs
 
-- `autoexec_axis.cfg` / `autoexec_allies.cfg` set `spawnSelector4` (`vstr spawnpsr` / `vstr spawnpsb`). No hook resets: legacy runs them on the first spawn and after every `vid_restart` (`src/cgame/cg_playerstate.c` `CG_Respawn`), which would re-arm a join hook that just ran.
+- `autoexec_axis.cfg` / `autoexec_allies.cfg` set `spawnSelector4` (`vstr unbindNumberRow; vstr spawnpsr` / `...spawnpsb`: nothing is unbound before a team menu exists, TAB keeps the scores). No hook resets: legacy runs them on the first spawn and after every `vid_restart` (`src/cgame/cg_playerstate.c` `CG_Respawn`), which would re-arm a join hook that just ran.
 - `autoexec_spectator.cfg` runs `vstr ta_Spectator` (spectator binds, e.g. SPACE plain jump). Legacy runs team autoexecs from the first snapshot too (`cg_snapshot.c` → `CG_Respawn`), so it also covers server join.
 
 ## All autoexecs

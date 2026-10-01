@@ -9,7 +9,6 @@ default/scripts/vsays/servers/
 ## etlegacy generated
 default/profile.pid
 default/etconfig.cfg
-default/etconfig.cfg.backup
 
 # Local files
 Others/

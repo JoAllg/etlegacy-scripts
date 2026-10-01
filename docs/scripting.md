@@ -120,7 +120,9 @@ Examples: weapon binds in `binds_custom.cfg`, class bindings (`cs_*` aliases) in
 One key opens a mode that rebinds a group of keys (e.g. number row) and prints the options; selecting an option or pressing the opener again restores the normal binds. The opener re-points itself to its OFF state while the mode is open.
 ```
 bind ENTER "vstr spawnSelector"
-set spawnSelector3      "vstr echospr; vstr bindNumbersSpawnpsr; set spawnSelector3 vstr spawnSelector3OFF"
+set spawnSelector3      "vstr spawnSelector4; set spawnSelector3 vstr spawnSelector3OFF"
+set spawnSelector4      "vstr unbindNumberRow; vstr spawnpsr"
+set spawnpsr            "vstr echospr; bind 1 vstr spawnp0r; bind 2 vstr spawnp1r"
 set spawnSelector3OFF "vstr resetSpawnSelector; vstr playCancel"
 set resetSpawnSelector "vstr reBindNumbers; reset spawnSelector3"
 set spawnp1r "setspawnpt 1; vstr resetSpawnSelector"
@@ -137,7 +139,7 @@ set spawnSelector2 "vstr spawnSelectorMap" // spawnSelectorMap is set only by au
 set spawnSelector3 "vstr spawnSelector4"   // mode open/close
 // spawnSelector4: team list, set only by autoexec_axis/allies.cfg ("vstr spawnpsr" / "vstr spawnpsb"), undefined before
 ```
-Map autoexecs set `spawnSelectorMap "vstr spawnSelector3"`, `autoexec_default.cfg` sets the fallback (legacy: `spawnmenu`). Only autoexecs set it (same for `spawnSelector4`, set by `autoexec_axis/allies.cfg`), because `F3` and a mod switch re-exec the cfg chain after the autoexecs: a value from the cfgs would overwrite the current map's menu. Same for the spawnpoint aliases (`spawnp*`, `echosp*`, `spawnsay*`): each autoexec first execs the generic `scripts/spawn/generic_spawnpoints.cfg`, so no values from the previous map remain.
+Map autoexecs set `spawnSelectorMap "vstr spawnSelector3"`, `autoexec_default.cfg` sets the fallback (legacy: `spawnmenu`). Only autoexecs set it (same for `spawnSelector4`, set by `autoexec_axis/allies.cfg`), because `F3` and a mod switch re-exec the cfg chain after the autoexecs: a value from the cfgs would overwrite the current map's menu. Same for the spawnpoint aliases (`spawnp*`, `echosp*`, `spawnsay*`) and the menu (`spawnpsr`/`spawnpsb`): each map autoexec binds only its own keys, so values left from the previous map are on no key ([Autoexec behavior](autoexec.md)).
 
 ### State-dependent dispatch and guards
 A generic alias is re-pointed to a context-specific implementation when state changes; until then it points to a guard that explains what's missing.
