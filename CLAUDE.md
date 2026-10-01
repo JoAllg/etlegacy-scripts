@@ -6,6 +6,8 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
 
 **Always ask the user** for design decisions and whenever anything is unclear — in addition to doing the research yourself, not instead of it.
 
+**Public repo:** this repo is public on GitHub. Never commit local paths, keys, GUID files, personal names or other personal data; they belong in the gitignored files (`user.cfg`, `settings.conf`, `CLAUDE.local.md`), versioned files use placeholders (`<fs_homepath>`, `<repo>`).
+
 **Comments in cfg/scripts:** concise. Never describe progress or history (what was there before, what changed). Only explain *why* it is done this way (which may be the reason for a change).
 
 **ET: Legacy source code:** a local checkout of [etlegacy](https://github.com/etlegacy/etlegacy); its path is in `CLAUDE.local.md` (not in version control). The local config of the installed game is in `~/.etlegacy/etlegacy`. If unsure about a behavior (e.g. the docs don't mention it), look it up in that code instead of assuming. Engine: `src/qcommon`, `src/client`; legacy mod: `src/cgame` (client-side cvars/commands, autoexecs), `src/game`, `src/ui`. This source only covers the engine and the **legacy** mod — nitmod, etpro, jaymod etc. are closed/other codebases, so for those rely on their docs or in-game `/cvarlist`/`/cmdlist`, and say when something is unverified.

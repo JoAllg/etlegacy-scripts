@@ -190,6 +190,24 @@ set forwardoff "-forward; vstr backing; set forwarding set cl_noTaunt 0"
 ```
 Example: `scripts/movement.cfg` movement script (no blocked movement when opposite directions overlap).
 
+### Live data from an external tool (generated cfg)
+A script cannot read anything outside the game, a program running next to it can: it rewrites a cfg at an interval, and a static script `exec`s that file on a key. `exec` reads the file from disk on every call (`src/qcommon/cmd.c` `Cmd_Exec_f`), so new content needs no reload.
+```
+// scripts/servermenu.cfg (static, in the exec chain)
+set serverMenuPage "exec profile/scripts/servers/p7_0.cfg"
+
+// scripts/servers/p7_0.cfg (generated)
+echo "^31. ^746+0/45  <server name>  legacy  radar  55ms"
+bind 1 "vstr resetServerMenu; connect <ip:port>"
+bind TAB "exec profile/scripts/servers/p7_0.cfg"
+```
+- The generated file holds only data (echoes, binds) and calls existing aliases; behavior stays in the static cfg, so a stale or missing file breaks nothing.
+- The game reads the file only at the `exec`: what is shown is a snapshot, refreshing is another `exec` (here `TAB`).
+- The tool writes `<name>.tmp` and renames it over the target, so an `exec` never runs a half-written file.
+- Foreign text (server names) is executed as commands: strip `"`, `;` and line breaks before writing it.
+
+Example: server menu (`tools/servermenu.py`, `scripts/servermenu.cfg`).
+
 ### Feedback
 Every state change plays a menu sound (`vstr playSelect` / `vstr playCancel`, defined in `scripts/common.cfg`) and echoes the new state, so the result is visible without opening the console.
 
