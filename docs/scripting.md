@@ -127,7 +127,7 @@ set spawnp1r "setspawnpt 1; vstr resetSpawnSelector"
 ```
 Examples: `scripts/spawnscript.cfg`, `scripts/voicechat.cfg`. The restore alias (`reBindNumbers`, `binds_custom.cfg`, shared by all layers) must rebind every key a layer uses. Every exit path (opener, option, `DEL`) closes the layer through one `reset<Layer>` alias; `resetLayers` runs all of them and every opener runs it first, so only one layer is open at a time.
 
-A layer with many pages can bind its keys in exec'd page files instead of aliases (`vsays/servers/<clan>/*.cfg`), which costs no cvars (`MAX_CVARS` 2048, nitmod already uses ~1900).
+A layer with many pages binds its keys in page files exec'd when opened instead of aliases per page (`vsays/chat/*.cfg`, `vsays/servers/<clan>/*.cfg`). Aliases a page needs are shared by all pages and redefined by each (`vsay1`..`vsay0`), so the cvar count does not grow with the pages: the engine stops with `Too many cvars` at `MAX_CVARS` (2048), and a hosted nitmod game registers ~1000 of its own, plus three per connected client.
 
 ### Override chain
 A key calls level 1, which by default forwards to level 2, and so on. Other cfgs replace a single level (mod cfg, map autoexec, team state) without knowing the rest.

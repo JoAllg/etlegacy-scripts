@@ -11,7 +11,7 @@ Valid for nitmod 2.3.5. nitmod is closed-source, so this is based on its live `/
 - **Spectator command:** `team s`, not `team spectator`.
 - **Minimum FOV:** `cg_fov 90` (legacy allows down to 75).
 - **Class commands:** different weapon IDs than legacy — see `default/mods/nitmod/mod_classcommands.cfg`.
-- **Chat shortcuts:** adds vsay shortcuts via `scripts/vsays/chat_shortcuts.cfg` (legacy doesn't exec this file).
+- **Chat shortcuts:** adds vsay shortcuts via `scripts/vsays/chat_shortcuts.cfg` and the `scripts/vsays/chat/*_shortcuts.cfg` pages it opens (legacy doesn't exec these files).
 - **`class`** takes no letter-code argument the way legacy's `class <s|m|e|f|c>` does — nitmod's own class scripts drive class choice through the `b_*`/`r_*` aliases instead (see `classKeysAllies`, `teamAllies`/`teamAxis` in `scripts/class/cs_backend.cfg`). `setclass` also exists as a separate command; neither's exact syntax is confirmed (no source, no usage string captured).
 
 ## Chat and voice chat syntax
