@@ -65,8 +65,8 @@ The engine execs `autoexec.cfg` from the mod folder at startup (details: `docs/a
 │   ├─ scripts/scripts.cfg, scripts/movement.cfg, scripts/display.cfg
 │   ├─ scripts/classcript.cfg  → scripts/class/cs_*.cfg
 │   ├─ scripts/spawnscript.cfg
-│   ├─ scripts/voicechat.cfg   → scripts/vsays/chat.cfg, chat_custom.cfg, vsays_custom.cfg
-│   │                            (vsays/servers/<clan>/*.cfg: server voice chat pages, exec'd at runtime when opened)
+│   ├─ scripts/voicechat.cfg   → scripts/vsays/chat.cfg, vsays_custom.cfg
+│   │                            (vsays/chat/*.cfg, vsays/servers/<clan>/*.cfg: voice chat pages, exec'd at runtime when opened)
 │   ├─ server/server.cfg
 │   ├─ scripts/servermenu.cfg    # (scripts/servers/p12_<n>.cfg, p7_<n>.cfg: server menu pages written by tools/servermenu.py, exec'd at runtime when opened)
 │   ├─ exec mod_general.cfg        # = mods/<mod>/mod_general.cfg (symlink, mod search path), overrides the general values

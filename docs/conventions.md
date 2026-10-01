@@ -21,7 +21,7 @@ Standards used in the live scripts. Not enforced everywhere yet — follow them 
 | Pattern                                                  | Meaning                                                  | Examples                                                                                      |
 | -------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | `bind<Key><Script>`                                      | value is a `bind` command; `vstr` it to (re)bind the key | `bindMouse2Weapalt`, `bindLeftaltCrouch`, `bindLessAirstrike`, `bindSpaceJump`            |
-| `bindNumbers<Menu>`                                      | binds a group of keys for a menu layer                   | `bindNumbersCategories`, `bindNumbersSpawnpsr`                                                |
+| `bindNumbers<Menu>`                                      | binds a group of keys for a menu layer                   | `bindWeapons`, `reBindNumbers`                                                             |
 | `set<Thing>`                                             | sets cvars / a setting when `vstr`'d                     | `setPopupsMenu`, `setPopupsNormal`, `setTeamSpectator` (mod-overridable commands)            |
 | `<cvar>Normal` / `Low` / `Higher` / `Sniper` / `Default` | value alias: full `cvar value` command                   | `fovNormal`, `fovLow`, `pitchSniper`, `maxFpsLow`, `nameDefault`                              |
 | `<feature>Toggle` + `<feature>ON` / `OFF`                | toggle pointer and its states                            | `sniperToggle`, `soundToggle`, `hudToggle`                                                    |
@@ -33,7 +33,7 @@ Standards used in the live scripts. Not enforced everywhere yet — follow them 
 | `null`                                                   | empty no-op alias for disabled hooks                     | `set preJoinHookb vstr null`                                                                  |
 
 
-Menu layers (voicechat, spawn selector): `chat<Category>` opens a category (echo + bind), `echo<Item>` prints one line, `c<Cat><n>` is the key action, `vsay<Cat><n>` holds the vsay text.
+Menu layers (voicechat, spawn selector): `chat<Category>` opens a category, `echo<Item>` prints one line. A voice chat page is a file (`scripts/vsays/chat/`, `vsays/servers/<clan>/`) exec'd when opened, in three blocks: `// Vsays` (`set vsay<key> "vsay <id> <text>"`, nothing else on the line), `// Echos`, `// Binds` (`bind <key> "vstr vsay<key>; vstr resetVoiceChat"`). All pages share the aliases `vsay1`..`vsay0` (cycle steps `vsay<n>a` / `b`, pointer `cycleVsay<Name>` in `vsays/chat.cfg`).
 
 Team/class (`scripts/classcript.cfg`, `scripts/class/`):
 

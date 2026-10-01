@@ -22,7 +22,7 @@ python3 tools/spawnpoints/diff.py [--spawns] [map ...]
 
 ## voicemenu.py
 
-Copies a server's quick chat menu (`V`) from its pk3 into voicechat pages in `default/scripts/vsays/servers/<clan>/`. Pages that duplicate the stock menu are left out; custom vsays the menu leaves out go on extra pages behind `TAB`. A rerun after a new server pack keeps edited texts and reports added and removed vsays.
+Copies a server's quick chat menu (`V`) from its pk3 into voicechat pages in `default/scripts/vsays/servers/<clan>/`. Pages that duplicate the stock menu are left out; custom vsays the menu leaves out go on extra pages behind `TAB`. The pages have the format of the stock pages (`default/scripts/vsays/chat/`) and share their `vsay<key>` aliases. A rerun after a new server pack keeps edited texts and reports added and removed vsays.
 
 ```sh
 python3 tools/voicemenu.py <clan> <pk3> [tag]

@@ -6,7 +6,7 @@
                       sample texts and the full palette
   apply               after a color change: codes of the old colors (last apply, RECORD) are replaced by the new ones;
                       texts without base/punctuation colors (and without highlights) are colored like voicemenu.py does;
-                      server page echoes show their bind's text without colors; echo menus (voice chat, spawn selector)
+                      server page echoes show their vsay's text without colors; echo menus (voice chat, spawn selector)
                       get the MENU_* colors; then lists the highlight todo
   todo                texts with base/punctuation colors but no highlight that were not reviewed yet
   done                marks all texts of the todo as reviewed (left plain on purpose)
@@ -92,7 +92,8 @@ def menu_echo(text, menu, old=None):
     """Echo menu line in the menu colors: heading (ends with ":", a server tag "[..]" in front keeps its colors),
     "<n>. item" or "TAB item"; other echoes unchanged. With old (menu colors of the last apply), an item keeps
     its role by its old color (global chat, spawnpoint owner); server pages pass none: their items are plain text."""
-    if plain(text).rstrip().endswith(":"):
+    # ponytail: the ":" of a heading follows a word ("FUN:", "... menu):"); one that ends a smiley ("(:", " ):", ")':") is an item's
+    if re.search(r"\w\)?:$", plain(text).rstrip()):
         tag = re.match(r".*\]\s*", text)
         tag = tag.group() if tag else ""
         return tag + menu["head"] + plain(text[len(tag):]).strip()
@@ -141,8 +142,8 @@ def todo(colors, reviewed):
 
 
 def fix_echoes(lines):
-    """Server pages: the echo of a vsay key shows the bind's text without colors (random vsays: their own text)."""
-    binds = {m.group(1): m.group(2) for m in (re.match(r'bind (\S+) "vsay(?:_team)? \w+(?: ([^;"]*))?;', l) for l in lines) if m}
+    """Server pages: the echo of a vsay key shows the text of its alias vsay<key> without colors (random vsays: their own text)."""
+    binds = {m.group(1): m.group(2) for m in (re.match(r'set vsay(\S+) "vsay(?:_team)? \w+(?: ([^;"]*))?"', l) for l in lines) if m}
     out = []
     for line in lines:
         m = re.match(r'echo "((?:\^.)*(\d)\.) (.*)"$', line)
@@ -243,13 +244,16 @@ def selftest():
     new = dict(c, team="^7", highlight="^d")
     assert remap("^9Clear the ^xpath^3! ^1Now", "vsay_team", c, new) == "^7Clear the ^dpath^3! ^1Now"
     assert remap("^lHi ^xyou", "vsay", c, new) == "^lHi ^dyou"
-    lines = ['echo "^31. old"', 'echo "2. ^lX (random)"', 'bind 1 "vsay a ^lNew^3!; vstr resetVoiceChat"', 'bind 2 "vsay b; vstr resetVoiceChat"']
+    lines = ['echo "^31. old"', 'echo "2. ^lX (random)"', 'set vsay1 "vsay a ^lNew^3!"', 'set vsay2 "vsay b"', 'bind 1 "vstr vsay1; vstr resetVoiceChat"']
+    assert [m.groups() for l in lines for m in TEXT.finditer(l)] == [("vsay", "a", "^lNew^3!")]  # alias name and bind are no vsay texts
     assert fix_echoes(lines)[:2] == ['echo "^31. New!"', 'echo "2. X (random)"']
     m = {"head": "^8", "key": "^3", "text": "^7", "nav": "^2", "global": "^6", "axis": "^i", "allies": "^d"}
     old_m = dict(m, **{"global": "^2"})
     assert menu_echo("^05.1 GLOBAL:", m, old_m) == "^85.1 GLOBAL:" and menu_echo("^9[^7eG^9] ^1FUN:", m) == "^9[^7eG^9] ^8FUN:"
     assert menu_echo("^?1. ^5Path cleared.", m, old_m) == "^31. ^7Path cleared." and menu_echo("^?5. ^2Global", m, old_m) == "^35. ^6Global"
     assert menu_echo("^n2 ^iBunker", m, old_m) == "^32. ^iBunker" and menu_echo("^?TAB ^2SECOND PAGE", m, old_m) == "^2TAB SECOND PAGE"
+    assert menu_echo("^87. Never give you up!! (:", m) == "^37. ^7Never give you up!! (:" and menu_echo("More (not in the menu):", m) == "^8More (not in the menu):"
+    assert menu_echo("^87. Aaaw ):", m) == "^37. ^7Aaaw ):" and menu_echo("^83. Don't kill me )':", m) == "^33. ^7Don't kill me )':"
     assert menu_echo("^31. ^2Hi", m) == "^31. ^7Hi" and menu_echo("^5    *** CHAT LOADED!", m, old_m) == "^5    *** CHAT LOADED!"
     assert render("^1a^3b") == '<span style="color:#ff0000">a</span><span style="color:#ffff00">b</span>'
     print("selftest ok")

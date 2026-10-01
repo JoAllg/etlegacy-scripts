@@ -26,7 +26,7 @@ Run `python3 tools/vsaycolors.py status` and tell the user the values (code, hex
 - Colors changed since the last apply: every code of an old role color becomes the new one, so existing highlights stay.
 - Texts without base/punctuation colors and without highlights (new texts, server colors) are colored like `tools/voicemenu.py` does.
 - Texts that are already right are not touched. "highlighted, but base/punctuation differ" lines are left alone: show them to the user.
-- Server page echoes show their bind's text without colors.
+- Server page echoes show the text of their key's `set vsay<key>` line without colors.
 - Echo menu lines get the `MENU_*` colors.
 
 ## 4. Highlight
@@ -34,13 +34,13 @@ Run `python3 tools/vsaycolors.py status` and tell the user the values (code, hex
 `python3 tools/vsaycolors.py todo` lists the texts that have base/punctuation colors but no highlight and were not reviewed. Texts containing a highlight or urgent color are done; never change them again.
 
 For each todo text edit only the color codes inside the text (file:line from the list):
-- Highlight 1–3 words that carry the message (the action or its object) with `VSAY_HIGHLIGHT`, and switch back to the base color before the next plain word. Style: `default/scripts/vsays/chat.cfg`, e.g. `^9Clear the ^xpath^3!`.
+- Highlight 1–3 words that carry the message (the action or its object) with `VSAY_HIGHLIGHT`, and switch back to the base color before the next plain word. Style: the stock pages in `default/scripts/vsays/chat/`, e.g. `^9Clear the ^xpath^3!`.
 - `VSAY_URGENT` only for urgency or danger (help, incoming, fire, disarm, medic, backup): `^9I need ^1backup^3!`.
 - Leave pure sounds and jokes plain (onomatopoeia, laughs, song lines): not every text needs a highlight.
-- No highlights in the general talk sections of `chat.cfg` (TALK, GLOBAL, GLOBAL 2: yes/no, thanks, greetings) and their copies in `server.example.cfg`; they stay plain. The same kind of text on server pages may be highlighted.
+- No highlights on the general talk pages `chat/talk.cfg`, `chat/global.cfg`, `chat/global2.cfg` (yes/no, thanks, greetings); they stay plain. The same kind of text on server pages may be highlighted.
 - Never change the words, the id, the key or the rest of the line, and never add `;` or `"`.
 - Server pages (`default/scripts/vsays/servers/`): the same vsay can be on several pages; `voicemenu.py` keeps the text of the first page in file-name order, so edit every copy the same way.
 
 Large todo lists: work through them file by file and show the user the first file's result before doing the rest.
 
-Afterwards run `python3 tools/vsaycolors.py apply` (echoes of server pages follow the new binds), then `python3 tools/vsaycolors.py done`: the remaining plain texts are marked as reviewed, so they are not offered again. Finish with a short list: file, key/line, new text.
+Afterwards run `python3 tools/vsaycolors.py apply` (echoes of server pages follow the new texts), then `python3 tools/vsaycolors.py done`: the remaining plain texts are marked as reviewed, so they are not offered again. Finish with a short list: file, key/line, new text.

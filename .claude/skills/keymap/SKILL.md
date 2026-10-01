@@ -14,7 +14,7 @@ description: Regenerate the keyboard + mouse keymap (tools/keymap/keymap.html) a
    - 1–2 words, max ~16 chars, English, what the player does, not how (`Med pack`, not `weapon6 hold`).
    - Same action, same name: mod variants (`+attack2` / `weapalt` = `Alt fire`), hold and toggle variants of one feature (`+vstr crouchON crouchOFF` and `vstr crouchswitch` = `Crouch`).
    - No "toggle"/"cycle"/"menu" in the name, the detected icon shows it: ⇄ toggle, ⟳ cycle (pointer named `cycle*` or more than 2 values; wins over menu), ☰ menu (gives ≥ `MENU_MIN` other keys new actions) (`vstr SniperToggle` = `Sniper Mode`).
-   - Menu layer entries are named by what they select (`vstr cCat1` = `Statements`, from the `echoCat*` text).
+   - Menu layer entries are named by what they select (`vstr chatStatements` = `Statements`, from the echo line of its key on the page, `default/scripts/vsays/chat/categories.cfg`).
    - Ask the user when the purpose stays unclear.
 3. `unused label(s)`: remove an entry only if it is unused for every mod in `default/mods/` (except `example`).
 4. `python3 tools/keymap/keymap.py --selftest`, then `python3 tools/keymap/keymap.py`: must report `0 unlabeled commands`.
