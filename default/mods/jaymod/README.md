@@ -19,4 +19,4 @@ Jaymod keeps etmain's weapon enum unchanged and appends its own weapons from 50,
 
 ## Popups
 
-The echo menus use jaymod's `cg_numPopups`, `cg_popupWaitTime`, `cg_popupFadeTime` and `cg_popupTime` (`setPopupsMenu` in `mod_general.cfg`).
+The echo menus use jaymod's `cg_numPopups`, `cg_popupWaitTime`, `cg_popupFadeTime` and `cg_popupTime` (`setPopupsMenu` in `mod_general.cfg`). Jaymod caps the wait time at 4000 ms and the fade time at 5000 ms (jaymod source `src/cgame/cg_popupmessages.cpp`), so a menu fades after 9 s instead of staying until it is closed; its keys stay bound.

@@ -4,6 +4,7 @@ paths:
   - "research/*.py"
   - "deploy.sh"
   - "keymap-live.sh"
+  - "servermenu.sh"
 ---
 
 # Tools (Python helpers, deploy.sh)
@@ -26,6 +27,7 @@ Generated output, never read whole or edited by hand:
 | `tools/keymap/keymap.html` (174 KB) | `tools/keymap/keymap.py`; names in `labels.json` via the keymap skill |
 | `tools/spawnpoints/autoexecs/*.cfg` (~250) | `tools/spawnpoints/spawnpoints.py`; `diff.py` compares with `default/autoexecs/` |
 | `default/scripts/vsays/servers/<clan>/*.cfg` | `tools/voicemenu.py` |
+| `default/scripts/servers/p12_<n>.cfg`, `p7_<n>.cfg` | `tools/servermenu.py`, rewritten every few seconds while it runs |
 | `tools/vsaycolors.html`, `default/scripts/vsays/vsaycolors.tsv` | `tools/vsaycolors.py` |
 | `research/<mod>/*.tsv`, `diff_*.md`, `research/README.md` | `research/dump_cvars.py`, `build_docs.py`, `diff_profile.py` |
 

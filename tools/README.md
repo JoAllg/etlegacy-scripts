@@ -36,6 +36,14 @@ Colors all vsay texts with the `VSAY_*` colors and the echo menus with the `MENU
 python3 tools/vsaycolors.py status | preview [role=^c ...] | apply | todo | done
 ```
 
+## servermenu.py
+
+Feeds the in-game server menu (`KP_MINUS`, `default/scripts/servermenu.cfg`): while it runs, it asks the favorite servers of the server browser for their state every 5 seconds and writes the menu pages to `default/scripts/servers/`. Each server shows as `humans+bots/slots  name  mod  map  ping`, sorted by humans; the number keys connect. Start it before or while playing and leave it running; `--once` prints the list in the terminal. How servers are queried: `docs/serverquery.md`.
+
+```sh
+./servermenu.sh          # = python3 tools/servermenu.py [--interval 5] [--once]
+```
+
 ## link_maps.py
 
 Symlinks downloaded map pk3s from `etmain/dlcache/` into `etmain/`, so local hosting (`+map`) finds them (the engine mounts `dlcache/` only on remote servers). Skips pk3s that would override stock maps or shaders. Rerun after new downloads.

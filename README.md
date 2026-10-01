@@ -87,6 +87,16 @@ python3 tools/keymap/keymap.py --missing    # commands that still have no name
 
 Serves the page at <http://127.0.0.1:27999/>, opens the browser and follows the running game: picking a class switches to its tab, a reset returns to Base, a mod switch reloads the page for that mod. It keeps running across game restarts. Requires `logfile 2` (set in `default/cvars.cfg`). Details: `tools/keymap/README.md`.
 
+## Server menu
+
+`KP_MINUS` lists your favorite servers of the server browser in game, sorted by humans: `humans+bots/slots  name  mod  map  ping`. A number key connects, `TAB` shows the next page (or refreshes), `KP_MINUS` or `ESC` closes it.
+
+```sh
+./servermenu.sh           # = python3 tools/servermenu.py
+```
+
+The game can't query servers from a script, so this helper has to run next to it: it asks the favorites every 5 seconds and writes the menu pages. The time in the menu heading shows how old the list is.
+
 ## Agent skills
 
 The repo ships project skills in `.claude/skills/` (`.agents` links to `.claude`), usable by [Claude Code](https://claude.com/claude-code) and every agent that reads `.agents/skills/` (`/<name>` or picked up automatically):
@@ -107,7 +117,7 @@ The repo ships project skills in `.claude/skills/` (`.agents` links to `.claude`
 | `default/mods/<mod>/` | per-mod `autoexec.cfg` and the values that differ per mod |
 | `default/autoexecs/`, `default/maps/` | per-map spawnpoints and location name overrides |
 | `docs/` | mirrored to the [wiki](https://github.com/JoAllg/etlegacy-scripts/wiki) on push (`.github/workflows/wiki.yml`): game knowledge (`gameplay.md`), load order, scripting patterns, conventions, key names, colors, characters |
-| `tools/` | keymap renderer, generators for spawnpoints and server voice menus, nitmod stock shield (`tools/README.md`) |
+| `tools/` | keymap renderer, generators for spawnpoints and server voice menus, server menu helper, nitmod stock shield (`tools/README.md`) |
 
 ## Developing
 

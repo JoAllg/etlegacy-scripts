@@ -10,7 +10,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
 
 **ET: Legacy source code:** a local checkout of [etlegacy](https://github.com/etlegacy/etlegacy); its path is in `CLAUDE.local.md` (not in version control). The local config of the installed game is in `~/.etlegacy/etlegacy`. If unsure about a behavior (e.g. the docs don't mention it), look it up in that code instead of assuming. Engine: `src/qcommon`, `src/client`; legacy mod: `src/cgame` (client-side cvars/commands, autoexecs), `src/game`, `src/ui`. This source only covers the engine and the **legacy** mod — nitmod, etpro, jaymod etc. are closed/other codebases, so for those rely on their docs or in-game `/cvarlist`/`/cmdlist`, and say when something is unverified.
 
-**Background docs:** read the files in `docs/` for background information before working on related topics (e.g. `docs/autoexec.md`: config load order and which mods support map/team/class autoexecs; `docs/scripting.md`: config scripting syntax, patterns and limits; `docs/conventions.md`: my naming and structure standards; `docs/commands.md`: legacy console commands, chat/vsay syntax; `docs/commands_nitmod.md`: nitmod differences; `docs/gameplay.md`: console, FPS/network settings, recoil/spread, tips; `docs/locations.md`: map location files (`default/maps/`), lookup order and format in legacy and nitmod; `docs/keybinds.md`: `bind` key names incl. mouse and German layout; `docs/colors.md`: `^` color codes with hex values; `docs/special_chars.md`: ET font character map; `docs/limitations.md`: what config scripts cannot do (state that goes out of sync, FPS dependent waits) and the workarounds).
+**Background docs:** read the files in `docs/` for background information before working on related topics (e.g. `docs/autoexec.md`: config load order and which mods support map/team/class autoexecs; `docs/scripting.md`: config scripting syntax, patterns and limits; `docs/conventions.md`: my naming and structure standards; `docs/commands.md`: legacy console commands, chat/vsay syntax; `docs/commands_nitmod.md`: nitmod differences; `docs/gameplay.md`: console, FPS/network settings, recoil/spread, tips; `docs/locations.md`: map location files (`default/maps/`), lookup order and format in legacy and nitmod; `docs/keybinds.md`: `bind` key names incl. mouse and German layout; `docs/colors.md`: `^` color codes with hex values; `docs/special_chars.md`: ET font character map; `docs/serverquery.md`: asking servers for players, bots, map and mod (`getinfo`/`getstatus`), favorites storage; `docs/limitations.md`: what config scripts cannot do (state that goes out of sync, FPS dependent waits) and the workarounds).
 
 **File rules:** special-case rules (what a file must contain, what it must not set, per-folder procedures) live in `.claude/rules/`, loaded automatically for matching paths. Put new rules of that kind there, not in `docs/` or this file.
 
@@ -33,7 +33,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
    │  ├─ definitions.cfg general definitions (all mods), re-exec'd by F3; state.cfg = start values of state
    │  ├─ cvars.cfg, binds_default.cfg, binds_custom.cfg
    │  ├─ mods/<mod>/     per-mod autoexec.cfg, mod_general.cfg (mod differences), mod_classcommands.cfg; mods/example/ = template
-   │  ├─ scripts/        class scripts (class/), spawnscript, voicechat + vsays/, sounds, general scripts
+   │  ├─ scripts/        class scripts (class/), spawnscript, voicechat + vsays/, server menu + servers/ (generated pages), sounds, general scripts
    │  ├─ autoexecs/      map/team autoexecs (spawnpoints)
    │  ├─ maps/           <map>_loc_override.dat location name overrides
    │  ├─ server/         local test server settings (bots, map cycles)
@@ -45,6 +45,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
    ├─ tools/vsaycolors.py colors all vsay texts with the VSAY_* colors and all echo menus with the MENU_* colors (status, HTML preview, apply after a color change, highlight todo; reviewed texts in default/scripts/vsays/vsaycolors.tsv), driven by the vsay-highlight skill
    ├─ tools/spawnpoints/  spawnpoints.py generates map autoexecs (spawn menu) from the map pk3s into autoexecs/ (setspawnpt N = N-th objective, rooms chosen via the objective whose closest spot lies there; labels from location files); diff.py compares them with default/autoexecs/
    ├─ tools/stock_shield/ stock_shield.py builds the nitmod stock menu shield pk3 from the local etmain pk3s into <fs_homepath>/nitmod/ (offered by deploy.sh)
+   ├─ tools/servermenu.py  runs next to the game (root script `servermenu.sh`): asks the favorite servers of the server browser (<fs_homepath>/etl.db) for humans, bots, mod, map and ping every 5 s and writes the pages of the in-game server menu (KP_MINUS, scripts/servermenu.cfg) into default/scripts/servers/
    ├─ tools/link_maps.py  symlinks downloaded map pk3s from etmain/dlcache/ into etmain/ (dlcache is only mounted on remote servers); rerun after new downloads
    └─ guid_backup/       OFF-LIMITS
 ```
@@ -67,6 +68,7 @@ The engine execs `autoexec.cfg` from the mod folder at startup (details: `docs/a
 │   ├─ scripts/voicechat.cfg   → scripts/vsays/chat.cfg, chat_custom.cfg, vsays_custom.cfg
 │   │                            (vsays/servers/<clan>/*.cfg: server voice chat pages, exec'd at runtime when opened)
 │   ├─ server/server.cfg
+│   ├─ scripts/servermenu.cfg    # (scripts/servers/p12_<n>.cfg, p7_<n>.cfg: server menu pages written by tools/servermenu.py, exec'd at runtime when opened)
 │   ├─ exec mod_general.cfg        # = mods/<mod>/mod_general.cfg (symlink, mod search path), overrides the general values
 │   │   └─ (nitmod only) scripts/vsays/chat_shortcuts.cfg
 │   └─ exec mod_classcommands.cfg  # = mods/<mod>/mod_classcommands.cfg, mod weapon IDs

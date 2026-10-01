@@ -94,6 +94,8 @@
   "vstr spawnp11r": "Spawn 12",
   "vstr spawnsay": "Announce spawn",
   "vstr spawnSelector": "Spawn select",
+  "vstr serverMenu": "Server menu",
+  "+vstr null resetLayers": "Menu",
   "vstr cycleWeaponSwitch": "Weaponswitch",
   "vstr teamAllies": "Allies",
   "vstr teamAxis": "Axis",

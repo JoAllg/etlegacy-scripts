@@ -5,6 +5,7 @@ guid_backup/
 tools/vsaycolors.html
 default/scripts/vsays/vsaycolors.tsv
 default/scripts/vsays/servers/
+default/scripts/servers/
 
 ## etlegacy generated
 default/profile.pid

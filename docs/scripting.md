@@ -27,6 +27,7 @@ Prefer `set` for aliases: `seta` persists them into `etconfig.cfg`, where they c
 
 - `bind <key> "<commands>"`, `unbind <key>`, `unbindall`, `bindlist`.
 - **Key release:** only if the bind text *starts* with `+`, the engine sends `-<rest of the bind> <key> <time>` on release. With several `+commands` in one bind only the first is released correctly (`"+attack; +speed"` releases as `-attack; +speed ...`). For hold actions with several commands use `+vstr`.
+- **`ESCAPE`:** the engine handles the press itself (in-game menu, closing the console) and never runs its bind; the release is not intercepted (`src/client/cl_keys.c` `CL_KeyEvent`). So only a `+` bind does anything on `ESCAPE`, and only its release part: `bind ESCAPE "+vstr null resetLayers"` (`scripts/scripts.cfg`) closes the echo menus when the key is let go.
 - **No scripted view movement up/down:** the legacy and nitmod cgames remove `+lookup`/`+lookdown` "to avoid abuse" (legacy `src/cgame/cg_consolecmds.c`, nitmod 2.3.5 `trap_RemoveCommand` in its `cgame.mp.x86_64.so`), so they print `Unknown command`. No other command turns the view by a relative amount (`m_pitch` only scales real mouse input), so an anti-recoil script is impossible.
 
 ## Built-in helpers
