@@ -89,7 +89,7 @@ Serves the page at <http://127.0.0.1:27999/>, opens the browser and follows the 
 
 ## Server menu
 
-`KP_MINUS` lists your favorite servers of the server browser in game, sorted by humans: `humans+bots/slots  name  mod  map  ping`. A number key connects, `TAB` shows the next page (or refreshes), `KP_MINUS` or `ESC` closes it.
+`KP_MINUS` lists your favorite servers of the server browser in game, in aligned columns `name  playing+spectators+bots/slots  map  ping  mod` (playing humans green, spectators cyan, bots grey: `MENU_PLAYING`, `MENU_SPEC`, `MENU_BOTS` in `settings.conf`), sorted by playing humans. A number key connects, `TAB` shows the next page (or refreshes), `KP_MINUS` or `ESC` closes it.
 
 ```sh
 ./servermenu.sh           # = python3 tools/servermenu.py

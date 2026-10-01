@@ -19,8 +19,9 @@
 #      KEYMAP_MOD (default mod of tools/keymap)
 #    - VSAY_TEAM, VSAY_GLOBAL, VSAY_BUDDY (base color of vsay_team/vsay/vsay_buddy text), VSAY_PUNCT (punctuation),
 #      VSAY_HIGHLIGHT, VSAY_URGENT (key words): colors of the vsay texts (tools/voicemenu.py, vsay-highlight skill)
-#    - MENU_HEAD, MENU_KEY, MENU_TEXT, MENU_NAV (TAB line), MENU_GLOBAL (global chat), MENU_AXIS, MENU_ALLIES (spawnpoint owner):
-#      colors of the echo menus (voice chat, spawn selector; tools/vsaycolors.py apply, voicemenu.py, spawnpoints.py)
+#    - MENU_HEAD, MENU_KEY, MENU_TEXT, MENU_NAV (TAB line), MENU_GLOBAL (global chat), MENU_AXIS, MENU_ALLIES (spawnpoint owner),
+#      MENU_PLAYING, MENU_SPEC, MENU_BOTS (server menu player numbers): colors of the echo menus
+#      (voice chat, spawn selector, server menu; tools/vsaycolors.py apply, voicemenu.py, spawnpoints.py, servermenu.py)
 # 1. Asks to set defaultprofile.dat to PROFILE, the profile the game writes etconfig.cfg into
 # 2. Creates user.cfg from user.example.cfg (personal settings, omnibot_path from HOMEPATH) if missing,
 #    else appends the set/seta values of the template that user.cfg lacks (reported)
@@ -149,7 +150,7 @@ setup() {
 	local missing="" key
 	# shellcheck source=/dev/null
 	[ -f "$SETTINGS" ] && source "$SETTINGS"
-	for key in GAME_BIN HOMEPATH BASEPATH GAME_BIN_I386 PROFILE KEYMAP_MOD VSAY_TEAM VSAY_GLOBAL VSAY_BUDDY VSAY_PUNCT VSAY_HIGHLIGHT VSAY_URGENT MENU_HEAD MENU_KEY MENU_TEXT MENU_NAV MENU_GLOBAL MENU_AXIS MENU_ALLIES; do
+	for key in GAME_BIN HOMEPATH BASEPATH GAME_BIN_I386 PROFILE KEYMAP_MOD VSAY_TEAM VSAY_GLOBAL VSAY_BUDDY VSAY_PUNCT VSAY_HIGHLIGHT VSAY_URGENT MENU_HEAD MENU_KEY MENU_TEXT MENU_NAV MENU_GLOBAL MENU_AXIS MENU_ALLIES MENU_PLAYING MENU_SPEC MENU_BOTS; do
 		grep -q "^$key=" "$SETTINGS" 2>/dev/null || missing+=" $key"
 	done
 	[ -z "$missing" ] && return
@@ -229,6 +230,9 @@ setup() {
 	needs MENU_GLOBAL && set_value MENU_GLOBAL "^6"
 	needs MENU_AXIS && set_value MENU_AXIS "^i"
 	needs MENU_ALLIES && set_value MENU_ALLIES "^d"
+	needs MENU_PLAYING && set_value MENU_PLAYING "^2"
+	needs MENU_SPEC && set_value MENU_SPEC "^5"
+	needs MENU_BOTS && set_value MENU_BOTS "^9"
 }
 
 setup

@@ -197,7 +197,7 @@ A script cannot read anything outside the game, a program running next to it can
 set serverMenuPage "exec profile/scripts/servers/p7_0.cfg"
 
 // scripts/servers/p7_0.cfg (generated)
-echo "^31. ^746+0/45  <server name>  legacy  radar  55ms"
+echo "^31.  ^7<server name>  ^240^7+^56^7+^90^7/45  radar  55ms  legacy"
 bind 1 "vstr resetServerMenu; connect <ip:port>"
 bind TAB "exec profile/scripts/servers/p7_0.cfg"
 ```

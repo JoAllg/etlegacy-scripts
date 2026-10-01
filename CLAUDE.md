@@ -47,7 +47,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
    ├─ tools/vsaycolors.py colors all vsay texts with the VSAY_* colors and all echo menus with the MENU_* colors (status, HTML preview, apply after a color change, highlight todo; reviewed texts in default/scripts/vsays/vsaycolors.tsv), driven by the vsay-highlight skill
    ├─ tools/spawnpoints/  spawnpoints.py generates map autoexecs (spawn menu) from the map pk3s into autoexecs/ (setspawnpt N = N-th objective, rooms chosen via the objective whose closest spot lies there; labels from location files); diff.py compares them with default/autoexecs/
    ├─ tools/stock_shield/ stock_shield.py builds the nitmod stock menu shield pk3 from the local etmain pk3s into <fs_homepath>/nitmod/ (offered by deploy.sh)
-   ├─ tools/servermenu.py  runs next to the game (root script `servermenu.sh`): asks the favorite servers of the server browser (<fs_homepath>/etl.db) for humans, bots, mod, map and ping every 5 s and writes the pages of the in-game server menu (KP_MINUS, scripts/servermenu.cfg) into default/scripts/servers/
+   ├─ tools/servermenu.py  runs next to the game (root script `servermenu.sh`): asks the favorite servers of the server browser (<fs_homepath>/etl.db) for playing humans, spectators, bots, mod, map and ping every 5 s and writes the pages of the in-game server menu (KP_MINUS, scripts/servermenu.cfg) into default/scripts/servers/
    ├─ tools/link_maps.py  symlinks downloaded map pk3s from etmain/dlcache/ into etmain/ (dlcache is only mounted on remote servers); rerun after new downloads
    └─ guid_backup/       OFF-LIMITS
 ```

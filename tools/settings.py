@@ -28,5 +28,6 @@ PROFILE = _get("PROFILE")
 KEYMAP_MOD = _get("KEYMAP_MOD")
 # colors of the vsay texts: base of vsay_team / vsay / vsay_buddy, punctuation, key words, urgent words
 VSAY = {k: _get("VSAY_" + k.upper()) for k in ("team", "global", "buddy", "punct", "highlight", "urgent")}
-# colors of the echo menus (voice chat, spawn selector): heading, key, item, TAB line, global chat item, spawnpoint owner
-MENU = {k: _get("MENU_" + k.upper()) for k in ("head", "key", "text", "nav", "global", "axis", "allies")}
+# colors of the echo menus (voice chat, spawn selector, server menu): heading, key, item, TAB line, global chat item, spawnpoint owner,
+# server menu player numbers (playing humans, spectators, bots)
+MENU = {k: _get("MENU_" + k.upper()) for k in ("head", "key", "text", "nav", "global", "axis", "allies", "playing", "spec", "bots")}

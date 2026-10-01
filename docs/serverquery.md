@@ -12,7 +12,7 @@ One UDP packet to the server's game port: four `0xff` bytes followed by the comm
 | `getstatus` | `statusResponse` + info string + one line per player | all serverinfo cvars (`sv_hostname`, `mapname`, `gamename`, `sv_maxclients`, `sv_privateClients`, `P`, ...); player lines: `<score> <ping> "<name>"` |
 | `getservers <protocol> [empty] [full]` to a master server | `getserversResponse` | `\` + 4 address bytes + 2 port bytes (big endian) per server; protocol is 84 |
 
-An info string is `\key\value\key\value`. The ping of a server is the round trip time of the request.
+An info string is `\key\value\key\value`. The ping of a server is the round trip time of the request. One measurement can be far too high: a PC or connection busy with the game reads the answers late, often several at once (seen on 2026-10-01: 300+ ms while the server browser showed 40). `tools/servermenu.py` therefore shows the lowest ping of the last 6 polls (30 s); a delay only ever adds time.
 
 ## Humans and bots
 
@@ -22,9 +22,9 @@ An info string is `\key\value\key\value`. The ping of a server is the round trip
 | players with ping 0 in `getstatus` | every server | bots have ping 0; differed from `humans` by at most 1 where both exist (a connecting client) |
 | `omnibot_playing` of `getstatus` | 299 of 348 servers | not usable: nitmod servers reported `0` or `-1` while 19 to 24 bots were playing |
 
-`tools/servermenu.py` uses `humans` when the key exists and the players minus the ping 0 players otherwise.
+`tools/servermenu.py` takes the bots from `humans` when the key exists, else from the ping 0 players. With `P` (below) it splits the humans: team players (`1`, `2`) minus the bots are playing, `3` and connecting `0` are spectators. Without `P` it shows humans and bots only.
 
-`P` of `getstatus` (legacy `src/game/g_main.c` `etpro_PlayerInfo`, 245 of 348 servers) holds one character per client slot: `1` axis, `2` allies, `3` spectator, `0` connecting, `-` free.
+`P` of `getstatus` (legacy `src/game/g_main.c` `etpro_PlayerInfo`, 245 of 348 servers) holds one character per client slot: `1` axis, `2` allies, `3` spectator, `0` connecting, `-` free. `P` is updated by the game on team changes and connects, so while a player joins or leaves its count can differ by one from the player lines (seen on 2026-10-01); count it on its own instead of matching it to the lines.
 
 ## Rate limit
 
