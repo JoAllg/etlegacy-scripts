@@ -32,9 +32,9 @@ from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from common import write_atomic  # noqa: E402
+from helpers.common import write_atomic  # noqa: E402
 from link_maps import DLCACHE, ETMAIN, LEGACY_PAKS, STOCK_PAKS, maps, rank  # noqa: E402
-from settings import MENU, PROFILE as PROFILE_NAME, REPO  # noqa: E402
+from helpers.settings import MENU, PROFILE as PROFILE_NAME, REPO  # noqa: E402
 
 PROFILE = REPO / PROFILE_NAME
 LIVE = PROFILE / "autoexecs"

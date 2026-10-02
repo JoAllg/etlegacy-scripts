@@ -1,6 +1,6 @@
 # Tools
 
-Optional Python 3 helpers (stdlib only). They read the game paths and color preferences from `settings.conf` (via `settings.py`), so run `deploy.sh` first. All have a `--selftest` and reject unknown arguments.
+Optional Python 3 helpers (stdlib only). They read the game paths and color preferences from `settings.conf` (via `helpers/settings.py`), so run `deploy.sh` first. All have a `--selftest` and reject unknown arguments.
 
 ## keymap/
 
@@ -53,18 +53,6 @@ python3 tools/serverconfig.py add <id> [address] [--match <text>]
 python3 tools/serverconfig.py --check
 ```
 
-## serverapi.py
-
-The one module that talks to game servers and tells them apart, used by `servermenu.py`, `serverconfig.py` and `voicemenu.py`: server state (`getinfo`/`getstatus`), favorites, matching against `servers.tsv`, the server's tag, the history of seen servers. On the command line it prints the state of a server.
-
-```sh
-python3 tools/serverapi.py <address> ...
-```
-
-## common.py
-
-Helpers shared by the tools: follower of the game's console log, color code stripping, cfg-safe text, atomic file write.
-
 ## link_maps.py
 
 Symlinks downloaded map pk3s from `etmain/dlcache/` into `etmain/`, so local hosting (`+map`) finds them (the engine mounts `dlcache/` only on remote servers). Skips pk3s that would override stock maps or shaders. Rerun after new downloads.
@@ -73,6 +61,14 @@ Symlinks downloaded map pk3s from `etmain/dlcache/` into `etmain/`, so local hos
 
 Builds the nitmod stock shield pk3 from your own `etmain/pak*.pk3`: it keeps the nitmod main menu and unpure servers on stock menus after servers pushed their own menu packs. `deploy.sh` offers it. Details: `stock_shield/README.md`.
 
-## settings.py
+## helpers/
 
-Shared reader for `settings.conf`; exits with a hint when a value is missing.
+Modules shared by the tools, imported as `helpers.<module>`:
+
+- `settings.py`: reader for `settings.conf`; exits with a hint when a value is missing.
+- `common.py`: follower of the game's console log, color code stripping, cfg-safe text, atomic file write.
+- `serverapi.py`: the one module that talks to game servers and tells them apart, used by `servermenu.py`, `serverconfig.py` and `voicemenu.py`: server state (`getinfo`/`getstatus`), favorites, matching against `servers.tsv`, the server's tag, the history of seen servers. On the command line it prints the state of a server.
+
+```sh
+python3 tools/helpers/serverapi.py <address> ...
+```

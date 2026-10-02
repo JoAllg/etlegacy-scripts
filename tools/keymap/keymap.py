@@ -17,7 +17,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
-from settings import HOMEPATH as GAME, KEYMAP_MOD, REPO as PROFILES  # noqa: E402  exec paths resolve in GAME/<mod>/ and GAME/etmain/ through the links of deploy.sh
+from helpers.settings import HOMEPATH as GAME, KEYMAP_MOD, REPO as PROFILES  # noqa: E402  exec paths resolve in GAME/<mod>/ and GAME/etmain/ through the links of deploy.sh
 
 # Scenario: state the views start from. Team + map autoexec, so the spawn selector layer (ENTER) is live.
 START = "exec autoexec.cfg"

@@ -13,8 +13,8 @@ or a voice chat of their own. A row matches a server whose name contains the tex
 first matching row wins, so one clan tag covers all servers of a clan. history.tsv next to it remembers the name
 of every server the game connected to, so a server is recognized without asking it again.
 
-Usage: tools/serverapi.py <address> ...   (prints name, id, mod, map, players, ping)
-       tools/serverapi.py --selftest
+Usage: tools/helpers/serverapi.py <address> ...   (prints name, id, mod, map, players, ping)
+       tools/helpers/serverapi.py --selftest
 """
 import argparse
 import contextlib
@@ -29,8 +29,9 @@ import tempfile
 import time
 from pathlib import Path
 
-from common import clean, strip_colors, write_atomic
-from settings import HOMEPATH, PROFILE, REPO
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # tools/: this module also runs as a command
+from helpers.common import clean, strip_colors, write_atomic  # noqa: E402
+from helpers.settings import HOMEPATH, PROFILE, REPO  # noqa: E402
 
 DB = HOMEPATH / "etl.db"
 CONFIGS = REPO / PROFILE / "serverconfigs"

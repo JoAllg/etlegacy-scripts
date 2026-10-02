@@ -10,7 +10,7 @@ one, which refreshes it). A server shows as name, playing humans+spectators+bots
 aligned with spaces (the popup font courbd is monospaced). Servers are sorted by playing humans, then spectators and
 bots; servers that don't answer come last.
 
-How the servers are asked: tools/serverapi.py (status). The interval must stay above 2 s (rate limit of the servers).
+How the servers are asked: tools/helpers/serverapi.py (status). The interval must stay above 2 s (rate limit of the servers).
 
 Usage: tools/servermenu.py [--interval 5] [--once]
        tools/servermenu.py --selftest
@@ -18,9 +18,9 @@ Usage: tools/servermenu.py [--interval 5] [--once]
 import argparse
 import time
 
-from common import clean, strip_colors, write_atomic
-from serverapi import favorites, status, summarize
-from settings import MENU, PROFILE, REPO
+from helpers.common import clean, strip_colors, write_atomic
+from helpers.serverapi import favorites, status, summarize
+from helpers.settings import MENU, PROFILE, REPO
 
 OUT = REPO / PROFILE / "servermenu"
 EXEC = "profile/servermenu"  # the profile link of deploy.sh in each mod folder

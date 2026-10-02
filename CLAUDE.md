@@ -29,7 +29,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
    ├─ user.cfg           personal settings (name, fps, mouse, fov, refresh rate, resolution, net rates), not in version control; user.example.cfg = template
    ├─ deploy.sh          setup (settings.conf) + mod-folder symlinks + GUID key backups
    ├─ play.sh            starts the game (arguments go to the game): tools/link_maps.py, tools/spawnpoints/spawnpoints.py, deploy.sh without questions, then servermenu.sh, serverconfig.sh + keymap-live.sh in the background until the game exits (only tool errors are printed, the game's output is hidden); play32.sh = the same with the 32-bit client (GAME_BIN_I386)
-   ├─ settings.conf      machine-specific values (fs_homepath, fs_basepath, game binary, profile) and personal preferences (VSAY_* vsay text colors, MENU_* echo menu colors), written by deploy.sh, not in version control; read by the Python tools via tools/settings.py
+   ├─ settings.conf      machine-specific values (fs_homepath, fs_basepath, game binary, profile) and personal preferences (VSAY_* vsay text colors, MENU_* echo menu colors), written by deploy.sh, not in version control; read by the Python tools via tools/helpers/settings.py
    ├─ .claude/rules/     path-scoped rules, one topic per file (autoexecs, exec-chain, layers, mods, maps, class, vsays, serverconfigs, cvars-binds, hud, tools, research, docs)
    ├─ docs/              background documentation for Claude/humans; mirrored to the GitHub wiki by .github/workflows/wiki.yml (Home.md, _Sidebar.md = wiki index/navigation)
    ├─ default/           LIVE profile used in game
@@ -52,8 +52,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
    ├─ tools/stock_shield/ stock_shield.py builds the nitmod stock menu shield pk3 from the local etmain pk3s into <fs_homepath>/nitmod/ (offered by deploy.sh)
    ├─ tools/servermenu.py  runs next to the game (root script `servermenu.sh`): asks the favorite servers of the server browser (<fs_homepath>/etl.db) for playing humans, spectators, bots, mod, map and ping every 5 s and writes the pages of the in-game server menu (KP_MINUS, scripts/servermenu.cfg) into default/servermenu/
    ├─ tools/serverconfig.py  runs next to the game (root script `serverconfig.sh`): follows the console log for connects and local hosting, asks the server for its name, matches it against default/serverconfigs/servers.tsv and writes current.cfg (that server's settings behind a change guard) and current_vsay.cfg (its voice chat on TAB); `add <id>` appends a servers.tsv row; warns about names a server cfg sets that default.cfg doesn't mention
-   ├─ tools/serverapi.py  the only code that talks to servers and tells them apart (status, favorites, servers.tsv matching, server tag, history.tsv); prints a server's state on the command line
-   ├─ tools/common.py    helpers shared by the tools: console log follower, color codes, cfg-safe text, atomic write
+   ├─ tools/helpers/     modules shared by the tools (imported as helpers.<module>): settings.py reads settings.conf; common.py: console log follower, color codes, cfg-safe text, atomic write; serverapi.py: the only code that talks to servers and tells them apart (status, favorites, servers.tsv matching, server tag, history.tsv), prints a server's state on the command line
    ├─ tools/link_maps.py  symlinks downloaded map pk3s from etmain/dlcache/ into etmain/ (dlcache is only mounted on remote servers); rerun after new downloads
    └─ guid_backup/       OFF-LIMITS
 ```

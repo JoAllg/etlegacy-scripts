@@ -3,7 +3,7 @@ import os
 import re
 import time
 
-from settings import HOMEPATH
+from helpers.settings import HOMEPATH
 
 STAMP = re.compile(r"^ *\d+ ")  # game time column of every log line
 

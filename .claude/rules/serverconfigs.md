@@ -2,7 +2,7 @@
 paths:
   - "default/serverconfigs/**"
   - "tools/serverconfig.py"
-  - "tools/serverapi.py"
+  - "tools/helpers/serverapi.py"
   - "serverconfig.sh"
 ---
 
@@ -23,4 +23,4 @@ Background (detection, guard, events, precedence): `docs/serverconfigs.md`.
 - A new event that can follow a server change gets `vstr serverCheck`, and a line in the table of `docs/serverconfigs.md`. Whatever re-execs the definitions ends with `vstr serverForce`.
 - One alias per id (`serverIs_<id>`) exists in game: ids come from `servers.tsv` only, never one per server address (`MAX_CVARS`, `.claude/rules/vsays.md`).
 - Text from a server (its name, its tag) goes through `common.clean` before it is written into a cfg: the game executes it.
-- All server access goes through `tools/serverapi.py` (`status`, `identify`, `server_tag`, `history`); helpers used by more than one tool live in `tools/common.py`.
+- All server access goes through `tools/helpers/serverapi.py` (`status`, `identify`, `server_tag`, `history`); helpers used by more than one tool live in `tools/helpers/common.py`.

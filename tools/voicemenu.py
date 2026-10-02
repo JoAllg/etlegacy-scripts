@@ -32,8 +32,8 @@ import tempfile
 import zipfile
 from pathlib import Path
 
-from serverapi import history, hostname, server_tag, servers, tag as shown
-from settings import BASEPATH, HOMEPATH, MENU as MENU_COLORS, PROFILE, REPO, VSAY
+from helpers.serverapi import history, hostname, server_tag, servers, tag as shown
+from helpers.settings import BASEPATH, HOMEPATH, MENU as MENU_COLORS, PROFILE, REPO, VSAY
 from vsaycolors import colorize, menu_echo, plain
 
 OUT = REPO / PROFILE / "scripts/vsays/servers"

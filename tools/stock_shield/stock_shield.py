@@ -11,7 +11,7 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from settings import BASEPATH, HOMEPATH  # noqa: E402
+from helpers.settings import BASEPATH, HOMEPATH  # noqa: E402
 
 # more tildes than any server pk3, so it sorts last and wins (README.md)
 NAME = "~" * 60 + "stock_shield.pk3"

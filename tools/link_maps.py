@@ -20,7 +20,7 @@ import sys
 import zipfile
 from pathlib import Path
 
-from settings import BASEPATH, HOMEPATH
+from helpers.settings import BASEPATH, HOMEPATH
 
 ETMAIN = HOMEPATH / "etmain"
 DLCACHE = ETMAIN / "dlcache"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Open the keymap in the browser and follow the class picked in the running game.
 
-The game's console log is followed with tools/common.py (follow); views and names always come from this repo.
+The game's console log is followed with tools/helpers/common.py (follow); views and names always come from this repo.
 The page polls /state, see keymap.py PAGE.
 
 Usage: python3 live.py [--mod <mod>, default KEYMAP_MOD of settings.conf] [--port 27999] [--selftest]
@@ -14,7 +14,7 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import keymap  # puts tools/ on sys.path
-from common import STAMP, follow, strip_colors
+from helpers.common import STAMP, follow, strip_colors
 
 DLL = re.compile(r"Sys_LoadDll\(.*/([^/]+)/(?:ui|cgame)\.mp\.")  # the module's folder is the running mod
 BASE_MARKERS = {"*CLASSES CLEANED*", ">>> AUTOEXEC LOADED!"}  # classReset and autoexec.cfg (unbindall) bring back Base binds

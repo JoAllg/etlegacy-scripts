@@ -17,7 +17,7 @@ import html
 import re
 from pathlib import Path
 
-from settings import MENU, PROFILE, REPO, VSAY
+from helpers.settings import MENU, PROFILE, REPO, VSAY
 
 LIVE = REPO / PROFILE
 SKIP = {"etconfig.cfg"}  # game-generated

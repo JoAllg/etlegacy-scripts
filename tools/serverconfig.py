@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Server configs: tells the game which server it is on, so it can exec that server's settings and voice chat.
 
-Runs next to the game and follows its console log (tools/common.py follow). A connect ("<address> resolved to
+Runs next to the game and follows its console log (tools/helpers/common.py follow). A connect ("<address> resolved to
 <ip:port>", src/client/cl_main.c CL_Connect_f) names only the address, so the server is asked for its name
-(tools/serverapi.py) and the name is looked up in default/serverconfigs/servers.tsv; a server seen before is
+(tools/helpers/serverapi.py) and the name is looked up in default/serverconfigs/servers.tsv; a server seen before is
 recognized at once from history.tsv, the answer then corrects it. A server that doesn't answer (map change, restart,
 its rate limit) is asked again after 2, 4, 8, ... up to 60 s, until it answers or the game moves on. A locally hosted map ("----- Server
 Initialization ----", src/server/sv_init.c SV_SpawnServer) is the id "local". The log found at the tool's start counts
@@ -36,9 +36,9 @@ import tempfile
 import time
 from pathlib import Path
 
-from common import STAMP, clean, find_log, follow, strip_colors, write_atomic
-from serverapi import CONFIGS, ID, ID_RULE, SERVERS, adr_string, history, hostname, identify, remember, resolve, server_tag, servers
-from settings import MENU, PROFILE, REPO
+from helpers.common import STAMP, clean, find_log, follow, strip_colors, write_atomic
+from helpers.serverapi import CONFIGS, ID, ID_RULE, SERVERS, adr_string, history, hostname, identify, remember, resolve, server_tag, servers
+from helpers.settings import MENU, PROFILE, REPO
 
 EXEC = "profile/serverconfigs"  # the profile link of deploy.sh in each mod folder
 VOICE = REPO / PROFILE / "scripts/vsays/servers"
