@@ -297,10 +297,12 @@ elif [ ! -e "$USER_CFG" ]; then
 else
 	# Settings the template gained since user.cfg was created: without them the general defaults apply.
 	# A value counts as present even commented out (// set name ...), so it can be dropped on purpose.
+	# Any letter case and a bare "<cvar> <value>" line count too: the engine reads both as the same cvar,
+	# and a default appended behind them would override the personal value.
 	added=()
 	while IFS= read -r line; do
 		[[ $line =~ ^[[:space:]]*seta?[[:space:]]+([A-Za-z0-9_]+) ]] || continue
-		grep -qE "^[[:space:]]*(//[[:space:]]*)?seta?[[:space:]]+${BASH_REMATCH[1]}([[:space:]]|$)" "$USER_CFG" && continue
+		grep -qiE "^[[:space:]]*((//[[:space:]]*)?seta?[[:space:]]+)?${BASH_REMATCH[1]}([[:space:]]|$)" "$USER_CFG" && continue
 		added+=("$line")
 	done < <(example_cfg)
 	if [ ${#added[@]} -gt 0 ]; then

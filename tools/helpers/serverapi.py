@@ -30,7 +30,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # tools/: this module also runs as a command
-from helpers.common import clean, strip_colors, write_atomic  # noqa: E402
+from helpers.common import COLOR, clean, strip_colors, write_atomic  # noqa: E402
 from helpers.settings import HOMEPATH, PROFILE, REPO  # noqa: E402
 
 DB = HOMEPATH / "etl.db"
@@ -234,7 +234,7 @@ def tag(hostname, text):
     """The part of a server name that shows `text`, with its color codes ("^1[^7xY^1] Fraghouse", "[xy]" ->
     "^1[^7xY^1]"); None if the name doesn't show it."""
     spans, shown, lead = [], "", None  # per shown character: where it starts in the name (its color codes included) and ends
-    for m in re.finditer(r"\^[^^]|.", hostname, re.S):
+    for m in re.finditer(rf"{COLOR}|.", hostname, re.S):
         if len(m.group()) == 2:
             lead = m.start() if lead is None else lead
             continue
@@ -284,20 +284,20 @@ def selftest():
     kind, kv, pings = parse(status_packet)
     assert kind == "status" and kv["gamename"] == "jaymod" and pings == [0, 48, 0, 999]
 
-    etl = summarize("1.2.3.4:27960", {"info": parse(info)[1], "status": {}, "pings": [0] * 5 + [50] * 14, "rtt": 48})
+    etl = summarize("192.0.2.1:27960", {"info": parse(info)[1], "status": {}, "pings": [0] * 5 + [50] * 14, "rtt": 48})
     assert (etl["playing"], etl["spec"], etl["bots"], etl["slots"], etl["mod"], etl["map"]) == (17, None, 2, 40, "nitmod", "radar")  # humans key wins over pings
     assert etl["hostname"] == etl["name"] == "^1[^7xY^1] FRAGHOUSE ^324MAPS ^2NOL"
-    old = summarize("5.6.7.8:27960", {"status": kv, "pings": pings})
+    old = summarize("192.0.2.2:27960", {"status": kv, "pings": pings})
     assert (old["playing"], old["spec"], old["bots"], old["slots"], old["mod"], old["ping"]) == (2, None, 2, 30, "jaymod", None)  # ping 0 = bot
-    off = summarize("9.9.9.9:27960", None)
-    assert off["playing"] is None and off["hostname"] == "" and off["name"] == "9.9.9.9:27960"
+    off = summarize("192.0.2.3:27960", None)
+    assert off["playing"] is None and off["hostname"] == "" and off["name"] == "192.0.2.3:27960"
 
     assert teams("-1-30-2", 1) == (1, 2) and teams("--", 0) is None and teams("", 0) is None and teams("3", 2) == (0, 1)
-    split = summarize("2.2.2.2:27960", {"info": {"clients": "3", "humans": "2", "sv_maxclients": "40", "game": "nitmod"}, "status": {"P": "1-32", "sv_hostname": "x"}, "pings": [40, 70, 0], "rtt": 5})
+    split = summarize("192.0.2.4:27960", {"info": {"clients": "3", "humans": "2", "sv_maxclients": "40", "game": "nitmod"}, "status": {"P": "1-32", "sv_hostname": "x"}, "pings": [40, 70, 0], "rtt": 5})
     assert (split["playing"], split["spec"], split["bots"]) == (1, 1, 1)
-    joining = summarize("3.3.3.3:27960", {"info": {"clients": "4", "humans": "4"}, "status": {"P": "1-32"}, "pings": [40, 70, 30, 999]})
+    joining = summarize("192.0.2.5:27960", {"info": {"clients": "4", "humans": "4"}, "status": {"P": "1-32"}, "pings": [40, 70, 30, 999]})
     assert (joining["playing"], joining["spec"], joining["bots"]) == (2, 1, 0)  # P one behind the player lines: split kept
-    assert resolve("1.2.3.4:27961") == ("1.2.3.4", 27961) and resolve("1.2.3.4") == ("1.2.3.4", 27960) and resolve("1.2.3.4:x") is None
+    assert resolve("192.0.2.1:27961") == ("192.0.2.1", 27961) and resolve("192.0.2.1") == ("192.0.2.1", 27960) and resolve("192.0.2.1:x") is None
     assert resolve("[2001:db8::1]:27961") == ("2001:db8::1", 27961) and resolve("[2001:DB8:0::1]") == resolve("2001:db8::1") == ("2001:db8::1", 27960)
     assert resolve("[nope]:27960") is None and resolve("[2001:db8::1]:x") is None
     assert adr_string(("192.0.2.7", 27960)) == "192.0.2.7:27960" and adr_string(("2001:db8::1", 27961)) == "[2001:db8::1]:27961"
@@ -314,11 +314,11 @@ def selftest():
         assert identify("^3Full ^7Name | Of {Server} #2", rows) == "solo" and identify("nobody", rows) is None
         log = Path(d) / "sub/history.tsv"
         assert history(log) == {}
-        remember("1.2.3.4:27960", name, log)
-        remember("5.6.7.8:27960", "Tab\there", log)
-        remember("1.2.3.4:27960", "^2renamed", log)
-        remember("9.9.9.9:27960", "", log)
-        assert history(log) == {"1.2.3.4:27960": "^2renamed", "5.6.7.8:27960": "Tabhere"}, history(log)
+        remember("192.0.2.1:27960", name, log)
+        remember("192.0.2.2:27960", "Tab\there", log)
+        remember("192.0.2.1:27960", "^2renamed", log)
+        remember("192.0.2.3:27960", "", log)
+        assert history(log) == {"192.0.2.1:27960": "^2renamed", "192.0.2.2:27960": "Tabhere"}, history(log)
     assert all(ID.fullmatch(i) for i in ("e", "xy", "e_2", "abcd")) and not any(ID.fullmatch(i) for i in ("", "local", "default", "current", "Eg", "e g", "e-g"))
     assert tag(name, "[xy]") == "^1[^7xY^1]" and tag(name, "fraghouse") == "FRAGHOUSE" and tag(name, "24maps") == "^324MAPS"
     assert tag(name, "nope") is None and tag(name, "") is None and tag("plain [x] name", "[x]") == "[x]"

@@ -13,7 +13,7 @@ python3 tools/keymap/live.py
 
 ## spawnpoints/
 
-`spawnpoints.py` generates map autoexecs with a spawnpoint menu from the map pk3s into `default/autoexecs/`: every `setspawnpt N` whose closest spawn spot lies in another room becomes a menu entry, labeled with the objective and the location name. A rerun only touches files whose content changes and prints them; an existing autoexec of the map is replaced (its settings block and tail are kept).
+`spawnpoints.py` generates map autoexecs with a spawnpoint menu from the map pk3s into `default/autoexecs/`: every `setspawnpt N` whose closest spawn spot lies in another room becomes a menu entry, labeled with the objective and the location name. A rerun reads only the maps whose pk3, location file or autoexec changed since the last run (maps named on the command line are always read), only touches files whose content changes and prints them; an existing autoexec of the map is replaced (its settings block and tail are kept).
 
 ```sh
 python3 tools/spawnpoints/spawnpoints.py [map ...]

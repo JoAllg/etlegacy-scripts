@@ -25,6 +25,7 @@ TODO.md
 CLAUDE.local.md
 
 __pycache__/
+tools/spawnpoints/.cache.json
 
 # Local WIP
 default/scripts/vsays/vsays_custom.cfg

@@ -29,5 +29,6 @@ A new weapon variant touches, for both teams:
 Rules:
 - Start values of state live in `default/state.cfg`: the armed join hooks, the cycle pointers `cycle<Team><Class>`, `chatFunction`, the class vsays toggle, the team brightness.
 - Everything a class script changes must be undone on a class change: binds through `cs_default`, toggles through `resetToggles`. Only what is safe while alive belongs there (class keys are pressed mid-life): prone is reset by `resetTemporary` (kill key, F4) instead.
+- The spectator key (`teamSpectator`) runs `resetToggles` and `cs_default` too, so no class state reaches the spectator. `ta_Spectator` must not: it also runs for a player in a team (`.claude/rules/autoexecs.md`). A class dependent bind that `ta_Spectator` overrides is set through a pointer (`bindMouse2Mode`, `bindGMode`; start value in `state.cfg`), which `ta_Team` applies again.
 - `ta_Axis`/`ta_Allies` run `vid_restart` when the team's overbright values are not active yet (`brightness<Team>` guard, armed in `state.cfg`), which re-runs the map autoexec; join hooks run once per team join, so nothing in a class change may re-arm them.
 - Class vsays (`classVsay<Action>`) send the texts of `scripts/vsays/vsays_custom.cfg`.

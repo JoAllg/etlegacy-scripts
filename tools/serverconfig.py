@@ -266,7 +266,7 @@ def run():
 
 def selftest():
     assert event("       0 192.0.2.7:27980 resolved to 192.0.2.7:27980\n") == "192.0.2.7:27980"
-    assert event("  165000 my.server.org resolved to 1.2.3.4:27960\n") == "1.2.3.4:27960"
+    assert event("  165000 my.server.org resolved to 192.0.2.1:27960\n") == "192.0.2.1:27960"
     assert event("       0 [2001:db8::1]:27961 resolved to [2001:db8::1]:27961\n") == "[2001:db8::1]:27961"
     assert event("       0 MOTD: resolving motd.example.org... resolved to 192.0.2.9:27951\n") is None
     assert event("       0 localhost resolved to loopback\n") is None and event("       0 Server: fueldump\n") is None
@@ -314,7 +314,7 @@ def selftest():
     assert with_row(tsv, "new", "x y") == (tsv + ["new\tx y"], []) and with_row(tsv, "xy", "[xY]")[1] == ["[xY]"]
     wait = pauses()
     assert [next(wait) for _ in range(7)] == [2, 4, 8, 16, 32, 60, 60]
-    assert ask("1.2.3.4:27960", lambda address: "") is False  # no answer: nothing is written
+    assert ask("192.0.2.1:27960", lambda address: "") is False  # no answer: nothing is written
     with tempfile.TemporaryDirectory() as d:
         pid, log = Path(d) / "profile.pid", Path(d) / "etconsole.log"
         assert not game_running(pid)  # no file: no game

@@ -17,6 +17,7 @@ import html
 import re
 from pathlib import Path
 
+from helpers.common import COLOR, COLOR_CHAR, strip_colors
 from helpers.settings import MENU, PROFILE, REPO, VSAY
 
 LIVE = REPO / PROFILE
@@ -29,13 +30,13 @@ MENU_DIRS = ("scripts/vsays", "scripts/spawn", "autoexecs")  # files with echo m
 ECHO = re.compile(r'(\becho "?)([^;"]+)')
 # vsay_buddy (fireteam) needs the class (-1) and the target clients; VoiceFireTeamChat <id> takes no text
 TEXT = re.compile(r'\b(vsay(?:_team)?|vsay_buddy(?: -?\d+)+) (\w+) ([^;"]+)')
-CODE = re.compile(r"\^([^\s^])")
+CODE = re.compile(rf"\^({COLOR_CHAR})")  # the code's character as group 1
 
 
 def colorize(text, base, punct):
     """Server colors removed, base color on the words, punct on punctuation runs that end a word (not ":D", "(:");
     ; would split the bind."""
-    text = re.sub(r"\^[^\s^]", "", text).replace(";", ",").strip()
+    text = strip_colors(text).replace(";", ",").strip()
     out, cur = "", None
     for i, part in enumerate(re.split(r"((?<=[\w'\")\]])[.,!?:]+(?=\s|$)\s*)", text)):
         if part:
@@ -54,13 +55,13 @@ def base(cmd):
 
 
 def plain(text):
-    return CODE.sub("", text)
+    return strip_colors(text)
 
 
 def chars(text):
     """[(char, color index)] of the visible non-space characters."""
     out, cur = [], None
-    for m in re.finditer(r"\^([^\s^])|(.)", text, re.S):
+    for m in re.finditer(rf"{CODE.pattern}|(.)", text, re.S):
         if m.group(1):
             cur = idx(m.group(1))
         elif not m.group(2).isspace():
@@ -95,12 +96,12 @@ def menu_echo(text, menu, old=None, server=False):
     its role by its old color (global chat, spawnpoint owner); server pages pass none: their items are plain text."""
     # ponytail: the ":" of a heading follows a word ("FUN:", "... menu):"); one that ends a smiley ("(:", " ):", ")':") is an item's
     if re.search(r"\w\)?:$", plain(text).rstrip()):
-        tag = (server and re.match(r".*(?=\^[^\s^][^^]*$)", text)) or re.match(r".*\]\s*", text)
+        tag = (server and re.match(rf".*(?={COLOR}[^^]*$)", text)) or re.match(r".*\]\s*", text)
         tag = tag.group() if tag else ""
         if tag.count("[") > tag.count("]"):  # the last color code lies inside the tag's brackets: the tag ends behind them
             tag += re.match(r"[^\]]*\]?\s*", text[len(tag):]).group()
         return tag + menu["head"] + plain(text[len(tag):]).strip()
-    m = re.match(r"(?:\^[^\s^])*(TAB|\d+)\.?\s+(.*)", text, re.S)
+    m = re.match(rf"(?:{COLOR})*(TAB|\d+)\.?\s+(.*)", text, re.S)
     if not m:
         return text
     item = plain(m.group(2)).strip()
@@ -149,7 +150,7 @@ def fix_echoes(lines):
     binds = {m.group(1): m.group(2) for m in (re.match(r'set vsay(\S+) "vsay(?:_team)? \w+(?: ([^;"]*))?"', l) for l in lines) if m}
     out = []
     for line in lines:
-        m = re.match(r'echo "((?:\^.)*(\d)\.) (.*)"$', line)
+        m = re.match(rf'echo "((?:{COLOR})*(\d)\.) (.*)"$', line)
         if m and m.group(2) in binds:
             line = f'echo "{m.group(1)} {plain(binds[m.group(2)] or m.group(3))}"'
         out.append(line)
@@ -194,7 +195,7 @@ def apply(colors):
 def render(text):
     """ET color string as HTML spans (hex from docs/colors.md)."""
     out, cur = [], PALETTE[7]
-    for m in re.finditer(r"\^([^\s^])|([^^]+|\^)", text):
+    for m in re.finditer(rf"{CODE.pattern}|([^^]+|\^)", text):
         if m.group(1):
             cur = PALETTE[idx(m.group(1))]
         else:

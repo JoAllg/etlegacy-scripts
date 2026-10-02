@@ -16,9 +16,10 @@ Usage: tools/servermenu.py [--interval 5] [--once]
        tools/servermenu.py --selftest
 """
 import argparse
+import re
 import time
 
-from helpers.common import clean, strip_colors, write_atomic
+from helpers.common import COLOR, clean, strip_colors, write_atomic
 from helpers.serverapi import favorites, status, summarize
 from helpers.settings import MENU, PROFILE, REPO
 
@@ -33,16 +34,12 @@ PING_POLLS = 6  # the ping shown is the lowest of this many polls
 
 def cut(name, length=NAME_LEN):
     """Name with its color codes, cut to `length` visible characters."""
-    out, visible, i = "", 0, 0
-    name = clean(name).strip()
-    while i < len(name) and visible < length:
-        if name[i] == "^" and i + 1 < len(name) and name[i + 1] != "^":
-            out += name[i:i + 2]
-            i += 2
-            continue
-        out += name[i]
-        visible += 1
-        i += 1
+    out, visible = "", 0
+    for m in re.finditer(rf"{COLOR}|.", clean(name).strip()):
+        if visible == length:
+            break
+        out += m.group()
+        visible += len(m.group()) == 1
     return out.rstrip().rstrip("^")  # a trailing ^ would swallow the color code that follows
 
 
@@ -150,10 +147,10 @@ def update(history):
 
 
 def selftest():
-    etl = summarize("1.2.3.4:27960", {"info": {"hostname": "^1[^7xY^1] FRAGHOUSE ^324MAPS ^2NOL", "mapname": "radar", "clients": "19", "humans": "17", "sv_maxclients": "40", "game": "nitmod"}, "rtt": 48})
-    old = summarize("5.6.7.8:27960", {"status": {"sv_hostname": 'Old "Server"; x', "mapname": "oasis", "gamename": "jaymod", "sv_maxclients": "32"}, "pings": [0, 48, 0, 999]})
-    off = summarize("9.9.9.9:27960", None)
-    split = summarize("2.2.2.2:27960", {"info": {"clients": "3", "humans": "2", "sv_maxclients": "40", "game": "nitmod"}, "status": {"P": "1-32", "sv_hostname": "x"}, "pings": [40, 70, 0], "rtt": 5})
+    etl = summarize("192.0.2.1:27960", {"info": {"hostname": "^1[^7xY^1] FRAGHOUSE ^324MAPS ^2NOL", "mapname": "radar", "clients": "19", "humans": "17", "sv_maxclients": "40", "game": "nitmod"}, "rtt": 48})
+    old = summarize("192.0.2.2:27960", {"status": {"sv_hostname": 'Old "Server"; x', "mapname": "oasis", "gamename": "jaymod", "sv_maxclients": "32"}, "pings": [0, 48, 0, 999]})
+    off = summarize("192.0.2.3:27960", None)
+    split = summarize("192.0.2.4:27960", {"info": {"clients": "3", "humans": "2", "sv_maxclients": "40", "game": "nitmod"}, "status": {"P": "1-32", "sv_hostname": "x"}, "pings": [40, 70, 0], "rtt": 5})
     assert cells(off)[1] == "offline"
 
     assert cut("^1[^7xY^1] FRAGHOUSE ^324MAPS ^2NOLAGS") == "^1[^7xY^1] FRAGHOUSE ^324MAPS ^2NO"  # 24 visible characters
@@ -171,15 +168,15 @@ def selftest():
     assert '"' not in table([old])[0] and ";" not in table([old])[0]
 
     rows = order([off, old, etl])
-    assert [r["address"] for r in rows] == ["1.2.3.4:27960", "5.6.7.8:27960", "9.9.9.9:27960"]
-    many = order([dict(etl, address=f"1.1.1.{n}:27960", playing=n) for n in range(15)])
+    assert [r["address"] for r in rows] == ["192.0.2.1:27960", "192.0.2.2:27960", "192.0.2.3:27960"]
+    many = order([dict(etl, address=f"192.0.2.{n}:27960", playing=n) for n in range(15)])
     p12, p7 = pages(many, 12, "12:00:00"), pages(many, 7, "12:00:00")
     assert sorted(p12) == ["p12_0.cfg", "p12_1.cfg"] and sorted(p7) == ["p7_0.cfg", "p7_1.cfg", "p7_2.cfg"]
     first = p12["p12_0.cfg"].splitlines()
     assert first[1] == "vstr popupsMenu" and "SERVERS 1/2 12:00:00" in first[2] and "TAB next page" in first[2]
     assert sum(l.startswith("echo") for l in first) == 13 and sum(l.startswith("echo") for l in p7["p7_0.cfg"].splitlines()) == 8
-    assert 'bind 1 "vstr resetServerMenu; connect 1.1.1.14:27960"' in first  # most playing humans first
-    assert 'bind US_EQUALS "vstr resetServerMenu; connect 1.1.1.3:27960"' in first
+    assert 'bind 1 "vstr resetServerMenu; connect 192.0.2.14:27960"' in first  # most playing humans first
+    assert 'bind US_EQUALS "vstr resetServerMenu; connect 192.0.2.3:27960"' in first
     assert first[3].startswith(f'echo "{m["key"]}1.  {t}') and first[14].startswith(f'echo "{m["key"]}12. {t}')  # keys 1-12 equally wide
     assert first[-1] == f'bind TAB "execq {EXEC}/p12_1.cfg"' and first.index("vstr unbindNumbers") < first.index(first[-1])
     assert p12["p12_1.cfg"].splitlines()[-1] == f'bind TAB "execq {EXEC}/p12_0.cfg"'  # last page wraps
@@ -188,7 +185,7 @@ def selftest():
     assert "TAB refresh" in one and one.splitlines()[-1] == f'bind TAB "execq {EXEC}/p7_0.cfg"'
     empty = pages([], 7, "12:00:00")
     assert list(empty) == ["p7_0.cfg"] and "No favorite servers" in empty["p7_0.cfg"]
-    history, a = {}, "1.2.3.4:27960"
+    history, a = {}, "192.0.2.1:27960"
     for ms, shown in ((300, 300), (40, 40), (320, 40)):
         rows = [{"address": a, "ping": ms}, {"address": "off", "ping": None}]
         steady(history, rows)

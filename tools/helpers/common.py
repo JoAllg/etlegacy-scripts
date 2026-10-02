@@ -8,8 +8,14 @@ from helpers.settings import HOMEPATH
 STAMP = re.compile(r"^ *\d+ ")  # game time column of every log line
 
 
+# A color code as the engine reads it (src/qcommon/q_shared.h Q_IsColorString): ^ and a visible character other
+# than ^ ("^^1" shows "^" in color 1, "^ " stays as it is). COLOR is its regex text for building other patterns.
+COLOR_CHAR = r"[^\x00-\x20\x7f^]"
+COLOR = rf"\^{COLOR_CHAR}"
+
+
 def strip_colors(text):
-    return re.sub(r"\^[^^]", "", text)
+    return re.sub(COLOR, "", text)
 
 
 def clean(text):

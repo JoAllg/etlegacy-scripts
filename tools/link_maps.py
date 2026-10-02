@@ -18,6 +18,7 @@ import io
 import re
 import sys
 import zipfile
+import zlib
 from pathlib import Path
 
 from helpers.settings import BASEPATH, HOMEPATH
@@ -26,14 +27,14 @@ ETMAIN = HOMEPATH / "etmain"
 DLCACHE = ETMAIN / "dlcache"
 STOCK_PAKS = BASEPATH / "etmain"
 LEGACY_PAKS = BASEPATH / "legacy"
+UNREADABLE = (zipfile.BadZipFile, NotImplementedError, RuntimeError, OSError, zlib.error)  # broken, unknown compression, encrypted
 
 
 def maps(pk3):
-    """{lowercase map name: bsp ZipInfo}, None if unreadable."""
+    """{lowercase map name: bsp ZipInfo}, None if unreadable. Only maps/<name>.bsp: the engine loads no bsp of a subfolder."""
     try:
         with zipfile.ZipFile(pk3) as z:
-            return {i.filename.rsplit("/", 1)[-1][:-4].lower(): i for i in z.infolist()
-                    if i.filename.lower().startswith("maps/") and i.filename.lower().endswith(".bsp")}
+            return {i.filename[5:-4].lower(): i for i in z.infolist() if re.fullmatch(r"maps/[^/]+\.bsp", i.filename, re.I)}
     except (zipfile.BadZipFile, OSError):
         return None
 
@@ -85,13 +86,13 @@ def rank(pk3, compiled):
     return compiled, "fix" in name, not server_copy, newest
 
 
-def main():
-    for link in ETMAIN.glob("*.pk3"):
-        if link.is_symlink() and link.readlink().parts[:1] == ("dlcache",):
-            link.unlink()
+def dlcache_link(path):
+    return path.is_symlink() and path.readlink().parts[:1] == ("dlcache",)
 
+
+def main():
     taken = set()
-    for pk3 in [*STOCK_PAKS.glob("*.pk3"), *ETMAIN.glob("*.pk3")]:
+    for pk3 in [*STOCK_PAKS.glob("*.pk3"), *(p for p in ETMAIN.glob("*.pk3") if not dlcache_link(p))]:
         taken |= set(maps(pk3) or {})
 
     stock_shaders = {}
@@ -109,7 +110,11 @@ def main():
         if found.keys() & taken:
             print(f"skip (overrides {', '.join(sorted(found.keys() & taken))}): {pk3.name}")
             continue
-        problem = found and shader_problem(pk3, stock_shaders)
+        try:
+            problem = found and shader_problem(pk3, stock_shaders)
+        except UNREADABLE as error:  # one broken pk3 must not stop the others
+            print(f"unreadable: {pk3.name} ({error!r})", file=sys.stderr)
+            continue
         if problem:
             print(f"skip ({problem}): {pk3.name}")
             continue
@@ -125,6 +130,11 @@ def main():
         r = rank(pk3, compiled[bsp.CRC])
         if name not in best or r > best[name][0]:
             best[name] = (r, pk3)
+
+    # the old links go only now: an error above leaves them as they are
+    for link in ETMAIN.glob("*.pk3"):
+        if dlcache_link(link):
+            link.unlink()
 
     winners = {pk3 for _, pk3 in best.values()}
     for pk3 in sorted(winners):
@@ -146,6 +156,12 @@ def selftest():
             for name, text in files.items():
                 z.writestr(f"scripts/{name}.shader", text)
         return buf
+
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as z:
+        for name in ("maps/Radar.BSP", "maps/sub/other.bsp", "maps/radar.script", "radar.bsp"):
+            z.writestr(name, "")
+    assert list(maps(buf)) == ["radar"]
 
     assert tokens(b'a // c\n{ "b c" } /* d */ e') == [b"a", b"{", b'"b c"', b"}", b"e"]
     stock = {"scripts/common.shader": b"white\n{\n}\n"}
