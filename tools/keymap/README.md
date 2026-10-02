@@ -152,10 +152,10 @@ Opens `http://127.0.0.1:27999/` and switches the "Class settings" tab to the cla
 | Log line (colors stripped, whole line) | Effect |
 |---|---|
 | `Sys_LoadDll(<home>/<mod>/ui.mp…` or `cgame.mp…` | page for that mod, if `~/.etlegacy/<mod>/autoexec.cfg` exists (built once per mod, ~2 s) |
-| echo text of a class alias, e.g. `[CLASS] Medic: Sten` | tab containing `cs_medic_sten` |
+| echo text of a class alias, e.g. `[CLASS] Covert Ops: FG42` | tab containing `cs_covops_fg42` |
 | `*CLASSES CLEANED*`, `>>> AUTOEXEC LOADED!` (`BASE_MARKERS`) | Base |
 
-Class echo texts are found in the emulator: every alias that runs a `cs_<class>_<weapon>` alias and an alias whose value is an `echo` (`b_me2` → `cs_medic_sten`, `echo-b_me2`). Connected, `echo` goes through `cpm`, which still prints to the console (verified on nitmod and in the legacy source).
+Class echo texts are found in the emulator: every alias that runs a `cs_<class>_<weapon>` alias and an alias whose value is an `echo` (`b_co2` → `cs_covops_fg42`, `echo-b_co2`). Connected, `echo` goes through `cpm`, which still prints to the console (verified on nitmod and in the legacy source).
 
 Not seen: a class picked only in the limbo menu (binds don't change then), F3, team keys and server joins (binds stay, so the tab stays).
 
@@ -186,4 +186,4 @@ Toggles and menus need no naming; they are detected from behavior.
 - the hover keys of `v`, `ENTER`, `F5`, and `F4` (must include `v` and `ENTER`), `MOUSE3` → `LEFTALT` as "Crouch" ⇄, a class key lands in its class view (`KP_UPARROW` → Medic), no ☰ on the spawn keys under `ENTER`, ☰ on the chat categories under `v`;
 - a simulated single-variant class that rebinds 4 keys and must stay ⟳.
 
-`live.py --selftest` checks the class echo map (`[CLASS] Medic: Sten` → `medic_sten`) and a sequence of log lines: mod switch, class echo, a `/cvarlist` line with the reset echo (must not count), reset, a mod without autoexec (page stays), `AUTOEXEC LOADED!`.
+`live.py --selftest` checks the class echo map (`[CLASS] Covert Ops: FG42` → `covops_fg42`) and a sequence of log lines: mod switch, class echo, a `/cvarlist` line with the reset echo (must not count), reset, a mod without autoexec (page stays), `AUTOEXEC LOADED!`.

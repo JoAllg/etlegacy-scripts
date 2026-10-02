@@ -84,11 +84,11 @@ def serve(follower, port):
 
 def selftest():
     f = Follower("nitmod")
-    assert f.current[2].get("[CLASS] Medic: Sten") == "medic_sten", f.current[2]
+    assert f.current[2].get("[CLASS] Covert Ops: FG42") == "covops_fg42", f.current[2]
     for line, mod, cls in [
         ("       0 Sys_LoadDll(/home/x/.etlegacy/legacy/ui.mp.x86_64.so)... succeeded\n", "legacy", None),
-        ("   52000 ^0[^nCLASS^0] ^nMedic^1: ^nSten\n", "legacy", "medic_sten"),
-        ('    5600           ?  classReset    "vstr cs_default; echo ^2*^7CLASSES CLEANED^2*" - ""\n', "legacy", "medic_sten"),
+        ("   52000 ^0[^nCLASS^0] ^nCovert Ops^1: ^nFG42\n", "legacy", "covops_fg42"),
+        ('    5600           ?  classReset    "vstr cs_default; echo ^2*^7CLASSES CLEANED^2*" - ""\n', "legacy", "covops_fg42"),
         ("   53000 ^2*^7CLASSES CLEANED^2*\n", "legacy", None),
         ("   54000 ^0[^nCLASS^0] ^nSoldier^1: ^nMortar\n", "legacy", "soldier_mortar"),
         ("   55000 Sys_LoadDll(/home/x/.etlegacy/testmod/cgame.mp.x86_64.so)... succeeded\n", "legacy", "soldier_mortar"),

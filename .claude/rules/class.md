@@ -26,6 +26,8 @@ A new weapon variant touches, for both teams:
 3. `cs_classcommands.cfg` and every `mods/<mod>/mod_classcommands.cfg` (`example/` included): `<b|r>_<class>_<weapon>`
 4. `cs_output.cfg`: `echo-`/`say-<b|r>_<class><n>`
 
+A weapon only one server has (fork with its own weapon IDs) is not a general variant: its steps live in that server's cfg and hang on the cycle end alias of the class (`b_so5`, `b_me2`, `b_en3`, `b_fo2`, `b_co4`, `r_` alike; `docs/serverconfigs.md` "Class steps"). A new general variant moves that end alias one further, in `cs_backend.cfg`, `serverconfigs/default.cfg` and the server cfgs that use it.
+
 Rules:
 - Start values of state live in `default/state.cfg`: the armed join hooks, the cycle pointers `cycle<Team><Class>`, `chatFunction`, the class vsays toggle, the team brightness.
 - Everything a class script changes must be undone on a class change: binds through `cs_default`, toggles through `resetToggles`. Only what is safe while alive belongs there (class keys are pressed mid-life): prone is reset by `resetTemporary` (kill key, F4) instead.

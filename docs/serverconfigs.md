@@ -92,6 +92,22 @@ A server cfg is a personal preference for that server, so it overrides these fil
 - Never set state a key changes (toggle and cycle pointers of `state.cfg`): `F3` would throw the player's choice away. Set what the steps mean instead, so the pointer stays untouched: the weapon switch cycle (`F5`) steps through first, second and off, and `vstr weaponSwitchOrderPistol` / `vstr weaponSwitchOrderSMG` (`scripts/movement.cfg`) choose the weapon of the first step, the start mode on that server.
 - A fixed value in `default.cfg` overrides `user.cfg` and the definitions on every server. Where a value alias exists, restore with it and name the cvar in a comment for the check: `vstr fovNormal  // cg_fov`.
 
+## Class steps
+
+A server with weapons the mod normally lacks (a fork with its own weapon IDs, more weapons allowed per class) gets extra steps on the class keys from its server cfg. No file of the mod changes, so other servers of the same mod keep the normal cycles.
+
+- Every class cycle of `scripts/class/cs_backend.cfg` ends in an alias one past its last step, which starts the cycle anew: `b_so5`, `b_me2`, `b_en3`, `b_fo2`, `b_co4` and the same with `r_`.
+- The server cfg defines that alias as a full step and chains further ones; the last one points back to step 1. A step holds the class command and the echo itself, so it costs one alias:
+  ```
+  set b_me2 "vstr cs_medic_smg; team b 1 58 35; set cycleAlliesMedic vstr b_me3; echo ^0[^nCLASS^0] ^nMedic^1: ^nBAR"
+  set b_me3 "vstr cs_medic_smg; team b 1 56 35; set cycleAlliesMedic vstr b_me1; echo ^0[^nCLASS^0] ^nMedic^1: ^nShotgun"
+  ```
+- `default.cfg` undoes them: `reset b_me2` for the cycle end (back to its first `set` of the game session, the one of `cs_backend.cfg`), `set b_me3 "vstr b_me1"` for the chained ones, whose first `set` is the server's. A cycle pointer may still point there after a server change.
+- A general step can be redefined the same way (another second weapon: `set b_so1 "vstr cs_soldier_mg42; team b 0 49 35; ..."`). `default.cfg` restores it with `reset b_so1`.
+- Never set the cycle pointers (`cycle<Team><Class>`) or a class command (`<b|r>_<class>_<weapon>`): the normal value of a class command differs per mod, so `default.cfg` could not restore it.
+- The weapon IDs are the server's: read them from its mod (source, or a decompile into `research/<mod>/decompiled/`) and test them in game. A wrong ID silently gives the class default.
+- The live keymap (`tools/keymap/live.py`) does not know these steps: it stays on the tab of the previous class.
+
 ## Voice chat
 
 `scripts/vsays/chat/categories.cfg` (first page of the voice chat) execs `current_vsay.cfg` each time it opens. On a server with voice chat pages the file echoes the `TAB` line with the server's tag and binds `TAB` to the top page `scripts/vsays/servers/<id>/<id>.cfg`; on every other server it is empty and `TAB` does nothing. The file is read when the page opens, so it needs no guard.
