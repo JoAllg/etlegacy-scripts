@@ -88,13 +88,14 @@ def remap(text, cmd, old, new):
     return CODE.sub(lambda m: table.get(idx(m.group(1)), m.group(0)), text)
 
 
-def menu_echo(text, menu, old=None):
-    """Echo menu line in the menu colors: heading (ends with ":", a server tag "[..]" in front keeps its colors),
+def menu_echo(text, menu, old=None, server=False):
+    """Echo menu line in the menu colors: heading (ends with ":", a server tag "[..]" in front keeps its colors; on a
+    server page the tag is everything in front of the last color code, as a tag may be any part of a server name),
     "<n>. item" or "TAB item"; other echoes unchanged. With old (menu colors of the last apply), an item keeps
     its role by its old color (global chat, spawnpoint owner); server pages pass none: their items are plain text."""
     # ponytail: the ":" of a heading follows a word ("FUN:", "... menu):"); one that ends a smiley ("(:", " ):", ")':") is an item's
     if re.search(r"\w\)?:$", plain(text).rstrip()):
-        tag = re.match(r".*\]\s*", text)
+        tag = (server and re.match(r".*(?=\^[^\s^][^^]*$)", text)) or re.match(r".*\]\s*", text)
         tag = tag.group() if tag else ""
         return tag + menu["head"] + plain(text[len(tag):]).strip()
     m = re.match(r"(?:\^[^\s^])*(TAB|\d+)\.?\s+(.*)", text, re.S)
@@ -178,7 +179,7 @@ def apply(colors):
         if server:
             lines = fix_echoes(lines)
         if any(d in f.relative_to(LIVE).as_posix() for d in MENU_DIRS):
-            lines = [l if l.lstrip().startswith("//") else ECHO.sub(lambda m: m.group(1) + menu_echo(m.group(2), MENU, None if server else old_menu), l)
+            lines = [l if l.lstrip().startswith("//") else ECHO.sub(lambda m: m.group(1) + menu_echo(m.group(2), MENU, None if server else old_menu, server), l)
                      for l in lines]
         orig = f.read_text(encoding="latin-1")
         text = "\n".join(lines) + ("\n" if orig.endswith("\n") else "")
@@ -249,11 +250,13 @@ def selftest():
     assert fix_echoes(lines)[:2] == ['echo "^31. New!"', 'echo "2. X (random)"']
     m = {"head": "^8", "key": "^3", "text": "^7", "nav": "^2", "global": "^6", "axis": "^i", "allies": "^d"}
     old_m = dict(m, **{"global": "^2"})
-    assert menu_echo("^05.1 GLOBAL:", m, old_m) == "^85.1 GLOBAL:" and menu_echo("^9[^7eG^9] ^1FUN:", m) == "^9[^7eG^9] ^8FUN:"
+    assert menu_echo("^05.1 GLOBAL:", m, old_m) == "^85.1 GLOBAL:" and menu_echo("^9[^7xY^9] ^1FUN:", m) == "^9[^7xY^9] ^8FUN:"
     assert menu_echo("^?1. ^5Path cleared.", m, old_m) == "^31. ^7Path cleared." and menu_echo("^?5. ^2Global", m, old_m) == "^35. ^6Global"
     assert menu_echo("^n2 ^iBunker", m, old_m) == "^32. ^iBunker" and menu_echo("^?TAB ^2SECOND PAGE", m, old_m) == "^2TAB SECOND PAGE"
     assert menu_echo("^87. Never give you up!! (:", m) == "^37. ^7Never give you up!! (:" and menu_echo("More (not in the menu):", m) == "^8More (not in the menu):"
     assert menu_echo("^87. Aaaw ):", m) == "^37. ^7Aaaw ):" and menu_echo("^83. Don't kill me )':", m) == "^33. ^7Don't kill me )':"
+    assert menu_echo("^vSO^7ME ^7NA^vME ^1FUN:", m, server=True) == "^vSO^7ME ^7NA^vME ^8FUN:"  # tag without brackets
+    assert menu_echo("^9[^7xY^9] ^1FUN:", m, server=True) == "^9[^7xY^9] ^8FUN:" and menu_echo("[x] FUN:", m, server=True) == "[x] ^8FUN:"
     assert menu_echo("^31. ^2Hi", m) == "^31. ^7Hi" and menu_echo("^5    *** CHAT LOADED!", m, old_m) == "^5    *** CHAT LOADED!"
     assert render("^1a^3b") == '<span style="color:#ff0000">a</span><span style="color:#ffff00">b</span>'
     print("selftest ok")

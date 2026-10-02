@@ -8,6 +8,7 @@
 - [nitmod commands](commands_nitmod.md)
 - [Location files](locations.md)
 - [Server queries](serverquery.md)
+- [Server configs](serverconfigs.md)
 - [Key names](keybinds.md)
 - [Color codes](colors.md)
 - [Special characters](special_chars.md)

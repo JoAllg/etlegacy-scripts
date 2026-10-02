@@ -30,7 +30,7 @@ Rules follow the ET: Legacy source (`src/qcommon/cmd.c`, `cvar.c`, `src/client/c
 
   | Command | Effect |
   |---|---|
-  | `exec <file>` | runs `<HOMEPATH>/<mod>/<file>` (`.cfg` added if no extension, HOMEPATH from `settings.conf`). Paths resolve through the real symlinks of `deploy.sh`, so `exec mod_general.cfg` reaches the mod's file like in game. Missing file = no-op |
+  | `exec <file>` | runs `<HOMEPATH>/<mod>/<file>` (`.cfg` added if no extension, HOMEPATH from `settings.conf`). Paths resolve through the real symlinks of `deploy.sh`, so `exec mod_general.cfg` reaches the mod's file like in game. Missing file = no-op. Files that tools write while the game runs are skipped (`servermenu/` pages, `serverconfigs/current*.cfg`): they hold your favorite servers and the server joined last |
   | `set` / `seta` / `sets` / `setu <name> <value...>` | stores the alias, arguments joined with spaces |
   | `reset <name>` | back to the value the alias had when it was first created (engine `resetString`). This is why `state.cfg` sets `spawnSelector` twice |
   | `vstr <name>` | runs the alias value (undefined alias = no-op) |

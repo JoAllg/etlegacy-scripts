@@ -1,0 +1,7 @@
+# Copy to servers.tsv (or let "tools/serverconfig.py add <id>" write it): <id><TAB><text in the server name>
+# A server whose name contains the text (colors ignored, any case) gets serverconfigs/<id>.cfg and the voice chat of
+# scripts/vsays/servers/<id>/. The first matching row wins, so list a single server before the tag of its clan.
+# Ids: 1 to 4 characters of a-z, 0-9, _.
+clan	[TAG]
+oc	OtherClan|
+fun	Full Name Of A Server Without Tag

@@ -1,6 +1,6 @@
 # Server queries
 
-How to ask an ET server for its state from outside the game, as used by `tools/servermenu.py` for the server menu (`KP_MINUS`). Verified against the ET: Legacy source (`src/server/sv_main.c` `SVC_Info`, `SVC_Status`; client side `src/client/cl_main.c` `CL_SetServerInfo`) and a live test against the 392 servers of `master.etlegacy.com:27950` on 2026-10-01 (348 answered).
+How to ask an ET server for its state from outside the game, as done by `tools/serverapi.py` for the server menu (`tools/servermenu.py`, `KP_MINUS`) and the settings per server (`tools/serverconfig.py`, [Server configs](serverconfigs.md)). Verified against the ET: Legacy source (`src/server/sv_main.c` `SVC_Info`, `SVC_Status`; client side `src/client/cl_main.c` `CL_SetServerInfo`) and a live test against the 392 servers of `master.etlegacy.com:27950` on 2026-10-01 (348 answered).
 
 ## Protocol
 
@@ -22,7 +22,7 @@ An info string is `\key\value\key\value`. The ping of a server is the round trip
 | players with ping 0 in `getstatus` | every server | bots have ping 0; differed from `humans` by at most 1 where both exist (a connecting client) |
 | `omnibot_playing` of `getstatus` | 299 of 348 servers | not usable: nitmod servers reported `0` or `-1` while 19 to 24 bots were playing |
 
-`tools/servermenu.py` takes the bots from `humans` when the key exists, else from the ping 0 players. With `P` (below) it splits the humans: team players (`1`, `2`) minus the bots are playing, `3` and connecting `0` are spectators. Without `P` it shows humans and bots only.
+`tools/serverapi.py` takes the bots from `humans` when the key exists, else from the ping 0 players. With `P` (below) it splits the humans: team players (`1`, `2`) minus the bots are playing, `3` and connecting `0` are spectators. Without `P` it shows humans and bots only.
 
 `P` of `getstatus` (legacy `src/game/g_main.c` `etpro_PlayerInfo`, 245 of 348 servers) holds one character per client slot: `1` axis, `2` allies, `3` spectator, `0` connecting, `-` free. `P` is updated by the game on team changes and connects, so while a player joins or leaves its count can differ by one from the player lines (seen on 2026-10-01); count it on its own instead of matching it to the lines.
 

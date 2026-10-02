@@ -50,7 +50,7 @@ Windows support is not planned, but only the setup is Linux-specific: the cfgs r
    ./play32.sh [game arguments]  # 32-bit client, for i386-only mods
    ```
 
-   `play.sh` reruns `deploy.sh` (without questions: each takes its safe default) , `tools/link_maps.py` and `tools/spawnpoints/spawnpoints.py`, then starts the game with the [server menu](#server-menu) helper and the [live keymap](#live-view-while-playing) next to it; both stop when the game exits. The terminal shows the warnings of these tools, not the game's output (that is in `<fs_homepath>/<mod>/etconsole.log`).
+   `play.sh` reruns `tools/link_maps.py`, `tools/spawnpoints/spawnpoints.py` and `deploy.sh` (without questions: each takes its safe default), then starts the game with the [server menu](#server-menu) helper, the [server settings](#settings-per-server) helper and the [live keymap](#live-view-while-playing) next to it; they stop when the game exits. The terminal shows the warnings of these tools, not the game's output (that is in `<fs_homepath>/<mod>/etconsole.log`).
 
 ## In game
 
@@ -104,6 +104,23 @@ Serves the page at <http://127.0.0.1:27999/>, opens the browser and follows the 
 
 The game can't query servers from a script, so this helper has to run next to it: it asks the favorites every 5 seconds and writes the menu pages. The time in the menu heading shows how old the list is.
 
+## Settings per server
+
+Your own settings and the voice chat of a server, applied when you join it. Details: `docs/serverconfigs.md`.
+
+```sh
+./serverconfig.sh                                # = python3 tools/serverconfig.py, runs next to the game
+python3 tools/serverconfig.py add <id> [address] # row for a server in servers.tsv (default: the server you are on) + its cfg
+python3 tools/voicemenu.py <id> <pk3>            # the server's own voice chat, from its pk3
+```
+
+- `<id>` is a short name you pick for a server or a clan, e.g. `xy` for all servers with `[xY]` in their name: 1 to 4 characters of lowercase letters, digits and `_`. It names that server's files (`serverconfigs/<id>.cfg`, `scripts/vsays/servers/<id>/`) and an alias in game, so it can't be the clan tag itself: tags contain colors, spaces, brackets or `|`, which don't work in a file path inside a bind or in an alias name.
+- `default/serverconfigs/servers.tsv` says which servers an id stands for: `<id><TAB><text in the server name>`, e.g. the clan tag as the server shows it, which covers every server of the clan (format: `servers.example.tsv`). If a clan renames its servers, only this text changes; several rows may share one id.
+- `default/serverconfigs/<id>.cfg` holds your settings for them; `default.cfg` resets them on every other server, so each value set in a server cfg needs its normal value there. They override `user.cfg`.
+- With voice chat pages for the id, `TAB` in the voice chat (`V`) opens the server's own menu.
+
+The game can't tell a script which server it is on, so this helper reads the console log and asks the server for its name.
+
 ## Agent skills
 
 The repo ships project skills in `.claude/skills/` (`.agents` links to `.claude`), usable by [Claude Code](https://claude.com/claude-code) and every agent that reads `.agents/skills/` (`/<name>` or picked up automatically):
@@ -123,8 +140,9 @@ The repo ships project skills in `.claude/skills/` (`.agents` links to `.claude`
 | `default/scripts/` | class scripts, spawn menu, voicechat, general scripts |
 | `default/mods/<mod>/` | per-mod `autoexec.cfg` and the values that differ per mod |
 | `default/autoexecs/`, `default/maps/` | per-map spawnpoints and location name overrides |
+| `default/serverconfigs/` | settings per server (`default.cfg`; your `servers.tsv` and `<id>.cfg` are gitignored) |
 | `docs/` | mirrored to the [wiki](https://github.com/JoAllg/etlegacy-scripts/wiki) on push (`.github/workflows/wiki.yml`): game knowledge (`gameplay.md`), load order, scripting patterns, conventions, key names, colors, characters |
-| `tools/` | keymap renderer, generators for spawnpoints and server voice menus, server menu helper, nitmod stock shield (`tools/README.md`) |
+| `tools/` | keymap renderer, generators for spawnpoints and server voice menus, server menu and server settings helpers, nitmod stock shield (`tools/README.md`) |
 
 ## Developing
 

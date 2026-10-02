@@ -27,6 +27,9 @@ CLASS_ALIAS = re.compile(r"cs_([a-z]+)_(\w+)$")  # cs_<class>_<weapon>, see docs
 TAPS = 6  # presses per key: enough to walk through the longest toggle/cycle
 MENU_MIN = 4  # distinct new actions on other keys that make a key a menu (voicechat 8, team keys 5); cycles win
 MAX_DEPTH = 64  # vstr/exec nesting; the engine has no limit, this stops alias loops
+# cfgs that tools write while the game runs (servermenu.py, serverconfig.py): they hold the favorite servers and the
+# server joined last, which are no binds of the profile and must not end up in the versioned keymap.html
+GENERATED = re.compile(r"(?:^|/)(?:servermenu/|serverconfigs/current)")
 KEY_ALIASES = {"ALT": "LEFTALT", "CTRL": "LEFTCTRL", "SHIFT": "LEFTSHIFT"}  # cl_keys.c keynames[], same keynum
 
 
@@ -150,6 +153,8 @@ class Console:
         # ponytail: wait, cvar commands and server-forced values are ignored; enough for binds, compare with /bindlist if a view looks wrong
 
     def exec_file(self, name, depth):
+        if GENERATED.search(name):
+            return
         path = self.root / (name if "." in Path(name).name else name + ".cfg")
         if path not in self.files:
             try:
@@ -808,6 +813,8 @@ def main():
 def selftest(mod):
     assert [c for _, c in split_commands('bind x "kill;forcetapout"  // a;b')] == ['bind x "kill;forcetapout"  // a;b']
     assert tokenize('set a "b c" d // e') == ["set", "a", "b c", "d"]
+    assert all(GENERATED.search(n) for n in ("profile/servermenu/p7_0.cfg", "profile/serverconfigs/current.cfg", "profile/serverconfigs/current_vsay.cfg"))
+    assert not GENERATED.search("profile/serverconfigs/default.cfg") and not GENERATED.search("profile/scripts/servermenu.cfg")
     con, data, _, _ = build(mod)
     base = data[0]["keys"]
     assert base["MOUSE2"]["c"] == "vstr weaponSwitch", base["MOUSE2"]

@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Open the keymap in the browser and follow the class picked in the running game.
 
-The game is found by the most recently written <HOMEPATH>/<mod>/etconsole.log (HOMEPATH of
-settings.conf); views and names always come from this repo. The game needs `logfile 2`, `logfile 1`
-buffers the log in 4 KB chunks. The page polls /state, see keymap.py PAGE.
+The game's console log is followed with tools/common.py (follow); views and names always come from this repo.
+The page polls /state, see keymap.py PAGE.
 
 Usage: python3 live.py [--mod <mod>, default KEYMAP_MOD of settings.conf] [--port 27999] [--selftest]
 """
@@ -11,19 +10,18 @@ import argparse
 import json
 import re
 import threading
-import time
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-import keymap
+import keymap  # puts tools/ on sys.path
+from common import STAMP, follow, strip_colors
 
 DLL = re.compile(r"Sys_LoadDll\(.*/([^/]+)/(?:ui|cgame)\.mp\.")  # the module's folder is the running mod
 BASE_MARKERS = {"*CLASSES CLEANED*", ">>> AUTOEXEC LOADED!"}  # classReset and autoexec.cfg (unbindall) bring back Base binds
-STAMP = re.compile(r"^ *\d+ ")  # game time column of every log line
 
 
 def clean(text):
-    return re.sub(r"\^.", "", text).strip()
+    return strip_colors(text).strip()
 
 
 def class_echoes(con):
@@ -61,40 +59,6 @@ class Follower:
             self.cls = self.current[2][text]
         elif text in BASE_MARKERS:
             self.cls = None
-
-
-def find_log():
-    """Most recently written <HOMEPATH>/<mod>/etconsole.log (the engine writes it into fs_game), or None."""
-    logs = []
-    for path in keymap.GAME.glob("*/etconsole.log"):
-        try:
-            logs.append((path.stat().st_mtime, path))
-        except OSError:
-            continue
-    return max(logs)[1] if logs else None
-
-
-def follow(follower):
-    while True:
-        path = find_log()
-        if not path:
-            time.sleep(2)
-            continue
-        print(f"following {path}")
-        with open(path, errors="replace") as log:  # from the start: the game truncates it at launch, replay restores the class
-            line = ""
-            while True:
-                line += log.readline()
-                if line.endswith("\n"):
-                    follower.feed(line)
-                    line = ""
-                    continue
-                time.sleep(.2)
-                try:
-                    if path.stat().st_size < log.tell() or find_log() != path:  # game restarted or another mod's log is newer
-                        break
-                except OSError:
-                    break
 
 
 def serve(follower, port):
@@ -147,7 +111,9 @@ def main():
     serve(follower, a.port)
     webbrowser.open(f"http://127.0.0.1:{a.port}/")
     try:
-        follow(follower)
+        for line in follow():  # from the start of the log: the replay restores the class
+            if line:
+                follower.feed(line)
     except KeyboardInterrupt:
         pass
 

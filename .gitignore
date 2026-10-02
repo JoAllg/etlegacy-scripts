@@ -5,7 +5,10 @@ guid_backup/
 tools/vsaycolors.html
 default/scripts/vsays/vsaycolors.tsv
 default/scripts/vsays/servers/
-default/scripts/servers/
+default/servermenu/
+default/serverconfigs/*
+!default/serverconfigs/default.cfg
+!default/serverconfigs/servers.example.tsv
 
 ## etlegacy generated
 default/profile.pid

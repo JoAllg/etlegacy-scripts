@@ -13,19 +13,18 @@ python3 tools/keymap/keymap.py [--mod <mod>] [--missing]
 
 ## spawnpoints/
 
-`spawnpoints.py` generates map autoexecs with a spawnpoint menu from the map pk3s into `spawnpoints/autoexecs/`: every `setspawnpt N` whose closest spawn spot lies in another room becomes a menu entry, labeled with the objective and the location name. `diff.py` compares the generated files with the live ones in `default/autoexecs/`.
+`spawnpoints.py` generates map autoexecs with a spawnpoint menu from the map pk3s into `default/autoexecs/`: every `setspawnpt N` whose closest spawn spot lies in another room becomes a menu entry, labeled with the objective and the location name. A rerun only touches files whose content changes and prints them; an existing autoexec of the map is replaced (its settings block and tail are kept).
 
 ```sh
 python3 tools/spawnpoints/spawnpoints.py [map ...]
-python3 tools/spawnpoints/diff.py [--spawns] [map ...]
 ```
 
 ## voicemenu.py
 
-Copies a server's quick chat menu (`V`) from its pk3 into voicechat pages in `default/scripts/vsays/servers/<clan>/`. Pages that duplicate the stock menu are left out; custom vsays the menu leaves out go on extra pages behind `TAB`. The pages have the format of the stock pages (`default/scripts/vsays/chat/`) and share their `vsay<key>` aliases. A rerun after a new server pack keeps edited texts and reports added and removed vsays.
+Copies a server's quick chat menu (`V`) from its pk3 into voicechat pages in `default/scripts/vsays/servers/<clan>/`; in game they are on `TAB` of the voice chat while playing on that server (`serverconfig.py`). `<clan>` is the server's id in `default/serverconfigs/servers.tsv`, and the headings carry its tag as the server writes it (taken from `[address]` or from a server the game connected to before). Pages that duplicate the stock menu are left out; custom vsays the menu leaves out go on extra pages behind `TAB`. The pages have the format of the stock pages (`default/scripts/vsays/chat/`) and share their `vsay<key>` aliases. A rerun after a new server pack keeps edited texts and reports added and removed vsays.
 
 ```sh
-python3 tools/voicemenu.py <clan> <pk3> [tag]
+python3 tools/voicemenu.py <clan> <pk3> [address]
 ```
 
 ## vsaycolors.py
@@ -38,11 +37,33 @@ python3 tools/vsaycolors.py status | preview [role=^c ...] | apply | todo | done
 
 ## servermenu.py
 
-Feeds the in-game server menu (`KP_MINUS`, `default/scripts/servermenu.cfg`): while it runs, it asks the favorite servers of the server browser for their state every 5 seconds and writes the menu pages to `default/scripts/servers/`. Each server shows as `name  playing+spectators+bots/slots  map  ping  mod` in columns aligned with spaces, sorted by playing humans; the number keys connect. Start it before or while playing and leave it running; `--once` prints the list in the terminal. How servers are queried: `docs/serverquery.md`.
+Feeds the in-game server menu (`KP_MINUS`, `default/scripts/servermenu.cfg`): while it runs, it asks the favorite servers of the server browser for their state every 5 seconds and writes the menu pages to `default/servermenu/`. Each server shows as `name  playing+spectators+bots/slots  map  ping  mod` in columns aligned with spaces, sorted by playing humans; the number keys connect. Start it before or while playing and leave it running; `--once` prints the list in the terminal. How servers are queried: `docs/serverquery.md`.
 
 ```sh
 ./servermenu.sh          # = python3 tools/servermenu.py [--interval 5] [--once]
 ```
+
+## serverconfig.py
+
+Settings and voice chat per server (`docs/serverconfigs.md`). While it runs, it follows the game's console log, asks a joined server for its name and looks it up in `default/serverconfigs/servers.tsv` (`<id><TAB><text in the server name>`, yours to maintain; format: `servers.example.tsv`). It then writes `current.cfg`, through which the game execs `default.cfg` and that server's `<id>.cfg`, and `current_vsay.cfg`, which puts the server's voice chat on `TAB`. `add` appends a row for a server (default: the one you are on) and creates its cfg. At start it warns about names a server cfg sets that `default.cfg` does not reset.
+
+```sh
+./serverconfig.sh                                   # = python3 tools/serverconfig.py
+python3 tools/serverconfig.py add <id> [address] [--match <text>]
+python3 tools/serverconfig.py --check
+```
+
+## serverapi.py
+
+The one module that talks to game servers and tells them apart, used by `servermenu.py`, `serverconfig.py` and `voicemenu.py`: server state (`getinfo`/`getstatus`), favorites, matching against `servers.tsv`, the server's tag, the history of seen servers. On the command line it prints the state of a server.
+
+```sh
+python3 tools/serverapi.py <address> ...
+```
+
+## common.py
+
+Helpers shared by the tools: follower of the game's console log, color code stripping, cfg-safe text, atomic file write.
 
 ## link_maps.py
 

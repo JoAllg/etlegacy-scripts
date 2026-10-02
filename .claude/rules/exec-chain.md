@@ -8,6 +8,7 @@ paths:
   - "default/scripts/class/**"
   - "default/scripts/vsays/**"
   - "default/server/**"
+  - "default/serverconfigs/**"
   - "default/mods/*/autoexec.cfg"
   - "default/mods/*/mod_general.cfg"
   - "default/mods/*/mod_classcommands.cfg"
@@ -16,10 +17,11 @@ paths:
 
 # Definitions pass vs state values
 
-Three passes, in this order, so F3 can re-assert settings without throwing away what the player toggled:
+Three passes and the server settings, in this order, so F3 can re-assert settings without throwing away what the player toggled:
 - **Definitions** (`default/definitions.cfg` and everything it execs, including the mod's `mod_general.cfg` / `mod_classcommands.cfg`): aliases, fixed binds, cvars no script changes. Re-exec'd by `F3` (`vstr reloadDefinitions`) and by `autoexec.cfg`.
 - **Personal values** (`user.cfg` at the repo root, not in version control; template `user.example.cfg`): name, fps, mouse, fov, refresh rate, fullscreen resolution, network rates, `omnibot_path`. Exec'd after the definitions by `autoexec.cfg` and by `F3`, so it overrides the general and the mod files; a missing file only prints `couldn't exec`. The definitions (`cvars.cfg`, `scripts/display.cfg`) hold the ET: Legacy defaults of these values. Never set there what a mod's `mod_general.cfg` sets per mod (e.g. `maxFpsLow`, `fovLow`). A new value goes into `user.example.cfg` too (`deploy.sh` appends missing ones to `user.cfg`).
 - **State values** (`default/state.cfg`, and `modState` in `mods/<mod>/mod_general.cfg` for mod specific ones): the start value of anything a script changes at runtime. Exec'd by `mods/<mod>/autoexec.cfg` only, so game start, mod switch and `F1` reset them, `F3` does not. Runs after `user.cfg` on purpose: it applies aliases `user.cfg` redefines, and state start values win until the next restart/`F1`.
+- **Server settings** (`default/serverconfigs/`, `.claude/rules/serverconfigs.md`): applied last by `vstr serverForce`, which ends both `autoexec.cfg` and `reloadDefinitions`, so they override all three passes.
 - `unbindall` lives in `mods/<mod>/autoexec.cfg`, never in the definitions.
 
 Rules for the definitions pass:

@@ -194,19 +194,21 @@ Example: `scripts/movement.cfg` movement script (no blocked movement when opposi
 A script cannot read anything outside the game, a program running next to it can: it rewrites a cfg at an interval, and a static script `exec`s that file on a key. `exec` reads the file from disk on every call (`src/qcommon/cmd.c` `Cmd_Exec_f`), so new content needs no reload.
 ```
 // scripts/servermenu.cfg (static, in the exec chain)
-set serverMenuPage "exec profile/scripts/servers/p7_0.cfg"
+set serverMenuPage "exec profile/servermenu/p7_0.cfg"
 
-// scripts/servers/p7_0.cfg (generated)
+// servermenu/p7_0.cfg (generated)
 echo "^31.  ^7<server name>  ^240^7+^56^7+^90^7/45  radar  55ms  legacy"
 bind 1 "vstr resetServerMenu; connect <ip:port>"
-bind TAB "exec profile/scripts/servers/p7_0.cfg"
+bind TAB "exec profile/servermenu/p7_0.cfg"
 ```
 - The generated file holds only data (echoes, binds) and calls existing aliases; behavior stays in the static cfg, so a stale or missing file breaks nothing.
 - The game reads the file only at the `exec`: what is shown is a snapshot, refreshing is another `exec` (here `TAB`).
 - The tool writes `<name>.tmp` and renames it over the target, so an `exec` never runs a half-written file.
 - Foreign text (server names) is executed as commands: strip `"`, `;` and line breaks before writing it.
 
-Example: server menu (`tools/servermenu.py`, `scripts/servermenu.cfg`).
+- A file the game execs on its own events instead of a key carries a change guard, so it only acts when its content is new.
+
+Examples: server menu (`tools/servermenu.py`, `scripts/servermenu.cfg`); settings per server (`tools/serverconfig.py`, [Server configs](serverconfigs.md)).
 
 ### Feedback
 Every state change plays a menu sound (`vstr playSelect` / `vstr playCancel`, defined in `scripts/common.cfg`) and echoes the new state, so the result is visible without opening the console.

@@ -11,6 +11,7 @@ Background documentation for the [etlegacy-scripts](https://github.com/JoAllg/et
 - [nitmod commands](commands_nitmod.md): differences to legacy
 - [Location files](locations.md): map location names, lookup order and format in legacy and nitmod
 - [Server queries](serverquery.md): asking servers for players, bots, map and mod; favorites storage
+- [Server configs](serverconfigs.md): settings and voice chat per server, how the joined server is detected, precedence
 - [Key names](keybinds.md): `bind` key names incl. mouse and German layout
 - [Color codes](colors.md): `^` color codes with hex values
 - [Special characters](special_chars.md): ET font character map
