@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate map autoexecs (spawn selector) from the map pk3s: tools/spawnpoints/autoexecs/autoexec_<map>.cfg.
+"""Generate map autoexecs (spawn selector) from the map pk3s: <profile>/autoexecs/autoexec_<map>.cfg.
 
 How the game picks the spawn spot (legacy g_team.c SelectRandomTeamSpawnPoint, same in 2.60b and nitmod):
 "setspawnpt N" takes the origin of the N-th team_WOLF_objective (bsp entity order) without checking its
@@ -16,6 +16,8 @@ rooms. Location: nearest entry of default/maps/<map>_loc_override.dat, else of a
 maps/<map>_loc_override.dat or _loc.dat, else target_location entities; coordinates if none within LOC_RANGE.
 Each file defines its own menu (spawnpsr/-psb: echo list + binds of exactly its keys), so a previous map's
 spawnpoints are on no key and no generic list has to be exec'd first.
+A file is only written (and its "Last edited" date set) when its content changes; an existing autoexec of the
+map is replaced, keeping its settings block and tail.
 
 Usage: tools/spawnpoints/spawnpoints.py [map ...]   (default: all maps)
        tools/spawnpoints/spawnpoints.py --selftest
@@ -30,11 +32,11 @@ from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from common import write_atomic  # noqa: E402
 from link_maps import DLCACHE, ETMAIN, LEGACY_PAKS, STOCK_PAKS, maps, rank  # noqa: E402
 from settings import MENU, PROFILE as PROFILE_NAME, REPO  # noqa: E402
 
 PROFILE = REPO / PROFILE_NAME
-OUT = Path(__file__).resolve().parent / "autoexecs"
 LIVE = PROFILE / "autoexecs"
 TEMPLATE = LIVE / "autoexec_fueldump.cfg"  # settings and tail for maps without a live autoexec
 LOC_RANGE = 768        # farther than this from the room centre: coordinates instead of a location name
@@ -265,6 +267,11 @@ def render(mapname, title, pk3name, result):
     return "\n".join(lines + tail) + "\n"
 
 
+def undated(text):
+    """An autoexec without its "Last edited" line: equal texts mean nothing changed but the date."""
+    return re.sub(r"^// Last edited[^\n]*\n", "", text, count=1, flags=re.M)
+
+
 def selftest():
     pak0 = next(p for p in (ETMAIN / "pak0.pk3", STOCK_PAKS / "pak0.pk3") if p.exists())  # home: downloaded stock paks
     with zipfile.ZipFile(pak0) as z:
@@ -275,14 +282,15 @@ def selftest():
     assert [n for n, *_ in result["b"][0]][-1] == 3, result["b"]
     assert menu_line("r", 2) == 'set spawnpsr    "vstr echospr; bind 1 vstr spawnp0r; bind 2 vstr spawnp1r"'
     assert menu_line("b", 12).endswith('bind 0 vstr spawnp9b; bind US_MINUS vstr spawnp10b; bind US_EQUALS vstr spawnp11b"')
+    assert undated("// Last edited    01.10.2026 //\nset a 1\n") == undated("// Last edited    02.10.2026 //\nset a 1\n")
+    assert undated("// Last edited    01.10.2026 //\nset a 1\n") != undated("// Last edited    01.10.2026 //\nset a 2\n")
     print("selftest ok")
 
 
 def main(args):
     src = sources()
     locs = pk3_locations(src.values()) | pk3_locations(LEGACY_PAKS.glob("*.pk3"))
-    OUT.mkdir(exist_ok=True)
-    written = 0
+    created, changed = [], []
     for mapname in args or sorted(src):
         pk3 = src.get(mapname.lower())
         if mapname.lower() in RESERVED:
@@ -306,9 +314,18 @@ def main(args):
         result = analyse(ents, loc)
         if result is None or not any(result[t][0] for t, *_ in TEAMS):
             continue
-        (OUT / f"autoexec_{mapname.lower()}.cfg").write_text(render(mapname, title, pk3.name, result), encoding="latin1")
-        written += 1
-    print(f"{written} autoexecs written to {OUT}")
+        path = LIVE / f"autoexec_{mapname.lower()}.cfg"
+        text = render(mapname, title, pk3.name, result)
+        old = path.read_text(encoding="latin1") if path.exists() else None
+        if old is not None and undated(old) == undated(text):
+            continue
+        write_atomic(path, text)
+        (changed if old is not None else created).append(path.name)
+    for title, names in (("created", created), ("changed", changed)):
+        if names:
+            print(f"{title} in {LIVE}: {' '.join(names)}")
+    if created:
+        print("new autoexecs need deploy.sh (links into the mod folders)")
 
 
 if __name__ == "__main__":
