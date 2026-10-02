@@ -41,9 +41,8 @@ def map_color(lines):
 
 
 def with_map_color(lines, color):
-    """The lines of a map autoexec (or of its settings block) with this crosshair color as their only one, none for
-    None. The line follows the last setting ("exec autoexec_mod.cfg" resets the color, so it must come after it);
-    None if the lines hold no setting to put it after."""
+    """The lines of a map autoexec with this crosshair color (None: without one), placed after the last setting:
+    "exec autoexec_mod.cfg" resets the color. None if the lines hold no setting."""
     out = [line for line in lines if not MAP_COLOR.match(line)]
     if not color:
         return out

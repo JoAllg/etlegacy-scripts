@@ -230,9 +230,8 @@ def longname(z, mapname):
 
 def template_parts(mapname):
     """(settings, tail): the lines between "// Settings" and "// Spawnpoints" and those after the last spawnsay,
-    from the live autoexec_<map>.cfg (else TEMPLATE), so manual changes there carry over. The crosshair color is the
-    map's own, whichever file the settings come from: also that of an autoexec without spawnpoints
-    (tools/serverconfig.py), and never the template's."""
+    from the live autoexec_<map>.cfg (else TEMPLATE), so manual changes there carry over. The crosshair color is always
+    the map's own, never the template's."""
     own = LIVE / f"autoexec_{mapname.lower()}.cfg"
     return parts(own.read_text(encoding="latin1").splitlines() if own.exists() else [],
                  TEMPLATE.read_text(encoding="latin1").splitlines() if TEMPLATE.exists() else [])

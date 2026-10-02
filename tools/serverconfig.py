@@ -15,11 +15,8 @@ without it applies no server's settings. Written to default/serverconfigs/:
 - current_vsay.cfg: exec'd each time the voice chat opens; puts the server's voice chat (scripts/vsays/servers/<id>/,
   tools/voicemenu.py) on TAB, or nothing.
 
-Crosshair color per map: the same log names the map of every map load ("LOADING... maps/<map>.bsp", in legacy "LOADING...  - maps/<map>.bsp -",
-src/cgame/cg_info.c CG_LoadingString) and echoes each step of the color cycle ("CROSSHAIR COLOR <name>", default/scripts/display.cfg). A
-step taken on a map is written into default/autoexecs/autoexec_<map>.cfg as "vstr crosshairColor<Name>", which sets it
-on every later load of that map; a map without autoexec gets one that execs the default autoexec (linked into the game
-by the next deploy.sh run).
+Crosshair color per map (docs/autoexec.md): a step of the color cycle taken on a map is written into
+default/autoexecs/autoexec_<map>.cfg; a map without autoexec gets one.
 
 At start (and with --check) every name a server cfg sets is looked up in default.cfg, which runs before every server
 cfg: a name it doesn't mention keeps the server's value on all other servers, so it is reported (warning only).
@@ -57,7 +54,7 @@ GENERATED = {"default", "current", "current_vsay"}  # cfgs of serverconfigs/ tha
 NAME = re.compile(r'\s*(?:(?:set[asu]?|bind|reset|toggle|cycle)\s+)?"?([^\s";]+)')
 NO_NAME = {"exec", "execq", "vstr", "echo", "wait"}
 AUTOEXECS = REPO / PROFILE / "autoexecs"
-# both texts can come from a server (map name, a printed line) and end up in a file name and a cfg: letters only
+# a server can make the game print both lines: the names end up in a file name and a cfg
 MAP_LOAD = re.compile(r"LOADING\.\.\. +(?:- )?maps/([\w.+-]+)\.bsp(?: -)?", re.A)  # legacy: "LOADING...  - maps/<map>.bsp -"
 COLOR_STEP = re.compile(r"CROSSHAIR COLOR ([a-z]{1,16})")
 
@@ -72,7 +69,7 @@ def event(line):
 
 
 def stub(mapname):
-    """Autoexec of a map that has none: what the default autoexec does, so there is a file to carry the color."""
+    """Autoexec of a map that has none: the default autoexec, plus a place for the color."""
     return ["// Map name       " + mapname,
             "// Autoexec by    tools/serverconfig.py (crosshair color; the map has no spawnpoints of its own here)",
             "",
@@ -83,8 +80,8 @@ def stub(mapname):
 
 
 def save_color(mapname, color, out=AUTOEXECS):
-    """Sets the crosshair color in the map's autoexec; True if the file was written. The echo of the autoexec's own
-    line at map load names the color the file has, which writes nothing."""
+    """Sets the crosshair color in the map's autoexec; True if the file was written (not for the color it has:
+    the autoexec's own line echoes at every map load)."""
     path = out / f"autoexec_{mapname}.cfg"
     try:
         old = path.read_text("latin1").splitlines()
