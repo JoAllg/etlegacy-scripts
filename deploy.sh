@@ -39,6 +39,10 @@
 #    (etmain is in every mod's search path); removes links to the same files/folder from the mod directories
 # 7. Symlinks the mod-specific autoexec* and mod_* files
 # 8. Offers to build the nitmod stock shield pk3 from the stock etmain pk3s (tools/stock_shield/README.md)
+# 9. Offers desktop files (application menu entries with the game's icon) that start launcher.sh and,
+#    if GAME_BIN_I386 is set, launcher32.sh: etlegacy-launcher.<arch>.desktop in ~/.local/share/applications
+#    (XDG_DATA_HOME). Asked only while one is missing; existing ones are rewritten when the repo path changed.
+#    The 64-bit entry opens et:// links.
 #
 # ⚠️ IMPORTANT BEHAVIOR:
 # ----------------------
@@ -522,6 +526,55 @@ if [[ " $MODS " == *" nitmod "* ]] && [ ! -e "$SHIELD" ]; then
 	elif ask "  Build and install the stock shield pk3? [y/N]" n; then
 		python3 "$REPO/tools/stock_shield/stock_shield.py" | sed 's/^/    - /'
 	fi
+fi
+
+# 9. Desktop files: menu entries that start the game through the launcher scripts
+APPS="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+
+# desktop_entry <bits> <launcher> [url]: the entry text; with a third argument it takes et:// links
+desktop_entry() {
+	cat <<EOF
+[Desktop Entry]
+Type=Application
+Name=ET: Legacy Launcher ($1-bit)
+GenericName=World War II first-person shooter
+Comment=ET: Legacy with the profile tools (launcher.sh)
+Icon=etl
+Exec="$REPO/$2"${3:+ +connect %u}
+Terminal=false
+${3:+MimeType=x-scheme-handler/et;
+}Categories=Game;ActionGame;
+StartupNotify=false
+Keywords=team-based;multiplayer;tactical;WWII;enemy;territory;etl;etlegacy;
+PrefersNonDefaultGPU=true
+EOF
+}
+
+# only the 64-bit entry takes et:// links, so a link has one target
+DESKTOPS=("x86_64 64 launcher.sh url")
+[ -n "$GAME_BIN_I386" ] && DESKTOPS+=("i386 32 launcher32.sh")
+desktop_missing=""
+for entry in "${DESKTOPS[@]}"; do
+	[ -e "$APPS/etlegacy-launcher.${entry%% *}.desktop" ] || desktop_missing=1
+done
+echo -e "\n${CYAN}🖥️  Desktop files (start the game through launcher.sh)...${NC}"
+if [[ $REPO == *[\"\$\`\\%]* ]]; then
+	# they would need escaping in the quoted Exec path
+	echo -e "    ${ORANGE}⚠️  Skipped: the repo path contains \" \$ \` \\ or %${NC}"
+elif [ -z "$desktop_missing" ] || ask "  Create desktop files in $APPS? [y/N]" n; then
+	# existing ones are rewritten without asking: the repo may have moved
+	mkdir -p "$APPS"
+	for entry in "${DESKTOPS[@]}"; do
+		read -r arch bits launcher url <<<"$entry"
+		file="$APPS/etlegacy-launcher.$arch.desktop"
+		text=$(desktop_entry "$bits" "$launcher" "$url")
+		[ "$text" = "$(cat "$file" 2>/dev/null)" ] && continue
+		if echo "$text" >"$file"; then
+			echo "    - Wrote $file"
+		else
+			echo -e "    ${RED}⚠️  WARNING:${NC} Failed to write $file"
+		fi
+	done
 fi
 
 echo -e "\n${GREEN}✅ Deploy completed!${NC}"

@@ -41,6 +41,8 @@ Windows support is not planned, but only the setup is Linux-specific: the cfgs r
 
    A `profiles/` folder the game already created in a mod folder blocks the link to this repo; the script offers to rename it to `profiles.bak_<date>`.
 
+   It also offers desktop files: the application menu entries "ET: Legacy Launcher (64-bit)" and, with a 32-bit client installed, "(32-bit)", which start `launcher.sh` / `launcher32.sh` (`~/.local/share/applications/etlegacy-launcher.<arch>.desktop`). The 64-bit entry opens `et://` links.
+
 3. Put your player name into `user.cfg` (name + the `PGDN` name cycle) and adjust fps, mouse, fov, refresh rate, fullscreen resolution and network rates. It is gitignored.
 
 4. Start the game. The profile is `default`; the mod's `autoexec.cfg` runs the whole chain.
