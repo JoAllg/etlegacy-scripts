@@ -23,4 +23,4 @@ The echo menus use jaymod's `cg_numPopups`, `cg_popupWaitTime`, `cg_popupFadeTim
 
 ## Weapon keys with fallback
 
-Every `weaponbank` command starts `cg_weaponCycleDelay`, also one for a bank without ammo (jaymod source `src/cgame/cg_weapons.cpp` `CG_WeaponBank_f`; legacy starts it only when the weapon changes). `mod_general.cfg` therefore sets the delay to 0 and puts the fallback bank first (`bankPistol`, `bankSMG`). Not tested in game.
+Every `weaponbank` command starts `cg_weaponCycleDelay`, also one for a bank without ammo (jaymod source `src/cgame/cg_weapons.cpp` `CG_WeaponBank_f`; legacy starts it only when the weapon changes). `mod_general.cfg` therefore sets the delay to 0 and puts the fallback bank first (`bankPistol`, `bankSMGSelect`). That form can't step to the next weapon of bank 3, so the SMG key runs plain `weaponbank 3` while bank 3 is in hand (`bankSMGCycle`, a guess of the script). Not tested in game.
