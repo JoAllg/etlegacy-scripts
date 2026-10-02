@@ -10,7 +10,9 @@ The tool follows the console log `<fs_homepath>/<mod>/etconsole.log` (`logfile 2
 |---|---|---|
 | `<address> resolved to <ip:port>` (IPv6: `[<ip>]:<port>`) | the game connects to a server: server menu, server browser, `connect`, `reconnect` | `src/client/cl_main.c` `CL_Connect_f`, `src/qcommon/net_ip.c` `NET_AdrToString`; IPv6 not tested in game |
 | `----- Server Initialization ----` | the game hosts a map itself (`+map`, `+devmap`), on every local map load | `src/server/sv_init.c` `SV_SpawnServer`; seen in a log of a local host on 2026-10-02 |
-| a log that starts again | new game session, on no server | the engine truncates the log at launch (`src/qcommon/common.c`) |
+| a log that starts again (smaller, or another first line `logfile opened on <date>`) | new game session, on no server | the engine truncates the log at launch (`src/qcommon/common.c` `Com_Printf`) |
+
+The log the tool finds at its start belongs to an earlier session unless a game runs, so its connects don't count then. A game runs while `profiles/<profile>/profile.pid` holds a live pid (`src/sys/sys_main.c` `Sys_WritePIDFile`, removed in `Sys_Exit`).
 
 A connect names only the address, the server's name is not logged. The tool asks the server for it (`getstatus`, [Server queries](serverquery.md)) and looks the name up in `servers.tsv`. `history.tsv` keeps the name of every server asked so far, so a known server is recognized without waiting for its answer; the answer still follows and corrects the result. An unknown server counts as "no server of the list" until it answers. A server that doesn't answer (map change, restart, its rate limit dropping the packet) is asked again after 2, 4, 8, ... up to 60 s, with one packet per try, until it answers or the game connects elsewhere.
 
@@ -99,4 +101,5 @@ The tag in the headings of the pages and in the `TAB` line is the text of `serve
 
 - Until the tool has written, the settings of the previous server stay; the next event of the table corrects it.
 - Leaving a server for the main menu and playing a demo keep the last server's settings.
-- Without the tool (`./serverconfig.sh`, started by `./play.sh`) the files keep the state of its last run.
+- Without the tool (`./serverconfig.sh`, started by `./play.sh`) no server's settings apply: when it ends (Ctrl+C, the `SIGTERM` of `./play.sh`) it writes both files for "no server". Only a tool that is killed hard (`SIGKILL`, power loss) leaves the files of its last server, until it starts again. Tested on 2026-10-02 without a game: start with an old log and `SIGTERM` both wrote the "no server" files.
+- A failed write or query is reported and tried again with the pauses above; the tool keeps running.

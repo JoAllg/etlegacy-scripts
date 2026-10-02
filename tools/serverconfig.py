@@ -6,7 +6,9 @@ Runs next to the game and follows its console log (tools/common.py follow). A co
 (tools/serverapi.py) and the name is looked up in default/serverconfigs/servers.tsv; a server seen before is
 recognized at once from history.tsv, the answer then corrects it. A server that doesn't answer (map change, restart,
 its rate limit) is asked again after 2, 4, 8, ... up to 60 s, until it answers or the game moves on. A locally hosted map ("----- Server
-Initialization ----", src/server/sv_init.c SV_SpawnServer) is the id "local". Written to default/serverconfigs/:
+Initialization ----", src/server/sv_init.c SV_SpawnServer) is the id "local". The log found at the tool's start counts
+only while a game runs (profile.pid), and the tool leaves the files for "no server" when it ends, so a game started
+without it applies no server's settings. Written to default/serverconfigs/:
 - current.cfg: execs default.cfg, then <id>.cfg if the id has one. Its guard applies them only when another id was
   applied last, so the game execs it on many events (map load, team and class change, voice chat) and catches up
   whenever this tool was slower than the game.
@@ -26,7 +28,9 @@ Usage: tools/serverconfig.py                                      follow the gam
 import argparse
 import contextlib
 import io
+import os
 import re
+import signal
 import sys
 import tempfile
 import time
@@ -39,6 +43,7 @@ from settings import MENU, PROFILE, REPO
 EXEC = "profile/serverconfigs"  # the profile link of deploy.sh in each mod folder
 VOICE = REPO / PROFILE / "scripts/vsays/servers"
 VOICE_EXEC = "profile/scripts/vsays/servers"
+PIDFILE = REPO / PROFILE / "profile.pid"  # the game's profiles/<profile>/profile.pid, through the profiles link of deploy.sh
 CONNECT = re.compile(r"\S+ resolved to (\d+\.\d+\.\d+\.\d+:\d+|\[[^\]\s]+\]:\d+)")  # one word in front: not the "MOTD: resolving ..." line; IPv6 is "[ip]:port"
 LOCAL = "----- Server Initialization ----"
 RETRY, RETRY_MAX = 2, 60  # seconds until a server that didn't answer is asked again: doubled after every try, up to the maximum
@@ -212,24 +217,51 @@ def add(server, address, text):
         print(f"⚠️  the earlier row of '{first}' matches this server first", file=sys.stderr)
 
 
+def game_running(pidfile=PIDFILE):
+    """True while a game runs: its pid file holds the pid and goes at exit (src/sys/sys_main.c Sys_WritePIDFile,
+    Sys_Exit); after a crash it stays, with a pid that is gone."""
+    try:
+        os.kill(int(pidfile.read_text()), 0)
+    except PermissionError:  # the pid lives, under another user
+        return True
+    except (OSError, ValueError):
+        return False
+    return True
+
+
+def attempt(target):
+    """settle(), with a failed write or socket counted as "no answer yet": the tool lives on and tries again."""
+    try:
+        return settle(target)
+    except OSError as e:
+        print(f"⚠️  server configs: {e} (trying again)", file=sys.stderr)
+        return False
+
+
 def run():
     check()
     print(f"Server configs: following the game -> {CONFIGS} (Ctrl+C stops)")
-    done, target, wait, due = object(), None, None, 0
+    done, target, wait, due, stale, first = object(), None, None, 0, False, True
+    for sig in (signal.SIGTERM, signal.SIGHUP):  # play.sh ends the tool with SIGTERM: leave through the finally below
+        signal.signal(sig, lambda *_: sys.exit(0))
     try:
         for line in follow():
             if line is None:  # a new game session is on no server
-                target = None
+                # the log found at the tool's start is the last session's unless a game runs: its connects don't count
+                target, stale, first = None, first and not game_running(), False
             elif line:
-                target = event(line) or target
+                target = target if stale else event(line) or target
             elif target != done:  # end of the log: act on the last event only, not on every connect of a replay
-                done, wait = target, None if settle(target) else pauses()
+                done, wait = target, None if attempt(target) else pauses()
                 due = time.monotonic() + next(wait) if wait else 0
             elif wait and time.monotonic() >= due:  # between the tries the log is followed on, so a new connect is not held up
-                wait = None if ask(target) else wait
+                wait = None if attempt(target) else wait
                 due = time.monotonic() + next(wait) if wait else 0
     except KeyboardInterrupt:
         pass
+    finally:  # without the tool nobody corrects the files: a game started without it must find no server's settings
+        with contextlib.suppress(OSError):
+            write(None)
 
 
 def selftest():
@@ -283,6 +315,21 @@ def selftest():
     wait = pauses()
     assert [next(wait) for _ in range(7)] == [2, 4, 8, 16, 32, 60, 60]
     assert ask("1.2.3.4:27960", lambda address: "") is False  # no answer: nothing is written
+    with tempfile.TemporaryDirectory() as d:
+        pid, log = Path(d) / "profile.pid", Path(d) / "etconsole.log"
+        assert not game_running(pid)  # no file: no game
+        pid.write_text(str(os.getpid()))
+        assert game_running(pid)
+        pid.write_text("x")
+        assert not game_running(pid)
+        log.write_text("       0 logfile opened on A\n")
+        with contextlib.redirect_stdout(io.StringIO()):  # "following ..."
+            lines = follow(lambda: log, 0)
+            assert [next(lines) for _ in range(3)] == [None, "       0 logfile opened on A\n", ""] and next(lines) == ""
+            log.write_text("       0 logfile opened on B\n       0 a longer log than the one before\n")  # restart, not smaller
+            assert [next(lines) for _ in range(2)] == [None, "       0 logfile opened on B\n"]
+        write_atomic(log, "x")
+        assert not list(Path(d).glob("*.tmp"))
     assert unreset("cg_fov 1\ncg_fov 2\nexec x.cfg\nwait 5", "my_cg_fov 1") == ["cg_fov"]
     print("selftest ok")
 

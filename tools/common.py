@@ -20,7 +20,7 @@ def clean(text):
 
 def write_atomic(path, text):
     """Writes a file the game may exec at any time: swapped in whole. latin1 keeps every byte as it is."""
-    tmp = path.with_name(path.name + ".tmp")
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")  # own name per process: two tools may write the same file
     tmp.write_text(text, "latin1")
     os.replace(tmp, path)
 
@@ -36,19 +36,25 @@ def find_log():
     return max(logs)[1] if logs else None
 
 
-def follow():
+def first_line(path):
+    """First line of a log as bytes: "logfile opened on <date>" (src/qcommon/common.c Com_Printf), new with every game start."""
+    with open(path, "rb") as log:
+        return log.readline(200)
+
+
+def follow(find=find_log, pause=.2):
     """Lines of the game's console log as they are written (needs `logfile 2`, 1 buffers 4 KB), without end.
     Yields None when a log is opened, which is read from its start (the game truncates it at launch, so a replay
     restores the state), and "" each time the end of the log is reached."""
     while True:
-        path = find_log()
+        path = find()
         if not path:
             time.sleep(2)
             continue
         print(f"following {path}")
         yield None
         with open(path, errors="replace") as log:
-            line = ""
+            line, head = "", b""
             while True:
                 line += log.readline()
                 if line.endswith("\n"):
@@ -56,9 +62,13 @@ def follow():
                     line = ""
                     continue
                 yield ""
-                time.sleep(.2)
+                time.sleep(pause)
                 try:
-                    if path.stat().st_size < log.tell() or find_log() != path:  # game restarted or another mod's log is newer
+                    # game restarted (a new log can outgrow a short old one between two looks, so its first line
+                    # is compared too) or another mod's log is newer
+                    now = first_line(path)
+                    if path.stat().st_size < log.tell() or (head.endswith(b"\n") and now != head) or find() != path:
                         break
+                    head = now
                 except OSError:
                     break
