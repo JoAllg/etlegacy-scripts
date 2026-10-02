@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////////////
 ```
 
-Config, scripts and keybinds for **Wolfenstein: Enemy Territory** on **ET: Legacy**, one script set for every mod (legacy, nitmod, jaymod; etpub, silEnT and ETJump with default values, not tested in game): class scripts, spawnpoint autoexecs, a voicechat menu, weapon-switch and network toggles, plus a keymap tool that renders the live binds as a keyboard overview.
+Config, scripts and keybinds for **Wolfenstein: Enemy Territory** on **ET: Legacy**, one script set for every mod (legacy, nitmod, jaymod; etpub, silEnT and ETJump with default values, not tested in game): class scripts, autoexecs per map, team and mod, a voicechat menu, an in-game server menu, settings and voicechat menus per server, plus a keymap tool that renders the live binds as a keyboard overview.
 
 ## Requirements
 
@@ -21,7 +21,7 @@ Config, scripts and keybinds for **Wolfenstein: Enemy Territory** on **ET: Legac
 - ET: Legacy 2.86 or newer
 - Python 3, only for the optional tools in `tools/`
 
-Windows support is not planned, but only the setup is Linux-specific: the cfgs reach each other through the `profile/` and `profiles/` links instead of absolute paths, and machine-specific values live in `settings.conf`. A Windows port mainly needs a `deploy.sh` equivalent (links into the mod folders).
+Windows support is not planned, but only the setup is Linux-specific: the cfgs reach each other through the `profile/` and `profiles/` links instead of absolute paths, and machine-specific values live in `settings.conf`. A Windows port mainly needs a port the existing shell scripts.
 
 ## Setup
 
