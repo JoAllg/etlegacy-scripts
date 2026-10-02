@@ -41,6 +41,7 @@ Two kinds, told apart by the header:
 ## Team autoexecs
 
 - `autoexec_axis.cfg` / `autoexec_allies.cfg` set `spawnSelector4` (`vstr unbindNumberRow; vstr spawnpsr` / `...spawnpsb`: nothing is unbound before a team menu exists, TAB keeps the scores). No hook resets: legacy runs them on the first spawn and after every `vid_restart` (`src/cgame/cg_playerstate.c` `CG_Respawn`), which would re-arm a join hook that just ran.
+- Both run `vstr ta_Team` (`scripts/classcript.cfg`), which undoes `ta_Spectator`: legacy runs `autoexec_spectator.cfg` before the team's file on every map load and `vid_restart`, also for a player in a team (console log of 2026-10-02: `autoexec_spectator.cfg`, then `autoexec_axis.cfg` after the `vid_restart` of the team brightness). A bind `ta_Spectator` sets needs its player value in `ta_Team`.
 - All three end with `vstr serverCheck` (settings of the server the game is on, guarded: nothing happens unless the server changed; `.claude/rules/serverconfigs.md`).
 - `autoexec_spectator.cfg` runs `vstr ta_Spectator` (spectator binds, e.g. SPACE plain jump). Legacy runs team autoexecs from the first snapshot too (`cg_snapshot.c` → `CG_Respawn`), so it also covers server join.
 

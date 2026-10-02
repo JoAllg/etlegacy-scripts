@@ -89,6 +89,7 @@ A server cfg is a personal preference for that server, so it overrides these fil
 
 - Nothing undoes a server cfg except `default.cfg`, which runs before every server cfg: each name a server cfg sets (cvar, alias, bind) needs its normal value there, or it keeps the server's value on all other servers. The tool reports such names at its start (`tools/serverconfig.py --check`); it only compares names.
 - Both files run again after every server change, `F3` and `F1`: absolute values only (`cg_fov 100`), no toggle or cycle steps.
+- Never set state a key changes (toggle and cycle pointers of `state.cfg`): `F3` would throw the player's choice away. Set what the steps mean instead, so the pointer stays untouched: the weapon switch cycle (`F5`) steps through first, second and off, and `vstr weaponSwitchOrderPistol` / `vstr weaponSwitchOrderSMG` (`scripts/movement.cfg`) choose the weapon of the first step, the start mode on that server.
 - A fixed value in `default.cfg` overrides `user.cfg` and the definitions on every server. Where a value alias exists, restore with it and name the cvar in a comment for the check: `vstr fovNormal  // cg_fov`.
 
 ## Voice chat

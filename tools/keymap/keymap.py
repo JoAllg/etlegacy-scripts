@@ -834,7 +834,7 @@ def selftest(mod):
     assert base["v"]["a"]["1"][0][1] == "menu", base["v"]  # a chat category opens its vsay list
     medic_i = next(i for i, v in enumerate(data) if v["name"].startswith("Medic"))
     assert base["KP_UPARROW"]["a"]["MOUSE4"][0][3] == medic_i, base["KP_UPARROW"]  # a class key lands in its class view
-    assert scoped["MOUSE3"]["t"] == "toggle" and base["MOUSE2"]["t"] == "", scoped["MOUSE3"]
+    assert scoped["MOUSE3"]["t"] == "toggle" and base["MOUSE2"]["t"] == "toggle", scoped["MOUSE3"]  # MOUSE2: pistols and back to the SMG
     assert all(base[k]["t"] == "menu" for k in ("v", "ENTER", "KP_END", "KP_PGDN")), base["KP_END"]
     assert all(base[k]["t"] == "cycle" for k in ("KP_HOME", "KP_UPARROW", "KP_PGUP", "KP_LEFTARROW", "KP_5"))
     assert base["KP_DOWNARROW"]["t"] != "menu" and base["KP_RIGHTARROW"]["t"] != "menu"
