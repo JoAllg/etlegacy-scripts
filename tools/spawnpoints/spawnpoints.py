@@ -38,7 +38,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from helpers import common  # noqa: E402
-from helpers.common import clean, strip_colors, write_atomic  # noqa: E402
+from helpers.common import RESERVED, clean, map_color, strip_colors, with_map_color, write_atomic  # noqa: E402
 from link_maps import DLCACHE, ETMAIN, LEGACY_PAKS, STOCK_PAKS, maps, rank  # noqa: E402
 from helpers.settings import MENU, PROFILE as PROFILE_NAME, REPO  # noqa: E402
 
@@ -52,7 +52,6 @@ ROOM_DZ = 64           # height difference between spots of one room
 MAX_ENTRIES = 12       # keys 1..0, -, = of the spawn selector (spawnp0-11)
 KEYS = [*"1234567890", "US_MINUS", "US_EQUALS"]
 MENU_NOTE = "// - spawnpsr/-psb bind only this map's keys: spawnpoints left over from the previous map are on no key"
-RESERVED = {"axis", "allies", "spectator", "default"}  # event autoexecs of the same name (docs/autoexec.md)
 OWN_BONUS = 256        # see menu()
 TEAMS = (("r", "team_ctf_redspawn", MENU["axis"], 1), ("b", "team_ctf_bluespawn", MENU["allies"], 2))  # color of the spawn name, objective spawnflag of the team
 
@@ -231,13 +230,21 @@ def longname(z, mapname):
 
 def template_parts(mapname):
     """(settings, tail): the lines between "// Settings" and "// Spawnpoints" and those after the last spawnsay,
-    from the live autoexec_<map>.cfg (else TEMPLATE), so manual changes there carry over."""
-    for path in (LIVE / f"autoexec_{mapname.lower()}.cfg", TEMPLATE):
-        lines = path.read_text(encoding="latin1").splitlines() if path.exists() else []
+    from the live autoexec_<map>.cfg (else TEMPLATE), so manual changes there carry over. The crosshair color is the
+    map's own, whichever file the settings come from: also that of an autoexec without spawnpoints
+    (tools/serverconfig.py), and never the template's."""
+    own = LIVE / f"autoexec_{mapname.lower()}.cfg"
+    return parts(own.read_text(encoding="latin1").splitlines() if own.exists() else [],
+                 TEMPLATE.read_text(encoding="latin1").splitlines() if TEMPLATE.exists() else [])
+
+
+def parts(own, template):
+    for lines in (own, template):
         says = [i for i, l in enumerate(lines) if re.match(r"\s*set\s+spawnsay", l)]
         ends = [i for i, l in enumerate(lines) if l.startswith("// Spawnpoints")]
         if "// Settings" in lines and ends and says:
-            return lines[lines.index("// Settings") + 1:ends[0]], lines[says[-1] + 1:]
+            settings = lines[lines.index("// Settings") + 1:ends[0]]
+            return with_map_color(settings, map_color(own)) or with_map_color(settings, None), lines[says[-1] + 1:]
     sys.exit(f"{TEMPLATE} lacks the // Settings, // Spawnpoints or spawnsay lines")
 
 
@@ -298,6 +305,11 @@ def selftest():
     assert label("a /* b // c ///") == "a / * b / / c / / /"  # no comment start: the menu's binds come after the label
     assert parse_locations('1 2 3 "^3Bun;ker"\n4 5 6 @\n') == [((1.0, 2.0, 3.0), "Bun,ker"), ((4.0, 5.0, 6.0), "Bun,ker")]
     assert vec("1 2 3 4") == (1.0, 2.0, 3.0) and vec("1 2") is None and vec("a b c") is None
+    full = ["// Settings", "exec autoexec_mod.cfg", "vstr crosshairColorRed  // x", "", "// Spawnpoints", "set spawnsay0 a", "echo end"]
+    stub = ["// Settings", "exec autoexec_default.cfg", "vstr crosshairColorCyan"]
+    assert parts(stub, full)[0][:2] == ["exec autoexec_mod.cfg", "vstr crosshairColorCyan" + common.MAP_COLOR_NOTE]  # the stub's color, the template's settings
+    assert parts([], full) == (["exec autoexec_mod.cfg", ""], ["echo end"])  # the template's color stays there
+    assert parts(full, [])[0] == ["exec autoexec_mod.cfg", "vstr crosshairColorRed" + common.MAP_COLOR_NOTE, ""]
     assert stamp(Path(__file__).with_name("missing")) is None and read_cache(["other generator"]) == {}
     print("selftest ok")
 

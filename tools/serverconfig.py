@@ -15,6 +15,12 @@ without it applies no server's settings. Written to default/serverconfigs/:
 - current_vsay.cfg: exec'd each time the voice chat opens; puts the server's voice chat (scripts/vsays/servers/<id>/,
   tools/voicemenu.py) on TAB, or nothing.
 
+Crosshair color per map: the same log names the map of every map load ("LOADING... maps/<map>.bsp", in legacy "LOADING...  - maps/<map>.bsp -",
+src/cgame/cg_info.c CG_LoadingString) and echoes each step of the color cycle ("CROSSHAIR COLOR <name>", default/scripts/display.cfg). A
+step taken on a map is written into default/autoexecs/autoexec_<map>.cfg as "vstr crosshairColor<Name>", which sets it
+on every later load of that map; a map without autoexec gets one that execs the default autoexec (linked into the game
+by the next deploy.sh run).
+
 At start (and with --check) every name a server cfg sets is looked up in default.cfg, which runs before every server
 cfg: a name it doesn't mention keeps the server's value on all other servers, so it is reported (warning only).
 
@@ -36,7 +42,7 @@ import tempfile
 import time
 from pathlib import Path
 
-from helpers.common import STAMP, clean, find_log, follow, strip_colors, write_atomic
+from helpers.common import RESERVED, STAMP, clean, find_log, follow, map_color, strip_colors, with_map_color, write_atomic
 from helpers.serverapi import CONFIGS, ID, ID_RULE, SERVERS, adr_string, history, hostname, identify, remember, resolve, server_tag, servers
 from helpers.settings import MENU, PROFILE, REPO
 
@@ -50,6 +56,10 @@ RETRY, RETRY_MAX = 2, 60  # seconds until a server that didn't answer is asked a
 GENERATED = {"default", "current", "current_vsay"}  # cfgs of serverconfigs/ that are no server's settings
 NAME = re.compile(r'\s*(?:(?:set[asu]?|bind|reset|toggle|cycle)\s+)?"?([^\s";]+)')
 NO_NAME = {"exec", "execq", "vstr", "echo", "wait"}
+AUTOEXECS = REPO / PROFILE / "autoexecs"
+# both texts can come from a server (map name, a printed line) and end up in a file name and a cfg: letters only
+MAP_LOAD = re.compile(r"LOADING\.\.\. +(?:- )?maps/([\w.+-]+)\.bsp(?: -)?", re.A)  # legacy: "LOADING...  - maps/<map>.bsp -"
+COLOR_STEP = re.compile(r"CROSSHAIR COLOR ([a-z]{1,16})")
 
 
 def event(line):
@@ -59,6 +69,54 @@ def event(line):
         return "local"
     m = CONNECT.fullmatch(text)
     return m and m.group(1)
+
+
+def stub(mapname):
+    """Autoexec of a map that has none: what the default autoexec does, so there is a file to carry the color."""
+    return ["// Map name       " + mapname,
+            "// Autoexec by    tools/serverconfig.py (crosshair color; the map has no spawnpoints of its own here)",
+            "",
+            "// Settings",
+            "exec autoexec_default.cfg  // generic spawn menu and mod switch guard, as on a map without autoexec",
+            "",
+            "echo ^5>>> AUTOEXEC_MAP LOADED!"]
+
+
+def save_color(mapname, color, out=AUTOEXECS):
+    """Sets the crosshair color in the map's autoexec; True if the file was written. The echo of the autoexec's own
+    line at map load names the color the file has, which writes nothing."""
+    path = out / f"autoexec_{mapname}.cfg"
+    try:
+        old = path.read_text("latin1").splitlines()
+    except FileNotFoundError:
+        old = None
+    lines = old or stub(mapname)
+    if map_color(lines) == color:
+        return False
+    new = with_map_color(lines, color)
+    if new is None:
+        print(f"⚠️  crosshair color: {path.name} has no settings line (exec autoexec_mod.cfg) to put the color after", file=sys.stderr)
+        return False
+    write_atomic(path, "\n".join(new) + "\n")
+    if old is None:
+        print(f"⚠️  crosshair color: created {path.name}, the game finds it after the next deploy.sh run (./launcher.sh)", file=sys.stderr)
+    return True
+
+
+def on_map(line, mapname, out=AUTOEXECS):
+    """The map the game is on after this log line (None: unknown); a step of the color cycle is saved for it."""
+    text = strip_colors(STAMP.sub("", line)).strip()
+    m = MAP_LOAD.fullmatch(text)
+    if m:
+        name = m.group(1).lower()
+        return None if name in RESERVED else name
+    m = COLOR_STEP.fullmatch(text)
+    if m and mapname:
+        try:
+            save_color(mapname, m.group(1).capitalize(), out)
+        except OSError as e:
+            print(f"⚠️  crosshair color: {e}", file=sys.stderr)
+    return mapname
 
 
 def settings_cfg(server):
@@ -241,16 +299,18 @@ def attempt(target):
 def run():
     check()
     print(f"Server configs: following the game -> {CONFIGS} (Ctrl+C stops)")
-    done, target, wait, due, stale, first = object(), None, None, 0, False, True
+    done, target, wait, due, stale, first, mapname = object(), None, None, 0, False, True, None
     for sig in (signal.SIGTERM, signal.SIGHUP):  # launcher.sh ends the tool with SIGTERM: leave through the finally below
         signal.signal(sig, lambda *_: sys.exit(0))
     try:
         for line in follow():
             if line is None:  # a new game session is on no server
                 # the log found at the tool's start is the last session's unless a game runs: its connects don't count
-                target, stale, first = None, first and not game_running(), False
+                target, stale, first, mapname = None, first and not game_running(), False, None
             elif line:
-                target = target if stale else event(line) or target
+                if not stale:
+                    target = event(line) or target
+                    mapname = on_map(line, mapname)
             elif target != done:  # end of the log: act on the last event only, not on every connect of a replay
                 done, wait = target, None if attempt(target) else pauses()
                 due = time.monotonic() + next(wait) if wait else 0
@@ -271,6 +331,29 @@ def selftest():
     assert event("       0 MOTD: resolving motd.example.org... resolved to 192.0.2.9:27951\n") is None
     assert event("       0 localhost resolved to loopback\n") is None and event("       0 Server: fueldump\n") is None
     assert event("    1200 ----- Server Initialization ----\n") == "local"
+
+    with tempfile.TemporaryDirectory() as d:
+        out, note = Path(d), "  // crosshair color on this map (HOME), saved by tools/serverconfig.py"
+        radar = out / "autoexec_radar.cfg"
+        radar.write_text("// Settings\nexec autoexec_mod.cfg  // x\nset spawnSelectorMap \"vstr spawnSelector3\"\n\n// Spawnpoints\n")
+        assert on_map("     100 ^8CROSSHAIR COLOR ^2cyan\n", None, out) is None and "Color" not in radar.read_text()  # no map yet
+        assert on_map("       0 LOADING... maps/Radar.bsp\n", None, out) == "radar" and on_map("       0 LOADING... :models:\n", "radar", out) == "radar"
+        assert on_map("    1200 LOADING...  - maps/supply.bsp -\n", "radar", out) == "supply"
+        assert on_map("     100 ^8CROSSHAIR COLOR ^2cyan\n", "radar", out) == "radar"
+        assert radar.read_text().splitlines()[1:4] == ["exec autoexec_mod.cfg  // x", 'set spawnSelectorMap "vstr spawnSelector3"', "vstr crosshairColorCyan" + note]
+        before = radar.stat().st_mtime_ns
+        assert save_color("radar", "Cyan", out) is False and radar.stat().st_mtime_ns == before  # the autoexec's own echo
+        assert save_color("radar", "Red", out) and radar.read_text().count("crosshairColor") == 1 and "vstr crosshairColorRed" + note in radar.read_text()
+        for line in ("Someone: CROSSHAIR COLOR green", "CROSSHAIR COLOR x; quit", "CROSSHAIR COLOR ../x"):  # chat, no color names
+            on_map(f"     100 {line}\n", "radar", out)
+        assert "Red" in radar.read_text()
+        assert [on_map(f"       0 LOADING... maps/{m}.bsp\n", "radar", out) for m in ("default", "../x", "a/b", "te-1_b2.x")] == [None, "radar", "radar", "te-1_b2.x"]
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            assert save_color("newmap", "Green", out) and "created autoexec_newmap.cfg" in err.getvalue()
+            assert (out / "autoexec_newmap.cfg").read_text().splitlines()[3:6] == ["// Settings", "exec autoexec_default.cfg  // generic spawn menu and mod switch guard, as on a map without autoexec", "vstr crosshairColorGreen" + note]
+            (out / "autoexec_odd.cfg").write_text("echo x\n")
+            assert save_color("odd", "Green", out) is False and "no settings line" in err.getvalue()
+        assert not list(out.glob("*.tmp"))
 
     xy = settings_cfg("xy").splitlines()
     assert xy[1] == f'set serverApply "execq {EXEC}/default.cfg; execq {EXEC}/xy.cfg; set serverLast vstr serverIs_xy"'

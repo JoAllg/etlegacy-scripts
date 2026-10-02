@@ -26,6 +26,33 @@ def clean(text):
     return "".join(c for c in text if 32 <= ord(c) < 256 and ord(c) != 127)
 
 
+# Names that are no map's autoexec_<name>.cfg: event autoexecs of the mods (docs/autoexec.md) and the mod switch guard
+RESERVED = {"default", "mod", "axis", "allies", "spectator", "soldier", "medic", "engineer", "fieldops", "covertops"}
+# The crosshair color of a map: a step of the HOME cycle (default/scripts/display.cfg) in the map's autoexec
+MAP_COLOR = re.compile(r"\s*vstr crosshairColor([A-Z][a-z]+)\b")
+MAP_COLOR_NOTE = "  // crosshair color on this map (HOME), saved by tools/serverconfig.py"
+SETTING = re.compile(r"\s*(exec autoexec_\w+\.cfg|set spawnSelectorMap)\b")
+
+
+def map_color(lines):
+    """Name of the crosshair color the lines of a map autoexec set ("Cyan"), None without one."""
+    names = [m.group(1) for m in map(MAP_COLOR.match, lines) if m]
+    return names[-1] if names else None
+
+
+def with_map_color(lines, color):
+    """The lines of a map autoexec (or of its settings block) with this crosshair color as their only one, none for
+    None. The line follows the last setting ("exec autoexec_mod.cfg" resets the color, so it must come after it);
+    None if the lines hold no setting to put it after."""
+    out = [line for line in lines if not MAP_COLOR.match(line)]
+    if not color:
+        return out
+    at = [i for i, line in enumerate(out) if SETTING.match(line)]
+    if not at:
+        return None
+    return out[:at[-1] + 1] + [f"vstr crosshairColor{color}{MAP_COLOR_NOTE}"] + out[at[-1] + 1:]
+
+
 def write_atomic(path, text):
     """Writes a file the game may exec at any time: swapped in whole. latin1 keeps every byte as it is."""
     tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")  # own name per process: two tools may write the same file
