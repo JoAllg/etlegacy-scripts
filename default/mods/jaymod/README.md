@@ -20,3 +20,7 @@ Jaymod keeps etmain's weapon enum unchanged and appends its own weapons from 50,
 ## Popups
 
 The echo menus use jaymod's `cg_numPopups`, `cg_popupWaitTime`, `cg_popupFadeTime` and `cg_popupTime` (`setPopupsMenu` in `mod_general.cfg`). Jaymod caps the wait time at 4000 ms and the fade time at 5000 ms (jaymod source `src/cgame/cg_popupmessages.cpp`), so a menu fades after 9 s instead of staying until it is closed; its keys stay bound.
+
+## Weapon keys with fallback
+
+Every `weaponbank` command starts `cg_weaponCycleDelay`, also one for a bank without ammo (jaymod source `src/cgame/cg_weapons.cpp` `CG_WeaponBank_f`; legacy starts it only when the weapon changes). `mod_general.cfg` therefore sets the delay to 0 and puts the fallback bank first (`bankPistol`, `bankSMG`). Not tested in game.

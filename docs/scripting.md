@@ -113,7 +113,7 @@ Store a whole `bind` command in an alias named `bind<Key><Script>`, then `vstr` 
 ```
 set bindMouse1Attack "bind MOUSE1 +attack"
 set bindMouse1Sprint "bind MOUSE1 +vstr autosprintON autosprintOFF"
-set weapon3 "weaponbank 3; weaponbank 2; vstr bindMouse1Sprint"
+set weapon3 "weaponbank 3; vstr bindMouse1Sprint"
 ```
 Examples: weapon binds in `binds_custom.cfg`, class bindings (`cs_*` aliases) in `scripts/classcript.cfg`, mod-specific alt-fire binds in `mods/<mod>/mod_general.cfg`.
 
