@@ -20,6 +20,7 @@ jobs:
           git clone "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.wiki.git" wiki
           git -C wiki rm -rq --ignore-unmatch .
           cp docs/*.md wiki/
+          cp -r docs/images wiki/
           # Wiki pages are addressed without the .md extension
           sed -i -E 's/\]\(([A-Za-z0-9_-]+)\.md(#[^)]*)?\)/](\1\2)/g' wiki/*.md
           cd wiki

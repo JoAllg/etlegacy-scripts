@@ -4,7 +4,7 @@ Optional Python 3 helpers (stdlib only). They read the game paths and color pref
 
 ## keymap/
 
-Keyboard + mouse overview of the live binds. `keymap.py` emulates the exec chain, presses every bound key and writes `keymap.html` (one self-contained page, tabs per class bind set). New commands get their short names in `labels.json` (`--missing` lists unnamed ones). `live.py` serves the page and switches to the class picked in the running game by following the newest `<HOMEPATH>/<mod>/etconsole.log`. Details: `keymap/README.md`.
+Keyboard + mouse overview of the live binds. `keymap.py` emulates the exec chain, presses every bound key and writes `keymap.html` (one self-contained page, tabs per class bind set). New commands get their short names in `labels.json` (`--missing` lists unnamed ones). `live.py` serves the page and switches to the class picked in the running game by following the newest `<HOMEPATH>/<mod>/etconsole.log`. Details: [`keymap/README.md`](keymap/README.md).
 
 ```sh
 python3 tools/keymap/keymap.py [--mod <mod>] [--missing]
@@ -37,7 +37,7 @@ python3 tools/vsaycolors.py status | preview [role=^c ...] | apply | todo | done
 
 ## servermenu.py
 
-Feeds the in-game server menu (`RIGHTCTRL`, `default/scripts/servermenu.cfg`): while it runs, it asks the favorite servers of the server browser for their state every 5 seconds and writes the menu pages to `default/servermenu/`. Each server shows as `name  playing+spectators+bots/slots  map  ping  mod` in columns aligned with spaces, sorted by playing humans; the number keys connect. Start it before or while playing and leave it running; `--once` prints the list in the terminal. How servers are queried: `docs/serverquery.md`.
+Feeds the in-game server menu (`RIGHTCTRL`, `default/scripts/servermenu.cfg`): while it runs, it asks the favorite servers of the server browser for their state every 5 seconds and writes the menu pages to `default/servermenu/`. Each server shows as `name  playing+spectators+bots/slots  map  ping  mod` in columns aligned with spaces, sorted by playing humans; the number keys connect. Start it before or while playing and leave it running; `--once` prints the list in the terminal. How servers are queried: [`docs/serverquery.md`](../docs/serverquery.md).
 
 ```sh
 python3 tools/servermenu.py [--interval 5] [--once]
@@ -45,9 +45,9 @@ python3 tools/servermenu.py [--interval 5] [--once]
 
 ## serverconfig.py
 
-Settings and voice chat per server (`docs/serverconfigs.md`). While it runs, it follows the game's console log, asks a joined server for its name and looks it up in `default/serverconfigs/servers.tsv` (`<id><TAB><text in the server name>`, yours to maintain; format: `servers.example.tsv`). It then writes `current.cfg`, through which the game execs `default.cfg` and that server's `<id>.cfg`, and `current_vsay.cfg`, which puts the server's voice chat on `TAB`. `add` appends a row for a server (default: the one you are on) and creates its cfg. At start it warns about names a server cfg sets that `default.cfg` does not reset.
+Settings and voice chat per server ([`docs/serverconfigs.md`](../docs/serverconfigs.md)). While it runs, it follows the game's console log, asks a joined server for its name and looks it up in `default/serverconfigs/servers.tsv` (`<id><TAB><text in the server name>`, yours to maintain; format: `servers.example.tsv`). It then writes `current.cfg`, through which the game execs `default.cfg` and that server's `<id>.cfg`, and `current_vsay.cfg`, which puts the server's voice chat on `TAB`. `add` appends a row for a server (default: the one you are on) and creates its cfg. At start it warns about names a server cfg sets that `default.cfg` does not reset.
 
-It also remembers the crosshair color per map: a color you choose with `HOME` is written into `default/autoexecs/autoexec_<map>.cfg` of the map you are on and set again on every later load of that map (`docs/autoexec.md`). A map without autoexec gets one, which the game finds after the next `./launcher.sh` start.
+It also remembers the crosshair color per map: a color you choose with `HOME` is written into `default/autoexecs/autoexec_<map>.cfg` of the map you are on and set again on every later load of that map ([`docs/autoexec.md`](../docs/autoexec.md)). A map without autoexec gets one, which the game finds after the next `./launcher.sh` start.
 
 ```sh
 python3 tools/serverconfig.py
@@ -61,7 +61,7 @@ Symlinks downloaded map pk3s from `etmain/dlcache/` into `etmain/`, so local hos
 
 ## stock_shield/
 
-Builds the nitmod stock shield pk3 from your own `etmain/pak*.pk3`: it keeps the nitmod main menu, local games and unpure servers on stock menus and sounds after servers pushed their own menu and sound packs. `deploy.sh` offers it. Details: `stock_shield/README.md`.
+Builds the nitmod stock shield pk3 from your own `etmain/pak*.pk3`: it keeps the nitmod main menu, local games and unpure servers on stock menus and sounds after servers pushed their own menu and sound packs. `deploy.sh` offers it. Details: [`stock_shield/README.md`](stock_shield/README.md).
 
 ## helpers/
 

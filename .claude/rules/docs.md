@@ -15,7 +15,8 @@ paths:
 - One place per fact: `docs/` holds background, `.claude/rules/` the per-path rules, `CLAUDE.md` the map of both. Link instead of repeating.
 
 `docs/` is mirrored to the GitHub wiki by `.github/workflows/wiki.yml` on every push to `main` (wiki edits are overwritten):
-- Flat folder: only `docs/*.md` is copied, no subfolders or images.
+- Flat folder: only `docs/*.md` and `docs/images/` are copied, no other subfolders.
+- Images: `docs/images/<name>.png`, linked from a doc as `![text](images/<name>.png)` and from the root `README.md` as `docs/images/<name>.png`. Screenshots show no real server names, player names or addresses (public repo).
 - Links between docs: `[text](file.md)` or `[text](file.md#anchor)` with the bare file name (letters, digits, `_`, `-`); the workflow strips `.md` for the wiki. Links to other repo files don't work in the wiki: name the path in backticks instead.
 - A new doc is added to `docs/Home.md`, `docs/_Sidebar.md` and the "Background docs" list in `CLAUDE.md`.
 

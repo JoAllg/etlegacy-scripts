@@ -31,7 +31,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
    ├─ launcher.sh        starts the game (arguments go to the game): tools/link_maps.py, tools/spawnpoints/spawnpoints.py, deploy.sh without questions, then tools/servermenu.py, tools/serverconfig.py + tools/keymap/live.py in the background until the game exits (only tool errors are printed, the game's output is hidden); launcher32.sh = the same with the 32-bit client (GAME_BIN_I386)
    ├─ settings.conf      machine-specific values (fs_homepath, fs_basepath, game binary, profile) and personal preferences (VSAY_* vsay text colors, MENU_* echo menu colors), written by deploy.sh, not in version control; read by the Python tools via tools/helpers/settings.py
    ├─ .claude/rules/     path-scoped rules, one topic per file (autoexecs, exec-chain, layers, mods, maps, class, vsays, serverconfigs, cvars-binds, hud, tools, research, docs)
-   ├─ docs/              background documentation for Claude/humans; mirrored to the GitHub wiki by .github/workflows/wiki.yml (Home.md, _Sidebar.md = wiki index/navigation)
+   ├─ docs/              background documentation for Claude/humans; mirrored to the GitHub wiki by .github/workflows/wiki.yml (Home.md, _Sidebar.md = wiki index/navigation; images/ = screenshots for the docs and the README)
    ├─ default/           LIVE profile used in game
    │  ├─ definitions.cfg general definitions (all mods), re-exec'd by F3; state.cfg = start values of state
    │  ├─ cvars.cfg, binds_default.cfg, binds_custom.cfg
