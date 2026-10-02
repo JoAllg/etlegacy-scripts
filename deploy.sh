@@ -25,6 +25,8 @@
 # 1. Asks to set defaultprofile.dat to PROFILE, the profile the game writes etconfig.cfg into
 # 2. Creates user.cfg from user.example.cfg (personal settings, omnibot_path from HOMEPATH) if missing,
 #    else appends the set/seta values of the template that user.cfg lacks (reported)
+#    Rewrites the HUD VALUES block of user.cfg from the legacy HUD file (tools/helpers/hudvalues.py): the aliases
+#    that put the HUD back after a script changed it in game
 # 3. Deletes broken symlinks at the top level of each mod directory
 # 4. Symlinks HOMEPATH/profiles -> this repo (the repo can live anywhere); asks before replacing a
 #    folder or a symlink to another path (a folder is renamed to profiles.bak_<date>, not deleted).
@@ -308,6 +310,15 @@ else
 			"$USER_CFG" >"$USER_CFG.tmp" && mv "$USER_CFG.tmp" "$USER_CFG"
 		echo -e "\n${ORANGE}⚠️  Added ${#added[@]} missing setting(s) from user.example.cfg to user.cfg, adjust them:${NC}"
 		printf '    + %s\n' "${added[@]}"
+	fi
+fi
+
+# HUD values: the HUD is changed in the game's HUD editor, so the aliases that reset it are read from its file on every run
+if [ -e "$USER_CFG" ]; then
+	if command -v python3 >/dev/null; then
+		python3 "$REPO/tools/helpers/hudvalues.py" | sed 's/^/  /'
+	else
+		echo -e "  ${ORANGE}⚠️  python3 not found, HUD values in user.cfg not updated${NC}"
 	fi
 fi
 

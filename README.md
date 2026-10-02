@@ -37,7 +37,7 @@ Windows support is not planned, but only the setup is Linux-specific: the cfgs r
    <repo>/deploy.sh
    ```
 
-   The first run detects the game (executable, fs_homepath, fs_basepath) and writes `settings.conf`, asking for anything it cannot find (delete a line to detect it again). It links the repo into the mod folders, backs up and links the GUID keys (`guid_backup/`) and creates `user.cfg` from `user.example.cfg`. Rerun it after pulling: it adds new `user.example.cfg` settings to your `user.cfg` and lists them.
+   The first run detects the game (executable, fs_homepath, fs_basepath) and writes `settings.conf`, asking for anything it cannot find (delete a line to detect it again). It links the repo into the mod folders, backs up and links the GUID keys (`guid_backup/`) and creates `user.cfg` from `user.example.cfg`. Rerun it after pulling: it adds new `user.example.cfg` settings to your `user.cfg` and lists them. It also rewrites the `HUD VALUES` block of `user.cfg` from your legacy HUD, so run it (or start through `play.sh`) after moving the popups in the HUD editor.
 
    A `profiles/` folder the game already created in a mod folder blocks the link to this repo; the script offers to rename it to `profiles.bak_<date>`.
 

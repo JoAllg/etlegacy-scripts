@@ -68,7 +68,9 @@ Modules shared by the tools, imported as `helpers.<module>`:
 - `settings.py`: reader for `settings.conf`; exits with a hint when a value is missing.
 - `common.py`: follower of the game's console log, color code stripping, cfg-safe text, atomic file write.
 - `serverapi.py`: the one module that talks to game servers and tells them apart, used by `servermenu.py`, `serverconfig.py` and `voicemenu.py`: server state (`getinfo`/`getstatus`), favorites, matching against `servers.tsv`, the server's tag, the history of seen servers. On the command line it prints the state of a server.
+- `hudvalues.py`: run by `deploy.sh`. Reads the popup position, size and times of your legacy HUD (`default/huds/hud_v<n>.dat`, the HUD named by `cg_altHud`) and writes them into the `HUD VALUES` block of `user.cfg`, so the echo menus put the popups back where your HUD has them. Without a HUD file the values of the built-in HUD apply.
 
 ```sh
 python3 tools/helpers/serverapi.py <address> ...
+python3 tools/helpers/hudvalues.py
 ```

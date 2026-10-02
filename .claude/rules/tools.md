@@ -35,6 +35,7 @@ Generated output, never read whole or edited by hand:
 | `default/scripts/vsays/servers/<clan>/*.cfg` | `tools/voicemenu.py` |
 | `default/servermenu/p12_<n>.cfg`, `p7_<n>.cfg` | `tools/servermenu.py`, rewritten every few seconds while it runs |
 | `default/serverconfigs/current.cfg`, `current_vsay.cfg`, `history.tsv` | `tools/serverconfig.py`, on every server change (`.claude/rules/serverconfigs.md`) |
+| the `HUD VALUES` block of `user.cfg` | `tools/helpers/hudvalues.py`, on every `deploy.sh` run (`.claude/rules/hud.md`) |
 | `tools/vsaycolors.html`, `default/scripts/vsays/vsaycolors.tsv` | `tools/vsaycolors.py` |
 | `research/<mod>/*.tsv`, `diff_*.md`, `research/README.md` | `research/dump_cvars.py`, `build_docs.py`, `diff_profile.py` |
 
