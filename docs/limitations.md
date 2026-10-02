@@ -33,18 +33,16 @@ A new toggle or cycle should name in its comment which of these it relies on.
 
 `wait n` counts runs of the command buffer (two per client frame), not time, and stops the whole buffer including key presses and releases ([Config scripting](scripting.md), `wait`). A script with waits is tuned for one `com_maxfps` and runs faster or slower at another; while it waits, no other key command is processed.
 
-Workarounds: no wait where a hold key does the job; a countdown that re-queues itself through `+vstr` keeps key commands flowing (grenade auto-throw, `class/cs_classcripts.cfg`); keep waits as short as the action allows.
+Workarounds: no wait where a hold key does the job; the timer (`scripts/common.cfg`: `set timerDone vstr <alias>; vstr timer<ms>`) runs an alias after a time through a countdown that re-queues itself with `+vstr`, so key commands keep flowing (grenade auto-throw, dynamite: `class/cs_classcripts.cfg`); keep waits as short as the action allows.
 
 The waits in the scripts are tuned for `com_maxfps 125`, where `wait n` lasts n × 4 ms (n × 500 / FPS in general):
 
 | Wait | At 125 FPS | Used by | Kind |
 |---|---|---|---|
 | `wait 2`, `wait 3` | 1 to 1.5 frames | quick equipment keys, arty, popups, second wait of the jump | frames: the game needs one frame to take a command, at any FPS |
-| `wait 5` | 20 ms | grenade auto-throw tick (145 ticks = 2.9 s, fuse 4 s) | time |
+| `wait 5` | 20 ms | timer tick: grenade auto-throw (145 ticks = 2.9 s, fuse 4 s), dynamite (8 ticks = 160 ms weapon switch before `+attack`, 20 ticks = 400 ms plant, then arm) | time |
 | `wait 10` | 40 ms | jump (sprint before the jump), voice chat close | time |
-| `wait 40` | 160 ms | dynamite: weapon switch before `+attack` | time |
 | `wait 50` | 200 ms | team join hook | time |
-| `wait 100` | 400 ms | dynamite: plant, then arm | time |
 
 At another FPS the time waits are wrong by the factor 125 / FPS: at 76 FPS the grenade countdown takes 4.8 s (longer than the fuse), at 250 FPS the dynamite `+attack` comes after 80 ms instead of 160 ms. The FPS cycle (END) and `maxFpsLow` (pistols, sniper mode: 71 FPS in nitmod and jaymod) change the frame rate while playing.
 
@@ -52,15 +50,13 @@ At another FPS the time waits are wrong by the factor 125 / FPS: at 76 FPS the g
 
 `wait` takes no variable and scripts cannot calculate, so the time waits become aliases that hold a `wait` of the right length for the current FPS, and the scripts chain them:
 
-- Three units cover every time wait in use: `wait20`, `wait40`, `wait200` (milliseconds). Frame waits (`wait 2`, `wait 3`) stay literal.
+- Three units cover every time wait in use: `wait20` (timer tick), `wait40`, `wait200` (milliseconds). Frame waits (`wait 2`, `wait 3`) stay literal.
 
 | Now (tuned for 125 FPS) | Time | With the aliases |
 |---|---|---|
 | `wait 5` | 20 ms | `vstr wait20` |
 | `wait 10` | 40 ms | `vstr wait40` |
-| `wait 40` | 160 ms | `vstr wait40; vstr wait40; vstr wait40; vstr wait40` |
 | `wait 50` | 200 ms | `vstr wait200` |
-| `wait 100` | 400 ms | `vstr wait200; vstr wait200` |
 
 - One value alias per frame rate sets the FPS and the three waits together, so they cannot differ: `set fpsSet125 "com_maxfps 125; set wait20 wait 5; set wait40 wait 10; set wait200 wait 50"`. The count is ms × FPS / 500, rounded:
 

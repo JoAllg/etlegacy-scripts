@@ -34,7 +34,7 @@ Pattern: `docs/scripting.md` "Change guard"; mechanism: `docs/autoexec.md`.
 
 ## New mod
 
-Copy `example/` to `<mod>/`, replace every `<mod>` placeholder (incl. `modIs_<mod>`), adapt `mod_general.cfg` and the class command IDs, rerun `deploy.sh` (add the mod to `AUTOEXEC_MODS` there if it runs event autoexecs).
+Copy `example/` to `<mod>/`, replace every `<mod>` placeholder (incl. `modIs_<mod>`), adapt `mod_general.cfg` and the class command IDs, add the mod to `MODS` in `deploy.sh` and rerun it.
 
 ## Class commands
 

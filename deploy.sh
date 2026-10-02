@@ -33,8 +33,8 @@
 #    profiles -> this repo (engine profile folder: etconfig.cfg, defaultprofile.dat, user.cfg)
 #    profile  -> this repo's PROFILE folder (all cfg exec paths: exec profile/...)
 # 5. Backs up GUID key files to guid_backup/<key>_<date> and symlinks them into the mod directories
-# 6. Symlinks map autoexecs for AUTOEXEC_MODS and the location overrides to HOMEPATH/etmain/maps
-#    (etmain is in every mod's search path); removes links to the same folder from the mod directories
+# 6. Symlinks the map/team autoexecs into HOMEPATH/etmain and the location overrides to HOMEPATH/etmain/maps
+#    (etmain is in every mod's search path); removes links to the same files/folder from the mod directories
 # 7. Symlinks the mod-specific autoexec* and mod_* files
 # 8. Offers to build the nitmod stock shield pk3 from the stock etmain pk3s (tools/stock_shield/README.md)
 #
@@ -57,11 +57,6 @@
 # - These are the mod directories that will be created in HOMEPATH
 # - Common mods: etmain, legacy, etpub, nitmod, silent, jaymod, etjump
 MODS="etmain legacy etpub nitmod silent jaymod etjump"
-
-# AUTOEXEC_MODS: Mods that get the map/team autoexecs of <profile>/autoexecs/
-# - Every mod that runs event autoexecs (docs/autoexec.md); jaymod runs none
-# - These should be a subset of the MODS list above
-AUTOEXEC_MODS="legacy etpub silent etjump nitmod"
 
 # GUID: Array of "mod keyfile" pairs for authentication
 # - Format: "modname keyfilename"
@@ -222,7 +217,7 @@ setup() {
 	needs VSAY_PUNCT && set_value VSAY_PUNCT "^3"
 	needs VSAY_HIGHLIGHT && set_value VSAY_HIGHLIGHT "^x"
 	needs VSAY_URGENT && set_value VSAY_URGENT "^1"
-	# the colors of the echo menus; readable on bright and dark maps with the popup shadow (hud.dat textStyle 3)
+	# the colors of the echo menus; readable on bright and dark maps with the popup shadow (huds/hud_v<version>.dat textStyle 3)
 	needs MENU_HEAD && set_value MENU_HEAD "^8"
 	needs MENU_KEY && set_value MENU_KEY "^3"
 	needs MENU_TEXT && set_value MENU_TEXT "^7"
@@ -321,7 +316,7 @@ echo -e "${CYAN}🚀 Setting up ET Legacy mod symlinks...${NC}"
 # 3. Delete stale symlinks (target no longer exists), e.g. from renamed/removed autoexecs
 # Top level only: all links this script creates live there
 echo -e "\n${CYAN}🧹 Deleting stale symlinks...${NC}"
-for mod in $MODS; do
+for mod in etmain $MODS; do  # etmain holds the autoexec links even if it is no mod of the list
 	[ -d "$HOMEPATH/$mod" ] || continue
 	find "$HOMEPATH/$mod" -maxdepth 1 -xtype l -printf "    - Deleted stale symlink: %p -> %l\n" -delete
 done
@@ -435,27 +430,30 @@ for guid_entry in "${GUID[@]}"; do
 	fi
 done
 
-# 6. Symlink autoexec files for specified mods
+# 6. Symlink the map/team autoexecs and the location overrides into etmain:
+# it is in the search path of every mod, so one set of links serves all of them
+mkdir -p "$HOMEPATH/etmain"
 echo -e "\n${CYAN}⚙️  Symlinking autoexec files...${NC}"
-for mod in $AUTOEXEC_MODS; do
-	mod_dir="$HOMEPATH/$mod"
-	echo "  Processing autoexec files for mod: $mod"
-
-	if [ -d "$REPO/$PROFILE/autoexecs" ]; then
-		if ln -sf "$REPO/$PROFILE/autoexecs"/* "$mod_dir/"; then
-			echo "    - Symlinked all autoexec files to $mod_dir/"
-		else
-			echo -e "    ${RED}⚠️  WARNING:${NC} Failed to symlink all autoexec files to $mod_dir/"
-		fi
+AUTOEXEC_DIR="$REPO/$PROFILE/autoexecs"
+if [ -d "$AUTOEXEC_DIR" ]; then
+	# single files, not the folder: the game execs them by bare name
+	if ln -sf "$AUTOEXEC_DIR"/autoexec_*.cfg "$HOMEPATH/etmain/"; then
+		echo "    - Symlinked all autoexec files to $HOMEPATH/etmain/"
 	else
-		echo -e "    ${RED}⚠️  WARNING:${NC} Autoexecs directory not found"
+		echo -e "    ${RED}⚠️  WARNING:${NC} Failed to symlink all autoexec files to $HOMEPATH/etmain/"
 	fi
-done
+	# a link to the same file in a mod folder would outrank the one in etmain
+	for mod in $MODS; do
+		[ "$mod" != etmain ] && [ -d "$HOMEPATH/$mod" ] || continue
+		removed=$(find "$HOMEPATH/$mod" -maxdepth 1 -type l -lname "$AUTOEXEC_DIR/*" -print -delete | wc -l)
+		[ "$removed" -gt 0 ] && echo "    - Removed $removed autoexec links from $HOMEPATH/$mod (etmain covers them)"
+	done
+else
+	echo -e "    ${RED}⚠️  WARNING:${NC} Autoexecs directory not found"
+fi
 
-# etmain is in the search path of every mod, so one link serves all of them
 echo -e "\n${CYAN}🗺️  Symlinking location overrides...${NC}"
 if [ -d "$REPO/$PROFILE/maps" ]; then
-	mkdir -p "$HOMEPATH/etmain"
 	link_dir "$REPO/$PROFILE/maps" "$HOMEPATH/etmain/maps"
 	# a link to the same folder in a mod folder would outrank the mod's own pk3s
 	for mod in $MODS; do

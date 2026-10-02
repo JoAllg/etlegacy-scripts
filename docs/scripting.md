@@ -182,11 +182,11 @@ Example: mod switch reload (`mods/<mod>/autoexec_mod.cfg`); why it is needed and
 Empty or default aliases that other scripts fill in (`cs_soldier_mortar`, `classHook`, `resetToggles`), and one reset alias per feature that every exit path uses (`resetSniper` is used by the sniper toggle *and* the class reset). Keeps cleanup in one place.
 
 ### Remember-and-resume (movement)
-On press, store what to resume; on release, run the stored command of the opposite key. A harmless command (`set cl_noTaunt 0`) or `vstr null` acts as "nothing to resume".
+On press, store what to resume; on release, run the stored command of the opposite key. `vstr null` acts as "nothing to resume".
 ```
 bind w "+vstr forwardon forwardoff"
 set forwardon  "-back; +forward; set forwarding +forward"
-set forwardoff "-forward; vstr backing; set forwarding set cl_noTaunt 0"
+set forwardoff "-forward; vstr backing; set forwarding vstr null"
 ```
 Example: `scripts/movement.cfg` movement script (no blocked movement when opposite directions overlap).
 

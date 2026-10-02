@@ -40,4 +40,6 @@ pids+=($!)
 pids+=($!)
 trap 'kill "${pids[@]}" 2>/dev/null' EXIT
 
-"$bin" "$@" >/dev/null 2>&1
+# Memory: com_zoneMegs is only read from the command line (the zone is allocated before any cfg runs,
+# src/qcommon/common.c Com_InitZoneMemory); before "$@", so an argument can override them
+"$bin" +set com_hunkMegs 512 +set com_zoneMegs 192 +set com_soundMegs 192 "$@" >/dev/null 2>&1

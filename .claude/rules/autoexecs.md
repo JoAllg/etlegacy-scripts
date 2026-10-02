@@ -49,4 +49,4 @@ Two kinds, told apart by the header:
 - Map and default autoexecs also run on every `vid_restart`: keep them safe to re-run. No mod cfg execs except the guarded `exec autoexec_mod.cfg`, no hook resets.
 - Only autoexecs set spawnpoint aliases, `spawnSelectorMap` and `spawnSelector4`.
 - `scripts/spawn/` files are exec'd by autoexecs only.
-- New autoexec files need a rerun of `deploy.sh` (symlinked into the mod folders).
+- New autoexec files need a rerun of `deploy.sh` (symlinked into `<fs_homepath>/etmain/`).

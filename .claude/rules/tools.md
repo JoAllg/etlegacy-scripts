@@ -38,4 +38,4 @@ Generated output, never read whole or edited by hand:
 | `tools/vsaycolors.html`, `default/scripts/vsays/vsaycolors.tsv` | `tools/vsaycolors.py` |
 | `research/<mod>/*.tsv`, `diff_*.md`, `research/README.md` | `research/dump_cvars.py`, `build_docs.py`, `diff_profile.py` |
 
-`deploy.sh`: safe to rerun, asks before replacing a folder or foreign link, never touches `guid_backup/` contents except to back up and link keys. Its header comment lists every step: keep it in sync with the code. Mod lists: `MODS` (all mod folders), `AUTOEXEC_MODS` (mods with event autoexecs, get `default/autoexecs/*`). `default/maps/` needs no list: it is linked once to `etmain/maps`.
+`deploy.sh`: safe to rerun, asks before replacing a folder or foreign link, never touches `guid_backup/` contents except to back up and link keys. Its header comment lists every step: keep it in sync with the code. Mod list: `MODS` (all mod folders). `default/autoexecs/autoexec_*.cfg` and `default/maps/` need no list: they are linked once into `etmain/` and to `etmain/maps`.

@@ -31,7 +31,7 @@ Windows support is not planned, but only the setup is Linux-specific: the cfgs r
    git clone https://github.com/JoAllg/etlegacy-scripts.git <repo>
    ```
 
-2. Pick your mods in `deploy.sh` (`MODS`, `AUTOEXEC_MODS`, `GUID`), then run it:
+2. Run `deploy.sh`:
 
    ```sh
    <repo>/deploy.sh
@@ -49,6 +49,8 @@ Windows support is not planned, but only the setup is Linux-specific: the cfgs r
    ./play.sh [game arguments]    # e.g. ./play.sh +set fs_game nitmod +connect <ip>
    ./play32.sh [game arguments]  # 32-bit client, for i386-only mods
    ```
+
+   Starting the game without `play.sh`: add `+set com_hunkMegs 512 +set com_zoneMegs 192 +set com_soundMegs 192` to its arguments (recommended, `play.sh` passes them). `com_zoneMegs` can only be set on the command line.
 
    `play.sh` reruns `tools/link_maps.py`, `tools/spawnpoints/spawnpoints.py` and `deploy.sh` (without questions: each takes its safe default), then starts the game with the [server menu](#server-menu) helper, the [server settings](#settings-per-server) helper and the [live keymap](#live-view-while-playing) next to it; they stop when the game exits. The terminal shows the warnings of these tools, not the game's output (that is in `<fs_homepath>/<mod>/etconsole.log`).
 

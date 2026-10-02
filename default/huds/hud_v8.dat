@@ -2060,7 +2060,7 @@
 					"backgroundColor":	"28332b7f",
 					"showBorder":	false,
 					"borderColor":	"7f7f7f7f",
-					"textStyle":	0,
+					"textStyle":	3,
 					"textAlign":	0,
 					"autoAdjust":	0,
 					"barStyle":	0,

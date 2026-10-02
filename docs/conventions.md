@@ -30,6 +30,7 @@ Standards used in the live scripts. Not enforced everywhere yet — follow them 
 | `cycle<Feature>Up` / `Down` + `<feature><Value>`         | bidirectional cycle pointers                             | `cycleCrosshairSizeUp` / `Down` → `crosshairSize15`                                           |
 | `reset<Feature>`                                         | shared cleanup used by every exit path                   | `resetSniper`, `resetProne`, `resetToggles`, `resetLayers`, `resetTemporary`, `resetTeamBinds`, `resetVoiceChat`          |
 | `play<Sound>`                                            | sound command aliases (`scripts/common.cfg`)             | `playSelect`, `playCancel`, `playFilter`                                                      |
+| `timer<ms>`, `timerDone`, `timerStop`                    | timer (`scripts/common.cfg`): runs an alias after a time | `set timerDone vstr grenadeOFF; vstr timer2900`                                               |
 | `null`                                                   | empty no-op alias for disabled hooks                     | `set preJoinHookb vstr null`                                                                  |
 
 
@@ -79,7 +80,7 @@ Team/class (`scripts/classcript.cfg`, `scripts/class/`):
         *** CHAT LOADED!          one level deeper (scripts/class/, scripts/vsays/)
   ```
   The marker needs the quotes: `echo` rejoins unquoted arguments with single spaces and would drop the indent. A parent prints after its children (a nested `exec` runs before the caller's remaining lines), so the markers read like closing brackets.
-- `exec` paths are always `profile/...` (the profile link of `deploy.sh`), never `profiles/<name>/...`; comments that name a file write `profiles/<profile>/...`, so they show where the path leads (commented-out commands keep their `profile/` path); `wait 10` / `wait 50` between execs and larger sections.
+- `exec` paths are always `profile/...` (the profile link of `deploy.sh`), never `profiles/<name>/...`; comments that name a file write `profiles/<profile>/...`, so they show where the path leads (commented-out commands keep their `profile/` path). No `wait` between execs: `exec` inserts the file at the front of the command buffer, so the order holds without it. The only one is the first line after `unbindall` in `mods/<mod>/autoexec.cfg`: it ends the buffer run of the engine start (`src/qcommon/common.c` `Com_Init`), so the chain runs once the client is up (bare cvar commands in `state.cfg` need its cvars) and its values override `+set` arguments of the command line.
 - Bigger scripts are split by role: e.g. `class/cs_backend.cfg` (logic), `cs_classcommands.cfg` (commands), `cs_classcripts.cfg` (feature scripts), `cs_output.cfg` (echo/say text).
 
 
