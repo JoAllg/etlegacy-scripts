@@ -102,5 +102,5 @@ The tag in the headings of the pages and in the `TAB` line is the text of `serve
 
 - Until the tool has written, the settings of the previous server stay; the next event of the table corrects it.
 - Leaving a server for the main menu and playing a demo keep the last server's settings.
-- Without the tool (`./serverconfig.sh`, started by `./play.sh`) no server's settings apply: when it ends (Ctrl+C, the `SIGTERM` of `./play.sh`) it writes both files for "no server". Only a tool that is killed hard (`SIGKILL`, power loss) leaves the files of its last server, until it starts again. Tested on 2026-10-02 without a game: start with an old log and `SIGTERM` both wrote the "no server" files.
+- Without the tool (`tools/serverconfig.py`, started by `./launcher.sh`) no server's settings apply: when it ends (Ctrl+C, the `SIGTERM` of `./launcher.sh`) it writes both files for "no server". Only a tool that is killed hard (`SIGKILL`, power loss) leaves the files of its last server, until it starts again. Tested on 2026-10-02 without a game: start with an old log and `SIGTERM` both wrote the "no server" files.
 - A failed write or query is reported and tried again with the pauses above; the tool keeps running.

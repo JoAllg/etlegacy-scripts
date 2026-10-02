@@ -4,11 +4,11 @@ Optional Python 3 helpers (stdlib only). They read the game paths and color pref
 
 ## keymap/
 
-Keyboard + mouse overview of the live binds. `keymap.py` emulates the exec chain, presses every bound key and writes `keymap.html` (one self-contained page, tabs per class bind set). New commands get their short names in `labels.json` (`--missing` lists unnamed ones). `live.py` (`keymap-live.sh`) serves the page and switches to the class picked in the running game by following the newest `<HOMEPATH>/<mod>/etconsole.log`. Details: `keymap/README.md`.
+Keyboard + mouse overview of the live binds. `keymap.py` emulates the exec chain, presses every bound key and writes `keymap.html` (one self-contained page, tabs per class bind set). New commands get their short names in `labels.json` (`--missing` lists unnamed ones). `live.py` serves the page and switches to the class picked in the running game by following the newest `<HOMEPATH>/<mod>/etconsole.log`. Details: `keymap/README.md`.
 
 ```sh
 python3 tools/keymap/keymap.py [--mod <mod>] [--missing]
-./keymap-live.sh
+python3 tools/keymap/live.py
 ```
 
 ## spawnpoints/
@@ -40,7 +40,7 @@ python3 tools/vsaycolors.py status | preview [role=^c ...] | apply | todo | done
 Feeds the in-game server menu (`KP_MINUS`, `default/scripts/servermenu.cfg`): while it runs, it asks the favorite servers of the server browser for their state every 5 seconds and writes the menu pages to `default/servermenu/`. Each server shows as `name  playing+spectators+bots/slots  map  ping  mod` in columns aligned with spaces, sorted by playing humans; the number keys connect. Start it before or while playing and leave it running; `--once` prints the list in the terminal. How servers are queried: `docs/serverquery.md`.
 
 ```sh
-./servermenu.sh          # = python3 tools/servermenu.py [--interval 5] [--once]
+python3 tools/servermenu.py [--interval 5] [--once]
 ```
 
 ## serverconfig.py
@@ -48,7 +48,7 @@ Feeds the in-game server menu (`KP_MINUS`, `default/scripts/servermenu.cfg`): wh
 Settings and voice chat per server (`docs/serverconfigs.md`). While it runs, it follows the game's console log, asks a joined server for its name and looks it up in `default/serverconfigs/servers.tsv` (`<id><TAB><text in the server name>`, yours to maintain; format: `servers.example.tsv`). It then writes `current.cfg`, through which the game execs `default.cfg` and that server's `<id>.cfg`, and `current_vsay.cfg`, which puts the server's voice chat on `TAB`. `add` appends a row for a server (default: the one you are on) and creates its cfg. At start it warns about names a server cfg sets that `default.cfg` does not reset.
 
 ```sh
-./serverconfig.sh                                   # = python3 tools/serverconfig.py
+python3 tools/serverconfig.py
 python3 tools/serverconfig.py add <id> [address] [--match <text>]
 python3 tools/serverconfig.py --check
 ```

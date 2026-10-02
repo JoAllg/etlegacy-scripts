@@ -242,7 +242,7 @@ def run():
     check()
     print(f"Server configs: following the game -> {CONFIGS} (Ctrl+C stops)")
     done, target, wait, due, stale, first = object(), None, None, 0, False, True
-    for sig in (signal.SIGTERM, signal.SIGHUP):  # play.sh ends the tool with SIGTERM: leave through the finally below
+    for sig in (signal.SIGTERM, signal.SIGHUP):  # launcher.sh ends the tool with SIGTERM: leave through the finally below
         signal.signal(sig, lambda *_: sys.exit(0))
     try:
         for line in follow():

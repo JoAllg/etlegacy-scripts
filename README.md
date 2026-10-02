@@ -37,7 +37,7 @@ Windows support is not planned, but only the setup is Linux-specific: the cfgs r
    <repo>/deploy.sh
    ```
 
-   The first run detects the game (executable, fs_homepath, fs_basepath) and writes `settings.conf`, asking for anything it cannot find (delete a line to detect it again). It links the repo into the mod folders, backs up and links the GUID keys (`guid_backup/`) and creates `user.cfg` from `user.example.cfg`. Rerun it after pulling: it adds new `user.example.cfg` settings to your `user.cfg` and lists them. It also rewrites the `HUD VALUES` block of `user.cfg` from your legacy HUD, so run it (or start through `play.sh`) after moving the popups in the HUD editor.
+   The first run detects the game (executable, fs_homepath, fs_basepath) and writes `settings.conf`, asking for anything it cannot find (delete a line to detect it again). It links the repo into the mod folders, backs up and links the GUID keys (`guid_backup/`) and creates `user.cfg` from `user.example.cfg`. Rerun it after pulling: it adds new `user.example.cfg` settings to your `user.cfg` and lists them. It also rewrites the `HUD VALUES` block of `user.cfg` from your legacy HUD, so run it (or start through `launcher.sh`) after moving the popups in the HUD editor.
 
    A `profiles/` folder the game already created in a mod folder blocks the link to this repo; the script offers to rename it to `profiles.bak_<date>`.
 
@@ -46,13 +46,22 @@ Windows support is not planned, but only the setup is Linux-specific: the cfgs r
 4. Start the game. The profile is `default`; the mod's `autoexec.cfg` runs the whole chain.
 
    ```sh
-   ./play.sh [game arguments]    # e.g. ./play.sh +set fs_game nitmod +connect <ip>
-   ./play32.sh [game arguments]  # 32-bit client, for i386-only mods
+   ./launcher.sh [game arguments]    # e.g. ./launcher.sh +set fs_game nitmod +connect <ip>
+   ./launcher32.sh [game arguments]  # 32-bit client, for i386-only mods
    ```
 
-   Starting the game without `play.sh`: add `+set com_hunkMegs 512 +set com_zoneMegs 192 +set com_soundMegs 192` to its arguments (recommended, `play.sh` passes them). `com_zoneMegs` can only be set on the command line.
+   Starting the game without `launcher.sh`: add `+set com_hunkMegs 512 +set com_zoneMegs 192 +set com_soundMegs 192` to its arguments (recommended, `launcher.sh` passes them). `com_zoneMegs` can only be set on the command line.
 
-   `play.sh` reruns `tools/link_maps.py`, `tools/spawnpoints/spawnpoints.py` and `deploy.sh` (without questions: each takes its safe default), then starts the game with the [server menu](#server-menu) helper, the [server settings](#settings-per-server) helper and the [live keymap](#live-view-while-playing) next to it; they stop when the game exits. The terminal shows the warnings of these tools, not the game's output (that is in `<fs_homepath>/<mod>/etconsole.log`).
+   `launcher.sh` starts the game and handles everything around it:
+
+   - Downloaded maps become available for local hosting (`tools/link_maps.py`).
+   - New maps get their spawn menu, the map autoexec `autoexec_<map>.cfg` (`tools/spawnpoints/spawnpoints.py`).
+   - Links and settings are refreshed without questions, each taking its safe default (`deploy.sh`).
+   - The in-game [server menu](#server-menu) stays up to date (`tools/servermenu.py`).
+   - Your [settings per server](#settings-per-server) apply when you join one (`tools/serverconfig.py`).
+   - The [live keymap](#live-view-while-playing) follows your class in the browser (`tools/keymap/live.py`).
+
+   The last three run next to the game and stop when it exits. The terminal shows only the warnings of these tools; the game's output is in `<fs_homepath>/<mod>/etconsole.log`.
 
 ## In game
 
@@ -91,7 +100,7 @@ python3 tools/keymap/keymap.py --missing    # commands that still have no name
 ### Live view while playing
 
 ```sh
-./keymap-live.sh          # = python3 tools/keymap/live.py
+python3 tools/keymap/live.py
 ```
 
 Serves the page at <http://127.0.0.1:27999/>, opens the browser and follows the running game: picking a class switches to its tab, a reset returns to Base, a mod switch reloads the page for that mod. It keeps running across game restarts. Requires `logfile 2` (set in `default/cvars.cfg`). Details: `tools/keymap/README.md`.
@@ -101,7 +110,7 @@ Serves the page at <http://127.0.0.1:27999/>, opens the browser and follows the 
 `KP_MINUS` lists your favorite servers of the server browser in game, in aligned columns `name  playing+spectators+bots/slots  map  ping  mod` (playing humans green, spectators cyan, bots grey: `MENU_PLAYING`, `MENU_SPEC`, `MENU_BOTS` in `settings.conf`), sorted by playing humans. A number key connects, `TAB` shows the next page (or refreshes), `KP_MINUS` or `ESC` closes it.
 
 ```sh
-./servermenu.sh           # = python3 tools/servermenu.py
+python3 tools/servermenu.py
 ```
 
 The game can't query servers from a script, so this helper has to run next to it: it asks the favorites every 5 seconds and writes the menu pages. The time in the menu heading shows how old the list is.
@@ -111,7 +120,7 @@ The game can't query servers from a script, so this helper has to run next to it
 Your own settings and the voice chat of a server, applied when you join it. Details: `docs/serverconfigs.md`.
 
 ```sh
-./serverconfig.sh                                # = python3 tools/serverconfig.py, runs next to the game
+python3 tools/serverconfig.py                    # runs next to the game
 python3 tools/serverconfig.py add <id> [address] # row for a server in servers.tsv (default: the server you are on) + its cfg
 python3 tools/voicemenu.py <id> <pk3>            # the server's own voice chat, from its pk3
 ```

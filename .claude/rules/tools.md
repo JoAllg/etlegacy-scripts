@@ -3,11 +3,8 @@ paths:
   - "tools/**"
   - "research/*.py"
   - "deploy.sh"
-  - "keymap-live.sh"
-  - "servermenu.sh"
-  - "serverconfig.sh"
-  - "play.sh"
-  - "play32.sh"
+  - "launcher.sh"
+  - "launcher32.sh"
 ---
 
 # Tools (Python helpers, deploy.sh)

@@ -7,7 +7,6 @@ python3 tools/keymap/keymap.py              # writes tools/keymap/keymap.html (d
 python3 tools/keymap/keymap.py --mod legacy
 python3 tools/keymap/keymap.py --missing    # commands without a name, unused names
 python3 tools/keymap/live.py                # opens the keymap in the browser, follows the class picked in game
-./keymap-live.sh                            # same, script in the repo root
 python3 tools/keymap/keymap.py --selftest
 ```
 

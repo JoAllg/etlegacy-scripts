@@ -3,7 +3,6 @@ paths:
   - "default/serverconfigs/**"
   - "tools/serverconfig.py"
   - "tools/helpers/serverapi.py"
-  - "serverconfig.sh"
 ---
 
 # Server configs (settings and voice chat per server)
