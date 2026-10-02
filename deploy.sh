@@ -37,7 +37,7 @@
 # 5. Backs up GUID key files to guid_backup/<key>_<date> and symlinks them into the mod directories
 # 6. Symlinks the map/team autoexecs into HOMEPATH/etmain and the location overrides to HOMEPATH/etmain/maps
 #    (etmain is in every mod's search path); removes links to the same files/folder from the mod directories
-# 7. Symlinks the mod-specific autoexec* and mod_* files
+# 7. Symlinks the mod-specific autoexec* and mod_* files; a fork of FORKS gets the files of its mod
 # 8. Offers to build the nitmod stock shield pk3 from the stock etmain pk3s (tools/stock_shield/README.md)
 # 9. Offers desktop files (application menu entries with the game's icon) that start launcher.sh and,
 #    if GAME_BIN_I386 is set, launcher32.sh: etlegacy-launcher.<arch>.desktop in ~/.local/share/applications
@@ -63,6 +63,12 @@
 # - These are the mod directories that will be created in HOMEPATH
 # - Common mods: etmain, legacy, etpub, nitmod, silent, jaymod, etjump
 MODS="etmain legacy etpub nitmod silent jaymod etjump"
+
+# FORKS: Space-separated "fork=mod" pairs: a server's fork of a mod that runs in its own folder (fs_game)
+# - The fork folder gets the same links as the mod (profiles, profile, autoexec*, mod_* of default/mods/<mod>/),
+#   so the profile loads there like on the mod and a mod switch into the fork is noticed
+# - Only if HOMEPATH/<fork> exists: the game creates it on the first connect to such a server
+FORKS="etps=legacy"
 
 # GUID: Array of "mod keyfile" pairs for authentication
 # - Format: "modname keyfilename"
@@ -330,10 +336,16 @@ fi
 
 echo -e "${CYAN}🚀 Setting up ET Legacy mod symlinks...${NC}"
 
+# forks whose folder exists are set up like the mods of the list (links, cleanup), but get no GUID keys
+LINK_MODS=$MODS
+for fork in $FORKS; do
+	[ -d "$HOMEPATH/${fork%%=*}" ] && LINK_MODS+=" ${fork%%=*}"
+done
+
 # 3. Delete stale symlinks (target no longer exists), e.g. from renamed/removed autoexecs
 # Top level only: all links this script creates live there
 echo -e "\n${CYAN}🧹 Deleting stale symlinks...${NC}"
-for mod in etmain $MODS; do  # etmain holds the autoexec links even if it is no mod of the list
+for mod in etmain $LINK_MODS; do  # etmain holds the autoexec links even if it is no mod of the list
 	[ -d "$HOMEPATH/$mod" ] || continue
 	find "$HOMEPATH/$mod" -maxdepth 1 -xtype l -printf "    - Deleted stale symlink: %p -> %l\n" -delete
 done
@@ -377,7 +389,7 @@ if [ "$(readlink -f "$HOME_LINK")" != "$REPO" ]; then
 	fi
 fi
 
-for mod in $MODS; do
+for mod in $LINK_MODS; do
 	mod_dir="$HOMEPATH/$mod"
 	echo "  Processing mod: $mod"
 	mkdir -p "$mod_dir"
@@ -460,7 +472,7 @@ if [ -d "$AUTOEXEC_DIR" ]; then
 		echo -e "    ${RED}⚠️  WARNING:${NC} Failed to symlink all autoexec files to $HOMEPATH/etmain/"
 	fi
 	# a link to the same file in a mod folder would outrank the one in etmain
-	for mod in $MODS; do
+	for mod in $LINK_MODS; do
 		[ "$mod" != etmain ] && [ -d "$HOMEPATH/$mod" ] || continue
 		removed=$(find "$HOMEPATH/$mod" -maxdepth 1 -type l -lname "$AUTOEXEC_DIR/*" -print -delete | wc -l)
 		[ "$removed" -gt 0 ] && echo "    - Removed $removed autoexec links from $HOMEPATH/$mod (etmain covers them)"
@@ -473,7 +485,7 @@ echo -e "\n${CYAN}🗺️  Symlinking location overrides...${NC}"
 if [ -d "$REPO/$PROFILE/maps" ]; then
 	link_dir "$REPO/$PROFILE/maps" "$HOMEPATH/etmain/maps"
 	# a link to the same folder in a mod folder would outrank the mod's own pk3s
-	for mod in $MODS; do
+	for mod in $LINK_MODS; do
 		mod_maps="$HOMEPATH/$mod/maps"
 		if [ "$mod" != etmain ] && [ -L "$mod_maps" ] && [ "$(readlink -f "$mod_maps")" = "$(readlink -f "$REPO/$PROFILE/maps")" ]; then
 			rm "$mod_maps"
@@ -487,34 +499,34 @@ fi
 # 7. Symlink mod-specific autoexec files
 # Only autoexec* and mod_* files: the game looks them up in the mod folder (search path), all other cfgs are exec'd via profile/ paths
 echo -e "\n${CYAN}🔧 Symlinking mod-specific autoexec files...${NC}"
-for mod_config_dir in "$REPO/$PROFILE/mods"/*/; do
-	mod_config_dir=${mod_config_dir%/}
-	mod_name=$(basename "$mod_config_dir")
-	target_mod_dir="$HOMEPATH/$mod_name"
-
-	# example/ is the template for new mods, not a real mod folder
-	[ "$mod_name" = "example" ] && continue
-
-	echo "  Processing mod-specific autoexec files for: $mod_name"
-
-	if [ -d "$target_mod_dir" ]; then
-		# Skip unmatched globs: not every mod folder has both kinds of file
-		mod_files=()
-		for mod_file in "$mod_config_dir"/autoexec* "$mod_config_dir"/mod_*; do
-			[ -e "$mod_file" ] && mod_files+=("$mod_file")
-		done
-		if [ ${#mod_files[@]} -gt 0 ]; then
-			if ln -sf "${mod_files[@]}" "$target_mod_dir/"; then
-				echo "    - Symlinked autoexec files to $target_mod_dir/"
-			else
-				echo -e "    ${RED}⚠️  WARNING:${NC} Failed to symlink autoexec files to $target_mod_dir/"
-			fi
-		else
-			echo -e "    ${ORANGE}⚠️  No autoexec files found in $mod_config_dir${NC}"
-		fi
-	else
+# link_mod_files <mod> <folder>: links the autoexec* and mod_* files of default/mods/<mod>/ into HOMEPATH/<folder>
+link_mod_files() {
+	local mod_config_dir="$REPO/$PROFILE/mods/$1" target_mod_dir="$HOMEPATH/$2" mod_file mod_files=()
+	echo "  Processing mod-specific autoexec files for: $2${3:+ (fork of $1)}"
+	if [ ! -d "$target_mod_dir" ]; then
 		echo -e "    ${RED}⚠️  WARNING:${NC} Target mod directory $target_mod_dir not found"
+		return
 	fi
+	# Skip unmatched globs: not every mod folder has both kinds of file
+	for mod_file in "$mod_config_dir"/autoexec* "$mod_config_dir"/mod_*; do
+		[ -e "$mod_file" ] && mod_files+=("$mod_file")
+	done
+	if [ ${#mod_files[@]} -eq 0 ]; then
+		echo -e "    ${ORANGE}⚠️  No autoexec files found in $mod_config_dir${NC}"
+	elif ln -sf "${mod_files[@]}" "$target_mod_dir/"; then
+		echo "    - Symlinked autoexec files to $target_mod_dir/"
+	else
+		echo -e "    ${RED}⚠️  WARNING:${NC} Failed to symlink autoexec files to $target_mod_dir/"
+	fi
+}
+
+for mod_config_dir in "$REPO/$PROFILE/mods"/*/; do
+	mod_name=$(basename "$mod_config_dir")
+	# example/ is the template for new mods, not a real mod folder
+	[ "$mod_name" = "example" ] || link_mod_files "$mod_name" "$mod_name"
+done
+for fork in $FORKS; do
+	[ -d "$HOMEPATH/${fork%%=*}" ] && link_mod_files "${fork#*=}" "${fork%%=*}" fork
 done
 
 # 8. nitmod stock shield: built from the local game, the files are game assets (not in the repo)
