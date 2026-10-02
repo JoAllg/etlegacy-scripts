@@ -1,5 +1,5 @@
 #!/bin/bash
-# Starts the game (64-bit) with everything around it:
+# Starts the game (64-bit) with everything around it; needs a complete settings.conf (deploy.sh writes it):
 # 1. tools/link_maps.py (downloaded maps for local hosting), tools/spawnpoints/spawnpoints.py (map autoexecs of new maps)
 # 2. deploy.sh (links, settings.conf) without a terminal, so every question takes its safe default;
 #    after the generator, so it links the autoexecs of new maps on the same start
@@ -9,6 +9,13 @@
 # launcher32.sh starts the 32-bit client (i386-only mods) the same way.
 
 REPO=$(cd "$(dirname "$0")" && pwd -P)
+
+# every tool below exits without settings.conf or one of its required values (tools/helpers/settings.py names it);
+# deploy.sh has to run in a terminal for that, here it could not ask
+if ! PYTHONPATH="$REPO/tools" python3 -c 'import helpers.settings'; then
+	echo "ERROR: settings.conf is missing or incomplete, run $REPO/deploy.sh first" >&2
+	exit 1
+fi
 
 # without the list of skipped pk3s: it is the same on every start
 python3 "$REPO/tools/link_maps.py" | grep -v '^skip ('
@@ -43,3 +50,10 @@ trap 'kill "${pids[@]}" 2>/dev/null' EXIT
 # Memory: com_zoneMegs is only read from the command line (the zone is allocated before any cfg runs,
 # src/qcommon/common.c Com_InitZoneMemory); before "$@", so an argument can override them
 "$bin" +set com_hunkMegs 512 +set com_zoneMegs 192 +set com_soundMegs 192 "$@" >/dev/null 2>&1
+status=$?
+case $status in
+	0) ;;
+	126 | 127) echo "ERROR: cannot start $bin (GAME_BIN / GAME_BIN_I386 in settings.conf: delete the line and run deploy.sh to detect it again)" >&2 ;;
+	*) echo "ERROR: the game exited with status $status (etconsole.log in the mod folder has its output)" >&2 ;;
+esac
+exit $status

@@ -295,6 +295,7 @@ def selftest():
     assert undated("// Last edited    01.10.2026 //\nset a 1\n") == undated("// Last edited    02.10.2026 //\nset a 1\n")
     assert undated("// Last edited    01.10.2026 //\nset a 1\n") != undated("// Last edited    01.10.2026 //\nset a 2\n")
     assert label(' ^1Axis; quit"\n^^2x ') == "Axis, quit'^x" and label("^ a") == "^ a"  # nothing a cfg would execute
+    assert label("a /* b // c ///") == "a / * b / / c / / /"  # no comment start: the menu's binds come after the label
     assert parse_locations('1 2 3 "^3Bun;ker"\n4 5 6 @\n') == [((1.0, 2.0, 3.0), "Bun,ker"), ((4.0, 5.0, 6.0), "Bun,ker")]
     assert vec("1 2 3 4") == (1.0, 2.0, 3.0) and vec("1 2") is None and vec("a b c") is None
     assert stamp(Path(__file__).with_name("missing")) is None and read_cache(["other generator"]) == {}

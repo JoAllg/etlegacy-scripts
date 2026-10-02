@@ -19,8 +19,10 @@ def strip_colors(text):
 
 
 def clean(text):
-    """Text that is safe inside a quoted cfg command: no quote, no command separator, printable latin1 only."""
-    text = text.replace('"', "'").replace(";", ",")
+    """Text that is safe inside a quoted cfg command: no quote, no command separator, no comment start, printable
+    latin1 only. A vstr runs the text unquoted, where // and /* start a comment (src/qcommon/cmd.c Cbuf_Execute):
+    /* would swallow every command after it."""
+    text = re.sub(r"/(?=[/*])", "/ ", text.replace('"', "'").replace(";", ","))
     return "".join(c for c in text if 32 <= ord(c) < 256 and ord(c) != 127)
 
 

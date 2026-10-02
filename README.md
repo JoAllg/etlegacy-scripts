@@ -52,7 +52,7 @@ Windows support is not planned, but only the setup is Linux-specific: the cfgs r
 
    Starting the game without `launcher.sh`: add `+set com_hunkMegs 512 +set com_zoneMegs 192 +set com_soundMegs 192` to its arguments (recommended, `launcher.sh` passes them). `com_zoneMegs` can only be set on the command line.
 
-   `launcher.sh` starts the game and handles everything around it:
+   `launcher.sh` starts the game and handles everything around it. It needs a complete `settings.conf` and tells you to run `deploy.sh` if a value is missing; a game that fails to start or exits with an error is reported with its exit status.
 
    - Downloaded maps become available for local hosting (`tools/link_maps.py`).
    - New maps get their spawn menu, the map autoexec `autoexec_<map>.cfg` (`tools/spawnpoints/spawnpoints.py`).
