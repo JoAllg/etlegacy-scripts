@@ -42,7 +42,7 @@ Prefer `set` for aliases: `seta` persists them into `etconfig.cfg`, where they c
 
 **`reset <alias>`:** for a user-created cvar this restores the value it was **first** set to in this game session. A later `set` doesn't change that stored default — after editing a cfg, `reset` still returns the old value until the game restarts.
 
-**`exec <file>`:** runs a cfg (`.cfg` added if missing), path relative to the mod search path (`profile/...`). Console shows `execing <file>` or `couldn't exec <file>`.
+**`exec <file>`:** runs a cfg (`.cfg` added if missing), path relative to the mod search path (`profile/...`). Console shows `execing <file>` or `couldn't exec <file>`. `execq <file>` is the same without the `execing` line (`src/qcommon/cmd.c` `Cmd_Exec_f`); files that a key press execs use it.
 
 **`echo`:** prints text; when connected it shows as a notification (`cpm`). ET: Legacy extension: `echo "FOV: " vstr cg_fov` inserts a cvar value. Color codes `^0`–`^9` and letters (e.g. `^5` cyan).
 
@@ -194,12 +194,12 @@ Example: `scripts/movement.cfg` movement script (no blocked movement when opposi
 A script cannot read anything outside the game, a program running next to it can: it rewrites a cfg at an interval, and a static script `exec`s that file on a key. `exec` reads the file from disk on every call (`src/qcommon/cmd.c` `Cmd_Exec_f`), so new content needs no reload.
 ```
 // scripts/servermenu.cfg (static, in the exec chain)
-set serverMenuPage "exec profile/servermenu/p7_0.cfg"
+set serverMenuPage "execq profile/servermenu/p7_0.cfg"
 
 // servermenu/p7_0.cfg (generated)
 echo "^31.  ^7<server name>  ^240^7+^56^7+^90^7/45  radar  55ms  legacy"
 bind 1 "vstr resetServerMenu; connect <ip:port>"
-bind TAB "exec profile/servermenu/p7_0.cfg"
+bind TAB "execq profile/servermenu/p7_0.cfg"
 ```
 - The generated file holds only data (echoes, binds) and calls existing aliases; behavior stays in the static cfg, so a stale or missing file breaks nothing.
 - The game reads the file only at the `exec`: what is shown is a snapshot, refreshing is another `exec` (here `TAB`).

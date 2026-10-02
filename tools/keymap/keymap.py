@@ -123,7 +123,7 @@ class Console:
         if not args:
             return
         cmd, argc = args[0].lower(), len(args)
-        if cmd == "exec" and argc > 1:
+        if cmd in ("exec", "execq") and argc > 1:
             self.exec_file(args[1], depth)
         elif cmd in ("set", "seta", "sets", "setu") and argc > 2:
             name = args[1].lower()

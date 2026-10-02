@@ -21,6 +21,7 @@ import contextlib
 import io
 import json
 import re
+import select
 import socket
 import sqlite3
 import sys
@@ -58,13 +59,23 @@ def favorites():
 
 
 def resolve(address):
-    """(ip, port) of "host[:port]", None if it doesn't resolve."""
-    # ponytail: IPv4 only, the favorites of the browser are stored as ip:port; add "[v6]:port" parsing when one shows up
-    host, _, port = address.partition(":")
+    """(ip, port) of "host[:port]", "[ipv6][:port]" or a bare IPv6 address, None if it doesn't resolve."""
+    # ponytail: a host name resolves to IPv4 only and a link-local scope ("%eth0") is dropped; use getaddrinfo's full
+    # answer when a server is reachable no other way
+    m = re.fullmatch(r"\[([^\]]+)\](?::(\d*))?", address)
+    v6 = m or address.count(":") > 1
+    host, port = (m.group(1), m.group(2)) if m else (address, "") if v6 else address.partition(":")[::2]
     try:
+        if v6:
+            return socket.getaddrinfo(host, None, socket.AF_INET6, flags=socket.AI_NUMERICHOST)[0][4][0], int(port or 27960)
         return socket.gethostbyname(host), int(port or 27960)
     except (OSError, ValueError):
         return None
+
+
+def adr_string(addr):
+    """(ip, port) as the game logs a connect: "ip:port", IPv6 "[ip]:port" (src/qcommon/net_ip.c NET_AdrToString)."""
+    return ("[%s]:%d" if ":" in addr[0] else "%s:%d") % addr
 
 
 def info_dict(line):
@@ -90,41 +101,47 @@ def parse(packet):
 def query(addrs, cmds=(b"getinfo xxx", b"getstatus")):
     """{addr: {"info": {...}, "status": {...}, "pings": [...], "rtt": ms}} of the servers that answered; one packet
     per command and server."""
-    out = {}
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    out, socks = {}, {}  # one socket per address family in use
     try:
         start, sent = time.monotonic(), {}
         for addr in addrs:
             sent[addr] = time.monotonic()
+            family = socket.AF_INET6 if ":" in addr[0] else socket.AF_INET
             for cmd in cmds:
                 try:
-                    sock.sendto(b"\xff\xff\xff\xff" + cmd, addr)
-                except OSError:
+                    if family not in socks:
+                        socks[family] = socket.socket(family, socket.SOCK_DGRAM)
+                    socks[family].sendto(b"\xff\xff\xff\xff" + cmd, addr)
+                except OSError:  # e.g. no IPv6 on this machine: the server counts as not answering
                     pass
         missing = len(cmds) * len(set(addrs))
-        while missing > 0:
+        while missing > 0 and socks:
             left = start + TIMEOUT - time.monotonic()
             if left <= 0:
                 break
-            sock.settimeout(left)
             try:
-                packet, addr = sock.recvfrom(65535)
+                ready = select.select(list(socks.values()), [], [], left)[0]
+                answers = [sock.recvfrom(65535) for sock in ready]
             except OSError:
                 break
-            parsed = parse(packet)
-            if not parsed or addr not in addrs:
-                continue
-            kind, info, pings = parsed
-            server = out.setdefault(addr, {})
-            if kind not in server:
-                missing -= 1
-            server[kind] = info
-            if kind == "status":
-                server["pings"] = pings
-            else:
-                server["rtt"] = round((time.monotonic() - sent[addr]) * 1000)
+            if not ready:
+                break
+            for packet, addr in answers:
+                parsed, addr = parse(packet), addr[:2]  # IPv6 adds flow info and scope
+                if not parsed or addr not in addrs:
+                    continue
+                kind, info, pings = parsed
+                server = out.setdefault(addr, {})
+                if kind not in server:
+                    missing -= 1
+                server[kind] = info
+                if kind == "status":
+                    server["pings"] = pings
+                else:
+                    server["rtt"] = round((time.monotonic() - sent[addr]) * 1000)
     finally:
-        sock.close()
+        for sock in socks.values():
+            sock.close()
     return out
 
 
@@ -280,6 +297,9 @@ def selftest():
     joining = summarize("3.3.3.3:27960", {"info": {"clients": "4", "humans": "4"}, "status": {"P": "1-32"}, "pings": [40, 70, 30, 999]})
     assert (joining["playing"], joining["spec"], joining["bots"]) == (2, 1, 0)  # P one behind the player lines: split kept
     assert resolve("1.2.3.4:27961") == ("1.2.3.4", 27961) and resolve("1.2.3.4") == ("1.2.3.4", 27960) and resolve("1.2.3.4:x") is None
+    assert resolve("[2001:db8::1]:27961") == ("2001:db8::1", 27961) and resolve("[2001:DB8:0::1]") == resolve("2001:db8::1") == ("2001:db8::1", 27960)
+    assert resolve("[nope]:27960") is None and resolve("[2001:db8::1]:x") is None
+    assert adr_string(("192.0.2.7", 27960)) == "192.0.2.7:27960" and adr_string(("2001:db8::1", 27961)) == "[2001:db8::1]:27961"
 
     name = "^1[^7xY^1] FRAGHOUSE ^324MAPS"
     with tempfile.TemporaryDirectory() as d:

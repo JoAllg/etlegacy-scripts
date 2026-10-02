@@ -111,7 +111,7 @@ def pages(rows, size, stamp):
         cfg += [f'echo "{MENU["key"]}{f"{n}.":<4}{MENU["text"]}{text}"' for n, text in enumerate(lines[page * size:(page + 1) * size], 1)]
         cfg.append("vstr unbindNumbers")
         cfg += [f'bind {key} "vstr resetServerMenu; connect {row["address"]}"' for key, row in zip(KEYS, part)]
-        cfg.append(f'bind TAB "exec {EXEC}/p{size}_{(page + 1) % count}.cfg"')
+        cfg.append(f'bind TAB "execq {EXEC}/p{size}_{(page + 1) % count}.cfg"')  # execq: a key press prints no "execing" line
         out[f"p{size}_{page}.cfg"] = "\n".join(cfg) + "\n"
     return out
 
@@ -181,11 +181,11 @@ def selftest():
     assert 'bind 1 "vstr resetServerMenu; connect 1.1.1.14:27960"' in first  # most playing humans first
     assert 'bind US_EQUALS "vstr resetServerMenu; connect 1.1.1.3:27960"' in first
     assert first[3].startswith(f'echo "{m["key"]}1.  {t}') and first[14].startswith(f'echo "{m["key"]}12. {t}')  # keys 1-12 equally wide
-    assert first[-1] == f'bind TAB "exec {EXEC}/p12_1.cfg"' and first.index("vstr unbindNumbers") < first.index(first[-1])
-    assert p12["p12_1.cfg"].splitlines()[-1] == f'bind TAB "exec {EXEC}/p12_0.cfg"'  # last page wraps
+    assert first[-1] == f'bind TAB "execq {EXEC}/p12_1.cfg"' and first.index("vstr unbindNumbers") < first.index(first[-1])
+    assert p12["p12_1.cfg"].splitlines()[-1] == f'bind TAB "execq {EXEC}/p12_0.cfg"'  # last page wraps
     assert 'bind 4 ' not in p12["p12_1.cfg"] and 'echo "' + m["key"] + "3. " in p12["p12_1.cfg"]
     one = pages(many[:3], 7, "12:00:00")["p7_0.cfg"]
-    assert "TAB refresh" in one and one.splitlines()[-1] == f'bind TAB "exec {EXEC}/p7_0.cfg"'
+    assert "TAB refresh" in one and one.splitlines()[-1] == f'bind TAB "execq {EXEC}/p7_0.cfg"'
     empty = pages([], 7, "12:00:00")
     assert list(empty) == ["p7_0.cfg"] and "No favorite servers" in empty["p7_0.cfg"]
     history, a = {}, "1.2.3.4:27960"

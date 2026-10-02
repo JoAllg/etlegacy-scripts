@@ -17,7 +17,7 @@ existing pages are kept per vsay (edited or highlighted ones too); added and rem
 
 Every page heading starts with the server tag as the server writes it in its name, colors included: the text of
 <clan> in default/serverconfigs/servers.tsv, looked up in the name of [address] (asked now) or of a server the game
-connected to before (history.tsv); "[<clan>]" if no such name is known. The server's own tag is cut from the heading.
+connected to before (history.tsv); "[<clan>]" if no such name is known. An [address] that doesn't answer is an error. The server's own tag is cut from the heading.
 Headings, keys and items are echoed in the MENU_* colors of settings.conf, like the general voice chat.
 
 Usage: tools/voicemenu.py <clan> <pk3> [address]
@@ -187,7 +187,7 @@ def bind(clan, label, action, key, pages):
         return f'bind {key} "vstr vsay{key}; vstr resetVoiceChat"', None
     o = re.search(r"open (\w+)", action)
     if o and o.group(1) in pages:
-        return f'bind {key} "exec {EXEC}/{clan}/{page_name(o.group(1), None, clan)}.cfg"', o.group(1)
+        return f'bind {key} "execq {EXEC}/{clan}/{page_name(o.group(1), None, clan)}.cfg"', o.group(1)  # execq: a key press prints no "execing" line
     if o:  # a UI menu that isn't a chat page (e.g. name editor): not reachable from the console
         return f'bind {key} "echo ^1Only in the server\'s own menu ({o.group(1)}); vstr resetVoiceChat"', None
     cmds = [c or f"{v} {x}" for c, v, x in re.findall(r'exec "([^"]+)"|setCvar (\w+) "([^"]*)"', action)]
@@ -284,7 +284,7 @@ QM_MENU_END''')
     assert set(files) == {"x.cfg", "fun.cfg"}, files
     assert files["x.cfg"].splitlines()[1:4] == ["", "// Echos", "vstr popupsMenu"]  # no vsays: no Vsays section
     assert "Statements" not in files["x.cfg"] and 'echo "^31. ^7FUN"' in files["x.cfg"]
-    assert f"bind 1 \"exec {EXEC}/x/fun.cfg\"" in files["x.cfg"], files["x.cfg"]
+    assert f"bind 1 \"execq {EXEC}/x/fun.cfg\"" in files["x.cfg"], files["x.cfg"]
     assert renumber([("^78. a", "", "8"), ("^70. b", "", "0"), ("TAB c", "", "TAB")]) == [("^71. a", "", "1"), ("^72. b", "", "2"), ("TAB c", "", "TAB")]
     fun = files["fun.cfg"]
     assert 'set vsay1 "vsay xy11 ^lHi^3, ^lyou^3!"\n' in fun and 'bind 1 "vstr vsay1; vstr resetVoiceChat"' in fun and 'echo "^31. ^7Hi, you!"' in fun, fun
@@ -320,9 +320,9 @@ QM_MENU_END''')
     assert [v for v, _ in extra] == ["E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "XYV"], extra
     add_extra(menus, "x", extra)
     files, _ = render("x", "x.pk3", menus, stock, texts=texts, colors=col, menu_colors=mc)
-    assert f'bind TAB "exec {EXEC}/x/extra1.cfg"' in files["x.cfg"] and "unbind TAB" not in files["fun.cfg"]
+    assert f'bind TAB "execq {EXEC}/x/extra1.cfg"' in files["x.cfg"] and "unbind TAB" not in files["fun.cfg"]
     assert files["fun.cfg"].index("\nvstr unbindNumbers\n") < files["fun.cfg"].index("\nbind 1 "), files["fun.cfg"]
-    assert 'set vsay1 "vsay XYV ^ltext xyv"\n' in files["extra2.cfg"] and f'bind TAB "exec {EXEC}/x/extra1.cfg"' in files["extra2.cfg"]
+    assert 'set vsay1 "vsay XYV ^ltext xyv"\n' in files["extra2.cfg"] and f'bind TAB "execq {EXEC}/x/extra1.cfg"' in files["extra2.cfg"]
     assert 'echo "[x] ^8More sounds (not in the server menu):"' in files["extra1.cfg"], files["extra1.cfg"]
     print("selftest ok")
 
@@ -347,6 +347,8 @@ def main():
         stock = set(voices(z)[0])
         stock_menus = parse(z.read(MENU).decode("latin-1"))
     names, rows = [hostname(a.address)] if a.address else list(history().values()), servers()
+    if a.address and not names[0]:  # also a tag passed where the address belongs
+        sys.exit(f"'{a.address}' doesn't answer: the third argument is the address of a server, its tag is taken from the server's name")
     tag = server_tag(clan, names, rows)
     if not tag:
         print(f"⚠️  no server name with the text of '{clan}' (serverconfigs/servers.tsv) known: headings get [{clan}]", file=sys.stderr)

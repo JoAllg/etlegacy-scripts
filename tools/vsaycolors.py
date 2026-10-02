@@ -97,6 +97,8 @@ def menu_echo(text, menu, old=None, server=False):
     if re.search(r"\w\)?:$", plain(text).rstrip()):
         tag = (server and re.match(r".*(?=\^[^\s^][^^]*$)", text)) or re.match(r".*\]\s*", text)
         tag = tag.group() if tag else ""
+        if tag.count("[") > tag.count("]"):  # the last color code lies inside the tag's brackets: the tag ends behind them
+            tag += re.match(r"[^\]]*\]?\s*", text[len(tag):]).group()
         return tag + menu["head"] + plain(text[len(tag):]).strip()
     m = re.match(r"(?:\^[^\s^])*(TAB|\d+)\.?\s+(.*)", text, re.S)
     if not m:
@@ -256,6 +258,7 @@ def selftest():
     assert menu_echo("^87. Never give you up!! (:", m) == "^37. ^7Never give you up!! (:" and menu_echo("More (not in the menu):", m) == "^8More (not in the menu):"
     assert menu_echo("^87. Aaaw ):", m) == "^37. ^7Aaaw ):" and menu_echo("^83. Don't kill me )':", m) == "^33. ^7Don't kill me )':"
     assert menu_echo("^vSO^7ME ^7NA^vME ^1FUN:", m, server=True) == "^vSO^7ME ^7NA^vME ^8FUN:"  # tag without brackets
+    assert menu_echo("^9[^7xY^9] FUN:", m, server=True) == "^9[^7xY^9] ^8FUN:"  # no color code behind the tag: its bracket keeps its color
     assert menu_echo("^9[^7xY^9] ^1FUN:", m, server=True) == "^9[^7xY^9] ^8FUN:" and menu_echo("[x] FUN:", m, server=True) == "[x] ^8FUN:"
     assert menu_echo("^31. ^2Hi", m) == "^31. ^7Hi" and menu_echo("^5    *** CHAT LOADED!", m, old_m) == "^5    *** CHAT LOADED!"
     assert render("^1a^3b") == '<span style="color:#ff0000">a</span><span style="color:#ffff00">b</span>'

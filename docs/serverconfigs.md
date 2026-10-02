@@ -8,7 +8,7 @@ The tool follows the console log `<fs_homepath>/<mod>/etconsole.log` (`logfile 2
 
 | Log line | Meaning | Evidence |
 |---|---|---|
-| `<address> resolved to <ip:port>` | the game connects to a server: server menu, server browser, `connect`, `reconnect` | `src/client/cl_main.c` `CL_Connect_f` |
+| `<address> resolved to <ip:port>` (IPv6: `[<ip>]:<port>`) | the game connects to a server: server menu, server browser, `connect`, `reconnect` | `src/client/cl_main.c` `CL_Connect_f`, `src/qcommon/net_ip.c` `NET_AdrToString`; IPv6 not tested in game |
 | `----- Server Initialization ----` | the game hosts a map itself (`+map`, `+devmap`), on every local map load | `src/server/sv_init.c` `SV_SpawnServer`; seen in a log of a local host on 2026-10-02 |
 | a log that starts again | new game session, on no server | the engine truncates the log at launch (`src/qcommon/common.c`) |
 
@@ -48,7 +48,7 @@ fun	Full Name Of A Server Without Tag
 `current.cfg` for the id `xy`:
 
 ```
-set serverApply "exec profile/serverconfigs/default.cfg; exec profile/serverconfigs/xy.cfg; set serverLast vstr serverIs_xy"
+set serverApply "execq profile/serverconfigs/default.cfg; execq profile/serverconfigs/xy.cfg; set serverLast vstr serverIs_xy"
 set serverIs_xy "vstr null"
 vstr serverLast
 set serverIs_xy "vstr serverApply"
@@ -71,6 +71,8 @@ jaymod runs no event autoexecs ([Autoexec behavior](autoexec.md)), so only the c
 
 In-game test on 2026-10-02 (legacy, local host of fueldump with a `local.cfg`): game start exec'd `current.cfg` and `default.cfg` after `state.cfg`; the map autoexec exec'd `current.cfg`, `default.cfg` and `local.cfg` in this order; the spectator autoexec exec'd `current.cfg` only. A remote server change and the other mods are not tested in game.
 
+`serverCheck` and `serverApply` use `execq` (a class key or the voice chat can run them, [Config scripting](scripting.md)), so the console shows no `execing` line for these files; an apply shows as the load marker of `default.cfg` (`>>> SERVER DEFAULTS LOADED!`). Not tested in game with `execq`.
+
 ## Precedence
 
 Later wins:
@@ -81,7 +83,7 @@ Later wins:
 4. `serverconfigs/default.cfg`
 5. `serverconfigs/<id>.cfg`
 
-A server cfg is a personal preference for that server, so it overrides everything else.
+A server cfg is a personal preference for that server, so it overrides these files. It does not override what the event that applies it sets afterwards: `serverCheck` runs at the start of the event, so the class script of a class key, the rest of a map or team autoexec and the binds of the voice chat page run after the server cfg and win for the names they set. `F3` and `autoexec.cfg` apply it last (`serverForce`).
 
 - Nothing undoes a server cfg except `default.cfg`, which runs before every server cfg: each name a server cfg sets (cvar, alias, bind) needs its normal value there, or it keeps the server's value on all other servers. The tool reports such names at its start (`tools/serverconfig.py --check`); it only compares names.
 - Both files run again after every server change, `F3` and `F1`: absolute values only (`cg_fov 100`), no toggle or cycle steps.

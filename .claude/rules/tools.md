@@ -21,6 +21,7 @@ What each tool does and its usage line: `tools/README.md` and the module docstri
 - cfg, location and pk3 text files have no fixed encoding: classic mods draw 8-bit bytes, legacy decodes UTF-8 (`docs/special_chars.md`). A tool that writes them back reads and writes `latin1`, which keeps every byte as it is; UTF-8 would re-encode the bytes above 0x7F.
 - Every tool parses its arguments with `argparse` (unknown arguments are an error, never ignored) and has a `--selftest` (plain `assert`s, prints `selftest ok`, changes nothing): run it after a change and extend it for new logic. `ponytail:` comments mark deliberate shortcuts with their ceiling.
 - Selftests, docstrings and examples use made-up values only (server names, clan tags, pack names; addresses from `192.0.2.0/24`): the repo is public, and a copied server answer or log line shows where the user plays.
+- A generated cfg that a key press execs, and every `exec` it binds to a key, uses `execq` (`.claude/rules/exec-chain.md`).
 - Tools are rerunnable: a rerun keeps what the user edited (vsay texts, the settings block of a map autoexec) and reports what it added or removed.
 - A new tool gets a section in `tools/README.md` and a line in the `CLAUDE.md` folder tree; the usage stays in the docstring.
 - Tools that start the game (`research/dump_cvars.py`) need the display and write to `fs_homepath`: run them outside the sandbox.
