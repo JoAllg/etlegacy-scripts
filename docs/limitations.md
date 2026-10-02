@@ -1,6 +1,6 @@
-# Limitations of config scripts
+# Limitations
 
-What the scripts of this profile cannot do, why, and the workarounds. Syntax and patterns: [Config scripting](scripting.md).
+What this profile cannot do or work around, why, and the workarounds: config scripts, the engine, mods and local hosting. Syntax and patterns of config scripts: [Config scripting](scripting.md).
 
 ## Scripts cannot read the game state
 
@@ -92,3 +92,17 @@ The nitmod stock shield (`tools/stock_shield/README.md`) cannot tell a local gam
 | Local game, main menu | same as unpure: this is what the shield is for; wanted packs in the mod folder lose their stock-name files too |
 
 `/sv_pure` in the console shows the mode of the current server. Workaround on an unpure server with wanted replacements: move the shield pk3 out of `<fs_homepath>/nitmod/` and rebuild it afterwards (`python3 tools/stock_shield/stock_shield.py`). Not tested in game.
+
+## Local hosting in nitmod
+
+### Maps in the host game list that do not start
+
+The host game list shows every `scripts/*.arena` file of the search path, whether or not the map's bsp exists (`src/ui/ui_gameinfo.c` `UI_LoadArenas`). The engine mounts every top-level pk3 of the mod folder; the `dlcache` folder that keeps downloads apart exists only for etmain and legacy (`src/qcommon/files.c` `FS_AddContainerDirectory`, `src/qcommon/download.c` `Com_ContainerizePath`). The packs of nitmod servers therefore stay mounted in `<fs_homepath>/nitmod/`, and the arena files they bring for their map rotation add entries without a map, e.g. `nfl_b2`. Legacy does not list them, its search path does not contain the nitmod folder.
+
+Starting such an entry prints `Can't find map maps/<map>.bsp` and starts no server (`src/server/sv_ccmds.c` `SV_Map_f`; dedicated server test and console log of a start from the menu, 2026-10-02). The menu has set `ui_connecting 1` before (`src/ui/ui_main.c`, `StartServer`) and nothing resets it; what the screen shows then is unverified. No cvar restricts the mounted pk3s, and a copy of the mod folder under another name does not work (self-check below).
+
+### Crash after a mod switch in the menu
+
+nitmod's `G_InitGame` checks `gamename` and `fs_game` = `nitmod`, `mod_version` = `2.3.5` and `mod_url` = `etmods.net` and returns without setting up the level when one differs (`research/nitmod_2.3.5/decompiled/qagame_runframe_crash.c`). The engine runs game frames right after the init (`src/server/sv_init.c` `SV_SpawnServer`), and the first one reads the missing entity array: segmentation fault in `G_RunFrame` → `CheckCvars` → `G_ReassignSkillLevel`, crash log `<fs_homepath>/nitmod/crash_*.log` with an empty `Map:`.
+
+Likely trigger, not reproduced: a legacy game hosted before switching to nitmod in the mods menu. Legacy registers `mod_version` and `mod_url` with its own values, cvars survive the mod switch, and registering an existing cvar keeps its value (`src/qcommon/cvar.c` `Cvar_Get`). The crashes seen so far followed that order. Workaround: start the game in nitmod (`+set fs_game nitmod`) to host there.
