@@ -1,0 +1,3673 @@
+{
+	"version": 7,
+	"huds": [
+		{
+			"name": "1",
+			"components": {
+				"healthbar": {
+					"rect": {
+						"x": -24,
+						"y": -20,
+						"w": 12,
+						"h": 72
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"healthtext": {
+					"rect": {
+						"x": -41,
+						"y": -62,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"xptext": {
+					"rect": {
+						"x": 24,
+						"y": -2,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"ranktext": {
+					"rect": {
+						"x": 30,
+						"y": -14,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"statsdisplay": {
+					"rect": {
+						"x": 24,
+						"y": -20,
+						"w": 14,
+						"h": 72
+					},
+					"style": 1,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"weaponicon": {
+					"rect": {
+						"x": -45,
+						"y": -20,
+						"w": 60,
+						"h": 32
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"weaponammo": {
+					"rect": {
+						"x": -45,
+						"y": -8,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"fireteam": {
+					"rect": {
+						"x": 10,
+						"y": 10,
+						"w": 320,
+						"h": 100
+					},
+					"anchor": 0,
+					"parent": {
+						"anchor": 0,
+						"component": null
+					}
+				},
+				"hudhead": {
+					"visible": false
+				},
+				"reinforcement": {
+					"secondaryColor": "007fffff"
+				},
+				"spawntimer": {
+					"secondaryColor": "ff0000ff"
+				},
+				"votetext": {
+					"secondaryColor": "ffff00ff"
+				},
+				"demotext": {
+					"secondaryColor": "ff0000ff"
+				},
+				"missilecamera": {
+					"rect": {
+						"x": 4,
+						"y": 4,
+						"w": 160,
+						"h": 120
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"compass": {
+					"rect": {
+						"x": 49,
+						"y": -19,
+						"w": 84,
+						"h": 84
+					},
+					"style": 14,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				}
+			}
+		},
+		{
+			"name": "2",
+			"parent": "1",
+			"components": {
+				"healthbar": {
+					"rect": {
+						"x": 24,
+						"y": -20,
+						"w": 12,
+						"h": 72
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"healthtext": {
+					"rect": {
+						"x": 40,
+						"y": -2,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"xptext": {
+					"rect": {
+						"x": 110,
+						"y": -2,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"ranktext": {
+					"rect": {
+						"x": 115,
+						"y": -14,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"statsdisplay": {
+					"rect": {
+						"x": 45,
+						"y": -20,
+						"w": 14,
+						"h": 72
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"weaponicon": {
+					"rect": {
+						"x": -28,
+						"y": -20,
+						"w": 60,
+						"h": 32
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"weaponammo": {
+					"rect": {
+						"x": -25,
+						"y": -8,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"compass": {
+					"rect": {
+						"x": 70,
+						"y": -19,
+						"w": 84,
+						"h": 84
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				}
+			}
+		},
+		{
+			"name": "3",
+			"parent": "2",
+			"components": {
+				"healthbar": {
+					"rect": {
+						"x": -24,
+						"y": -20,
+						"w": 12,
+						"h": 72
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"healthtext": {
+					"rect": {
+						"x": -41,
+						"y": -62,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"xptext": {
+					"rect": {
+						"x": 40,
+						"y": -2,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"ranktext": {
+					"rect": {
+						"x": 100,
+						"y": -2,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"weaponicon": {
+					"rect": {
+						"x": -45,
+						"y": -20,
+						"w": 60,
+						"h": 32
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"weaponammo": {
+					"rect": {
+						"x": -45,
+						"y": -8,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"powerups": {
+					"rect": {
+						"x": -4,
+						"y": 96,
+						"w": 36,
+						"h": 36
+					},
+					"anchor": 2,
+					"parent": {
+						"anchor": 3,
+						"component": null
+					}
+				},
+				"objectives": {
+					"rect": {
+						"x": 4,
+						"y": 96,
+						"w": 36,
+						"h": 36
+					},
+					"anchor": 0,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"livesleft": {
+					"rect": {
+						"x": 44,
+						"y": 102,
+						"w": 48,
+						"h": 24
+					},
+					"anchor": 0,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"roundtimer": {
+					"rect": {
+						"x": -41,
+						"y": -78,
+						"w": 57,
+						"h": 14
+					},
+					"style": 1,
+					"showBackGround": false,
+					"showBorder": false,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"reinforcement": {
+					"rect": {
+						"x": -41,
+						"y": -78,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"textAlign": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"spawntimer": {
+					"rect": {
+						"x": -41,
+						"y": -78,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"showBackGround": false,
+					"showBorder": false,
+					"textAlign": 2,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"sprinttext": {
+					"rect": {
+						"x": 4,
+						"y": -93,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"breathtext": {
+					"rect": {
+						"x": 4,
+						"y": -93,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"weaponchargetext": {
+					"rect": {
+						"x": -3,
+						"y": -92,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"textAlign": 2,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				}
+			}
+		},
+		{
+			"name": "4",
+			"parent": "3",
+			"components": {
+				"crosshair": {
+					"rect": {
+						"x": 0,
+						"y": 0,
+						"w": 32,
+						"h": 32
+					},
+					"style": 0,
+					"mainColor": "00ffffff",
+					"anchor": 8,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"staminabar": {
+					"rect": {
+						"x": -27.70001220703125,
+						"y": -3,
+						"w": 12,
+						"h": 72
+					},
+					"barStyle": 5,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"breathbar": {
+					"rect": {
+						"x": -27.70001220703125,
+						"y": -3,
+						"w": 12,
+						"h": 72
+					},
+					"barStyle": 5,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"healthbar": {
+					"rect": {
+						"x": 42.79998779296875,
+						"y": -3,
+						"w": 12,
+						"h": 72
+					},
+					"style": 4101,
+					"barStyle": 4101,
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"weaponchargebar": {
+					"rect": {
+						"x": 32.29998779296875,
+						"y": -3,
+						"w": 12,
+						"h": 72
+					},
+					"barStyle": 5,
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"healthtext": {
+					"rect": {
+						"x": 41,
+						"y": -59,
+						"w": 57,
+						"h": 14
+					},
+					"style": 1,
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"xptext": {
+					"rect": {
+						"x": 65.20001220703125,
+						"y": 68,
+						"w": 58,
+						"h": 14
+					},
+					"textAlign": 2,
+					"anchor": 0,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"ranktext": {
+					"rect": {
+						"x": -18.999984741210938,
+						"y": -1,
+						"w": 58,
+						"h": 14
+					},
+					"visible": false,
+					"textAlign": 2,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"statsdisplay": {
+					"rect": {
+						"x": -3.9999847412109375,
+						"y": -3,
+						"w": 14,
+						"h": 72
+					},
+					"visible": false,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"weaponicon": {
+					"rect": {
+						"x": 66.9499969482422,
+						"y": 22,
+						"w": 60,
+						"h": 32
+					},
+					"anchor": 0,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"weaponammo": {
+					"rect": {
+						"x": 50.399993896484375,
+						"y": -76,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"fireteam": {
+					"rect": {
+						"x": 10.299980163574219,
+						"y": -14,
+						"w": 320,
+						"h": 103
+					},
+					"showBackGround": false,
+					"showBorder": false,
+					"anchor": 2,
+					"parent": {
+						"anchor": 1,
+						"component": null
+					}
+				},
+				"popupmessages": {
+					"rect": {
+						"x": 4,
+						"y": 82,
+						"w": 284,
+						"h": 72
+					},
+					"anchor": 0,
+					"parent": {
+						"anchor": 0,
+						"component": null
+					}
+				},
+				"powerups": {
+					"rect": {
+						"x": -1.100006103515625,
+						"y": -2,
+						"w": 36,
+						"h": 36
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"objectives": {
+					"rect": {
+						"x": -26.20001220703125,
+						"y": -91,
+						"w": 36,
+						"h": 36
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"hudhead": {
+					"rect": {
+						"x": -28,
+						"y": 0,
+						"w": 62,
+						"h": 80
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"cursorhints": {
+					"style": 0
+				},
+				"weaponstability": {
+					"rect": {
+						"x": -68.89999389648438,
+						"y": -5,
+						"w": 10,
+						"h": 64
+					},
+					"anchor": 3,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"livesleft": {
+					"rect": {
+						"x": 4,
+						"y": -96,
+						"w": 48,
+						"h": 24
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"roundtimer": {
+					"rect": {
+						"x": 0,
+						"y": 113,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 1,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"reinforcement": {
+					"rect": {
+						"x": 6,
+						"y": 97,
+						"w": 57,
+						"h": 14
+					},
+					"textAlign": 1,
+					"anchor": 0,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"spawntimer": {
+					"rect": {
+						"x": -5.5,
+						"y": 97,
+						"w": 57,
+						"h": 14
+					},
+					"textAlign": 1,
+					"anchor": 2,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"localtime": {
+					"rect": {
+						"x": -10.250015258789062,
+						"y": -2,
+						"w": 57,
+						"h": 14
+					},
+					"showBackGround": false,
+					"showBorder": false,
+					"anchor": 1,
+					"parent": {
+						"anchor": 2,
+						"component": null
+					}
+				},
+				"votetext": {
+					"rect": {
+						"x": 4,
+						"y": 30,
+						"w": 278,
+						"h": 28
+					},
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"anchor": 0,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"spectatortext": {
+					"rect": {
+						"x": 4,
+						"y": 15,
+						"w": 250,
+						"h": 38
+					},
+					"style": 1,
+					"anchor": 0,
+					"parent": {
+						"anchor": 0,
+						"component": null
+					}
+				},
+				"limbotext": {
+					"rect": {
+						"x": 4,
+						"y": 15,
+						"w": 278,
+						"h": 38
+					},
+					"anchor": 0,
+					"parent": {
+						"anchor": 0,
+						"component": null
+					}
+				},
+				"followtext": {
+					"rect": {
+						"x": 4,
+						"y": 56,
+						"w": 278,
+						"h": 24
+					},
+					"style": 1,
+					"anchor": 0,
+					"parent": {
+						"anchor": 0,
+						"component": null
+					}
+				},
+				"demotext": {
+					"rect": {
+						"x": 10,
+						"y": 0,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 0,
+					"parent": {
+						"anchor": 0,
+						"component": null
+					}
+				},
+				"missilecamera": {
+					"rect": {
+						"x": 4,
+						"y": 28,
+						"w": 160,
+						"h": 112
+					},
+					"style": 1,
+					"anchor": 6,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"sprinttext": {
+					"rect": {
+						"x": -20.5,
+						"y": -75,
+						"w": 57,
+						"h": 14
+					},
+					"textAlign": 2,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"breathtext": {
+					"rect": {
+						"x": -46,
+						"y": -75,
+						"w": 57,
+						"h": 14
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"weaponchargetext": {
+					"rect": {
+						"x": 25.5,
+						"y": -76,
+						"w": 38,
+						"h": 14
+					},
+					"textAlign": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"fps": {
+					"rect": {
+						"x": -47.25,
+						"y": -42,
+						"w": 57,
+						"h": 14
+					},
+					"showBackGround": false,
+					"showBorder": false,
+					"anchor": 4,
+					"parent": {
+						"anchor": 3,
+						"component": null
+					}
+				},
+				"ping": {
+					"rect": {
+						"x": -103.5,
+						"y": -33,
+						"w": 57,
+						"h": 14
+					},
+					"showBackGround": false,
+					"showBorder": false,
+					"anchor": 4,
+					"parent": {
+						"anchor": 3,
+						"component": null
+					}
+				},
+				"speed": {
+					"showBackGround": false,
+					"showBorder": false
+				},
+				"lagometer": {
+					"showBackGround": false,
+					"showBorder": false
+				},
+				"disconnect": {
+					"visible": false,
+					"showBackGround": false,
+					"showBorder": false
+				},
+				"chat": {
+					"rect": {
+						"x": 1.7499961853027344,
+						"y": -3,
+						"w": 364,
+						"h": 72
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"pmitemsbig": {
+					"visible": false
+				},
+				"warmuptext": {
+					"rect": {
+						"x": 4,
+						"y": 70,
+						"w": 300,
+						"h": 39
+					},
+					"anchor": 0,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"objectivetext": {
+					"rect": {
+						"x": 4,
+						"y": -106,
+						"w": 300,
+						"h": 16
+					},
+					"style": 1,
+					"showBackGround": false,
+					"showBorder": false,
+					"textAlign": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"centerprint": {
+					"rect": {
+						"x": 4,
+						"y": -76,
+						"w": 300,
+						"h": 23
+					},
+					"textAlign": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"crosshairtext": {
+					"style": 1
+				},
+				"crosshairbar": {
+					"rect": {
+						"x": 0,
+						"y": -31,
+						"w": 130,
+						"h": 10
+					},
+					"style": 0,
+					"barStyle": 2,
+					"anchor": 5,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"compass": {
+					"rect": {
+						"x": 0,
+						"y": 3,
+						"w": 90,
+						"h": 90
+					},
+					"style": 3,
+					"anchor": 5,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				}
+			}
+		},
+		{
+			"name": "New HUD",
+			"parent": "4",
+			"components": {
+				"crosshair": {
+					"rect": {
+						"x": 0,
+						"y": 0,
+						"w": 30,
+						"h": 30
+					},
+					"mainColor": "00ff96ff",
+					"secondaryColor": "ff0064ff",
+					"anchor": 8,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"staminabar": {
+					"rect": {
+						"x": -34.25001525878906,
+						"y": -5.5999755859375,
+						"w": 12,
+						"h": 73.1999969482422
+					},
+					"barStyle": 21,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"breathbar": {
+					"rect": {
+						"x": -122.20001220703125,
+						"y": -30,
+						"w": 12,
+						"h": 75
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"healthbar": {
+					"rect": {
+						"x": -136.9500274658203,
+						"y": -81,
+						"w": 12,
+						"h": 72
+					},
+					"visible": false,
+					"style": 1,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"weaponchargebar": {
+					"rect": {
+						"x": 33.24998474121094,
+						"y": -4.79998779296875,
+						"w": 12,
+						"h": 73
+					},
+					"autoAdjust": 1,
+					"barStyle": 21,
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"healthtext": {
+					"rect": {
+						"x": -0.5000152587890625,
+						"y": 110,
+						"w": 57,
+						"h": 14
+					},
+					"style": 0,
+					"mainColor": "ff00ffff",
+					"anchor": 2,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"xptext": {
+					"rect": {
+						"x": -4.92498779296875,
+						"y": -107.5,
+						"w": 53,
+						"h": 8
+					},
+					"scale": 64.99984741210938,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"weaponicon": {
+					"rect": {
+						"x": 13.000030517578125,
+						"y": -98,
+						"w": 40,
+						"h": 21
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"weaponammo": {
+					"rect": {
+						"x": 0.2499847412109375,
+						"y": 109,
+						"w": 57,
+						"h": 14
+					},
+					"scale": 84.99984741210938,
+					"mainColor": "00ffffff",
+					"anchor": 0,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"fireteam": {
+					"rect": {
+						"x": 4.750030517578125,
+						"y": 3,
+						"w": 300,
+						"h": 76
+					},
+					"style": 3,
+					"showBackGround": true,
+					"backgroundColor": "0000003d",
+					"showBorder": true,
+					"anchor": 0,
+					"parent": {
+						"anchor": 0,
+						"component": null
+					}
+				},
+				"popupmessages": {
+					"rect": {
+						"x": -1.9999923706054688,
+						"y": 29,
+						"w": 422,
+						"h": 80
+					},
+					"style": 129,
+					"scale": 80,
+					"textStyle": 0,
+					"anchor": 0,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"powerups": {
+					"rect": {
+						"x": 0,
+						"y": 0,
+						"w": 48,
+						"h": 48
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"objectives": {
+					"visible": false
+				},
+				"hudhead": {
+					"rect": {
+						"x": -37.000030517578125,
+						"y": 0.5,
+						"w": 62,
+						"h": 80
+					},
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"cursorhints": {
+					"rect": {
+						"x": 0,
+						"y": 19,
+						"w": 48,
+						"h": 48
+					},
+					"anchor": 1,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"livesleft": {
+					"visible": false
+				},
+				"roundtimer": {
+					"rect": {
+						"x": 0,
+						"y": 90,
+						"w": 57,
+						"h": 14
+					},
+					"textStyle": 3,
+					"anchor": 1,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"reinforcement": {
+					"rect": {
+						"x": -5.225006103515625,
+						"y": 80,
+						"w": 57,
+						"h": 14
+					},
+					"secondaryColor": "000000ff",
+					"backgroundColor": "28333d7f",
+					"textStyle": 3,
+					"anchor": 1,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"spawntimer": {
+					"rect": {
+						"x": 5.274993896484375,
+						"y": 80,
+						"w": 57,
+						"h": 14
+					},
+					"secondaryColor": "ffff00ff",
+					"textStyle": 3,
+					"anchor": 1,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"localtime": {
+					"rect": {
+						"x": -3.375,
+						"y": -1.5,
+						"w": 56,
+						"h": 13
+					},
+					"visible": true,
+					"scale": 102.49984741210938,
+					"mainColor": "ffffff48",
+					"secondaryColor": "00ff99ff",
+					"anchor": 2,
+					"parent": {
+						"anchor": 3,
+						"component": null
+					}
+				},
+				"votetext": {
+					"rect": {
+						"x": 10.749996185302734,
+						"y": -3,
+						"w": 278,
+						"h": 28
+					},
+					"scale": 94.99984741210938,
+					"mainColor": "ffff00ff",
+					"anchor": 6,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"spectatortext": {
+					"rect": {
+						"x": 7.75000762939453,
+						"y": -5,
+						"w": 250,
+						"h": 38
+					},
+					"visible": false,
+					"anchor": 6,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"limbotext": {
+					"rect": {
+						"x": 9.25000762939453,
+						"y": -79,
+						"w": 278,
+						"h": 38
+					},
+					"anchor": 6,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"followtext": {
+					"rect": {
+						"x": 9.75,
+						"y": 101,
+						"w": 278,
+						"h": 24
+					},
+					"anchor": 0,
+					"parent": {
+						"anchor": 0,
+						"component": null
+					}
+				},
+				"demotext": {
+					"visible": false
+				},
+				"sprinttext": {
+					"rect": {
+						"x": -2.5250244140625,
+						"y": -77,
+						"w": 57,
+						"h": 14
+					},
+					"style": 0,
+					"scale": 70,
+					"textAlign": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"breathtext": {
+					"rect": {
+						"x": -64.75000762939453,
+						"y": -54,
+						"w": 57,
+						"h": 14
+					},
+					"visible": false,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"weaponchargetext": {
+					"rect": {
+						"x": 27.75,
+						"y": -77,
+						"w": 38,
+						"h": 14
+					},
+					"scale": 70,
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"fps": {
+					"rect": {
+						"x": -3,
+						"y": 10,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"mainColor": "99999963",
+					"anchor": 2,
+					"parent": {
+						"anchor": 3,
+						"component": null
+					}
+				},
+				"ping": {
+					"rect": {
+						"x": -3.75,
+						"y": -3,
+						"w": 57,
+						"h": 14
+					},
+					"borderColor": "ff7f7f7f",
+					"anchor": 2,
+					"parent": {
+						"anchor": 3,
+						"component": null
+					}
+				},
+				"chat": {
+					"rect": {
+						"x": 0.75,
+						"y": -2,
+						"w": 364,
+						"h": 80
+					},
+					"textStyle": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"spectatorstatus": {
+					"rect": {
+						"x": 0,
+						"y": 0,
+						"w": 138,
+						"h": 22
+					},
+					"scale": 59.999847412109375,
+					"anchor": 5,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"warmuptitle": {
+					"rect": {
+						"x": 0,
+						"y": 12.5,
+						"w": 422,
+						"h": 12
+					},
+					"scale": 69.99984741210938,
+					"anchor": 1,
+					"parent": {
+						"anchor": 1,
+						"component": null
+					}
+				},
+				"warmuptext": {
+					"rect": {
+						"x": 5.25,
+						"y": -67,
+						"w": 300,
+						"h": 39
+					},
+					"scale": 104.99984741210938,
+					"anchor": 5,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"objectivetext": {
+					"rect": {
+						"x": 3.9999961853027344,
+						"y": -106,
+						"w": 300,
+						"h": 16
+					},
+					"visible": false,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"centerprint": {
+					"rect": {
+						"x": 0,
+						"y": -78,
+						"w": 300,
+						"h": 23
+					},
+					"textAlign": 1,
+					"anchor": 5,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"banner": {
+					"rect": {
+						"x": 32.25,
+						"y": -4,
+						"w": 422,
+						"h": 24
+					},
+					"visible": false,
+					"anchor": 8,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"crosshairbar": {
+					"rect": {
+						"x": 0,
+						"y": -29.5,
+						"w": 133,
+						"h": 13
+					},
+					"style": 1,
+					"barStyle": 2818,
+					"anchor": 5,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"compass": {
+					"rect": {
+						"x": 0,
+						"y": 6,
+						"w": 95,
+						"h": 95
+					},
+					"style": 86,
+					"scale": 94.99984741210938,
+					"anchor": 5,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				}
+			}
+		},
+		{
+			"name": "default",
+			"parent": false,
+			"components": {
+				"crosshair": {
+					"rect": {
+						"x": 0,
+						"y": 0,
+						"w": 30,
+						"h": 30
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ff0000ff",
+					"secondaryColor": "ff0000ff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 8,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"staminabar": {
+					"rect": {
+						"x": -33.41669464111328,
+						"y": 0,
+						"w": 12,
+						"h": 65
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "00ff197f",
+					"secondaryColor": "ff00197f",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 21,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"breathbar": {
+					"rect": {
+						"x": -122.20000457763672,
+						"y": -30,
+						"w": 12,
+						"h": 75
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "0019ff7f",
+					"secondaryColor": "ff19007f",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 5,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"healthbar": {
+					"rect": {
+						"x": -0.283355712890625,
+						"y": -75,
+						"w": 72,
+						"h": 12
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffff0082",
+					"secondaryColor": "ff00003f",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 1,
+					"barStyle": 4113,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 5,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"weaponchargebar": {
+					"rect": {
+						"x": 33.24999237060547,
+						"y": 0,
+						"w": 12,
+						"h": 65
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffbf",
+					"secondaryColor": "ffff193f",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 1,
+					"barStyle": 21,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"clipbar": {
+					"rect": {
+						"x": -18,
+						"y": -20,
+						"w": 12,
+						"h": 72
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffbf",
+					"secondaryColor": "ff00003f",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 3285,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"healthtext": {
+					"rect": {
+						"x": -0.0833384171128273,
+						"y": -88,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ff00ffff",
+					"secondaryColor": "ff000000",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 5,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"xptext": {
+					"rect": {
+						"x": -4.92497730255127,
+						"y": 53.5,
+						"w": 53,
+						"h": 8
+					},
+					"visible": false,
+					"style": 1,
+					"scale": 64.99984741210938,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 2,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 2,
+					"parent": {
+						"anchor": 3,
+						"component": null
+					}
+				},
+				"ranktext": {
+					"rect": {
+						"x": -18.9999885559082,
+						"y": -1,
+						"w": 58,
+						"h": 14
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 2,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"statsdisplay": {
+					"rect": {
+						"x": 1.0000101327896118,
+						"y": -1,
+						"w": 9,
+						"h": 62
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"weaponheatbar": {
+					"rect": {
+						"x": -28,
+						"y": -20,
+						"w": 60,
+						"h": 32
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffff004c",
+					"secondaryColor": "ff0000b2",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 145,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"weaponicon": {
+					"rect": {
+						"x": 21.3333625793457,
+						"y": -81,
+						"w": 40,
+						"h": 21
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"weaponammo": {
+					"rect": {
+						"x": 4.416656494140625,
+						"y": -97,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 84.99984741210938,
+					"mainColor": "00ffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 2,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"fireteam": {
+					"rect": {
+						"x": 4.750030517578125,
+						"y": 3,
+						"w": 300,
+						"h": 76
+					},
+					"visible": true,
+					"style": 3,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "28332b7f",
+					"showBackGround": true,
+					"backgroundColor": "0000003d",
+					"showBorder": true,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 0,
+					"parent": {
+						"anchor": 0,
+						"component": null
+					}
+				},
+				"popupmessages": {
+					"rect": {
+						"x": 1.3333359956741333,
+						"y": 57,
+						"w": 422,
+						"h": 100
+					},
+					"visible": true,
+					"style": 139,
+					"scale": 80,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 2000,
+					"feedFadeTime": 2500,
+					"anchor": 0,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"popupmessages2": {
+					"rect": {
+						"x": 4,
+						"y": 5,
+						"w": 422,
+						"h": 96
+					},
+					"visible": false,
+					"style": 128,
+					"scale": 89.6999969482422,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 2000,
+					"feedFadeTime": 2500,
+					"anchor": 0,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"popupmessages3": {
+					"rect": {
+						"x": 4,
+						"y": 5,
+						"w": 422,
+						"h": 96
+					},
+					"visible": false,
+					"style": 128,
+					"scale": 89.6999969482422,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 2000,
+					"feedFadeTime": 2500,
+					"anchor": 0,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"popupmessages4": {
+					"rect": {
+						"x": 4,
+						"y": 5,
+						"w": 422,
+						"h": 96
+					},
+					"visible": false,
+					"style": 128,
+					"scale": 89.6999969482422,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 2000,
+					"feedFadeTime": 2500,
+					"anchor": 0,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"powerups": {
+					"rect": {
+						"x": -7.499999523162842,
+						"y": 1,
+						"w": 48,
+						"h": 48
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 2,
+					"parent": {
+						"anchor": 3,
+						"component": null
+					}
+				},
+				"objectives": {
+					"rect": {
+						"x": -26.200000762939453,
+						"y": -91,
+						"w": 36,
+						"h": 36
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"hudhead": {
+					"rect": {
+						"x": -37.00001907348633,
+						"y": 0.5,
+						"w": 62,
+						"h": 80
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"cursorhints": {
+					"rect": {
+						"x": 0,
+						"y": 19,
+						"w": 48,
+						"h": 48
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 1,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"cursorhintsbar": {
+					"rect": {
+						"x": -1.6666666269302368,
+						"y": 67,
+						"w": 48,
+						"h": 8
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 640,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 1,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"cursorhintstext": {
+					"rect": {
+						"x": 23.9999885559082,
+						"y": 54,
+						"w": 57,
+						"h": 14
+					},
+					"visible": false,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 0,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"weaponstability": {
+					"rect": {
+						"x": -68.89999389648438,
+						"y": -5,
+						"w": 10,
+						"h": 64
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 134,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 3,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"livesleft": {
+					"rect": {
+						"x": 4,
+						"y": -96,
+						"w": 48,
+						"h": 24
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"roundtimer": {
+					"rect": {
+						"x": -11.25,
+						"y": -88,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"reinforcement": {
+					"rect": {
+						"x": -0.6416829228401184,
+						"y": -98,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 110,
+					"mainColor": "00a7ffff",
+					"secondaryColor": "000000ff",
+					"showBackGround": false,
+					"backgroundColor": "28333d7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"spawntimer": {
+					"rect": {
+						"x": -20.97500991821289,
+						"y": -98,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "7e8486ff",
+					"secondaryColor": "ffff00ff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 2,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"localtime": {
+					"rect": {
+						"x": -1.7083231210708618,
+						"y": -70.5,
+						"w": 56,
+						"h": 13
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 102.49984741210938,
+					"mainColor": "ffffff48",
+					"secondaryColor": "00ff99ff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 0,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"votetext": {
+					"rect": {
+						"x": 5.74999475479126,
+						"y": -40,
+						"w": 278,
+						"h": 28
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 94.99984741210938,
+					"mainColor": "ffff00ff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"spectatortext": {
+					"rect": {
+						"x": 7.75000762939453,
+						"y": -5,
+						"w": 250,
+						"h": 38
+					},
+					"visible": false,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"limbotext": {
+					"rect": {
+						"x": 9.25000762939453,
+						"y": -79,
+						"w": 278,
+						"h": 38
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"followtext": {
+					"rect": {
+						"x": 9.75,
+						"y": 101,
+						"w": 278,
+						"h": 24
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 0,
+					"parent": {
+						"anchor": 0,
+						"component": null
+					}
+				},
+				"demotext": {
+					"rect": {
+						"x": -3.3333332538604736,
+						"y": 3,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ff00007f",
+					"secondaryColor": "ff0000ff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 2,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 2,
+					"parent": {
+						"anchor": 2,
+						"component": null
+					}
+				},
+				"missilecamera": {
+					"rect": {
+						"x": 6.50000238418579,
+						"y": 12,
+						"w": 160,
+						"h": 112
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 7,
+						"component": null
+					}
+				},
+				"sprinttext": {
+					"rect": {
+						"x": -0.02502441219985485,
+						"y": -66,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 70,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"breathtext": {
+					"rect": {
+						"x": -64.75000762939453,
+						"y": -54,
+						"w": 57,
+						"h": 14
+					},
+					"visible": false,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"weaponchargetext": {
+					"rect": {
+						"x": 29.416654586791992,
+						"y": -65,
+						"w": 38,
+						"h": 14
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 70,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"fps": {
+					"rect": {
+						"x": -1.33331298828125,
+						"y": -57,
+						"w": 57,
+						"h": 14
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "99999963",
+					"secondaryColor": "999999ff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 0,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"snapshot": {
+					"rect": {
+						"x": -1.33331298828125,
+						"y": 1,
+						"w": 57,
+						"h": 38
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "999999ff",
+					"secondaryColor": "999999ff",
+					"showBackGround": true,
+					"backgroundColor": "28332b7f",
+					"showBorder": true,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 0,
+					"textAlign": 3,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 2,
+					"parent": {
+						"anchor": 2,
+						"component": null
+					}
+				},
+				"ping": {
+					"rect": {
+						"x": -1.25,
+						"y": -92,
+						"w": 57,
+						"h": 14
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "999999ff",
+					"secondaryColor": "999999ff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "ff7f7f7f",
+					"textStyle": 0,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"speed": {
+					"rect": {
+						"x": -1.33331298828125,
+						"y": -108,
+						"w": 57,
+						"h": 14
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "999999ff",
+					"secondaryColor": "999999ff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 0,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"lagometer": {
+					"rect": {
+						"x": -0.4999796450138092,
+						"y": -2,
+						"w": 57,
+						"h": 57
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "999999ff",
+					"secondaryColor": "999999ff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 0,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"disconnect": {
+					"rect": {
+						"x": -2.9999794960021973,
+						"y": 4.5,
+						"w": 57,
+						"h": 57
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 0,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 3,
+					"parent": {
+						"anchor": 3,
+						"component": null
+					}
+				},
+				"chat": {
+					"rect": {
+						"x": -5.083338260650635,
+						"y": -2,
+						"w": 364,
+						"h": 80
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 0,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"spectatorstatus": {
+					"rect": {
+						"x": 0,
+						"y": 0,
+						"w": 138,
+						"h": 22
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 59.999847412109375,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 5,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"pmitemsbig": {
+					"rect": {
+						"x": -2.9999794960021973,
+						"y": 52,
+						"w": 290,
+						"h": 57
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 2500,
+					"feedStayTime": 2000,
+					"feedFadeTime": 2500,
+					"anchor": 2,
+					"parent": {
+						"anchor": 3,
+						"component": null
+					}
+				},
+				"warmuptitle": {
+					"rect": {
+						"x": 0,
+						"y": 12.5,
+						"w": 422,
+						"h": 12
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 69.99984741210938,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 1,
+					"parent": {
+						"anchor": 1,
+						"component": null
+					}
+				},
+				"warmuptext": {
+					"rect": {
+						"x": 1.0833231210708618,
+						"y": 8,
+						"w": 300,
+						"h": 39
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 104.99984741210938,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 1,
+					"parent": {
+						"anchor": 1,
+						"component": null
+					}
+				},
+				"objectivetext": {
+					"rect": {
+						"x": 3.9999959468841553,
+						"y": -106,
+						"w": 300,
+						"h": 16
+					},
+					"visible": false,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "007f7f3f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 1,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"iconfeed": {
+					"rect": {
+						"x": 0,
+						"y": -105,
+						"w": 422,
+						"h": 24
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": true,
+					"backgroundColor": "007f7f3f",
+					"showBorder": true,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 1,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 5,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				},
+				"centerprint": {
+					"rect": {
+						"x": 0,
+						"y": 82,
+						"w": 300,
+						"h": 23
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 1,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"banner": {
+					"rect": {
+						"x": 32.25000762939453,
+						"y": -4,
+						"w": 422,
+						"h": 24
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 8,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"crosshairtext": {
+					"rect": {
+						"x": 0,
+						"y": -42,
+						"w": 300,
+						"h": 16
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 5,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"crosshairbar": {
+					"rect": {
+						"x": 0,
+						"y": -33,
+						"w": 126,
+						"h": 6
+					},
+					"visible": true,
+					"style": 9,
+					"scale": 100,
+					"mainColor": "ffffff69",
+					"secondaryColor": "ff00003f",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 2818,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 5,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"stats": {
+					"rect": {
+						"x": -3.3333332538604736,
+						"y": 9,
+						"w": 224,
+						"h": 36
+					},
+					"visible": true,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "7f7f7fff",
+					"showBackGround": true,
+					"backgroundColor": "000000b2",
+					"showBorder": true,
+					"borderColor": "bfbfbfff",
+					"textStyle": 0,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 2,
+					"parent": {
+						"anchor": 3,
+						"component": null
+					}
+				},
+				"xpgain": {
+					"rect": {
+						"x": 5.499979496002197,
+						"y": 74,
+						"w": 178,
+						"h": 53
+					},
+					"visible": true,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "bfbfbfff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 3,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 200,
+					"feedStayTime": 1000,
+					"feedFadeTime": 250,
+					"anchor": 1,
+					"parent": {
+						"anchor": 8,
+						"component": null
+					}
+				},
+				"scPlayerListAxis": {
+					"rect": {
+						"x": 15,
+						"y": -12,
+						"w": 142,
+						"h": 168
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "be202072",
+					"showBackGround": true,
+					"backgroundColor": "000000b2",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 0,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 6,
+					"parent": {
+						"anchor": 6,
+						"component": null
+					}
+				},
+				"scPlayerListAllies": {
+					"rect": {
+						"x": -14.999999046325684,
+						"y": -12,
+						"w": 142,
+						"h": 168
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "1e71ce72",
+					"showBackGround": true,
+					"backgroundColor": "000000b2",
+					"showBorder": false,
+					"borderColor": "000000b2",
+					"textStyle": 0,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 4,
+					"parent": {
+						"anchor": 4,
+						"component": null
+					}
+				},
+				"scTeamNamesAxis": {
+					"rect": {
+						"x": -30,
+						"y": 12,
+						"w": 190,
+						"h": 30
+					},
+					"visible": false,
+					"style": 1,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "000000ff",
+					"showBackGround": true,
+					"backgroundColor": "be202072",
+					"showBorder": false,
+					"borderColor": "000000b2",
+					"textStyle": 0,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 2,
+					"parent": {
+						"anchor": 1,
+						"component": null
+					}
+				},
+				"scTeamNamesAllies": {
+					"rect": {
+						"x": 30,
+						"y": 12,
+						"w": 190,
+						"h": 30
+					},
+					"visible": false,
+					"style": 0,
+					"scale": 100,
+					"mainColor": "ffffffff",
+					"secondaryColor": "000000ff",
+					"showBackGround": true,
+					"backgroundColor": "1e71ce72",
+					"showBorder": false,
+					"borderColor": "7f7f7f7f",
+					"textStyle": 0,
+					"textAlign": 0,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 0,
+					"parent": {
+						"anchor": 1,
+						"component": null
+					}
+				},
+				"compass": {
+					"rect": {
+						"x": 0,
+						"y": 10,
+						"w": 95,
+						"h": 95
+					},
+					"visible": true,
+					"style": 47,
+					"scale": 57.9090461730957,
+					"mainColor": "ffffffff",
+					"secondaryColor": "ffffffff",
+					"showBackGround": false,
+					"backgroundColor": "28332b7f",
+					"showBorder": false,
+					"borderColor": "7f7e7f7f",
+					"textStyle": 3,
+					"textAlign": 1,
+					"autoAdjust": 0,
+					"barStyle": 0,
+					"circleDensityPoint": 1,
+					"circleStartAngle": 0,
+					"circleEndAngle": 360,
+					"circleThickness": 1,
+					"feedTime": 0,
+					"feedStayTime": 0,
+					"feedFadeTime": 0,
+					"anchor": 5,
+					"parent": {
+						"anchor": 5,
+						"component": null
+					}
+				}
+			}
+		}
+	]
+}
