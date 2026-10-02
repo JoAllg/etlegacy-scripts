@@ -29,7 +29,7 @@ python3 tools/voicemenu.py <clan> <pk3> [address]
 
 ## vsaycolors.py
 
-Colors all vsay texts with the `VSAY_*` colors and the echo menus with the `MENU_*` colors of `settings.conf`. `preview` writes `vsaycolors.html` (current vs proposed colors), `apply` recolors after a color change, `todo` / `done` track which texts were reviewed for highlights (`default/scripts/vsays/vsaycolors.tsv`).
+Colors all vsay texts and chat texts (`say`, `say_team`, `say_teamnl`, `say_buddy`; not `say !command`) with the `VSAY_*` colors and the echo menus with the `MENU_*` colors of `settings.conf`. `preview` writes `vsaycolors.html` (current vs proposed colors), `apply` recolors after a color change, `todo` / `done` track which texts were reviewed for highlights (`default/scripts/vsays/vsaycolors.tsv`).
 
 ```sh
 python3 tools/vsaycolors.py status | preview [role=^c ...] | apply | todo | done

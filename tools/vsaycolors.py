@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Colors of the vsay texts (vsay / vsay_team <id> <text>, vsay_buddy <class> <n> [client ids] <id> <text>) in the profile cfgs, from the VSAY_* values of settings.conf.
+"""Colors of the vsay texts (vsay / vsay_team <id> <text>, vsay_buddy <class> <n> [client ids] <id> <text>) and the chat texts
+(say / say_team / say_teamnl / say_buddy <text>; not "say !command") in the profile cfgs, from the VSAY_* values of settings.conf.
 
   status              current colors and how many texts still need base/punctuation colors or a highlight review
   preview [role=^c]   tools/vsaycolors.html: current vs proposed colors (roles: team global buddy punct highlight urgent),
@@ -30,6 +31,8 @@ MENU_DIRS = ("scripts/vsays", "scripts/spawn", "autoexecs")  # files with echo m
 ECHO = re.compile(r'(\becho "?)([^;"]+)')
 # vsay_buddy (fireteam) needs the class (-1) and the target clients; VoiceFireTeamChat <id> takes no text
 TEXT = re.compile(r'\b(vsay(?:_team)?|vsay_buddy(?: -?\d+)+) (\w+) ([^;"]+)')
+# say at the start of a command (not a word of an echo text or an alias name); "say !stats", "say /cmd" are commands of the server
+SAY = re.compile(r'((?:^|(?<!echo )"|;)\s*|\bset \w+ )(say(?:_team(?:nl)?|_buddy)?) (?![!/\\])([^;"]+)')
 CODE = re.compile(rf"\^({COLOR_CHAR})")  # the code's character as group 1
 
 
@@ -51,7 +54,18 @@ def idx(c):
 
 
 def base(cmd):
-    return {"vsay_team": "team", "vsay_buddy": "buddy"}.get(cmd.split()[0], "global")
+    return {"vsay_team": "team", "say_team": "team", "say_teamnl": "team", "vsay_buddy": "buddy", "say_buddy": "buddy"}.get(cmd.split()[0], "global")
+
+
+def found(line):
+    """[(cmd, id, text)] of a line; chat texts have no id ("")."""
+    return [m.groups() for m in TEXT.finditer(line)] + [(m.group(2), "", m.group(3)) for m in SAY.finditer(line)]
+
+
+def sub_texts(line, fn):
+    """line with every text replaced by fn(cmd, id, text)."""
+    line = TEXT.sub(lambda m: f"{m.group(1)} {m.group(2)} {fn(*m.groups())}", line)
+    return SAY.sub(lambda m: f"{m.group(1)}{m.group(2)} {fn(m.group(2), '', m.group(3))}", line)
 
 
 def plain(text):
@@ -117,9 +131,9 @@ def files():
 
 
 def texts(f):
-    """[(line number, cmd, id, text)] of the vsay texts outside comments."""
-    return [(n, *m.groups()) for n, line in enumerate(f.read_text(encoding="latin-1").splitlines())
-            if not line.lstrip().startswith("//") for m in TEXT.finditer(line)]
+    """[(line number, cmd, id, text)] of the vsay and chat texts outside comments."""
+    return [(n, *g) for n, line in enumerate(f.read_text(encoding="latin-1").splitlines())
+            if not line.lstrip().startswith("//") for g in found(line)]
 
 
 def read_record():
@@ -167,8 +181,7 @@ def apply(colors):
             if line.lstrip().startswith("//"):
                 continue
 
-            def fix(m):
-                cmd, vsay, text = m.groups()
+            def fix(cmd, vsay, text):
                 new = remap(text, cmd, old, colors) if old and old != colors else text
                 if not base_done(new, cmd, colors):
                     if highlighted(new, colors):
@@ -177,8 +190,8 @@ def apply(colors):
                         new = colorize(plain(new), colors[base(cmd)], colors["punct"])
                 if new != text:
                     changed.append(f"{f.relative_to(REPO)}:{n + 1} {cmd} {vsay} {new}")
-                return f"{cmd} {vsay} {new}"
-            lines[n] = TEXT.sub(fix, line)
+                return new
+            lines[n] = sub_texts(line, fix)
         if server:
             lines = fix_echoes(lines)
         if any(d in f.relative_to(LIVE).as_posix() for d in MENU_DIRS):
@@ -208,13 +221,18 @@ def palette():
     return {int(i): h for i, h in rows}
 
 
-def preview(colors, proposed):
+def samples_of(found_texts, colors):
+    """Up to 6 highlighted texts per vsay command; a chat text counts for the vsay of its base color (say_teamnl -> vsay_team)."""
     samples = {c: [] for c in ("vsay_team", "vsay", "vsay_buddy")}
-    for f in files():
-        for _, cmd, vsay, text in texts(f):
-            cmd = cmd.split()[0]
-            if highlighted(text, colors) and len(samples[cmd]) < 6 and text not in samples[cmd]:
-                samples[cmd].append(text)
+    for cmd, text in found_texts:
+        key = {"team": "vsay_team", "buddy": "vsay_buddy"}.get(base(cmd), "vsay")
+        if highlighted(text, colors) and len(samples[key]) < 6 and text not in samples[key]:
+            samples[key].append(text)
+    return samples
+
+
+def preview(colors, proposed):
+    samples = samples_of(((cmd, text) for f in files() for _, cmd, _, text in texts(f)), colors)
     if not samples["vsay_buddy"]:  # none written yet: the team texts in the buddy color
         samples["vsay_buddy"] = [remap(t, "vsay_team", colors, dict(colors, team=colors["buddy"])) for t in samples["vsay_team"][:3]]
     prefix = {"vsay_team": "^7(Player^7)^3(Location^3): ", "vsay": "^7Player^3: ", "vsay_buddy": "^7(Player^7)^3(Location^3): "}
@@ -250,6 +268,13 @@ def selftest():
     assert remap("^lHi ^xyou", "vsay", c, new) == "^lHi ^dyou"
     lines = ['echo "^31. old"', 'echo "2. ^lX (random)"', 'set vsay1 "vsay a ^lNew^3!"', 'set vsay2 "vsay b"', 'bind 1 "vstr vsay1; vstr resetVoiceChat"']
     assert [m.groups() for l in lines for m in TEXT.finditer(l)] == [("vsay", "a", "^lNew^3!")]  # alias name and bind are no vsay texts
+    says = ['set say-x "say_teamnl ^9Go ^xnow"', 'set a "vstr b; say_team Hi; echo say what"', 'set c "x; set classSay say_teamnl Hi there; echo y"',
+            'echo "say cheese"', 'bind x "say !stats"', 'vstr say-x', 'set d "vsay Hi Hello"']
+    assert [g for l in says for g in found(l)] == [("say_teamnl", "", "^9Go ^xnow"), ("say_team", "", "Hi"), ("say_teamnl", "", "Hi there"), ("vsay", "Hi", "Hello")]
+    assert sub_texts(says[2], lambda cmd, vsay, text: text.upper()) == 'set c "x; set classSay say_teamnl HI THERE; echo y"'
+    assert sub_texts(says[6], lambda cmd, vsay, text: text.upper()) == 'set d "vsay Hi HELLO"' and base("say_teamnl") == "team" and base("say") == "global"
+    s = samples_of([("say_teamnl", "^9I will spawn at ^xBunker"), ("vsay_buddy -1 0", "^fHeal ^1me"), ("say", "^lHi ^xall"), ("say_team", "^9plain")], c)
+    assert s == {"vsay_team": ["^9I will spawn at ^xBunker"], "vsay": ["^lHi ^xall"], "vsay_buddy": ["^fHeal ^1me"]}, s
     assert fix_echoes(lines)[:2] == ['echo "^31. New!"', 'echo "2. X (random)"']
     m = {"head": "^8", "key": "^3", "text": "^7", "nav": "^2", "global": "^6", "axis": "^i", "allies": "^d"}
     old_m = dict(m, **{"global": "^2"})
