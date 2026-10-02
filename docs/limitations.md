@@ -80,3 +80,15 @@ At another FPS the time waits are wrong by the factor 125 / FPS: at 76 FPS the g
 - 1024 characters per command line (`MAX_CMD_LINE`), no nested quotes: an alias cannot contain a quoted string, so an action with several commands needs its own alias.
 - `reset <alias>` returns to the first value of the game session, not to the value in the cfg ([Config scripting](scripting.md), `reset`).
 - A server can enforce cvar values; a script does not notice it. `F3` restores the definitions afterwards.
+
+## Stock shield hides server sounds and menus on unpure servers
+
+The nitmod stock shield (`tools/stock_shield/README.md`) cannot tell a local game from an unpure server: wherever it is active, every stock file name it carries (menus, the whole stock `sound/` folder) plays the stock version.
+
+| Where | Sounds and menus of the server |
+|---|---|
+| Pure server (`sv_pure 1`, the default) | work: only pk3s on the server's checksum list are read, the shield is not on it (`src/qcommon/files.c` `FS_PakIsPure`) |
+| Unpure server (`sv_pure 0`) | files under new names work (spree sounds, custom vsays); files that replace a stock name are stock, e.g. translated vsay voices, other weapon sounds |
+| Local game, main menu | same as unpure: this is what the shield is for; wanted packs in the mod folder lose their stock-name files too |
+
+`/sv_pure` in the console shows the mode of the current server. Workaround on an unpure server with wanted replacements: move the shield pk3 out of `<fs_homepath>/nitmod/` and rebuild it afterwards (`python3 tools/stock_shield/stock_shield.py`). Not tested in game.
