@@ -1,6 +1,6 @@
 # Server queries
 
-How to ask an ET server for its state from outside the game, as done by `tools/helpers/serverapi.py` for the server menu (`tools/servermenu.py`, `KP_MINUS`) and the settings per server (`tools/serverconfig.py`, [Server configs](serverconfigs.md)). Verified against the ET: Legacy source (`src/server/sv_main.c` `SVC_Info`, `SVC_Status`; client side `src/client/cl_main.c` `CL_SetServerInfo`) and a live test against the 392 servers of `master.etlegacy.com:27950` on 2026-10-01 (348 answered).
+How to ask an ET server for its state from outside the game, as done by `tools/helpers/serverapi.py` for the server menu (`tools/servermenu.py`, `RIGHTCTRL`) and the settings per server (`tools/serverconfig.py`, [Server configs](serverconfigs.md)). Verified against the ET: Legacy source (`src/server/sv_main.c` `SVC_Info`, `SVC_Status`; client side `src/client/cl_main.c` `CL_SetServerInfo`) and a live test against the 392 servers of `master.etlegacy.com:27950` on 2026-10-01 (348 answered).
 
 ## Protocol
 

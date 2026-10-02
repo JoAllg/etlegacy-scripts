@@ -15,7 +15,7 @@ Naming (`b_`/`r_`, class codes, `cs_`, `ta_`, hooks): `docs/conventions.md` "Tea
 | `class/cs_backend.cfg` | logic: team aliases, hooks, class keys, the weapon cycles `<b\|r>_<class>`, `...Again`, `<b\|r>_<class><n>` |
 | `class/cs_classcommands.cfg` | etmain default class commands `<b\|r>_<class>_<weapon>` (`team <b\|r> <class> <weapon> <weapon2>`) |
 | `mods/<mod>/mod_classcommands.cfg` | the same aliases with the mod's weapon IDs (`.claude/rules/mods.md` "Class commands") |
-| `class/cs_classcripts.cfg` | feature scripts the assignments bind (`bind<Key><Script>`), sniper mode, class vsays toggle (F7) |
+| `class/cs_classcripts.cfg` | feature scripts the assignments bind (`bind<Key><Script>`), sniper mode, class vsays toggle (KP_MINUS) |
 | `class/cs_output.cfg` | `echo-<b\|r>_<class><n>` / `say-<b\|r>_<class><n>` texts |
 
 Flow of a class key (e.g. allies soldier): `vstr so` → `b_so` (first press: `reset cycleAlliesSoldier`, points the key to `b_soAgain`) → `b_soAgain`: `chatFunction`, `classHook` (`resetToggles`, `cs_default`, spawn selector), `preJoinHookb`, `cycleAlliesSoldier` → `b_so<n>` (`cs_soldier_<weapon>`, `b_soldier_<weapon>`, next cycle step, `echo-`/`say-`), `postJoinHookb`.

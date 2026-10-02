@@ -37,7 +37,7 @@ python3 tools/vsaycolors.py status | preview [role=^c ...] | apply | todo | done
 
 ## servermenu.py
 
-Feeds the in-game server menu (`KP_MINUS`, `default/scripts/servermenu.cfg`): while it runs, it asks the favorite servers of the server browser for their state every 5 seconds and writes the menu pages to `default/servermenu/`. Each server shows as `name  playing+spectators+bots/slots  map  ping  mod` in columns aligned with spaces, sorted by playing humans; the number keys connect. Start it before or while playing and leave it running; `--once` prints the list in the terminal. How servers are queried: `docs/serverquery.md`.
+Feeds the in-game server menu (`RIGHTCTRL`, `default/scripts/servermenu.cfg`): while it runs, it asks the favorite servers of the server browser for their state every 5 seconds and writes the menu pages to `default/servermenu/`. Each server shows as `name  playing+spectators+bots/slots  map  ping  mod` in columns aligned with spaces, sorted by playing humans; the number keys connect. Start it before or while playing and leave it running; `--once` prints the list in the terminal. How servers are queried: `docs/serverquery.md`.
 
 ```sh
 python3 tools/servermenu.py [--interval 5] [--once]

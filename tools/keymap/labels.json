@@ -103,5 +103,6 @@
   "vstr weaponSwitch": "Weaponswitch",
   "zoomin": "Zoom in",
   "vstr classVsaysToggle": "Class Vsays",
-  "+vstr grenadeON grenadeOFF": "Grenade"
+  "+vstr grenadeON grenadeOFF": "Grenade",
+  "vstr spawnReportToggle": "Spawn Report"
 }
