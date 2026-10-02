@@ -516,7 +516,7 @@ done
 # 8. nitmod stock shield: built from the local game, the files are game assets (not in the repo)
 SHIELD="$HOMEPATH/nitmod/$(printf '~%.0s' {1..60})stock_shield.pk3"
 if [[ " $MODS " == *" nitmod "* ]] && [ ! -e "$SHIELD" ]; then
-	echo -e "\n${CYAN}🛡️  nitmod stock shield (keeps menus stock when servers push menu packs, tools/stock_shield/README.md)${NC}"
+	echo -e "\n${CYAN}🛡️  nitmod stock shield (keeps menus and sounds stock when servers push their packs, tools/stock_shield/README.md)${NC}"
 	if ! command -v python3 >/dev/null; then
 		echo -e "    ${ORANGE}⚠️  python3 not found, skipped${NC}"
 	elif ask "  Build and install the stock shield pk3? [y/N]" n; then

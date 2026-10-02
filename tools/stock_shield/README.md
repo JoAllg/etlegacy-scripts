@@ -1,6 +1,6 @@
 # nitmod stock shield
 
-The stock shield pk3 keeps the nitmod main menu, local games and unpure servers on stock ET content, even after servers push their own menu packs into `~/.etlegacy/nitmod/`.
+The stock shield pk3 keeps the nitmod main menu, local games and unpure servers on stock ET content, even after servers push their own menu and sound packs into `~/.etlegacy/nitmod/`.
 
 ## Why
 
@@ -10,14 +10,15 @@ Renaming `nitmod_2.3.5.pk3` doesn't help: nitmod's `ui/menus.txt` loads ~50 menu
 
 ## Content
 
-90 files, extracted unchanged from stock `etmain/pak0.pk3`/`pak2.pk3` (highest-priority stock version of each):
+1189 files (106 MB), extracted unchanged from stock `etmain/pak0.pk3`/`pak2.pk3` (highest-priority stock version of each):
 
 - 70 `ui/` files: every menu from nitmod's `menus.txt` that nitmod lacks, plus menus/assets that server packs override
 - 20 other files that server packs override: `gfx/2d/compass*.tga`, 2 `icons/`, `fonts/ariblk_16.dat`, `maps/{battery,fueldump,oasis,radar}.script`, 6 `scripts/*.arena`, `scripts/{battery,sprites}.shader`, `scripts/wm_{allies,axis}_chat.voice`
+- 1099 `sound/` files, the whole stock folder: sound packs replace stock sounds under their stock names (vsay voices in `sound/chat/`, announcer in `sound/vo/`, weapons, footsteps, win music, menu clicks, `sound/scripts/*.sounds`)
 
 ## Install
 
-The files are game assets, so the pk3 is built from your own `etmain/pak*.pk3` (`BASEPATH` of `settings.conf`) and written to `<HOMEPATH>/nitmod/`. `deploy.sh` offers to run it; manually:
+The files are game assets, so the pk3 is built from your own `etmain/pak*.pk3` (`BASEPATH` of `settings.conf`) and written to `<HOMEPATH>/nitmod/`. `deploy.sh` offers to run it while the pk3 is missing; manually (also to rebuild an installed one):
 
 ```
 python3 tools/stock_shield/stock_shield.py
@@ -30,10 +31,10 @@ The name needs more tildes than any server pk3 (60 here). Check in game: `/path`
 | Situation | Result |
 |---|---|
 | Pure server (`sv_pure 1`) | Shield ignored (not in the server's checksum list, `FS_PakIsPure`); server files load normally |
-| Unpure server (`sv_pure 0`) | Shield wins for its 90 files |
+| Unpure server (`sv_pure 0`) | Shield wins for its 1189 files |
 | Local hosting (`+map`) | Shield wins (`com_sv_running` disables the pure check) |
 | Main menu | Shield wins |
 
-- Also hides these 90 files from wanted packs in the mod folder, e.g. `x_nitmod_skin.2.7.pk3` (quit menu, icons, map scripts) and voice packs (`wm_*_chat.voice`, `wm_quickmessagealt.menu`) outside pure servers.
-- Files outside the 90 (new menu names, sounds, maps) are not shielded; a server pk3 with more than 60 tildes wins again.
+- Also hides these 1189 files from wanted packs in the mod folder, e.g. `x_nitmod_skin.2.7.pk3` (quit menu, icons, map scripts) and voice and sound packs (`wm_*_chat.voice`, `wm_quickmessagealt.menu`, every stock name below `sound/`) outside pure servers.
+- Files outside the 1189 (new menu names, sounds under new names, maps) are not shielded; a server pk3 with more than 60 tildes wins again.
 - Uninstall: delete the pk3 from `~/.etlegacy/nitmod/`.

@@ -43,6 +43,18 @@ ui/profile_delete_error.menu ui/profile_rename.menu ui/quit.menu ui/rec_restart.
 ui/vid_restart.menu ui/viewreplay.menu ui/viewreplay_delete.menu ui/wm_ftquickmessage.menu
 ui/wm_ftquickmessageAlt.menu ui/wm_quickmessage.menu ui/wm_quickmessageAlt.menu
 """.split()
+# whole folders: sound packs replace stock sounds under their stock names
+FOLDERS = ("sound/",)
+
+
+def shielded(paks):
+    """{file: pak} of FILES and everything below FOLDERS, each from the first pak that has it."""
+    found = {}
+    for pak in paks:
+        for name in pak.namelist():
+            if name in FILES or (name.startswith(FOLDERS) and not name.endswith("/")):
+                found.setdefault(name, pak)
+    return found
 
 
 def main():
@@ -50,24 +62,23 @@ def main():
     out = HOMEPATH / "nitmod" / NAME
     if not out.parent.is_dir():
         sys.exit(f"{out.parent} missing: nitmod is not installed")
+    found = shielded(paks)
+    missing = sorted(set(FILES) - set(found))
+    if missing:
+        sys.exit(f"{', '.join(missing)} in none of {', '.join(PAKS)} in {BASEPATH / 'etmain'}")
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as pk3:
-        for name in FILES:
-            pak = next((p for p in paks if name in p.NameToInfo), None)
-            if pak is None:
-                out.unlink()
-                sys.exit(f"{name} is in none of {', '.join(PAKS)} in {BASEPATH / 'etmain'}")
+        for name, pak in sorted(found.items()):
             pk3.writestr(name, pak.read(name))
-    print(f"wrote {out} ({len(FILES)} files)")
+    print(f"wrote {out} ({len(found)} files)")
 
 
 def selftest():
-    """Every listed file exists in the local stock paks (reads only)."""
+    """Every listed file and every folder exists in the local stock paks (reads only)."""
     assert len(set(FILES)) == len(FILES), [f for f in FILES if FILES.count(f) > 1]
-    names = set()
-    for p in PAKS:
-        with zipfile.ZipFile(BASEPATH / "etmain" / p) as z:
-            names |= set(z.namelist())
-    assert not set(FILES) - names, sorted(set(FILES) - names)
+    found = shielded([zipfile.ZipFile(BASEPATH / "etmain" / p) for p in PAKS])
+    assert not set(FILES) - set(found), sorted(set(FILES) - set(found))
+    for folder in FOLDERS:
+        assert any(n.startswith(folder) for n in found), folder
     print("selftest ok")
 
 
