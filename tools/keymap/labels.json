@@ -83,7 +83,7 @@
   "vstr spawnp1r": "Spawn 2",
   "vstr spawnp2r": "Spawn 3",
   "vstr spawnp3r": "Spawn 4",
-  "vstr spawnsay": "Announce spawn",
+  "vstr classSay; set timerDone vstr spawnsay; vstr timer1000": "Announce spawn",
   "vstr spawnSelector": "Spawn select",
   "vstr serverMenu": "Server menu",
   "+vstr null resetLayers": "Menu",

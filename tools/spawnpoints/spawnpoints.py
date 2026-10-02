@@ -38,6 +38,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from helpers import common  # noqa: E402
+from helpers.settings import VSAY  # noqa: E402
 from helpers.common import RESERVED, clean, map_color, strip_colors, with_map_color, write_atomic  # noqa: E402
 from link_maps import DLCACHE, ETMAIN, LEGACY_PAKS, STOCK_PAKS, maps, rank  # noqa: E402
 from helpers.settings import MENU, PROFILE as PROFILE_NAME, REPO  # noqa: E402
@@ -279,7 +280,7 @@ def render(mapname, title, pk3name, result):
         lines.append("")
     lines.append("// Announce spawnpoints")
     for label, i in says.items():
-        lines.append(f'set spawnsay{i:<4}"vstr playFilter; say_teamnl ^5will spawn at {"^0" if i == 0 else "^w"}{label}"')
+        lines.append(f'set spawnsay{i:<4}"vstr playFilter; say_teamnl {VSAY["team"]}I will spawn at {VSAY["highlight"]}{label}"')  # colors of the class report (class/cs_output.cfg)
     return "\n".join(lines + tail) + "\n"
 
 
