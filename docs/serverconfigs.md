@@ -97,10 +97,10 @@ A server cfg is a personal preference for that server, so it overrides these fil
 A server with weapons the mod normally lacks (a fork with its own weapon IDs, more weapons allowed per class) gets extra steps on the class keys from its server cfg. No file of the mod changes, so other servers of the same mod keep the normal cycles.
 
 - Every class cycle of `scripts/class/cs_backend.cfg` ends in an alias one past its last step, which starts the cycle anew: `b_so5`, `b_me2`, `b_en3`, `b_fo2`, `b_co4` and the same with `r_`.
-- The server cfg defines that alias as a full step and chains further ones; the last one points back to step 1. A step holds the class command and the echo itself, so it costs one alias:
+- The server cfg defines that alias as a full step and chains further ones; the last one points back to step 1. A step holds the class command, the class report line (`classSay`) and the echo itself, so it costs one alias:
   ```
-  set b_me2 "vstr cs_medic_smg; team b 1 58 35; set cycleAlliesMedic vstr b_me3; echo ^0[^nCLASS^0] ^nMedic^1: ^nBAR"
-  set b_me3 "vstr cs_medic_smg; team b 1 56 35; set cycleAlliesMedic vstr b_me1; echo ^0[^nCLASS^0] ^nMedic^1: ^nShotgun"
+  set b_me2 "vstr cs_medic_smg; team b 1 58 35; set cycleAlliesMedic vstr b_me3; set classSay say_teamnl ^9Spawning as ^xMedic ^9[^xBAR^9]; echo ^0[^nCLASS^0] ^nMedic^1: ^nBAR"
+  set b_me3 "vstr cs_medic_smg; team b 1 56 35; set cycleAlliesMedic vstr b_me1; set classSay say_teamnl ^9Spawning as ^xMedic ^9[^xShotgun^9]; echo ^0[^nCLASS^0] ^nMedic^1: ^nShotgun"
   ```
 - `default.cfg` undoes them: `reset b_me2` for the cycle end (back to its first `set` of the game session, the one of `cs_backend.cfg`), `set b_me3 "vstr b_me1"` for the chained ones, whose first `set` is the server's. A cycle pointer may still point there after a server change.
 - A general step can be redefined the same way (another second weapon: `set b_so1 "vstr cs_soldier_mg42; team b 0 49 35; ..."`). `default.cfg` restores it with `reset b_so1`.

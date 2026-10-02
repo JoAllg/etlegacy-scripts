@@ -104,5 +104,6 @@
   "zoomin": "Zoom in",
   "vstr classVsaysToggle": "Class Vsays",
   "+vstr grenadeON grenadeOFF": "Grenade",
+  "vstr classReportToggle": "Class Report",
   "vstr spawnReportToggle": "Spawn Report"
 }

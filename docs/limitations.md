@@ -40,7 +40,7 @@ The waits in the scripts are tuned for `com_maxfps 125`, where `wait n` lasts n 
 | Wait | At 125 FPS | Used by | Kind |
 |---|---|---|---|
 | `wait 2`, `wait 3` | 1 to 1.5 frames | quick equipment keys, arty, popups, second wait of the jump | frames: the game needs one frame to take a command, at any FPS |
-| `wait 5` | 20 ms | timer tick: grenade auto-throw (145 ticks = 2.9 s, fuse 4 s), dynamite (8 ticks = 160 ms weapon switch before `+attack`, 20 ticks = 400 ms plant, then arm) | time |
+| `wait 5` | 20 ms | timer tick: grenade auto-throw (145 ticks = 2.9 s, fuse 4 s), dynamite (8 ticks = 160 ms weapon switch before `+attack`, 20 ticks = 400 ms plant, then arm), class report (145 ticks = 2.9 s after the last class key) | time |
 | `wait 10` | 40 ms | jump (sprint before the jump), voice chat close | time |
 | `wait 50` | 200 ms | team join hook | time |
 
