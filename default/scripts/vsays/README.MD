@@ -170,6 +170,8 @@ Is supposed to work at jaymod, etpub, nitmod or noquarter
 | `[T]` | Ammo you have in current weapon |
 | `[W]` | Weapon you are currently holding |
 
+A name shortcut (`[A]`, `[D]`, `[H]`, `[K]`, `[P]`, `[R]`) whose person is not known (nobody pointed at, nobody gave ammo yet, ...) becomes `*unknown*` (nitmod; tested in game with `[P]`).
+
 ## jaymod (probably)
 Can be shown with `/textshortcuts` command
 

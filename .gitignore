@@ -13,6 +13,7 @@ default/serverconfigs/*
 ## etlegacy generated
 default/profile.pid
 default/etconfig.cfg
+default/maprecords.dat
 
 # Local files
 Others/
@@ -28,5 +29,4 @@ __pycache__/
 tools/spawnpoints/.cache.json
 
 # Local WIP
-default/scripts/vsays/vsays_custom.cfg
 default/scripts/vsays/chat_function.cfg
