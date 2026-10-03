@@ -26,7 +26,7 @@ A new weapon variant touches, for both teams:
 3. `cs_classcommands.cfg` and every `mods/<mod>/mod_classcommands.cfg` (`example/` included): `<b|r>_<class>_<weapon>`
 4. `cs_output.cfg`: `echo-`/`say-<b|r>_<class><n>`
 
-A weapon only one server has (fork with its own weapon IDs) is not a general variant: its steps live in that server's cfg and hang on the cycle end alias of the class (`b_so5`, `b_me2`, `b_en3`, `b_fo2`, `b_co4`, `r_` alike; `docs/serverconfigs.md` "Class steps"). A new general variant moves that end alias one further, in `cs_backend.cfg`, `serverconfigs/default.cfg` and the server cfgs that use it.
+A weapon only one mod has (etps: Shotgun, Venom, BAR, StG44, Johnson) is not a general variant: its steps live in that mod's `mod_classcommands.cfg` (`//--[ CLASS STEPS ]--//`), which `definitions.cfg` execs after `cs_backend.cfg`. They redefine the cycle end alias of the class (`b_so5`, `b_me2`, `b_en3`, `b_fo2`, `b_co4`, `r_` alike) as a full step (class command, `classSay` and echo inline, one alias per step) and chain further ones; the last points back to step 1. A general step may be redefined there too (etps soldier: pistol as second weapon). A mod switch re-execs the definitions, which restores the general cycles; the chained aliases stay defined but unreachable. A new general variant moves the end alias one further, in `cs_backend.cfg` and the mod files that use it. Server cfgs never set class steps or class commands: `serverconfigs/default.cfg` could not restore the mod's values.
 
 Rules:
 - Start values of state live in `default/state.cfg`: the armed join hooks, the cycle pointers `cycle<Team><Class>`, `chatFunction`, the class vsays toggle, the class report toggle, the team brightness.

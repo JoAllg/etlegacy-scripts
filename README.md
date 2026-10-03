@@ -15,7 +15,7 @@
 
 [📖 Documentation](https://github.com/JoAllg/etlegacy-scripts/wiki)
 
-Config, scripts and keybinds for **Wolfenstein: Enemy Territory** on **ET: Legacy**: one script set for every mod (legacy, nitmod, jaymod; etpub, silEnT and ETJump with default values, not tested in game).
+Config, scripts and keybinds for **Wolfenstein: Enemy Territory** on **ET: Legacy**: one script set for every mod (legacy, nitmod, jaymod, etps; etpub, silEnT and ETJump with default values, not tested in game).
 
 - **Class scripts:** class keys that step through the weapons of a class and set that class's binds.
 - **Autoexecs** per map, team and mod, with a spawn menu for every map (`ENTER`).

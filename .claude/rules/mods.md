@@ -12,12 +12,11 @@ One folder per mod; `deploy.sh` symlinks its `autoexec*` and `mod_*` files into 
 | `autoexec.cfg` | entry point: `unbindall`, `definitions.cfg`, `profiles/user.cfg`, `state.cfg`, `vstr serverForce` (server settings), then the mod switch guard. The only file that carries the mod's name (guard aliases) |
 | `autoexec_mod.cfg` | exec'd by every map/default autoexec; re-execs `autoexec.cfg` only after a mod switch, resets the crosshair color (`vstr crosshairColorNormal`; not in `etpub/` and `silent/`, `docs/autoexec.md`), then `vstr serverCheck` (server settings after a server change). Omitted for mods that run no event autoexecs (`jaymod/`), where nothing would exec it |
 | `mod_general.cfg` | mod differences (alt-fire, FOV, spectator command, popups, ...) plus `modState`, the mod's start binds applied by `default/state.cfg` |
-| `mod_classcommands.cfg` | the `//--[ CLASS COMMANDS ]--//` block (weapon IDs) |
+| `mod_classcommands.cfg` | the `//--[ CLASS COMMANDS ]--//` block (weapon IDs); a mod with weapons legacy lacks adds a `//--[ CLASS STEPS ]--//` block (`.claude/rules/class.md`) |
 | `autoexec_default.cfg` (optional) | only for mods that run it (`docs/autoexec.md`); overrides `default/autoexecs/autoexec_default.cfg` |
 | `README.md` (optional) | differences compared to plain legacy |
 
-- A server's fork of a mod with its own `fs_game` folder (`FORKS` in `deploy.sh`, `<fork>=<mod>`) gets no folder here: `deploy.sh` links the mod's files into the fork's folder once the game created it, so the fork loads the mod's chain and shares its `modIs_<mod>` guard. Its own weapons go into the server cfg (`docs/serverconfigs.md` "Class steps").
-- Folders: `legacy/`, `nitmod/` (full set, tested), `jaymod/` (no `autoexec_mod.cfg`), `etpub/`, `silent/`, `etjump/` (full set with the general default values, not tested in game; etpub and silEnT add an `autoexec_default.cfg` without spawnpoints), `example/` (template, not live, not linked).
+- Folders: `legacy/`, `nitmod/` (full set, tested), `etps/` (legacy's set: alt-fire, popups, server menu pages, chat shortcuts and class steps differ), `jaymod/` (no `autoexec_mod.cfg`), `etpub/`, `silent/`, `etjump/` (full set with the general default values, not tested in game; etpub and silEnT add an `autoexec_default.cfg` without spawnpoints), `example/` (template, not live, not linked).
 - A change that applies to every mod is made in all folders including `example/`: apart from the mod name and the documented differences the same file is identical everywhere.
 - Header description (below the title): identical for the same file in every mod folder (`example/` included, no "Template:"); mod differences go in comments after the header.
 - Name new dispatch files `mod_<name>.cfg`, with `mod` as the literal word, and exec them by bare name from `default/definitions.cfg`.

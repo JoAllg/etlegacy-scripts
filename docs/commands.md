@@ -50,6 +50,8 @@ Verified against the ET: Legacy source at `<ET: Legacy source checkout>` (engine
 
 nitmod: `+attack2` instead, see `docs/commands_nitmod.md`.
 
+etps (built on legacy 2.84): `+attack2` instead; its cgame rebinds `weapalt` binds to `+attack2` on start (string `Migrated %i legacy weapalt bind%s to +attack2`), tested in game 2026-10-03.
+
 ## Class, team & spawn
 
 | Command | Effect |
