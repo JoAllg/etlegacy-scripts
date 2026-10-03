@@ -267,7 +267,7 @@ def render(mapname, title, pk3name, result):
     lines += ["// Spawnpoints", MENU_NOTE, *(menu_line(team, len(result[team][0]) + 1) for team, *_ in TEAMS), ""]
     for team, *_ in TEAMS:
         for k, (n, _, desc) in enumerate([(0, "", "Default Spawn"), *result[team][0]]):
-            lines.append(f'set spawnp{k}{team:<5}"setspawnpt {n}; vstr resetSpawnSelector; set spawnsay vstr spawnsay{says[desc]}; vstr playSelect; vstr spawnReport"')
+            lines.append(f'set spawnp{k}{team:<5}"setspawnpt {n}; set spawnsay vstr spawnsay{says[desc]}; vstr spawnChosen"')
         lines.append("")
     lines.append("// Echo spawnpoints")
     for team, _, color, _ in TEAMS:

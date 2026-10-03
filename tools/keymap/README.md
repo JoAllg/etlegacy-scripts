@@ -163,7 +163,7 @@ Not seen: a class picked only in the limbo menu (binds don't change then), F3, t
 
 The detection relies on these names; keep them when renaming scripts, or adjust the constants:
 
-- `cycle<Feature>` for cycle pointers (`docs/conventions.md`), e.g. `cycleWeaponSwitch`, `cycleAxisSoldier`, `cycleCrosshairSizeUp`.
+- `cycle<Feature>` for cycle pointers (`docs/conventions.md`), e.g. `cycleWeaponSwitch`, `cycleSoldier`, `cycleCrosshairSizeUp`.
 - `cs_<class>_<weapon>` for class script assignments, and `classHook`.
 - `teamAxis`, `autoexec_fueldump.cfg`, `autoexec_axis.cfg` in `SCENARIO`.
 - `live.py`: class aliases run `cs_<class>_<weapon>` and an echo alias in the same alias; the reset echoes match `BASE_MARKERS`.

@@ -69,7 +69,7 @@ set crosshairColorCyan "cg_crosshaircolor cyan; cg_crosshaircoloralt cyan; set c
 set crosshairColorRed "cg_crosshaircolor red;  cg_crosshaircoloralt red;  set cycleCrosshairColor vstr crosshairColorWhite; vstr playSelect; echo ^8CROSSHAIR COLOR ^2red"
 set crosshairColorWhite "cg_crosshaircolor white; cg_crosshaircoloralt white; set cycleCrosshairColor vstr crosshairColorCyan; vstr playSelect; echo ^8CROSSHAIR COLOR ^2white"
 ```
-Examples: `scripts/display.cfg` crosshair color, gamma (floats), FPS (sets `com_maxfps` + `cl_maxpackets` + the `maxFpsNormal` alias per step), name cycle; the class selector (`class/cs_backend.cfg`, `cycleAlliesSoldier` → `b_so1..4`) is a manual cycle whose steps run class commands.
+Examples: `scripts/display.cfg` crosshair color, gamma (floats), FPS (sets `com_maxfps` + `cl_maxpackets` + the `maxFpsNormal` alias per step), name cycle; the class selector (`class/cs_backend.cfg`, `cycleSoldier` → `b_so1..4`) is a manual cycle whose steps run class commands.
 
 Pitfall: a cycle step must point to the *next* step. Check the pointer alias name in every step (a step that sets a different alias than the one bound breaks the cycle).
 
@@ -135,8 +135,8 @@ A layer with many pages binds its keys in page files exec'd when opened instead 
 ### Override chain
 A key calls level 1, which by default forwards to level 2, and so on. Other cfgs replace a single level (mod cfg, map autoexec, team state) without knowing the rest.
 ```
-set spawnSelector  "vstr spawnSelector2"   // replaced by "no team" / "no class" guards until a class is chosen
-set spawnSelector2 "vstr spawnSelectorMap" // spawnSelectorMap is set only by autoexecs: "vstr spawnSelector3" or legacy's "spawnmenu"
+set spawnSelector  "vstr spawnSelectorMap" // replaced by "no team" / "no class" guards until a class is chosen
+// spawnSelectorMap: set only by autoexecs, "vstr spawnSelector3" or legacy's "spawnmenu"
 set spawnSelector3 "vstr spawnSelector4"   // mode open/close
 // spawnSelector4: team list, set only by autoexec_axis/allies.cfg ("vstr spawnpsr" / "vstr spawnpsb"), undefined before
 ```
@@ -155,7 +155,7 @@ Example: `class/cs_backend.cfg` (team → class selectors), `binds_custom.cfg` (
 An alias that disables itself after running (`set <hook> vstr null`, with `set null ""`), re-armed with `reset`. Prevents repeated side effects, e.g. `vid_restart` or a team switch when the class key is pressed again.
 ```
 set null ""
-set preJoinHookb "vstr ta_Allies; vstr setTeamAllies; set preJoinHookb vstr null; reset preJoinHookr"
+set preJoinHookb "vstr ta_Allies; set preJoinHookb vstr null; reset preJoinHookr"
 ```
 Example: `class/cs_backend.cfg` (pre/post join hooks, re-armed by `autoexec_default.cfg` and the spectator hook).
 
