@@ -61,7 +61,7 @@ Constants at the top of `keymap.py`:
 Each bound key is pressed from the view's state; afterwards the state is restored.
 
 - **One press** runs what the engine runs:
-  - `+vstr a b` → `vstr a` (key down), then `vstr b` (key up). The state is checked after each half.
+  - `+vstr a b` → `vstr a` (key down), then `vstr b` (key up). Binds are checked after each half, pointer values after the whole press (a hold key that sets an alias on down and resets it on up changes nothing).
   - Other `+commands` (`+attack`, ...) → nothing; they change no binds.
   - Any other bind → the whole bind.
 - The key is pressed up to `TAPS = 6` times, each time using its *current* bind. It stops early when aliases and binds are back at the start (a toggle after 2 presses).
@@ -79,12 +79,12 @@ The **pointers** of a press are the aliases it reads via `vstr` and that change 
 |---|---|---|---|
 | ⟳ | cycle | the press reads **and sets** an alias whose name **starts with `cycle`**; it counts even when set to its current value. Or: a pointer takes **more than 2** values | `F5`, class keys (`KP_HOME`, `KP_UPARROW`, `KP_PGUP`, `KP_LEFTARROW`, `KP_5`), `HOME`, `END`, `PGUP`, `PGDN`, `DEL`, `+`, `-` |
 | ☰ | menu | at least `MENU_MIN = 4` other keys get **distinct** new actions (see below) | `v`, `ENTER`, `KP_END`, `KP_PGDN` |
-| ⇄ | toggle | a pointer takes exactly 2 values | `MOUSE3`, `F8`, `F9`, `F12`, `INS`, `LEFTCTRL`, `g` (mortar) |
+| ⇄ | toggle | a pointer takes exactly 2 values and changes on more than one press (a single change, e.g. `MOUSE4` leaving the SMG sets `bankSMG`, is no toggle) | `MOUSE3`, `F8`, `F9`, `F12`, `INS`, `LEFTCTRL`, `g` (mortar) |
 | ⤓ | hold | the bind is a `+command` (`+attack`, `+vstr a b`), so it works while the key is held; shown when the key has no mode icon | `MOUSE1`, `LEFTALT`, the movement keys, the class actions on `MOUSE4`/`MOUSE5` |
 | none | | no pointer, no hold | |
 
 - **Why cycle wins over menu**: a class key stays a cycle however many keys its class script rebinds.
-- **Why the name counts even for an unchanged value**: a class with a single weapon variant sets `cycle<Team><Class>` back to the same value.
+- **Why the name counts even for an unchanged value**: a class with a single weapon variant sets `cycle<Class>` back to the same value.
 - **Menu detail**: new actions are counted two ways, and the larger count decides:
   - keys whose **bind** changed, counted by distinct new bind (unbinding doesn't count), e.g. `v` binds 1–7 + `TAB` to 8 categories;
   - keys whose bind stayed the same but whose **called alias** (the `vstr`/`+vstr` target of the bind) changed or was set by a script, counted by distinct new alias values. E.g. `KP_END` sets `so`/`me`/`en`/`fo`/`co` to 5 different class aliases.
@@ -102,8 +102,8 @@ Hovering a key dims all others and highlights every key that changed in any pres
   - the class keys → `MOUSE3`, because `resetToggles` resets `sniperToggle`
   - `F4` → `v`, because `resetVoiceChat` resets `voiceChatSelector`
 - or one of its **own pointers** was set by a script. Own pointers are the aliases a single press of that key reads at any depth *and* sets itself (`pointers()`, computed once per key per view). For example:
-  - `F4` → `ENTER`: `ENTER` runs `spawnSelector` → `spawnSelector2` → `spawnSelectorMap` → `spawnSelector3` and sets `spawnSelector3`, which `resetSpawnSelector` resets
-  - each class key → the other class keys: `classKeys<Team>` points the other class keys back to their first press (which resets their `cycle<Team><Class>`)
+  - `F4` → `ENTER`: `ENTER` runs `spawnSelector` → `spawnSelectorMap` → `spawnSelector3` and sets `spawnSelector3`, which `resetSpawnSelector` resets
+  - each class key → the other class keys: `classKeys<Team>` points the other class keys back to their first press (which resets their `cycle<Class>`)
 - Aliases another key only *reads* don't count, e.g. `END` (FPS cycle) sets `maxFpsNormal`, which the weapon keys read. Otherwise nearly every script key would light up.
 
 The key itself is never listed.

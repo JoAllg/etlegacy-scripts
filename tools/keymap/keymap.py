@@ -203,7 +203,7 @@ def press(con, key, own, nested=False, baseline=None):
     - mode, first match (details: README.md):
       "cycle"  the press reads and sets an alias named cycle*, or an alias it reads takes more than 2 values
       "menu"   at least MENU_MIN other keys get distinct new actions (bind, or the alias their bind calls)
-      "toggle" an alias the press reads takes 2 values
+      "toggle" an alias the press reads takes 2 values, changed by more than one tap
     - affects: other keys whose binding changed, whose called alias changed or was set by a script, or whose
       own pointers (own: key -> pointers(), e.g. F4 resets ENTER's spawnSelector3) were set
       -> [(command, mode of that key in the state where it had that command, binds of that state)],
@@ -215,18 +215,17 @@ def press(con, key, own, nested=False, baseline=None):
     baseline = start[1] if baseline is None else baseline
     targets = {k: vstr_targets(c) for k, c in start[1].items() if k != key}
     values, affects = {}, {}  # pointer alias -> values seen
+    flips = {}  # alias -> taps that changed it
     cycle = False  # read and set a cycle* alias, also to the same value (class with a single weapon variant)
     new_binds, new_aliases = {}, {}  # other key -> first new bind / first new values of its called aliases
     states = {}  # (other key, command) -> state where the key first had that command
     for _ in range(TAPS):
+        tap, read = dict(con.cvars), set()  # values compared per tap: a hold key that sets an alias on down and resets it on up is no toggle
         for half in halves(con.binds.get(key, "")):
-            before, con.read, con.written = dict(con.cvars), set(), set()
+            con.read, con.written = set(), set()
             con.run(half, con.where.get(("bind", key), ""))
+            read |= con.read
             cycle |= any(n.startswith("cycle") for n in con.read & con.written)
-            for n in con.read:
-                old, new = before.get(n, ("",))[0], con.cvars.get(n, ("",))[0]
-                if old != new:
-                    values.setdefault(n, set()).update((old, new))
             for k in (set(con.binds) | set(start[1])) - {key}:
                 cmd = con.binds.get(k, "")
                 if norm(cmd) != norm(start[1].get(k, "")):
@@ -245,6 +244,11 @@ def press(con, key, own, nested=False, baseline=None):
                     affects[k].append(cmd)
                     if not nested:
                         states[k, cmd] = con.snapshot()
+        for n in read:
+            old, new = tap.get(n, ("",))[0], con.cvars.get(n, ("",))[0]
+            if old != new:
+                values.setdefault(n, set()).update((old, new))
+                flips[n] = flips.get(n, 0) + 1
         if (con.cvars, con.binds) == start[:2]:
             break
     modes, lands = {}, {}
@@ -258,7 +262,8 @@ def press(con, key, own, nested=False, baseline=None):
     elif max(len(set(new_binds.values())), len(set(new_aliases.values()))) >= MENU_MIN:
         mode = "menu"
     else:
-        mode = "toggle" if values else ""
+        # a toggle flips its alias on every tap; a single change (MOUSE4 leaves the SMG: bankSMG) is no toggle
+        mode = "toggle" if max(flips.values(), default=0) > 1 else ""
     return mode, {k: [(c, modes.get((k, c), ""), lands.get((k, c))) for c in v] for k, v in affects.items() if v}
 
 
@@ -835,11 +840,12 @@ def selftest(mod):
     medic_i = next(i for i, v in enumerate(data) if v["name"].startswith("Medic"))
     assert base["KP_UPARROW"]["a"]["MOUSE4"][0][3] == medic_i, base["KP_UPARROW"]  # a class key lands in its class view
     assert scoped["MOUSE3"]["t"] == "toggle" and base["MOUSE2"]["t"] == "toggle", scoped["MOUSE3"]  # MOUSE2: pistols and back to the SMG
+    assert scoped["MOUSE4"]["t"] == "" and scoped["MOUSE4"]["h"], scoped["MOUSE4"]  # hold: leaving the SMG once is no toggle
     assert all(base[k]["t"] == "menu" for k in ("v", "ENTER", "KP_END", "KP_PGDN")), base["KP_END"]
     assert all(base[k]["t"] == "cycle" for k in ("KP_HOME", "KP_UPARROW", "KP_PGUP", "KP_LEFTARROW", "KP_5"))
     assert base["KP_DOWNARROW"]["t"] != "menu" and base["KP_RIGHTARROW"]["t"] != "menu"
     assert "ENTER" in base["F4"]["a"] and "v" in base["F4"]["a"], base["F4"]
-    con.run('set r_so1 "set cycleAxisSoldier vstr r_so1; bind MOUSE4 a; bind MOUSE5 b; bind CAPSLOCK c; bind u d"')
+    con.run('set r_so1 "set cycleSoldier vstr r_so1; bind MOUSE4 a; bind MOUSE5 b; bind CAPSLOCK c; bind u d"')
     assert press(con, "KP_HOME", {})[0] == "cycle", "single weapon variant with 4 rebinds"
     print("selftest ok")
 
