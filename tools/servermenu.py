@@ -107,7 +107,7 @@ def pages(rows, size, stamp):
             cfg.append(f'echo "{MENU["text"]}No favorite servers: add some in the server browser"')
         cfg += [f'echo "{MENU["key"]}{f"{n}.":<4}{MENU["text"]}{text}"' for n, text in enumerate(lines[page * size:(page + 1) * size], 1)]
         cfg.append("vstr unbindNumbers")
-        cfg += [f'bind {key} "vstr resetServerMenu; connect {row["address"]}"' for key, row in zip(KEYS, part)]
+        cfg += [f'bind {key} "vstr resetLayers; connect {row["address"]}"' for key, row in zip(KEYS, part)]
         cfg.append(f'bind TAB "execq {EXEC}/p{size}_{(page + 1) % count}.cfg"')  # execq: a key press prints no "execing" line
         out[f"p{size}_{page}.cfg"] = "\n".join(cfg) + "\n"
     return out
@@ -175,8 +175,8 @@ def selftest():
     first = p12["p12_0.cfg"].splitlines()
     assert first[1] == "vstr popupsMenu" and "SERVERS 1/2 12:00:00" in first[2] and "TAB next page" in first[2]
     assert sum(l.startswith("echo") for l in first) == 13 and sum(l.startswith("echo") for l in p7["p7_0.cfg"].splitlines()) == 8
-    assert 'bind 1 "vstr resetServerMenu; connect 192.0.2.14:27960"' in first  # most playing humans first
-    assert 'bind US_EQUALS "vstr resetServerMenu; connect 192.0.2.3:27960"' in first
+    assert 'bind 1 "vstr resetLayers; connect 192.0.2.14:27960"' in first  # most playing humans first
+    assert 'bind US_EQUALS "vstr resetLayers; connect 192.0.2.3:27960"' in first
     assert first[3].startswith(f'echo "{m["key"]}1.  {t}') and first[14].startswith(f'echo "{m["key"]}12. {t}')  # keys 1-12 equally wide
     assert first[-1] == f'bind TAB "execq {EXEC}/p12_1.cfg"' and first.index("vstr unbindNumbers") < first.index(first[-1])
     assert p12["p12_1.cfg"].splitlines()[-1] == f'bind TAB "execq {EXEC}/p12_0.cfg"'  # last page wraps

@@ -219,14 +219,14 @@ def vsay_of(action):
 def bind(clan, label, action, key, pages):
     """(bind line, submenu to render or None); a vsay key runs its alias vsay<key>."""
     if vsay_of(action):
-        return f'bind {key} "vstr vsay{key}; vstr resetVoiceChat"', None
+        return f'bind {key} "vstr vsay{key}; vstr resetLayers"', None
     o = re.search(r"open (\w+)", action)
     if o and o.group(1) in pages:
         return f'bind {key} "execq {EXEC}/{clan}/{page_name(o.group(1), None, clan)}.cfg"', o.group(1)  # execq: a key press prints no "execing" line
     if o:  # a UI menu that isn't a chat page (e.g. name editor): not reachable from the console
-        return f'bind {key} "echo ^1Only in the server\'s own menu ({o.group(1)}); vstr resetVoiceChat"', None
+        return f'bind {key} "echo ^1Only in the server\'s own menu ({o.group(1)}); vstr resetLayers"', None
     cmds = [c or f"{v} {x}" for c, v, x in re.findall(r'exec "([^"]+)"|setCvar (\w+) "([^"]*)"', action)]
-    return f'bind {key} "' + "; ".join(cmds + ["vstr resetVoiceChat"]) + '"', None
+    return f'bind {key} "' + "; ".join(cmds + ["vstr resetLayers"]) + '"', None
 
 
 def strip_tag(head, clan, texts=()):
@@ -326,7 +326,7 @@ QM_MENU_END''')
     assert f"bind 1 \"execq {EXEC}/x/fun.cfg\"" in files["x.cfg"], files["x.cfg"]
     assert renumber([("^78. a", "", "8"), ("^70. b", "", "0"), ("TAB c", "", "TAB")]) == [("^71. a", "", "1"), ("^72. b", "", "2"), ("TAB c", "", "TAB")]
     fun = files["fun.cfg"]
-    assert 'set vsay1 "vsay xy11 ^lHi^3, ^lyou^3!"\n' in fun and 'bind 1 "vstr vsay1; vstr resetVoiceChat"' in fun and 'echo "^31. ^7Hi, you!"' in fun, fun
+    assert 'set vsay1 "vsay xy11 ^lHi^3, ^lyou^3!"\n' in fun and 'bind 1 "vstr vsay1; vstr resetLayers"' in fun and 'echo "^31. ^7Hi, you!"' in fun, fun
     assert 'set vsay2 "vsay_team FTAttack"\n' in fun and 'echo "^32. ^7Attack! (random)"' in fun, fun
     assert fun.index("// Vsays") < fun.index("// Echos") < fun.index("// Binds"), fun
     assert 'echo "^33. ^7Off"' in fun and vsays[("vsay", "xy11")] == ("fun.cfg", "1", "^lHi^3, ^lyou^3!")
@@ -352,7 +352,7 @@ QM_MENU_END''')
         "~ vsay_team ftattack  fun.cfg key 2: several variants now, text dropped: ^9Go"]
     voice = parse_voice('male\n/* c\n */ Hi { sound/a.wav "Hi!" sprites/x\n sound/b.ogg Yo } // c\nBye\n{\n sound/c.wav "Bye." }')
     assert voice == [("Hi", [("sound/a.wav", "Hi!"), ("sound/b.ogg", "Yo")]), ("Bye", [("sound/c.wav", "Bye.")])], voice
-    assert 'bind 3 "cg_x 1; cg_novoicechats 1; vstr resetVoiceChat"' in fun, fun
+    assert 'bind 3 "cg_x 1; cg_novoicechats 1; vstr resetLayers"' in fun, fun
     assert titles('QM_MENU_START_XY( "wm_fun_alt", "[x] Fun" )\n#define QM_MENU_START_XY( A, B )') == {"wm_fun_alt": "[x] Fun"}
     assert 'echo "[x] ^8FUN:"' in fun, fun
     assert strip_tag("^1[^7ABc^1]^0-^3ABc-classics", "abc") == "^3classics"

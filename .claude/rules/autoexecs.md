@@ -25,7 +25,7 @@ echo ^5>>> AUTOEXEC_MAP LOADED!
 ```
 - `exec autoexec_mod.cfg` comes first, so a mod switch reloads the chain before the map's values are set.
 - `spawnpsr`/`spawnpsb` bind exactly the keys of the map's `spawnp<k><r|b>` (`"vstr echosp<r|b>; bind 1 vstr spawnp0<r|b>; ..."`): the aliases survive map and mod changes, and `spawnSelector4` unbinds the number row first, so a spawnpoint of the previous map is on no key. Adding or removing a spawnpoint by hand means updating the bind list and the `echosp<r|b>` list too. No map autoexec execs `generic_spawnpoints.cfg`.
-- Every `spawnp<k><r|b>` closes the menu itself: `setspawnpt N; set spawnsay vstr spawnsay<i>; vstr spawnChosen` (`spawnChosen`, `scripts/spawnscript.cfg`: `resetSpawnSelector`, sound, `spawnReport`, which announces it while the KP_STAR toggle of `scripts/spawnscript.cfg` is on).
+- Every `spawnp<k><r|b>` closes the menu itself: `setspawnpt N; set spawnsay vstr spawnsay<i>; vstr spawnChosen` (`spawnChosen`, `scripts/spawnscript.cfg`: `resetLayers`, sound, `spawnReport`, which announces it while the KP_STAR toggle of `scripts/spawnscript.cfg` is on).
 - File name: `autoexec_<map>.cfg` in lowercase.
 - `vstr crosshairColor<Name>` after the last settings line is the map's crosshair color, written by `tools/serverconfig.py` while playing (`docs/autoexec.md`): never add, change or remove it in a bulk edit, and keep it after `exec autoexec_mod.cfg`, which resets the color. The generator carries a map's own line over and never the template's (`helpers/common.py` `with_map_color`).
 

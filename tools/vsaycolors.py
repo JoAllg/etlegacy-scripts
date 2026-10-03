@@ -266,7 +266,7 @@ def selftest():
     new = dict(c, team="^7", highlight="^d")
     assert remap("^9Clear the ^xpath^3! ^1Now", "vsay_team", c, new) == "^7Clear the ^dpath^3! ^1Now"
     assert remap("^lHi ^xyou", "vsay", c, new) == "^lHi ^dyou"
-    lines = ['echo "^31. old"', 'echo "2. ^lX (random)"', 'set vsay1 "vsay a ^lNew^3!"', 'set vsay2 "vsay b"', 'bind 1 "vstr vsay1; vstr resetVoiceChat"']
+    lines = ['echo "^31. old"', 'echo "2. ^lX (random)"', 'set vsay1 "vsay a ^lNew^3!"', 'set vsay2 "vsay b"', 'bind 1 "vstr vsay1; vstr resetLayers"']
     assert [m.groups() for l in lines for m in TEXT.finditer(l)] == [("vsay", "a", "^lNew^3!")]  # alias name and bind are no vsay texts
     says = ['set say-x "say_teamnl ^9Go ^xnow"', 'set a "vstr b; say_team Hi; echo say what"', 'set c "x; set classSay say_teamnl Hi there; echo y"',
             'echo "say cheese"', 'bind x "say !stats"', 'vstr say-x', 'set d "vsay Hi Hello"']

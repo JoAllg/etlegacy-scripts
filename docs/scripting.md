@@ -124,11 +124,11 @@ bind ENTER "vstr spawnSelector"
 set spawnSelector3      "vstr spawnSelector4; set spawnSelector3 vstr spawnSelector3OFF"
 set spawnSelector4      "vstr unbindNumberRow; vstr spawnpsr"
 set spawnpsr            "vstr echospr; bind 1 vstr spawnp0r; bind 2 vstr spawnp1r"
-set spawnSelector3OFF "vstr resetSpawnSelector; vstr playCancel"
-set resetSpawnSelector "vstr reBindNumbers; reset spawnSelector3"
-set spawnp1r "setspawnpt 1; vstr resetSpawnSelector"
+set spawnSelector3OFF "vstr resetLayers; vstr playCancel"
+set resetLayers "vstr reBindNumbers; reset spawnSelector3; reset voiceChatSelector"
+set spawnp1r "setspawnpt 1; vstr resetLayers"
 ```
-Examples: `scripts/spawnscript.cfg`, `scripts/voicechat.cfg`. The restore alias (`reBindNumbers`, `binds_custom.cfg`, shared by all layers) must rebind every key a layer uses. Every exit path (opener, option, `DEL`) closes the layer through one `reset<Layer>` alias; `resetLayers` runs all of them and every opener runs it first, so only one layer is open at a time.
+Examples: `scripts/spawnscript.cfg`, `scripts/voicechat.cfg`. The restore alias (`reBindNumbers`, `binds_custom.cfg`, shared by all layers) must rebind every key a layer uses. Every exit path (opener, option, `F4`, `ESCAPE`) closes it through `resetLayers`, which resets every layer's opener; every opener runs it first, so only one layer is open at a time.
 
 A layer with many pages binds its keys in page files exec'd when opened instead of aliases per page (`vsays/chat/*.cfg`, `vsays/servers/<clan>/*.cfg`). Aliases a page needs are shared by all pages and redefined by each (`vsay1`..`vsay0`), so the cvar count does not grow with the pages: the engine stops with `Too many cvars` at `MAX_CVARS` (2048), and a hosted nitmod game registers ~1000 of its own, plus three per connected client.
 
@@ -198,7 +198,7 @@ set serverMenuPage "execq profile/servermenu/p7_0.cfg"
 
 // servermenu/p7_0.cfg (generated)
 echo "^31.  ^7<server name>  ^240^7+^56^7+^90^7/45  radar  55ms  legacy"
-bind 1 "vstr resetServerMenu; connect <ip:port>"
+bind 1 "vstr resetLayers; connect <ip:port>"
 bind TAB "execq profile/servermenu/p7_0.cfg"
 ```
 - The generated file holds only data (echoes, binds) and calls existing aliases; behavior stays in the static cfg, so a stale or missing file breaks nothing.

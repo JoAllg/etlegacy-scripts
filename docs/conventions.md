@@ -28,13 +28,13 @@ Standards used in the live scripts. Not enforced everywhere yet — follow them 
 | `+vstr <feature>ON <feature>OFF`                         | hold press/release aliases                               | `crouchON`/`crouchOFF`, `statisticsON`/`statisticsOFF`                                        |
 | `cycle<Feature>` + `<feature><Value>`                    | manual cycle pointer and steps named by their value      | `cycleCrosshairColor` → `crosshairColorCyan`, `cycleGamma` → `gamma175`, `cycleFPS` → `fps71` |
 | `cycle<Feature>Up` / `Down` + `<feature><Value>`         | bidirectional cycle pointers                             | `cycleCrosshairSizeUp` / `Down` → `crosshairSize15`                                           |
-| `reset<Feature>`                                         | shared cleanup used by every exit path                   | `resetSniper`, `resetProne`, `resetToggles`, `resetLayers`, `resetTemporary`, `resetTeamBinds`, `resetVoiceChat`          |
+| `reset<Feature>`                                         | shared cleanup used by every exit path                   | `resetSniper`, `resetProne`, `resetToggles`, `resetLayers`, `resetTemporary`, `resetTeamBinds`          |
 | `play<Sound>`                                            | sound command aliases (`scripts/common.cfg`)             | `playSelect`, `playCancel`, `playFilter`                                                      |
 | `timer<ms>`, `timerDone`, `timerStop`                    | timer (`scripts/common.cfg`): runs an alias after a time | `set timerDone vstr grenadeOFF; vstr timer2900`                                               |
 | `null`                                                   | empty no-op alias for disabled hooks                     | `set preJoinHookb vstr null`                                                                  |
 
 
-Menu layers (voicechat, spawn selector): `chat<Category>` opens a category, `echo<Item>` prints one line. A voice chat page is a file (`scripts/vsays/chat/`, `vsays/servers/<clan>/`) exec'd when opened, in three blocks: `// Vsays` (`set vsay<key> "vsay <id> <text>"`, nothing else on the line), `// Echos`, `// Binds` (`bind <key> "vstr vsay<key>; vstr resetVoiceChat"`). All pages share the aliases `vsay1`..`vsay0` (cycle steps `vsay<n>a` / `b`, pointer `cycleVsay<Name>` in `vsays/chat.cfg`).
+Menu layers (voicechat, spawn selector): `chat<Category>` opens a category, `echo<Item>` prints one line. A voice chat page is a file (`scripts/vsays/chat/`, `vsays/servers/<clan>/`) exec'd when opened, in three blocks: `// Vsays` (`set vsay<key> "vsay <id> <text>"`, nothing else on the line), `// Echos`, `// Binds` (`bind <key> "vstr vsay<key>; vstr resetLayers"`). All pages share the aliases `vsay1`..`vsay0` (cycle steps `vsay<n>a` / `b`, pointer `cycleVsay<Name>` in `vsays/chat.cfg`).
 
 Team/class (`scripts/classcript.cfg`, `scripts/class/`):
 
