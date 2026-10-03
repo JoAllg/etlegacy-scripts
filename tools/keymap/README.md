@@ -104,7 +104,7 @@ Hovering a key dims all others and highlights every key that changed in any pres
 - or one of its **own pointers** was set by a script. Own pointers are the aliases a single press of that key reads at any depth *and* sets itself (`pointers()`, computed once per key per view). For example:
   - `F4` → `ENTER`: `ENTER` runs `spawnSelector` → `spawnSelectorMap` → `spawnSelector3` and sets `spawnSelector3`, which `resetLayers` resets
   - each class key → the other class keys: `classKeys<Team>` points the other class keys back to their first press (which resets their `cycle<Class>`)
-- Aliases another key only *reads* don't count, e.g. `END` (FPS cycle) sets `maxFpsNormal`, which the weapon keys read. Otherwise nearly every script key would light up.
+- Aliases another key only *reads* don't count, e.g. `END` (FPS cycle) sets `maxFps`, which the weapon keys read. Otherwise nearly every script key would light up.
 
 The key itself is never listed.
 

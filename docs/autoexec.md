@@ -38,7 +38,7 @@ Details for legacy (source-verified):
 - `F1` runs `exec autoexec.cfg`: full reset of the state.
 - Both end with `vstr serverForce`: the settings of the server the game is on override the chain ([Server configs](serverconfigs.md)). A server change itself is detected by `tools/serverconfig.py`, not by the scripts.
 - A mod switch goes through `autoexec.cfg` as well, so it resets state.
-- Which state resets on `F3` is a per-feature decision (`.claude/rules/exec-chain.md`).
+- `F3` keeps the state of every toggle and cycle and resets only the class toggles (`resetToggles`, `.claude/rules/exec-chain.md`).
 
 ## How this repo uses them
 

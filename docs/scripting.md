@@ -69,7 +69,7 @@ set crosshairColorCyan "cg_crosshaircolor cyan; cg_crosshaircoloralt cyan; set c
 set crosshairColorRed "cg_crosshaircolor red;  cg_crosshaircoloralt red;  set cycleCrosshairColor vstr crosshairColorWhite; vstr playSelect; echo ^8CROSSHAIR COLOR ^2red"
 set crosshairColorWhite "cg_crosshaircolor white; cg_crosshaircoloralt white; set cycleCrosshairColor vstr crosshairColorCyan; vstr playSelect; echo ^8CROSSHAIR COLOR ^2white"
 ```
-Examples: `scripts/display.cfg` crosshair color, gamma (floats), FPS (sets `com_maxfps` + `cl_maxpackets` + the `maxFpsNormal` alias per step), name cycle; the class selector (`class/cs_backend.cfg`, `cycleSoldier` → `b_so1..4`) is a manual cycle whose steps run class commands.
+Examples: `scripts/display.cfg` crosshair color, gamma (floats), FPS (sets `com_maxfps` + `cl_maxpackets` + the `maxFps` alias per step), name cycle; the class selector (`class/cs_backend.cfg`, `cycleSoldier` → `b_so1..4`) is a manual cycle whose steps run class commands.
 
 Pitfall: a cycle step must point to the *next* step. Check the pointer alias name in every step (a step that sets a different alias than the one bound breaks the cycle).
 
