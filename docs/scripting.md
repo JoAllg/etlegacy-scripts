@@ -44,6 +44,8 @@ Prefer `set` for aliases: `seta` persists them into `etconfig.cfg`, where they c
 
 **`exec <file>`:** runs a cfg (`.cfg` added if missing), path relative to the mod search path (`profile/...`). Console shows `execing <file>` or `couldn't exec <file>`. `execq <file>` is the same without the `execing` line (`src/qcommon/cmd.c` `Cmd_Exec_f`); files that a key press execs use it.
 
+**`cg_onWeapzoomStart` / `cg_onWeapzoomEnd`:** legacy only. Cvars holding a command that cgame runs when weapon zoom (`+weapzoom` / `toggleweapzoom`) starts or ends, e.g. `seta cg_onWeapzoomStart "vstr pitchLow"` (`src/cgame/cg_view.c` `CG_CalcFov`). They fire on the state change, not on the key, so hold and toggle behave the same. They don't fire while scoped, using binoculars or on a mounted/set MG, because weapon zoom is blocked there. Not tested in game.
+
 **`echo`:** prints text; when connected it shows as a notification (`cpm`). ET: Legacy extension: `echo "FOV: " vstr cg_fov` inserts a cvar value. Color codes `^0`–`^9` and letters (e.g. `^5` cyan).
 
 ## Script patterns

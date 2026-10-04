@@ -27,7 +27,7 @@ Verified against the ET: Legacy source at `<ET: Legacy source checkout>` (engine
 | `+reload` | reload |
 | `+activate` | use/interact (doors, levers, objectives, health/ammo cabinets) |
 | `+zoom` | scope/binocular zoom |
-| `+weapzoom` / `toggleweapzoom` | iron-sight/weapon zoom (hold / toggle) |
+| `+weapzoom` / `toggleweapzoom` | iron-sight/weapon zoom (hold / toggle), legacy; settings `cg_weapzoom*`, hooks `cg_onWeapzoomStart`/`End` (see [scripting](scripting.md#built-in-helpers)) |
 | `zoomin` / `zoomout` | binocular zoom step |
 | `weapon <bank>` | switch to weapon bank |
 | `weaponbank <bank>` | switch to weapon bank (bank-cycle aware) |

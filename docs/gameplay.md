@@ -53,12 +53,14 @@ Checked against the ET: Legacy source (2026-09) and the decompiled nitmod 2.3.5 
 ### FPS (`com_maxfps`)
 - Range 20–500, default 125. The frame limiter works in microseconds, so any value gives exact FPS; the old "round_down(1000/N)" list is only needed for accurate FPS in vanilla.
 - Commands still carry whole milliseconds: 125 (8 ms), 250 (4 ms) and 500 (2 ms) give even frame times; e.g. 144 fps alternates 6/7 ms.
+- Vsync (`r_swapInterval 1`, latched) caps FPS at the monitor refresh rate on top of `com_maxfps` (`sdl_glimp.c`, `SDL_GL_SetSwapInterval`), so the frame and packet timings below assume `r_swapInterval 0`.
 - Physics: servers with `g_fixedphysics 1` + `g_fixedphysicsfps 125` (legacy default) only fix the gravity rounding (jump height). They do **not** make recoil or spread FPS independent.
 
 ### maxpackets (`cl_maxpackets`)
 - Range 15–125, default 125 (the old limit of 100 no longer applies). Servers can still force lower values.
 - A packet goes out in the first frame after `1000/cl_maxpackets` ms (whole ms), so FPS should be a multiple of the packet rate: 125 fps or 250 fps with 125 maxpackets give 125 packets/s; 333 fps gives ~111/s (125) or ~83/s (100).
 - Recommended: `com_maxfps 125` or `250` with `cl_maxpackets 125`.
+- `cl_packetdup` (0–5, default 1): each packet also carries the commands of the previous N packets, so a lost packet loses no input; costs only upload (`cl_input.c`, `CL_WritePacket`).
 
 ### snaps
 - The server caps `snaps` at its `sv_fps` (usually 20, some servers 40). Setting it high is harmless but gains nothing beyond that.
