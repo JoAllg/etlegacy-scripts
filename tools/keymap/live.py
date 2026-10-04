@@ -17,7 +17,7 @@ import keymap  # puts tools/ on sys.path
 from helpers.common import STAMP, follow, strip_colors
 
 DLL = re.compile(r"Sys_LoadDll\(.*/([^/]+)/(?:ui|cgame)\.mp\.")  # the module's folder is the running mod
-BASE_MARKERS = {"*CLASSES CLEANED*", ">>> AUTOEXEC LOADED!"}  # classReset and autoexec.cfg (unbindall) bring back Base binds
+BASE_MARKERS = {"CLASSES reset", ">>> AUTOEXEC LOADED!"}  # classReset and autoexec.cfg (unbindall) bring back Base binds
 
 
 def clean(text):
@@ -84,13 +84,13 @@ def serve(follower, port):
 
 def selftest():
     f = Follower("nitmod")
-    assert f.current[2].get("[CLASS] Covert Ops: FG42") == "covops_fg42", f.current[2]
+    assert f.current[2].get("CLASS Covert Ops - FG42") == "covops_fg42", f.current[2]
     for line, mod, cls in [
         ("       0 Sys_LoadDll(/home/x/.etlegacy/legacy/ui.mp.x86_64.so)... succeeded\n", "legacy", None),
-        ("   52000 ^0[^nCLASS^0] ^nCovert Ops^1: ^nFG42\n", "legacy", "covops_fg42"),
-        ('    5600           ?  classReset    "vstr cs_default; echo ^2*^7CLASSES CLEANED^2*" - ""\n', "legacy", "covops_fg42"),
-        ("   53000 ^2*^7CLASSES CLEANED^2*\n", "legacy", None),
-        ("   54000 ^0[^nCLASS^0] ^nSoldier^1: ^nMortar\n", "legacy", "soldier_mortar"),
+        ("   52000 ^8CLASS ^2Covert Ops ^9- ^2FG42\n", "legacy", "covops_fg42"),
+        ('    5600           ?  classReset    "vstr cs_default; echo ^8CLASSES ^1reset" - ""\n', "legacy", "covops_fg42"),
+        ("   53000 ^8CLASSES ^1reset\n", "legacy", None),
+        ("   54000 ^8CLASS ^2Soldier ^9- ^2Mortar\n", "legacy", "soldier_mortar"),
         ("   55000 Sys_LoadDll(/home/x/.etlegacy/testmod/cgame.mp.x86_64.so)... succeeded\n", "legacy", "soldier_mortar"),
         ("       0 ^5>>> AUTOEXEC LOADED!\n", "legacy", None),
     ]:

@@ -62,7 +62,8 @@ Team/class (`scripts/classcript.cfg`, `scripts/class/`):
   - `vstr playSelect`: activating / selecting / on
   - `vstr playCancel`: deactivating / cancel / reset
   - `vstr playFilter`: before team messages (`say_team...`)
-- Echo format: `echo ^8<FEATURE> ^2<on / value>` or `^1<off>` (`^8` label, `^2` positive/value, `^1` negative).
+- Echo format: `echo ^8<FEATURE> ^2<on / value>` or `^1<off>` (`^8` label, `^2` positive/value, `^1` negative), e.g. `^8TEAM ^2Allies`, `^8CLASS ^2Soldier ^9- ^2MG42`. Orange labels stand out from the game's own white popups and green/cyan chat; no brackets or stars around labels.
+- Error format: `echo ^1! ^8<FEATURE> ^7<what to do>` + `vstr playError`, e.g. `^1! ^8SPAWNPOINT ^7Choose a team first`.
 - Vsay text colors (`vsay`, `vsay_team` text): use the user's `VSAY_*` colors in `settings.conf` (base color per command, punctuation, key word and urgent highlight); if they are missing, ask the user which colors to use. `tools/vsaycolors.py` / the `vsay` skill apply them to all vsay texts.
 - Echo menus (voice chat, spawn selector): `<key>. <item>` lines under a `<HEADING>:` line, in the user's `MENU_*` colors in `settings.conf` (heading, key, item, TAB line, global chat item, spawnpoint owner); `tools/vsaycolors.py apply` recolors them after a change.
 
