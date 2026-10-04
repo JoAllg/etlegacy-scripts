@@ -18,7 +18,7 @@
 #    - GAME_BIN_I386 (32-bit client next to GAME_BIN, for i386-only mods), PROFILE ("default"),
 #      KEYMAP_MOD (default mod of tools/keymap)
 #    - VSAY_TEAM, VSAY_GLOBAL, VSAY_BUDDY (base color of vsay_team/vsay/vsay_buddy text), VSAY_PUNCT (punctuation),
-#      VSAY_HIGHLIGHT, VSAY_URGENT (key words): colors of the vsay texts (tools/voicemenu.py, vsay-highlight skill)
+#      VSAY_HIGHLIGHT, VSAY_URGENT (key words): colors of the vsay texts (tools/voicemenu.py, vsay skill)
 #    - MENU_HEAD, MENU_KEY, MENU_TEXT, MENU_NAV (TAB line), MENU_GLOBAL (global chat), MENU_AXIS, MENU_ALLIES (spawnpoint owner),
 #      MENU_PLAYING, MENU_SPEC, MENU_BOTS (server menu player numbers): colors of the echo menus
 #      (voice chat, spawn selector, server menu; tools/vsaycolors.py apply, voicemenu.py, spawnpoints.py, servermenu.py)

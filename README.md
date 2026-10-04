@@ -248,4 +248,4 @@ The repo ships project skills in `.claude/skills/` (`.agents` links to `.claude`
 | Skill | Use |
 | --- | --- |
 | `keymap` | regenerates `tools/keymap/keymap.html` and names new binds in `labels.json`; after bind, class script or menu layer changes |
-| `vsay-highlight` | colors all vsay texts and echo menus with the `VSAY_*` / `MENU_*` colors from `settings.conf`, previews and changes them, highlights key words; after `tools/voicemenu.py` or new vsay texts |
+| `vsay` | translates non-English voice chat pages, colors all vsay and chat texts and echo menus with the `VSAY_*` / `MENU_*` colors from `settings.conf`, previews and changes them, highlights key words; after `tools/voicemenu.py` or new vsay texts |
