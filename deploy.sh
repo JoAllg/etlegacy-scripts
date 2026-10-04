@@ -216,24 +216,24 @@ setup() {
 	fi
 	needs PROFILE && set_value PROFILE "default"
 	needs KEYMAP_MOD && set_value KEYMAP_MOD "nitmod"
-	# the colors of scripts/vsays/chat.cfg
-	needs VSAY_TEAM && set_value VSAY_TEAM "^9"
-	needs VSAY_GLOBAL && set_value VSAY_GLOBAL "^l"
-	needs VSAY_BUDDY && set_value VSAY_BUDDY "^f"
-	needs VSAY_PUNCT && set_value VSAY_PUNCT "^3"
-	needs VSAY_HIGHLIGHT && set_value VSAY_HIGHLIGHT "^x"
-	needs VSAY_URGENT && set_value VSAY_URGENT "^1"
+	# the colors of scripts/vsays/chat.cfg; base colors = the game's own team (cyan), global (green) and fireteam (yellow) chat
+	needs VSAY_TEAM && set_value VSAY_TEAM "^5"
+	needs VSAY_GLOBAL && set_value VSAY_GLOBAL "^2"
+	needs VSAY_BUDDY && set_value VSAY_BUDDY "^3"
+	needs VSAY_PUNCT && set_value VSAY_PUNCT "^9"
+	needs VSAY_HIGHLIGHT && set_value VSAY_HIGHLIGHT "^7"
+	needs VSAY_URGENT && set_value VSAY_URGENT "^i"
 	# the colors of the echo menus; readable on bright and dark maps with the popup shadow (huds/hud_v<version>.dat textStyle 3)
-	needs MENU_HEAD && set_value MENU_HEAD "^8"
-	needs MENU_KEY && set_value MENU_KEY "^3"
-	needs MENU_TEXT && set_value MENU_TEXT "^7"
-	needs MENU_NAV && set_value MENU_NAV "^2"
-	needs MENU_GLOBAL && set_value MENU_GLOBAL "^6"
-	needs MENU_AXIS && set_value MENU_AXIS "^i"
-	needs MENU_ALLIES && set_value MENU_ALLIES "^d"
+	needs MENU_HEAD && set_value MENU_HEAD "^5"
+	needs MENU_KEY && set_value MENU_KEY "^o"
+	needs MENU_TEXT && set_value MENU_TEXT "^z"
+	needs MENU_NAV && set_value MENU_NAV "^g"
+	needs MENU_GLOBAL && set_value MENU_GLOBAL "^2"
+	needs MENU_AXIS && set_value MENU_AXIS "^1"
+	needs MENU_ALLIES && set_value MENU_ALLIES "^f"
 	needs MENU_PLAYING && set_value MENU_PLAYING "^2"
-	needs MENU_SPEC && set_value MENU_SPEC "^5"
-	needs MENU_BOTS && set_value MENU_BOTS "^9"
+	needs MENU_SPEC && set_value MENU_SPEC "^n"
+	needs MENU_BOTS && set_value MENU_BOTS "^m"
 }
 
 setup
