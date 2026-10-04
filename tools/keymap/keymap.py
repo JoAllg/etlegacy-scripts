@@ -18,6 +18,8 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 from helpers.settings import HOMEPATH as GAME, KEYMAP_MOD, REPO as PROFILES  # noqa: E402  exec paths resolve in GAME/<mod>/ and GAME/etmain/ through the links of deploy.sh
+from helpers.menupages import EXEC as SERVERMENU, pages  # noqa: E402
+from helpers.serverapi import summarize  # noqa: E402
 
 # Scenario: state the views start from. Team + map autoexec, so the spawn selector layer (ENTER) is live.
 START = "exec autoexec.cfg"
@@ -30,6 +32,9 @@ MAX_DEPTH = 64  # vstr/exec nesting; the engine has no limit, this stops alias l
 # cfgs that tools write while the game runs (servermenu.py, serverconfig.py): they hold the favorite servers and the
 # server joined last, which are no binds of the profile and must not end up in the versioned keymap.html
 GENERATED = re.compile(r"(?:^|/)(?:servermenu/|serverconfigs/current)")
+# in place of a server menu page: the page built from 7 made-up offline servers, so the menu binds its keys like in game
+SERVERMENU_PAGE = re.compile(rf"^{SERVERMENU}/p(\d+)_0\.cfg$")
+PLACEHOLDER = [summarize(f"192.0.2.{n}:27960", None) for n in range(1, 8)]
 KEY_ALIASES = {"ALT": "LEFTALT", "CTRL": "LEFTCTRL", "SHIFT": "LEFTSHIFT"}  # cl_keys.c keynames[], same keynum
 
 
@@ -153,9 +158,15 @@ class Console:
         # ponytail: wait, cvar commands and server-forced values are ignored; enough for binds, compare with /bindlist if a view looks wrong
 
     def exec_file(self, name, depth):
+        name = name if "." in Path(name).name else name + ".cfg"
+        page = SERVERMENU_PAGE.match(name)
+        if page:
+            self.execs += 1
+            self.run(pages(PLACEHOLDER, int(page[1]), "")[Path(name).name], "tools/servermenu.py", depth + 1)
+            self.execs -= 1
+            return
         if GENERATED.search(name):
             return
-        name = name if "." in Path(name).name else name + ".cfg"
         path = self.root / name
         if not path.exists():  # the game's search path: mod folder, then etmain (map and team autoexecs)
             path = GAME / "etmain" / name
@@ -233,11 +244,13 @@ def press(con, key, own, nested=False, baseline=None):
                         new_binds.setdefault(k, norm(cmd))
                 else:
                     # written counts even with an unchanged value: team keys are menus also for the team already chosen,
-                    # F4 resets a closed spawn menu
+                    # F4 resets a closed spawn menu; but writing the creation values back is a reset, no new action
+                    # (the kill key resets every layer and the weapon state)
                     now = tuple(con.cvars.get(t, ("",))[0] for t in targets.get(k, ()))
                     if now != tuple(start[0].get(t, ("",))[0] for t in targets.get(k, ())) \
                             or con.written & set(targets.get(k, ())):
-                        new_aliases.setdefault(k, now)  # menu: only the alias the bind calls directly
+                        if now != tuple(con.cvars.get(t, ("", ""))[1] for t in targets.get(k, ())):
+                            new_aliases.setdefault(k, now)  # menu: only the alias the bind calls directly
                     elif not con.written & own.get(k, set()):
                         continue
                 if cmd not in affects.setdefault(k, []):
@@ -835,7 +848,7 @@ def selftest(mod):
     scoped = next(v["keys"] for v in data if v["name"].startswith("Covops: fg42"))
     assert "MOUSE3" not in base, base["MOUSE3"]  # sniper mode only with a scope
     assert [x[:2] for x in scoped["MOUSE3"]["a"]["LEFTALT"]] == [["Crouch", "toggle"]], scoped["MOUSE3"]
-    assert all(m != "menu" for k, alts in base["ENTER"]["a"].items() if k != "v" for _, m, *_ in alts), base["ENTER"]  # v: ENTER closes the voice chat (resetLayers)
+    assert all(m != "menu" for k, alts in base["ENTER"]["a"].items() if k not in ("v", "RIGHTCTRL") for _, m, *_ in alts), base["ENTER"]  # ENTER closes the voice chat and the server menu (resetLayers)
     assert base["v"]["a"]["1"][0][1] == "menu", base["v"]  # a chat category opens its vsay list
     medic_i = next(i for i, v in enumerate(data) if v["name"].startswith("Medic"))
     assert base["KP_UPARROW"]["a"]["MOUSE4"][0][3] == medic_i, base["KP_UPARROW"]  # a class key lands in its class view
@@ -845,6 +858,8 @@ def selftest(mod):
     assert all(base[k]["t"] == "cycle" for k in ("KP_HOME", "KP_UPARROW", "KP_PGUP", "KP_LEFTARROW", "KP_5"))
     assert base["KP_DOWNARROW"]["t"] != "menu" and base["KP_RIGHTARROW"]["t"] != "menu"
     assert "ENTER" in base["F4"]["a"] and "v" in base["F4"]["a"], base["F4"]
+    assert base["RIGHTCTRL"]["t"] == "menu" and {"1", "7", "TAB"} <= set(base["RIGHTCTRL"]["a"]), base["RIGHTCTRL"]
+    assert base["x"]["t"] != "menu" and "ENTER" in base["x"]["a"], base["x"]  # kill: resets the layers, opens none
     con.run('set r_so1 "set cycleSoldier vstr r_so1; bind MOUSE4 a; bind MOUSE5 b; bind CAPSLOCK c; bind u d"')
     assert press(con, "KP_HOME", {})[0] == "cycle", "single weapon variant with 4 rebinds"
     print("selftest ok")

@@ -29,7 +29,7 @@ Rules follow the ET: Legacy source (`src/qcommon/cmd.c`, `cvar.c`, `src/client/c
 
   | Command | Effect |
   |---|---|
-  | `exec <file>` | runs `<HOMEPATH>/<mod>/<file>` (`.cfg` added if no extension, HOMEPATH from `settings.conf`). Paths resolve through the real symlinks of `deploy.sh`, so `exec mod_general.cfg` reaches the mod's file like in game. Missing file = no-op. Files that tools write while the game runs are skipped (`servermenu/` pages, `serverconfigs/current*.cfg`): they hold your favorite servers and the server joined last |
+  | `exec <file>` | runs `<HOMEPATH>/<mod>/<file>` (`.cfg` added if no extension, HOMEPATH from `settings.conf`). Paths resolve through the real symlinks of `deploy.sh`, so `exec mod_general.cfg` reaches the mod's file like in game. Missing file = no-op. Files that tools write while the game runs are skipped (`servermenu/` pages, `serverconfigs/current*.cfg`): they hold your favorite servers and the server joined last. A `servermenu/` page is replaced by the page `helpers/menupages.py` builds from 7 made-up offline servers (`192.0.2.x`), so `RIGHTCTRL` is seen as the menu it is in game |
   | `set` / `seta` / `sets` / `setu <name> <value...>` | stores the alias, arguments joined with spaces |
   | `reset <name>` | back to the value the alias had when it was first created (engine `resetString`). This is why `state.cfg` sets `spawnSelector` twice |
   | `vstr <name>` | runs the alias value (undefined alias = no-op) |
@@ -78,7 +78,7 @@ The **pointers** of a press are the aliases it reads via `vstr` and that change 
 | Icon | Mode | Rule | Current keys |
 |---|---|---|---|
 | ⟳ | cycle | the press reads **and sets** an alias whose name **starts with `cycle`**; it counts even when set to its current value. Or: a pointer takes **more than 2** values | `F5`, class keys (`KP_HOME`, `KP_UPARROW`, `KP_PGUP`, `KP_LEFTARROW`, `KP_5`), `HOME`, `END`, `PGUP`, `PGDN`, `DEL`, `+`, `-` |
-| ☰ | menu | at least `MENU_MIN = 4` other keys get **distinct** new actions (see below) | `v`, `ENTER`, `KP_END`, `KP_PGDN` |
+| ☰ | menu | at least `MENU_MIN = 4` other keys get **distinct** new actions (see below) | `v`, `ENTER`, `RIGHTCTRL`, `KP_END`, `KP_PGDN` |
 | ⇄ | toggle | a pointer takes exactly 2 values and changes on more than one press (a single change, e.g. `MOUSE4` leaving the SMG sets `bankSMG`, is no toggle) | `MOUSE3`, `F8`, `F9`, `F12`, `INS`, `LEFTCTRL`, `g` (mortar) |
 | ⤓ | hold | the bind is a `+command` (`+attack`, `+vstr a b`), so it works while the key is held; shown when the key has no mode icon | `MOUSE1`, `LEFTALT`, the movement keys, the class actions on `MOUSE4`/`MOUSE5` |
 | none | | no pointer, no hold | |
@@ -89,7 +89,7 @@ The **pointers** of a press are the aliases it reads via `vstr` and that change 
   - keys whose **bind** changed, counted by distinct new bind (unbinding doesn't count), e.g. `v` binds 1–7 + `TAB` to 8 categories;
   - keys whose bind stayed the same but whose **called alias** (the `vstr`/`+vstr` target of the bind) changed or was set by a script, counted by distinct new alias values. E.g. `KP_END` sets `so`/`me`/`en`/`fo`/`co` to 5 different class aliases.
   - `KP_DOWNARROW` (spectator) and `KP_RIGHTARROW` (class reset) set all class keys to the same `vstr noTeam`, which is 1 distinct action, so no menu.
-  - Set by a script counts even with an unchanged value, so the team key of the team already chosen in `SCENARIO` is still a menu.
+  - Set by a script counts even with an unchanged value, so the team key of the team already chosen in `SCENARIO` is still a menu. Unless the value is the alias's creation value (`reset`): that is a reset, not a new action, so the kill key `x` (resets every layer and the weapon state) is no menu.
 
 ### Affected keys (hover)
 
