@@ -30,6 +30,8 @@ An info string is `\key\value\key\value`. The ping of a server is the round trip
 
 ET: Legacy servers answer `getinfo` and `getstatus` from one address in a burst of 10 packets, then one packet per second (`SVC_RateLimitAddress(from, 10, 1000)`). Asking for both every second runs into the limit; every 5 seconds stays below it.
 
+On top, every server shares one budget for all its answers to everyone: a burst of 10, then one packet per 100 ms (`SVC_RateLimit(&outboundLeakyBucket, 10, 100)`). Busy servers are asked by many browsers, so an answer can be dropped, often the `getstatus` right after `getinfo` (seen on 2026-10-05, also on a phone hotspot that dropped some UDP answers). `tools/helpers/serverapi.py` asks `getstatus` once more when only `getinfo` came back; `tools/servermenu.py` shows a server's last values (whole state, split, ping, map, ...) for `SERVERMENU_KEEP` seconds (`settings.conf`) while it doesn't send them.
+
 ## Favorites of the server browser
 
 With `db_mode` 1 or 2 (default 2, `src/db/db_sqlite3.c`) the favorites are rows of the table `client_servers` (`profile`, `address`, `name`) in `<fs_homepath>/etl.db`; mode 2 writes the file at once, so it can be read while the game runs. With `db_mode 0` they are in `profiles/<profile>/favcache.json` (`src/client/cl_ui.c` `LAN_LoadCachedServers`), an array of `{"address", "name", "game"}`.

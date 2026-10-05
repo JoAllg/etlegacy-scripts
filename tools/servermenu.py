@@ -8,24 +8,29 @@ and p7_<n>.cfg (heading + 7, all other mods). scripts/servermenu.cfg execs page 
 echoes its servers and binds the number keys to connect, TAB execs the next page (the same one if there is only
 one, which refreshes it). A server shows as name, playing humans+spectators+bots/slots, map, ping, mod, the columns
 aligned with spaces (the popup font courbd is monospaced). Servers are sorted by playing humans, then spectators and
-bots; servers that don't answer come last.
+bots; servers that don't answer come last. The server the game connected to last (its console log) is left out.
+Whatever a server doesn't send in a poll (no answer at all, no getstatus, no split) shows its last value for up to
+SERVERMENU_KEEP seconds (settings.conf); a missing split keeps the last spectators, the humans total stays the current one.
 
-How the servers are asked: tools/helpers/serverapi.py (status). The interval must stay above 2 s (rate limit of the servers).
+How the servers are asked: tools/helpers/serverapi.py (status). The interval (SERVERMENU_POLL of settings.conf) is at
+least MIN_INTERVAL (rate limit of the servers).
 
-Usage: tools/servermenu.py [--interval 5] [--once]
+Usage: tools/servermenu.py [--interval <s>] [--once]
        tools/servermenu.py --selftest
 """
 import argparse
 import time
 
-from helpers.common import strip_colors, write_atomic
+from helpers.common import last_connect, strip_colors, write_atomic
 from helpers.menupages import EXEC, cells, cut, order, pad, pages, players, table, width
-from helpers.serverapi import favorites, status, summarize
-from helpers.settings import MENU, PROFILE, REPO
+from helpers.serverapi import adr_string, favorites, resolve, status, summarize
+from helpers.settings import MENU, PROFILE, REPO, SERVERMENU_KEEP, SERVERMENU_POLL
 
 OUT = REPO / PROFILE / "servermenu"
 SIZES = (12, 7)  # servers per page: all keys / nitmod's cap of 8 popup lines minus the heading
 PING_POLLS = 6  # the ping shown is the lowest of this many polls
+MIN_INTERVAL = 5  # seconds between two polls at least: rate limit of the servers (docs/serverquery.md)
+FIELDS = ("spec", "bots", "slots", "ping", "map", "mod", "hostname")  # what keep() fills from the last poll
 
 
 def write(files):
@@ -49,9 +54,43 @@ def steady(history, rows):
             row["ping"] = min(pings)
 
 
-def update(history):
-    rows = list(status(favorites()).values())
+def keep(known, rows, now, limit=SERVERMENU_KEEP):
+    """Fills what a server didn't send in this poll from its last values (known: {address: {field: (time, value)}},
+    kept between polls) that are at most `limit` seconds old: a server that doesn't answer shows its last state, a
+    missing split its last spectators with the rest of the humans now playing, a missing ping, map, ... its last one.
+    The humans total is kept instead of the playing ones: a split from another poll is applied to it."""
+    for row in rows:
+        last = known.setdefault(row["address"], {})
+        fresh = {f: v for f, (t, v) in last.items() if now - t <= limit}
+        if row["playing"] is None:  # no answer: all or nothing, a half old state would mix two moments
+            if "humans" not in fresh:
+                continue
+            row.update(fresh, spec=fresh.get("spec"), name=fresh.get("hostname") or row["name"])
+            humans = fresh["humans"]
+        else:
+            humans = row["playing"] + (row["spec"] or 0)
+            last["humans"] = now, humans
+            for field in FIELDS:
+                if row[field] not in (None, ""):
+                    last[field] = now, row[field]
+                elif field in fresh:
+                    row[field] = fresh[field]
+        row.pop("humans", None)
+        if row["spec"] is not None:
+            row["spec"] = min(row["spec"], humans)
+            row["playing"] = humans - row["spec"]
+
+
+def others(addresses, current):
+    """The addresses that are not the server the game is on ("ip:port" as the log names it, None for none)."""
+    return [a for a in addresses if not current or (resolve(a) and adr_string(resolve(a))) != current]
+
+
+def update(history, known):
+    favs = favorites()
+    rows = list(status(others(favs, last_connect()), names=favs).values())
     steady(history, rows)
+    keep(known, rows, time.monotonic())
     rows = order(rows)
     stamp = time.strftime("%H:%M:%S")
     files = {}
@@ -108,29 +147,49 @@ def selftest():
     for ms in range(100, 100 + PING_POLLS):
         steady(history, [{"address": a, "ping": ms}])
     assert history == {a: list(range(100, 100 + PING_POLLS))}  # older pings drop out
+    known, a = {}, "192.0.2.1:27960"
+    full = dict(etl, address=a, playing=10, spec=3)
+    keep(known, [full], 0, 60)
+    rows = [dict(full, playing=12, spec=None, ping=None, map=""), dict(summarize(a, None), name=a)]
+    keep(known, rows[:1], 60, 60)
+    assert (rows[0]["playing"], rows[0]["spec"], rows[0]["ping"], rows[0]["map"]) == (9, 3, 48, "radar")
+    keep(known, rows[1:], 60, 60)
+    assert {k: rows[1][k] for k in ("playing", "spec", "map", "name")} == {"playing": 9, "spec": 3, "map": "radar", "name": etl["hostname"]}
+    late = [dict(full, spec=None), summarize(a, None)]
+    keep(known, late, 61, 60)
+    assert late[0]["spec"] is None and late[1]["playing"] is None  # too old
+    few = [dict(full, playing=2, spec=None)]
+    keep({a: {"spec": (0, 3)}}, few, 1, 60)
+    assert (few[0]["playing"], few[0]["spec"]) == (0, 2)
+    other = [summarize("192.0.2.9:27960", None)]
+    keep(known, other, 0, 60)
+    assert other[0]["playing"] is None  # never seen
+    favs = ["192.0.2.1:27960", "192.0.2.1", "192.0.2.2:27961", "[2001:db8::1]:27960"]
+    assert others(favs, "192.0.2.1:27960") == ["192.0.2.2:27961", "[2001:db8::1]:27960"]
+    assert others(favs, "[2001:db8::1]:27960") == favs[:3] and others(favs, None) == favs
     print("selftest ok")
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--interval", type=float, default=5, help="seconds between two updates (default 5, at least 2)")
+    ap.add_argument("--interval", type=float, default=SERVERMENU_POLL, help=f"seconds between two updates (default SERVERMENU_POLL of settings.conf, at least {MIN_INTERVAL})")
     ap.add_argument("--once", action="store_true", help="update once, print the servers and exit")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
     if a.selftest:
         return selftest()
     if a.once:
-        rows = update({})
+        rows = update({}, {})
         for n, (text, row) in enumerate(zip(table(rows), rows), 1):
             print(f"{n:2}. {text}  {row['address']}")
         return
-    print(f"Server menu: favorites of profile '{PROFILE}' -> {OUT} every {max(a.interval, 2):g} s (Ctrl+C stops)")
-    history = {}
+    print(f"Server menu: favorites of profile '{PROFILE}' -> {OUT} every {max(a.interval, MIN_INTERVAL):g} s (Ctrl+C stops)")
+    history, known = {}, {}
     try:
         while True:
             start = time.monotonic()
-            update(history)
-            time.sleep(max(0.0, max(a.interval, 2) - (time.monotonic() - start)))
+            update(history, known)
+            time.sleep(max(0.0, max(a.interval, MIN_INTERVAL) - (time.monotonic() - start)))
     except KeyboardInterrupt:
         pass
 

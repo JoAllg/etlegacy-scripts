@@ -37,10 +37,10 @@ python3 tools/vsaycolors.py status | preview [role=^c ...] | apply | todo | done
 
 ## servermenu.py
 
-Feeds the in-game server menu (`RIGHTCTRL`, `default/scripts/servermenu.cfg`): while it runs, it asks the favorite servers of the server browser for their state every 5 seconds and writes the menu pages to `default/servermenu/`. Each server shows as `name  playing+spectators+bots/slots  map  ping  mod` in columns aligned with spaces, sorted by playing humans; the number keys connect. Start it before or while playing and leave it running; `--once` prints the list in the terminal. How servers are queried: [`docs/serverquery.md`](../docs/serverquery.md).
+Feeds the in-game server menu (`RIGHTCTRL`, `default/scripts/servermenu.cfg`): while it runs, it asks the favorite servers of the server browser for their state every `SERVERMENU_POLL` seconds (`settings.conf`, default and minimum 5) and writes the menu pages to `default/servermenu/`. Each server shows as `name  playing+spectators+bots/slots  map  ping  mod` in columns aligned with spaces, sorted by playing humans; the number keys connect. The server the game is on (its last connect in the console log) is left out. Whatever a server doesn't send in a poll (no answer at all, no `getstatus`, no split of playing humans and spectators) shows its last value for `SERVERMENU_KEEP` seconds (default 60). Start it before or while playing and leave it running; `--once` prints the list in the terminal. How servers are queried: [`docs/serverquery.md`](../docs/serverquery.md).
 
 ```sh
-python3 tools/servermenu.py [--interval 5] [--once]
+python3 tools/servermenu.py [--interval <s>] [--once]
 ```
 
 ## serverconfig.py

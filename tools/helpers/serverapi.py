@@ -44,19 +44,20 @@ TIMEOUT = 1.5
 
 
 def favorites():
-    """[address] of the profile's favorites, in the order they were added."""
+    """{address: name} of the profile's favorites, in the order they were added; the name as the server browser saw
+    it last (cut to about 32 characters, "" if never seen)."""
     try:
         con = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=1)
         try:
-            return [r[0] for r in con.execute("SELECT address FROM client_servers WHERE profile = ? ORDER BY created", (PROFILE,))]
+            return {a: n or "" for a, n in con.execute("SELECT address, name FROM client_servers WHERE profile = ? ORDER BY created", (PROFILE,))}
         finally:
             con.close()
     except sqlite3.Error:
         pass
     try:
-        return [s["address"] for s in json.loads((REPO / PROFILE / "favcache.json").read_text("latin1"))]
-    except (OSError, ValueError, KeyError, TypeError):
-        return []
+        return {s["address"]: s.get("name") or "" for s in json.loads((REPO / PROFILE / "favcache.json").read_text("latin1"))}
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        return {}
 
 
 def resolve(address):
@@ -191,16 +192,19 @@ def summarize(address, answer):
     return row
 
 
-def status(addresses, path=HISTORY):
+def status(addresses, path=HISTORY, names=None):
     """{address: row (summarize)} of the servers "host[:port]", asked at once; one that doesn't answer is offline,
-    named from the history if the game was on it before."""
+    named from the history if the game was on it before, else from `names` ({address: name}, e.g. favorites())."""
     addrs = {a: resolve(a) for a in addresses}
     answers = query([addr for addr in addrs.values() if addr])
+    retry = [addr for addr, answer in answers.items() if "status" not in answer]  # dropped by a busy server's rate limit
+    for addr, answer in query(retry, (b"getstatus",)).items() if retry else ():
+        answers[addr].update(answer)
     known = history(path)
     rows = {a: summarize(a, answers.get(addrs[a])) for a in addresses}
     for a, row in rows.items():
         if row["playing"] is None and addrs[a]:
-            row["name"] = known.get(adr_string(addrs[a]), a)
+            row["name"] = known.get(adr_string(addrs[a])) or (names or {}).get(a) or a
     return rows
 
 
@@ -327,6 +331,8 @@ def selftest():
         assert history(log) == {"192.0.2.1:27960": "^2renamed", "192.0.2.2:27960": "Tabhere"}, history(log)
         off = status(["192.0.2.1", "192.0.2.9:27960"], log)  # TEST-NET: no answer
         assert off["192.0.2.1"]["name"] == "^2renamed" and off["192.0.2.1"]["hostname"] == "" and off["192.0.2.9:27960"]["name"] == "192.0.2.9:27960"
+        off = status(["192.0.2.1", "192.0.2.9:27960", "192.0.2.8"], log, {"192.0.2.1": "^3old", "192.0.2.9:27960": "^3Browser", "192.0.2.8": ""})
+        assert [r["name"] for r in off.values()] == ["^2renamed", "^3Browser", "192.0.2.8"]  # history first, then the browser's name
     assert all(ID.fullmatch(i) for i in ("e", "xy", "e_2", "abcd")) and not any(ID.fullmatch(i) for i in ("", "local", "default", "current", "Eg", "e g", "e-g"))
     assert tag(name, "[xy]") == "^1[^7xY^1]" and tag(name, "fraghouse") == "FRAGHOUSE" and tag(name, "24maps") == "^324MAPS"
     assert tag(name, "nope") is None and tag(name, "") is None and tag("plain [x] name", "[x]") == "[x]"

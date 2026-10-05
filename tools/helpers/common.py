@@ -6,6 +6,8 @@ import time
 from helpers.settings import HOMEPATH
 
 STAMP = re.compile(r"^ *\d+ ")  # game time column of every log line
+CONNECT = re.compile(r"\S+ resolved to (\d+\.\d+\.\d+\.\d+:\d+|\[[^\]\s]+\]:\d+)")  # one word in front: not the "MOTD: resolving ..." line; IPv6 is "[ip]:port"
+LOCAL = "----- Server Initialization ----"
 
 
 # A color code as the engine reads it (src/qcommon/q_shared.h Q_IsColorString): ^ and a visible character other
@@ -106,3 +108,19 @@ def follow(find=find_log, pause=.2):
                     head = now
                 except OSError:
                     break
+
+
+def event(line):
+    """"ip:port" ("[ip]:port" for IPv6) the game connects to, "local" when it hosts a map itself, None for every other log line."""
+    text = STAMP.sub("", line).strip()
+    if text == LOCAL:
+        return "local"
+    m = CONNECT.fullmatch(text)
+    return m and m.group(1)
+
+
+def last_connect():
+    """"ip:port" of the last connect in the game's log, None if there is none or the game hosts a map since."""
+    path = find_log()
+    events = [e for e in map(event, path.read_text(errors="replace").splitlines()) if e] if path else []
+    return events[-1] if events and events[-1] != "local" else None

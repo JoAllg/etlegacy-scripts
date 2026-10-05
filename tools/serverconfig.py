@@ -39,7 +39,7 @@ import tempfile
 import time
 from pathlib import Path
 
-from helpers.common import RESERVED, STAMP, clean, find_log, follow, map_color, strip_colors, with_map_color, write_atomic
+from helpers.common import RESERVED, STAMP, clean, event, follow, last_connect, map_color, strip_colors, with_map_color, write_atomic
 from helpers.serverapi import CONFIGS, ID, ID_RULE, SERVERS, adr_string, history, hostname, identify, remember, resolve, server_tag, servers
 from helpers.settings import MENU, PROFILE, REPO
 
@@ -47,8 +47,6 @@ EXEC = "profile/serverconfigs"  # the profile link of deploy.sh in each mod fold
 VOICE = REPO / PROFILE / "scripts/vsays/servers"
 VOICE_EXEC = "profile/scripts/vsays/servers"
 PIDFILE = REPO / PROFILE / "profile.pid"  # the game's profiles/<profile>/profile.pid, through the profiles link of deploy.sh
-CONNECT = re.compile(r"\S+ resolved to (\d+\.\d+\.\d+\.\d+:\d+|\[[^\]\s]+\]:\d+)")  # one word in front: not the "MOTD: resolving ..." line; IPv6 is "[ip]:port"
-LOCAL = "----- Server Initialization ----"
 RETRY, RETRY_MAX = 2, 60  # seconds until a server that didn't answer is asked again: doubled after every try, up to the maximum
 GENERATED = {"default", "current", "current_vsay"}  # cfgs of serverconfigs/ that are no server's settings
 NAME = re.compile(r'\s*(?:(?:set[asu]?|bind|reset|toggle|cycle)\s+)?"?([^\s";]+)')
@@ -57,15 +55,6 @@ AUTOEXECS = REPO / PROFILE / "autoexecs"
 # a server can make the game print both lines: the names end up in a file name and a cfg
 MAP_LOAD = re.compile(r"LOADING\.\.\. +(?:- )?maps/([\w.+-]+)\.bsp(?: -)?", re.A)  # legacy: "LOADING...  - maps/<map>.bsp -"
 COLOR_STEP = re.compile(r"CROSSHAIR COLOR ([a-z]{1,16})")
-
-
-def event(line):
-    """"ip:port" ("[ip]:port" for IPv6) the game connects to, "local" when it hosts a map itself, None for every other log line."""
-    text = STAMP.sub("", line).strip()
-    if text == LOCAL:
-        return "local"
-    m = CONNECT.fullmatch(text)
-    return m and m.group(1)
 
 
 def stub(mapname):
@@ -211,13 +200,6 @@ def check(out=CONFIGS):
     for line in lines:
         print(line, file=sys.stderr)
     return lines
-
-
-def last_connect():
-    """"ip:port" of the last connect in the game's log, None if there is none or the game hosts a map since."""
-    path = find_log()
-    events = [e for e in map(event, path.read_text(errors="replace").splitlines()) if e] if path else []
-    return events[-1] if events and events[-1] != "local" else None
 
 
 def guess(name):
