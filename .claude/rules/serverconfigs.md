@@ -21,6 +21,6 @@ Background (detection, guard, events, precedence): `docs/serverconfigs.md`.
 - Never set state a key changes there (pointers of `state.cfg`): `F3` re-runs them and would drop the player's choice. Define what the steps of the cycle mean instead (`weaponSwitchOrder*`, `docs/serverconfigs.md` "Precedence").
 - They are exec'd through `current.cfg` only (`vstr serverCheck` / `vstr serverForce`, `default/definitions.cfg`), never directly from the chain or an autoexec.
 - A new event that can follow a server change gets `vstr serverCheck`, and a line in the table of `docs/serverconfigs.md`. Whatever re-execs the definitions ends with `vstr serverForce`.
-- One alias per id (`serverIs_<id>`) exists in game: ids come from `servers.tsv` only, never one per server address (`MAX_CVARS`, `.claude/rules/vsays.md`).
+- One alias per id (`serverIs_<id>`) exists in game: ids come from `servers.tsv` only, never one per server address (`MAX_CVARS`, `.claude/rules/vsays.md`). The per-address sound restart uses two fixed keys (`serverRestart_a`/`_b`) that the tool swaps.
 - Text from a server (its name, its tag) goes through `common.clean` before it is written into a cfg: the game executes it.
 - All server access goes through `tools/helpers/serverapi.py` (`status`, `identify`, `server_tag`, `history`); helpers used by more than one tool live in `tools/helpers/common.py`.

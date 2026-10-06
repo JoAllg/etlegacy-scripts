@@ -79,6 +79,7 @@ At another FPS the time waits are wrong by the factor 125 / FPS: at 76 FPS the g
 - 2048 cvars including every alias (`MAX_CVARS`, `src/qcommon/cvar.c`): nitmod with this profile uses about 1900. Pages with many entries bind their keys directly instead of defining aliases (server voice chat pages).
 - 1024 characters per command line (`MAX_CMD_LINE`), no nested quotes: an alias cannot contain a quoted string, so an action with several commands needs its own alias.
 - `reset <alias>` returns to the first value of the game session, not to the value in the cfg ([Config scripting](scripting.md), `reset`).
+- Loaded sounds stay cached by file name across servers until `snd_restart` (`vid_restart` keeps them): vsay packs of different servers share names, so the last server's voices play on the next one. `tools/serverconfig.py` runs `snd_restart` once per server change ([Server configs](serverconfigs.md#sound-restart)); `F2` does it by hand.
 - A server can enforce cvar values; a script does not notice it. `F3` restores the definitions afterwards.
 
 ## Stock shield hides server sounds and menus on unpure servers
