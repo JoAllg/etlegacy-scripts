@@ -14,6 +14,8 @@ default/serverconfigs/*
 default/profile.pid
 default/etconfig.cfg
 default/maprecords.dat
+default/hud_backup*.dat
+default/huds/*backup*.dat
 
 # Local files
 Others/

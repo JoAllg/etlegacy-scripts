@@ -4,7 +4,7 @@
 Scripts change the popupmessages component in game with editcomponent (echo menus, default/mods/legacy/mod_general.cfg)
 and must put it back where the HUD editor left it. The HUD file is personal, so the matching aliases go into a
 generated block of user.cfg, which runs after mod_general.cfg and overrides its stock HUD fallback:
-- popupmessagesNormal: y, w, h, feedStayTime and feedFadeTime of the HUD file
+- popupmessagesNormal: y, w, h, feedStayTime and feedFadeTime of the HUD file (also as cg_popupStayTime/cg_popupFadeTime, the times of 2.83 cgames)
 - popupmessagesMenu:   y moved so that the bottom edge stays where the HUD file has it
 The commands themselves are the ones of mod_general.cfg, only these numbers are replaced.
 
@@ -96,14 +96,15 @@ def template(text, alias):
 def put(command, **fields):
     """The editcomponent command with the numbers of these fields replaced."""
     for field, number in fields.items():
-        command, count = re.subn(rf"\b{field} \S+", f"{field} {number:g}", command)
+        command, count = re.subn(rf"\b{field} [^\s;]+", f"{field} {number:g}", command)
         if count != 1:
             raise Skip(f'"{field} <number>" not found once in: {command}')
     return command
 
 
 def block(templates, y, w, h, stay, fade):
-    normal = put(template(templates, "popupmessagesNormal"), y=y, w=w, h=h, feedStayTime=stay, feedFadeTime=fade)
+    normal = put(template(templates, "popupmessagesNormal"), y=y, w=w, h=h, feedStayTime=stay, feedFadeTime=fade,
+                 cg_popupStayTime=stay, cg_popupFadeTime=fade)
     menu = template(templates, "popupmessagesMenu")
     menu = put(menu, y=y + h - float(re.search(r"\bh (\S+)", menu)[1]))  # lines are drawn upward from the bottom edge
     return "\n".join((BEGIN, f'set popupmessagesNormal "{normal}"', f'set popupmessagesMenu "{menu}"', END))
@@ -170,10 +171,10 @@ def selftest():
     assert alt_hud('seta cg_altHud "mine"  // note\n', 'seta cg_altHud "other"') == "mine"
     assert alt_hud('// seta cg_altHud "off"\n', "set cg_altHud 2\n") == "2" and alt_hud("") == "default"
 
-    templates = ('set popupmessagesNormal "editcomponent popupmessages y 1 w 2 h 3 feedStayTime 4 feedFadeTime 5"  // note\n'
+    templates = ('set popupmessagesNormal "editcomponent popupmessages y 1 w 2 h 3 feedStayTime 4 feedFadeTime 5; cg_popupStayTime 4; cg_popupFadeTime 5"  // note\n'
                  'set popupmessagesMenu "editcomponent popupmessages y 1 w 600 h 240 feedStayTime 9 feedFadeTime 8"\n')
     new = block(templates, 290.5, 300, 80, 900, 2500)
-    assert 'popupmessagesNormal "editcomponent popupmessages y 290.5 w 300 h 80 feedStayTime 900 feedFadeTime 2500"' in new
+    assert 'popupmessagesNormal "editcomponent popupmessages y 290.5 w 300 h 80 feedStayTime 900 feedFadeTime 2500; cg_popupStayTime 900; cg_popupFadeTime 2500"' in new
     assert 'popupmessagesMenu "editcomponent popupmessages y 130.5 w 600 h 240 feedStayTime 9 feedFadeTime 8"' in new  # bottom edge 370.5
     try:
         block("set popupmessagesNormal \"editcomponent popupmessages w 2\"\n", 1, 2, 3, 4, 5)
