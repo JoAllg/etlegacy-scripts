@@ -10,6 +10,8 @@ in etmain/ (they would override it in every mod), and pk3s with a shader file th
 stock one with other content or breaks the shader parser (see shader_problem).
 Several pk3s with the same map: the newest wins, originals over server re-packs.
 Rerunnable: all symlinks from etmain/ into dlcache/ are replaced.
+A pure server mounts every pk3 of etmain/ and dlcache/, each keeps a file open: if the pk3s after linking
+come near the open files soft limit ("Invalid game folder", docs/limitations.md), it asks before linking.
 
 Usage: tools/link_maps.py
        tools/link_maps.py --selftest
@@ -17,27 +19,16 @@ Usage: tools/link_maps.py
 import argparse
 import io
 import re
+import resource
 import sys
 import zipfile
 import zlib
 from pathlib import Path
 
-from helpers.settings import BASEPATH, HOMEPATH
+from helpers.common import DLCACHE, ETMAIN, LEGACY_PAKS, STOCK_PAKS, maps, rank
+from helpers.settings import HOMEPATH
 
-ETMAIN = HOMEPATH / "etmain"
-DLCACHE = ETMAIN / "dlcache"
-STOCK_PAKS = BASEPATH / "etmain"
-LEGACY_PAKS = BASEPATH / "legacy"
 UNREADABLE = (zipfile.BadZipFile, NotImplementedError, RuntimeError, OSError, zlib.error)  # broken, unknown compression, encrypted
-
-
-def maps(pk3):
-    """{lowercase map name: bsp ZipInfo}, None if unreadable. Only maps/<name>.bsp: the engine loads no bsp of a subfolder."""
-    try:
-        with zipfile.ZipFile(pk3) as z:
-            return {i.filename[5:-4].lower(): i for i in z.infolist() if re.fullmatch(r"maps/[^/]+\.bsp", i.filename, re.I)}
-    except (zipfile.BadZipFile, OSError):
-        return None
 
 
 def tokens(text):
@@ -73,22 +64,17 @@ def shader_problem(pk3, stock_shaders):
     return None
 
 
-# Server re-packs of a map (own loading screens, sounds); "~"/"`" names sort last to override others
-SERVER_COPY = ("_cslhd", "_leo")
-
-
-def rank(pk3, compiled):
-    """Newest compiled bsp first; same bsp: a "fix" in the name, the original over a server
-    re-pack, then the newest file in the pk3 (fixed versions usually only change scripts or textures)."""
-    name = pk3.stem.lower()
-    server_copy = name.endswith(SERVER_COPY) or name[:1] in "~`"
-    with zipfile.ZipFile(pk3) as z:
-        newest = max(i.date_time for i in z.infolist())
-    return compiled, "fix" in name, not server_copy, newest
-
-
 def dlcache_link(path):
     return path.is_symlink() and path.readlink().parts[:1] == ("dlcache",)
+OTHER_FILES = 100  # ponytail: guessed headroom for the game's other open files (sounds, logs, libraries); the 2026-10-10 failure had 990 pk3s at 1024
+
+
+def open_files_warning(pk3s, limit):
+    """Warning text if this many mounted pk3s leave too few of the open files soft limit, None if they fit."""
+    if pk3s + OTHER_FILES <= limit:
+        return None
+    return (f"warning: a pure server would mount {pk3s} pk3s, the open files soft limit is {limit}: joining fails with "
+            f"\"Invalid game folder\" (docs/limitations.md). Remove pk3s from etmain/dlcache/ or raise the limit (ulimit -n).")
 
 
 def main():
@@ -132,6 +118,20 @@ def main():
         if name not in best or r > best[name][0]:
             best[name] = (r, pk3)
 
+    # the soft limit of this process: the game started from the same session gets the same one
+    mounted = [p for d in (ETMAIN, STOCK_PAKS, HOMEPATH / "legacy", LEGACY_PAKS) for p in d.glob("*.pk3") if not dlcache_link(p)]
+    warning = open_files_warning(len(mounted) + len({pk3 for _, pk3 in best.values()}) + len(list(DLCACHE.glob("*.pk3"))),
+                                 resource.getrlimit(resource.RLIMIT_NOFILE)[0])
+    if warning:
+        print(warning)
+        try:
+            answer = input("Link anyway? [y/N] ")
+        except EOFError:  # no terminal: nothing changes
+            answer = ""
+        if answer.strip().lower() != "y":
+            print("links left as they are")
+            return
+
     # the old links go only now: an error above leaves them as they are
     for link in ETMAIN.glob("*.pk3"):
         if dlcache_link(link):
@@ -170,6 +170,7 @@ def selftest():
     assert shader_problem(pk3(common=b"white\r\n{\r\n}\r\n"), stock) is None  # stock file, same content
     assert shader_problem(pk3(common=b"white\n{\nmap x\n}\n"), stock) == "changes stock scripts/common.shader"
     assert shader_problem(pk3(x=b"Made by me\ntextures/a\n{\n}\n"), stock).startswith("breaks shader parsing in scripts/x.shader at 'Made'")
+    assert open_files_warning(900, 1024) is None and "990 pk3s" in open_files_warning(990, 1024)
     print("selftest ok")
 
 

@@ -1,13 +1,18 @@
-"""Helpers shared by the tools: the game's console log, color codes, cfg-safe text, file writes."""
+"""Helpers shared by the tools: the game's console log, color codes, cfg-safe text, file writes, map pk3s."""
 import os
 import re
 import time
+import zipfile
 
-from helpers.settings import HOMEPATH
+from helpers.settings import BASEPATH, HOMEPATH
 
 STAMP = re.compile(r"^ *\d+ ")  # game time column of every log line
 CONNECT = re.compile(r"\S+ resolved to (\d+\.\d+\.\d+\.\d+:\d+|\[[^\]\s]+\]:\d+)")  # one word in front: not the "MOTD: resolving ..." line; IPv6 is "[ip]:port"
 LOCAL = "----- Server Initialization ----"
+ETMAIN = HOMEPATH / "etmain"
+DLCACHE = ETMAIN / "dlcache"
+STOCK_PAKS = BASEPATH / "etmain"
+LEGACY_PAKS = BASEPATH / "legacy"
 
 
 # A color code as the engine reads it (src/qcommon/q_shared.h Q_IsColorString): ^ and a visible character other
@@ -124,3 +129,26 @@ def last_connect():
     path = find_log()
     events = [e for e in map(event, path.read_text(errors="replace").splitlines()) if e] if path else []
     return events[-1] if events and events[-1] != "local" else None
+
+
+def maps(pk3):
+    """{lowercase map name: bsp ZipInfo}, None if unreadable. Only maps/<name>.bsp: the engine loads no bsp of a subfolder."""
+    try:
+        with zipfile.ZipFile(pk3) as z:
+            return {i.filename[5:-4].lower(): i for i in z.infolist() if re.fullmatch(r"maps/[^/]+\.bsp", i.filename, re.I)}
+    except (zipfile.BadZipFile, OSError):
+        return None
+
+
+# Server re-packs of a map (own loading screens, sounds); "~"/"`" names sort last to override others
+SERVER_COPY = ("_cslhd", "_leo")
+
+
+def rank(pk3, compiled):
+    """Newest compiled bsp first; same bsp: a "fix" in the name, the original over a server
+    re-pack, then the newest file in the pk3 (fixed versions usually only change scripts or textures)."""
+    name = pk3.stem.lower()
+    server_copy = name.endswith(SERVER_COPY) or name[:1] in "~`"
+    with zipfile.ZipFile(pk3) as z:
+        newest = max(i.date_time for i in z.infolist())
+    return compiled, "fix" in name, not server_copy, newest

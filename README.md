@@ -95,7 +95,6 @@ Starts the game and handles everything around it. It needs a complete `settings.
 
 Before the game starts:
 
-- Downloaded maps become available for local hosting (`tools/link_maps.py`).
 - New maps get their spawn menu, the map autoexec `autoexec_<map>.cfg` (`tools/spawnpoints/spawnpoints.py`).
 - Links and settings are refreshed without questions, each taking its safe default (`deploy.sh`).
 

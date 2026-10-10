@@ -39,8 +39,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from helpers import common  # noqa: E402
 from helpers.settings import VSAY  # noqa: E402
-from helpers.common import RESERVED, clean, map_color, strip_colors, with_map_color, write_atomic  # noqa: E402
-from link_maps import DLCACHE, ETMAIN, LEGACY_PAKS, STOCK_PAKS, maps, rank  # noqa: E402
+from helpers.common import (DLCACHE, ETMAIN, LEGACY_PAKS, RESERVED, STOCK_PAKS, clean, map_color, maps, rank,  # noqa: E402
+                            strip_colors, with_map_color, write_atomic)
 from helpers.settings import MENU, PROFILE as PROFILE_NAME, REPO  # noqa: E402
 
 PROFILE = REPO / PROFILE_NAME

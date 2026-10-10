@@ -1,6 +1,6 @@
 #!/bin/bash
 # Starts the game (64-bit) with everything around it; needs a complete settings.conf (deploy.sh writes it):
-# 1. tools/link_maps.py (downloaded maps for local hosting), tools/spawnpoints/spawnpoints.py (map autoexecs of new maps)
+# 1. tools/spawnpoints/spawnpoints.py (map autoexecs of new maps)
 # 2. deploy.sh --unattended (links, settings.conf): asks nothing, every question takes its safe default;
 #    after the generator, so it links the autoexecs of new maps on the same start
 # 3. tools/servermenu.py, tools/serverconfig.py and tools/keymap/live.py in the background, stopped when the game exits; only their errors are shown
@@ -17,9 +17,6 @@ if ! PYTHONPATH="$REPO/tools" python3 -c 'import helpers.settings'; then
 	exit 1
 fi
 
-# without the list of skipped pk3s: it is the same on every start
-python3 "$REPO/tools/link_maps.py" | grep -v '^skip ('
-[ "${PIPESTATUS[0]}" = 0 ] || echo "⚠️  link_maps.py failed, the game starts without new map links"
 python3 "$REPO/tools/spawnpoints/spawnpoints.py" || echo "⚠️  spawnpoints.py failed"
 
 if ! out=$("$REPO/deploy.sh" --unattended 2>&1); then

@@ -94,17 +94,17 @@ The nitmod stock shield (`tools/stock_shield/README.md`) cannot tell a local gam
 
 `/sv_pure` in the console shows the mode of the current server. Workaround on an unpure server with wanted replacements: move the shield pk3 out of `<fs_homepath>/nitmod/` and rebuild it afterwards (`python3 tools/stock_shield/stock_shield.py`). Not tested in game.
 
-## Local hosting: a second map runs out of open files
+## Pure servers run out of open files
 
-`/map <map>` while on a local game stops with `Invalid game folder`; the console log shows the cause just before: `Sys_FOpen: open('.../etmain/pak0.pk3', 0) failed: errno 24` (too many open files). Seen in a legacy log on 2026-10-10.
+Joining a pure server (also right after the game start) or `/map <map>` while on a local game stops with `Invalid game folder`; the console log shows the cause just before: `Sys_FOpen: open('.../etmain/pak0.pk3', 0) failed: errno 24` (too many open files). Seen in legacy logs on 2026-10-10.
 
-- The local server is pure (`sv_pure 1`, the default). Its gamestate makes the client set `fs_containerMount 1` (`src/client/cl_parse.c` `CL_ParseGamestate`).
-- A map load on the local host keeps the client connected (`src/client/cl_main.c` `CL_MapLoading`), so the pure list stays set, and the file system restart of the new map mounts every pk3 in `etmain/dlcache/` (`src/qcommon/files.c` `FS_AddContainerDirectory`). The first local map has no such list: leaving the remote server cleared it (`CL_Disconnect` → `FS_ClearPureServerPacks`).
-- Every mounted pk3 keeps a file open. The dlcache pk3s plus the ones in `etmain/` (most of them links of `tools/link_maps.py` to the same dlcache files) came to 990, and the desktop session's soft limit is 1024 open files per process (`systemctl --user show -p DefaultLimitNOFILESoft`).
+- On a pure server (`sv_pure 1`, the default, the local server too) the gamestate makes the client set `fs_containerMount 1` (`src/client/cl_parse.c` `CL_ParseGamestate`), and the file system restart mounts every pk3 in `etmain/dlcache/` (`src/qcommon/files.c` `FS_AddContainerDirectory`).
+- A map load on the local host keeps the client connected (`src/client/cl_main.c` `CL_MapLoading`), so the pure list stays set for the second map. The first local map has no such list: leaving the remote server cleared it (`CL_Disconnect` → `FS_ClearPureServerPacks`).
+- Every mounted pk3 keeps a file open: the dlcache pk3s plus the ones in `etmain/` (most of them links of `tools/link_maps.py` to the same dlcache files). Above about 1000 they pass the desktop session's soft limit of 1024 open files per process (`systemctl --user show -p DefaultLimitNOFILESoft`).
 
-Workaround: `/disconnect` before `/map`. The LOCALHOST entry of the server menu does that (`disconnect; map goldrush`, `tools/helpers/menupages.py`; not tested in game). Remote pure servers mount the whole dlcache as well, so they can hit the same limit as downloads accumulate.
+Workaround: fewer pk3s in `etmain/` and `etmain/dlcache/`. `/disconnect` before `/map` avoids the mount for a second local map; the LOCALHOST entry of the server menu does that (`disconnect; map goldrush`, `tools/helpers/menupages.py`; not tested in game).
 
-Long term: `tools/link_maps.py` has to stop linking every downloaded map into `etmain/` and link only a chosen subset (the maps to host locally), so the mounted pk3s stay well below the limit.
+`tools/link_maps.py` warns and asks before linking when the count comes near the limit. Long term: it links only a chosen subset (the maps to host locally) into `etmain/`, so the mounted pk3s stay well below the limit.
 
 ## Local hosting in nitmod
 
