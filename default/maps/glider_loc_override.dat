@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Glider 3                             //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2007                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 20 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 5789 11454 80 "Allied Command Post"
@@ -46,7 +46,7 @@
 10338 7237 -287 "East Hills"
 11410 8031 -9 @
 10129 6166 -120 @
-1855 3389 587 "Flying With Glider"
+1855 3389 587 "Flying with Glider"
 1856 5359 614 @
 1870 7475 614 @
 1927 10497 614 @

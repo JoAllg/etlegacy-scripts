@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Nemorosus RC1                        //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -2023 -2436 -29 "Allied Drop Point"
@@ -46,7 +46,7 @@
 -1502 263 0 @
 -1858 999 0 @
 -1355 38 0 @
--167 1547 0 "Outside The Bunker"
+-167 1547 0 "Outside the Bunker"
 -20 1037 0 @
 -885 1437 0 @
 -304 2016 0 @

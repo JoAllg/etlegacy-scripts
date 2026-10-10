@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Sottevast B2                         //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    10-12-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 23 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -2335 998 24 "Allied Hut"
@@ -151,7 +151,7 @@
 3468 -1152 -407 @
 -1876 -687 48 "South Bridge"
 -2337 -260 48 @
-352 -1467 -443 "Stairs To Warehouse"
+352 -1467 -443 "Stairs to Warehouse"
 3735 -3139 -591 "Targeting System"
 -41 2109 16 "Truck"
 3059 -995 -243 "Vent"

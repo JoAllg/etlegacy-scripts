@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Beach Invasion                       //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 20 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 19 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 3105 2745 576 "Ammo Cabinet"
@@ -125,7 +125,7 @@
 3635 3038 896 @
 3903 3081 736 @
 3611 3012 576 @
--2391 -2328 510 "Nothing To See Here"
+-2391 -2328 510 "Nothing to See Here"
 -1816 -2230 376 @
 -1109 -1616 573 @
 -1557 -1930 426 @

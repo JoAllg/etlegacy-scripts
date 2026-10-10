@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       AxS Assault B3                       //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -867 -1079 1465 "Allied Area"
@@ -98,7 +98,7 @@
 1176 -769 1532 "Outside Allied Spawn"
 1607 -753 1559 @
 1011 -861 1562 @
--6776 -1153 1184 "Outside The Depot"
+-6776 -1153 1184 "Outside the Depot"
 -6763 -528 1184 @
 -6454 -715 1200 @
 -6821 -62 1184 @

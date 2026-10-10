@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Oasi                                 //
 // Locations by   o-0._.0-o                            //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 22 //
-// Last edited    04-04-2024                           //
+// Last edited    10-10-2026                           //
 /////////////////////////////////////////////////////////
 -5080 -3480 8 "^3Allied Base"
 -4960 -2496 8 @
@@ -12,7 +13,7 @@
 -2964 1036 32 "^3Old City Living Room"
 -2880 -712 24 "^3Old City Shop"
 -2576 -256 24 @
--2402 -1343 24 "^3Behind The Shop"
+-2402 -1343 24 "^3Behind the Shop"
 -2619 -813 390 "^3Old City Shop Roof"
 -3096 112 8 "^3Old City"
 -3616 -616 8 @
@@ -107,7 +108,7 @@
 854 -4454 167 @
 558 -4869 167 @
 1413 -4857 167 @
--604 -4885 200 "^3Temple keylock"
+-604 -4885 200 "^3Temple Keylock"
 -785 -5398 168 "^3Oasi Temple"
 -768 -4309 168 @
 -46 -4810 168 @

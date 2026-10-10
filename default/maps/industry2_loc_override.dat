@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Industry 2                           //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 2076 -3205 232 "Allied 2nd Spawn"
@@ -53,7 +53,7 @@
 -75 776 98 @
 -1058 -803 97 @
 844 -3036 113 "City Ruins MG"
--991 -4039 267 "Climbing The Tree"
+-991 -4039 267 "Climbing the Tree"
 -986 -4050 498 @
 285 1785 88 "Command Post"
 273 2007 88 "Command Post Alley"

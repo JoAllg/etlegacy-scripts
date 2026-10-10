@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Navarone                             //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 22 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -3384 -3398 160 "Allied Boat Spawn"
@@ -66,7 +66,7 @@
 2342 1283 622 @
 -3051 1743 968 "Guns of Navarone"
 -2571 2199 970 @
--2087 1720 968 "Ladder To The Guns"
+-2087 1720 968 "Ladder to the Guns"
 -2091 1701 352 @
 -1465 719 256 "Lighthouse"
 -2155 870 256 @
@@ -121,7 +121,7 @@
 -201 -1059 864 "Supply Cabinets"
 -2570 2614 968 @
 1404 -1110 672 "Truck MG42"
-1535 -30 424 "Under The Bridge"
+1535 -30 424 "Under the Bridge"
 1523 -506 424 @
 1470 -961 424 @
 -1142 2975 600 "Ventilation Shaft"

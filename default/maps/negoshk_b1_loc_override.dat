@@ -1,17 +1,17 @@
 /////////////////////////////////////////////////////////
 // Map name       Negoshk B1                           //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 20 //
-// Last edited    12-05-2007                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 18 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 997 -3278 64 "Allied Spawn"
 564 -2520 64 @
 991 -2707 64 @
--3264 -544 64 "Ammo Depot no.1"
--121 -705 64 "Ammo Depot no.2"
--1093 2367 64 "Ammo Depot no.3"
+-3264 -544 64 "Ammo Depot No.1"
+-121 -705 64 "Ammo Depot No.2"
+-1093 2367 64 "Ammo Depot No.3"
 2625 413 64 "Castle Depot"
 3258 436 64 @
 2634 1461 64 @

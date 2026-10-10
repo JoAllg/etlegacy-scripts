@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Subway                               //
 // Locations by   ausman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    antman, Taranis                      //
+// Recommended    cg_locations, cg_locationMaxChars 23 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -3054 825 1376 "Command Post"
@@ -41,4 +41,4 @@
 -6576 -2824 584 @
 648 -2952 584 @
 96 3672 784 @
--5840 2968 784 "Western station"
+-5840 2968 784 "Western Station"

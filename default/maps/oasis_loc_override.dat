@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Siwa Oasis                           //
 // Locations by   Rain                                 //
-// Modified by    antman                               //
+// Modified by    antman, Taranis                      //
 // Recommended    cg_locations, cg_locationMaxChars 26 //
-// Last edited    14-10-2007                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 2439 4801 -215 "^1Allied Command Post"
@@ -60,7 +60,7 @@
 8964 4341 -423 "^3Gun Courtyard"
 9038 3763 -418 @
 8518 4676 -423 @
-4908 7519 -78 "^3Jumping The Wall"
+4908 7519 -78 "^3Jumping the Wall"
 2760 4620 -483 "^3Lower Excavation Exit"
 3300 5165 -491 @
 2423 5074 -479 @

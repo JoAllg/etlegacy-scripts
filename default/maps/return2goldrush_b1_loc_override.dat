@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Return 2 Goldrush                    //
 // Locations by   Rain                                 //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    12-06-2006                           //
+// Modified by    antman, Taranis                      //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 3874 2157 -285 "Allied Spawn"
@@ -109,7 +109,7 @@
 -353 451 192 "Transmitter Alley"
 -715 291 256 @
 3039 2283 -327 "Truck"
-1823 61 -351 "Under The Bridge"
+1823 61 -351 "Under the Bridge"
 1124 288 224 "Upper Ladder Room"
 1371 444 227 @
 1349 2989 256 "Upper North Courtyard"

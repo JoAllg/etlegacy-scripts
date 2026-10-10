@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Stonehenge                           //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 20 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 18 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 1379 -1528 295 "Allied Cabinets"
@@ -18,7 +18,7 @@
 -253 2971 680 @
 -489 3006 672 @
 -32 382 356 "Flag"
--1111 327 360 "Outside The Circle"
+-1111 327 360 "Outside the Circle"
 -1125 -410 382 @
 -753 944 294 @
 -424 1132 283 @

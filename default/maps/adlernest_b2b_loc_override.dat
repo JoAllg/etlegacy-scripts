@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Adlernest B2                         //
 // Locations by   Dersaidin                            //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 20 //
-// Last edited    28-05-2006                           //
+// Modified by    antman, Taranis                      //
+// Recommended    cg_locations, cg_locationMaxChars 16 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 12 -642 -121 "Abyss"
@@ -16,7 +16,7 @@
 -1479 7 62 @
 -1071 554 152 @
 -994 98 -273 @
--1155 -1343 -55 "Axis spawn"
+-1155 -1343 -55 "Axis Spawn"
 -1060 -1650 -55 @
 -1604 -1647 -55 @
 -1628 -1106 -55 @
@@ -72,7 +72,7 @@
 455 -3244 -111 @
 218 -2870 -170 @
 241 -2636 -273 @
-1655 -3239 -83 "Main road"
+1655 -3239 -83 "Main Road"
 1026 29 -55 "Side"
 1013 -147 -55 @
 101 852 112 "Side Balcony"

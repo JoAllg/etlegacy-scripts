@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Frost Competition Edition B4         //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    24-03-2007                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 23 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 4418 -1490 465 "Allied Spawn #1"
@@ -85,7 +85,7 @@
 1596 885 715 @
 2101 503 865 @
 3135 802 1134 @
-4409 1616 512 "North Path To Castle"
+4409 1616 512 "North Path to Castle"
 4990 1799 423 @
 3388 1736 586 @
 2292 1517 666 @
@@ -103,7 +103,7 @@
 -918 445 1134 @
 -862 454 976 @
 -514 524 726 "North Tower Wall"
--1882 2043 736 "Nothing To See Here!"
+-1882 2043 736 "Nothing to See Here!"
 -1148 -770 976 "Outer Courtyard"
 -1146 -1070 976 @
 -1243 -1273 992 @
@@ -129,7 +129,7 @@
 -2224 -483 992 @
 -2171 -117 992 @
 -2090 -1127 1000 @
--604 132 743 "Outside The Castle"
+-604 132 743 "Outside the Castle"
 -529 400 719 @
 -589 762 759 @
 -1266 1201 752 @
@@ -173,7 +173,7 @@
 -3980 -949 944 @
 -4340 -953 1104 @
 -4002 -905 1104 @
-2366 -148 775 "Road To Bridge"
+2366 -148 775 "Road to Bridge"
 3009 -148 785 @
 3676 -148 783 @
 4330 -148 776 @
@@ -185,7 +185,7 @@
 3801 -1481 928 @
 2217 -830 841 @
 3119 -990 985 @
-4467 -766 537 "South Path To Castle"
+4467 -766 537 "South Path to Castle"
 4325 -1847 523 @
 3469 -2182 612 @
 2516 -1753 691 @
@@ -208,7 +208,7 @@
 -4488 70 800 @
 -4918 -137 880 "Storage Stairs"
 4598 -162 768 "Truck Escape"
-62 -729 61 "Under The Bridge"
+62 -729 61 "Under the Bridge"
 23 -193 138 @
 339 642 83 @
 1199 530 53 @

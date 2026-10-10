@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Frost Summer Edition B3              //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 26 //
-// Last edited    14-04-2009                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 762 -158 1088 "^1Command Post"
@@ -121,7 +121,7 @@
 -2224 -483 992 @
 -2171 -117 992 @
 -2090 -1127 1000 @
--604 132 743 "^3Outside The Castle"
+-604 132 743 "^3Outside the Castle"
 -529 400 719 @
 -589 762 759 @
 -1266 1201 752 @
@@ -138,7 +138,7 @@
 -512 -1576 541 @
 -816 764 737 @
 -1406 -1567 728 @
-2824 -1502 886 "^3Outside The Village"
+2824 -1502 886 "^3Outside the Village"
 1945 -616 767 @
 2289 -148 775 @
 1879 319 748 @
@@ -184,7 +184,7 @@
 -831 -690 976 @
 -5392 -973 976 "^3South-West Tower"
 -5285 -975 1152 @
-62 -729 61 "^3Under The Bridge"
+62 -729 61 "^3Under the Bridge"
 23 -193 138 @
 339 642 83 @
 1199 530 53 @

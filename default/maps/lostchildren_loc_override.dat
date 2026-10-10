@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       City of Lost Children                //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 167 2091 96 "Allied CP Corridors"
@@ -150,7 +150,7 @@
 -641 -1125 257 "Second Barrier Overlook"
 -1220 185 192 "Second Boat Access"
 -1086 -689 -79 "Warplans"
-2016 1185 74 "You Are Going To Die"
+2016 1185 74 "You Are Going to Die"
 2276 1182 74 @
 2258 606 74 @
 1767 600 74 @

@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       No Mercy 1.0                         //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 23 //
-// Last edited    09-10-2009                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -1340 -14 234 "^1Command Post"
@@ -68,12 +68,12 @@
 -1248 -215 339 @
 -1664 -215 353 @
 -1664 46 359 @
--1949 -850 125 "^3Do Not Step On Mines"
+-1949 -850 125 "^3Do Not Step on Mines"
 1395 670 128 "^3East Tunnel"
 1635 -64 192 @
 -21 -320 128 "^3Main Gate"
 -1849 -584 152 "^3Minefield"
--194 1881 98 "^3Nothing To See Here!"
+-194 1881 98 "^3Nothing to See Here!"
 877 1759 63 "^3Ocean"
 653 1743 64 @
 589 1484 61 @

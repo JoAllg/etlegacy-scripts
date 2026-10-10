@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Battle of Wolken 4                   //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    23-07-2007                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 2851 -2615 576 "Barbwire Guard Post"
@@ -74,7 +74,7 @@
 777 383 416 "Main Entrance"
 671 1085 704 "Mortar Launcher"
 566 712 396 "Outside Garrison"
-2790 1151 416 "Path To Plane"
+2790 1151 416 "Path to Plane"
 3330 1574 416 @
 231 -1710 418 "Pier"
 346 -1273 422 @

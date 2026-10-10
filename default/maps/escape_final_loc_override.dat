@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Escape                               //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -3318 -1378 -176 "Allied Barrack"
@@ -169,7 +169,7 @@
 -1705 -1740 -210 @
 -2506 -2636 -200 @
 -2718 -3373 -229 @
-3286 -2957 -217 "Outside The Lookout"
+3286 -2957 -217 "Outside the Lookout"
 3279 -3244 -200 @
 3261 -3557 -146 @
 2668 -3191 -186 @

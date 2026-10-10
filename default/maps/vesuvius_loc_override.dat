@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Vesuvius                             //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-06-2007                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 20 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 1311 1247 1764 "Axis Team Door"
@@ -89,7 +89,7 @@
 -3395 3900 2254 @
 -3395 3900 2058 "North Valley Ladder"
 -3395 3900 1879 @
-289 6180 2137 "Outside The Castle"
+289 6180 2137 "Outside the Castle"
 1031 5237 2196 @
 -1221 6324 2388 @
 -469 6385 2308 @

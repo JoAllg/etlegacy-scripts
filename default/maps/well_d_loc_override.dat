@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////
 // Map name       The Well Of Youth                    //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 20 //
-// Last edited    25-12-2007                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
--8277 868 1008 "^1The Well Of Youth"
+-8277 868 1008 "^1The Well of Youth"
 -5746 -873 1160 "^3Ammo Supply"
 -6368 560 1552 "^3Bridge"
 -6364 1149 1552 @

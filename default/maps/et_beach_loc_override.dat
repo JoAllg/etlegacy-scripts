@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       ET Beach Invasion                    //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 21 //
-// Last edited    15-10-2007                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 2705 1274 960 "^1Command Post"
@@ -127,7 +127,7 @@
 3635 3038 896 @
 3903 3081 736 @
 3611 3012 576 @
--2391 -2328 510 "^3Nothing To See Here"
+-2391 -2328 510 "^3Nothing to See Here"
 -1816 -2230 376 @
 -1109 -1616 573 @
 -1557 -1930 426 @

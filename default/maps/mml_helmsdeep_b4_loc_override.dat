@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       MML Helmsdeep                        //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 1562 -1090 704 "Allied F.Ops Patrol Point"
@@ -312,7 +312,7 @@
 1541 -1152 384 "Tower-Hall Corridor"
 1393 -1564 384 @
 676 -2018 192 @
-16 1376 -1182 "Under The Fort Ramp"
+16 1376 -1182 "Under the Fort Ramp"
 1270 715 -1134 "Valley"
 1913 1201 -1203 @
 2290 1152 -1197 @

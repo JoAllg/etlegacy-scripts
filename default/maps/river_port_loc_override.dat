@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       River Port                           //
 // Locations by   extracted from river_port_b1.pk3     //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 26 //
-// Last edited                                         //
+// Last edited    10-10-2026                           //
 /////////////////////////////////////////////////////////
 -3395 -4355 512 "1st Dock"
 -3321 -3735 512 "2nd Dock"
@@ -19,7 +20,7 @@
 3279 961 604 @
 -117 -2250 442 "Capuzzo Post"
 -1608 -1788 480 "Church"
--1955 -1446 480 "Church Back door"
+-1955 -1446 480 "Church Back Door"
 -2479 -1534 452 "Church Backyard"
 -1326 -2290 440 "Church Drive"
 -1152 -1786 480 "Church Front Door"
@@ -54,10 +55,10 @@
 -3029 -2778 512 @
 -3042 -3275 512 @
 -3039 -1984 512 @
--2634 -1247 512 "Dock Walkway entrance"
+-2634 -1247 512 "Dock Walkway Entrance"
 1883 -2336 512 "East River Walkway"
 1893 -3846 512 @
-4175 1246 376 "Farm road"
+4175 1246 376 "Farm Road"
 4159 2078 376 @
 4131 2717 376 @
 108 -3084 448 "Foot Bridge Exit"
@@ -80,11 +81,11 @@
 -493 -3302 440 @
 -483 -2922 440 @
 -819 -5201 441 "Headquarter West Side"
-4394 -1026 408 "House Near AT"
+4394 -1026 408 "House near AT"
 -2570 -5824 576 "Mansion"
 -2543 -6196 576 @
 -2381 -5261 576 "Mansion Back Door"
--3915 -5983 546 "Mansion Back way"
+-3915 -5983 546 "Mansion Back Way"
 -3764 -6471 553 @
 -3317 -6589 549 @
 -2840 -6622 544 @

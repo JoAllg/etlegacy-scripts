@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Praetoria:Mission 1 (Bunker Hill)    //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 27 //
-// Last edited    10-08-2009                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 25 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -5118 6926 32 "^1Allied Command Post"
@@ -189,7 +189,7 @@
 19 3819 192 @
 7 5767 400 @
 -18 5196 363 @
--5484 6212 -49 "^3Outside The Church"
+-5484 6212 -49 "^3Outside the Church"
 -5487 6987 -47 @
 -5613 6891 -74 @
 -4744 6980 -40 @
@@ -199,7 +199,7 @@
 -4747 6221 -82 @
 -4529 5706 -127 @
 -5093 5462 -79 @
--5987 3905 -111 "^3Outside The Garrison"
+-5987 3905 -111 "^3Outside the Garrison"
 -6573 3900 -111 @
 -5979 5373 -79 @
 -6108 5617 -89 @
@@ -210,7 +210,7 @@
 -5541 4203 -84 @
 -5360 4828 -79 @
 -5365 5366 -79 @
--6071 2994 -95 "^3Outside The Storage"
+-6071 2994 -95 "^3Outside the Storage"
 -6547 2967 -39 @
 -6281 2744 -70 @
 -5743 2693 -118 @

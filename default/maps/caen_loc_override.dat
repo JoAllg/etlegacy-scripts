@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Caen                                 //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 21 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -1075 5966 606 "Allied Spawn"
@@ -83,7 +83,7 @@
 1252 2983 363 @
 -2057 -458 257 "Road Barriers"
 -2029 -69 279 @
--2129 341 287 "Road To Town"
+-2129 341 287 "Road to Town"
 -2137 871 294 @
 -1940 1351 295 @
 -1609 1722 297 @

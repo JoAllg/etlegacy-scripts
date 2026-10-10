@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Decay B7                             //
 // Locations by   extracted from z_maps3.pk3           //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 28 //
-// Last edited                                         //
+// Last edited    10-10-2026                           //
 /////////////////////////////////////////////////////////
 3319 -508 64 "Access Codes"
 3836 547 64 "Allied Camp"
@@ -31,7 +32,7 @@
 1368 4446 210 "Gold Storage"
 177 -1589 272 "Health & Ammo"
 -354 2441 327 "Locker Room Spawn"
-1993 -1649 212 "Left-side building"
+1993 -1649 212 "Left-side Building"
 2758 1240 64 "Right-side Path"
 -1186 750 113 "Side Gate"
 -668 -277 128 "Transmitter"

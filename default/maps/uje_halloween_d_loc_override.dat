@@ -1,31 +1,32 @@
 /////////////////////////////////////////////////////////
 // Map name       UJE Halloween                        //
 // Locations by   extracted from UJE_halloween_b3.pk3  //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 26 //
-// Last edited                                         //
+// Last edited    10-10-2026                           //
 /////////////////////////////////////////////////////////
-82 1066 -271 "Axis Flag spawn"
+82 1066 -271 "Axis Flag Spawn"
 -427 552 -271 @
 -1182 3146 -31 "Axis Spawn"
 -739 2797 -31 @
 -111 3283 -31 @
-304 3636 -259 "Axis Spawnexit"
--492 2356 -301 "Axis spawn hallway"
+304 3636 -259 "Axis Spawn Exit"
+-492 2356 -301 "Axis Spawn Hallway"
 -140 2131 -301 @
 -1310 2378 -301 @
--94 1484 -306 "Barier Street"
--748 2116 -31 "Building near Barier"
+-94 1484 -306 "Barrier Street"
+-748 2116 -31 "Building near Barrier"
 -1233 1963 -31 @
 -764 1886 -31 @
 -368 2020 -31 @
 905 -1828 -296 "Church"
-1528 -980 -296 "Church backway"
+1528 -980 -296 "Church Backway"
 1570 -1358 -296 @
 1386 -1779 -296 @
-694 -951 -306 "Church street"
+694 -951 -306 "Church Street"
 188 -1384 -306 @
 -187 -1720 -306 @
-1005 1442 -306 "Ghost house Entrance"
+1005 1442 -306 "Ghost House Entrance"
 1639 2308 -31 "Ghosthouse"
 1655 3360 -31 @
 1933 3183 128 @
@@ -35,15 +36,15 @@
 423 2982 -259 @
 855 3418 -259 @
 411 2350 -301 @
-1008 2158 -301 "Ghosthouse entrance"
-2327 1888 128 "Ghosthouse health and ammo"
+1008 2158 -301 "Ghosthouse Entrance"
+2327 1888 128 "Ghosthouse Health and Ammo"
 2364 3318 128 @
-2093 2684 288 "Ghosthouse radarpart"
+2093 2684 288 "Ghosthouse Radar Part"
 1327 -2604 -296 "Graveyard"
 1647 -2935 -296 @
 1708 -2241 -296 @
 1351 -2372 -296 @
--128 -352 -296 "Health and ammo"
+-128 -352 -296 "Health and Ammo"
 2322 3274 128 "Inside the Ghosthouse"
 2283 2834 128 @
 2281 3418 288 @
@@ -51,22 +52,22 @@
 2037 2274 288 @
 2302 2773 288 @
 2287 2222 128 @
-1215 -388 -296 "Neutral commandpost"
+1215 -388 -296 "Neutral Command Post"
 -949 99 -306 "Spawn Street"
 -402 -123 -296 @
 103 22 -306 @
 487 714 -296 "Square"
 -1595 2051 -306 "Street"
--962 882 -306 "Street near barier"
+-962 882 -306 "Street near Barrier"
 1753 51 -306 "Tunnels"
 1706 636 -296 @
 1484 867 -296 @
 1497 -3425 -983 "Underground"
 1486 -3850 -984 @
--786 1440 -306 "barier"
+-786 1440 -306 "Barrier"
 -334 1445 -306 @
--205 -2994 -296 "llied first spawn"
--175 -2627 -306 "llied first spawn street"
--1398 1478 -306 "second barier"
--955 -1866 -306 "street"
-782 -2548 -306 "street near Graveyard"
+-205 -2994 -296 "Allied First Spawn"
+-175 -2627 -306 "Allied First Spawn Street"
+-1398 1478 -306 "Second Barrier"
+-955 -1866 -306 "Street"
+782 -2548 -306 "Street near Graveyard"

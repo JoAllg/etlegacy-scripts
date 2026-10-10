@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Hindenburg B3                        //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 5214 7386 257 "Airfield"
@@ -172,7 +172,7 @@
 3057 2094 304 @
 3071 2416 304 @
 3569 2121 304 @
-6242 4344 315 "Nothing To See Here!!!"
+6242 4344 315 "Nothing to See Here!!!"
 6838 4358 315 @
 7975 4292 534 @
 6235 4084 315 @

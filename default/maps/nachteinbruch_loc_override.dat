@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Nachteinbruch                        //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 22 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 2271 -310 448 "Allies Command Post"
@@ -58,7 +58,7 @@
 847 -2879 400 @
 375 -2959 404 @
 1371 -2712 400 @
--2094 -860 480 "Near The Pak Cannon"
+-2094 -860 480 "Near the Pak Cannon"
 -2084 -1179 457 @
 -1847 -1497 373 @
 -1527 -1494 437 @

@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Bridges B5                           //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 428 1978 240 "Boathouse Area"
@@ -71,7 +71,7 @@
 4085 313 884 @
 4093 1487 864 "North Tunnel Spawn"
 4091 1151 864 @
--6056 -7983 139 "Nothing To See Here"
+-6056 -7983 139 "Nothing to See Here"
 -6094 -7371 45 @
 -6448 -6569 40 @
 -6477 -5115 -104 @
@@ -289,7 +289,7 @@
 -4179 -8659 1312 @
 -4542 -8009 1055 @
 1514 2267 293 "Truck Barrier"
--4878 -4348 241 "Under The Sawmill Bridge"
+-4878 -4348 241 "Under the Sawmill Bridge"
 -4120 -4751 320 @
 -4075 -3910 337 @
 -3843 -4321 322 @

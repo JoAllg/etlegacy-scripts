@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Kerkyra                              //
 // Locations by   extracted from kerkyra_b1.pk3        //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited                                         //
+// Last edited    10-10-2026                           //
 /////////////////////////////////////////////////////////
 4010 5160 169 "1st Floor Artroom"
 3969 6541 168 "1st Floor Bathroom"
@@ -10,9 +11,9 @@
 3976 4794 169 "1st Floor Library"
 4612 5489 168 "1st Floor Side Corridor"
 4369 5350 288 "1st Floor Stairs"
-4697 4834 168 "1st Floor Work room"
-3968 5422 169 "1st floor Relax Room"
-4237 6534 168 "1st floor Spawn Corridor"
+4697 4834 168 "1st Floor Work Room"
+3968 5422 169 "1st Floor Relax Room"
+4237 6534 168 "1st Floor Spawn Corridor"
 4242 6137 168 @
 4275 5769 168 @
 4784 4774 468 "2nd Floor Balcony"
@@ -37,7 +38,7 @@
 4013 6913 728 "3rd Floor Objectives"
 4001 6059 769 "3rd Floor Party Hall"
 4054 5651 728 "3rd Floor Piano"
-4058 5215 728 "3rd Floor Pre room"
+4058 5215 728 "3rd Floor Pre Room"
 3603 6257 728 "3rd Floor Side Balcony"
 4700 5366 728 "3rd Floor Side Room"
 4364 5079 730 "3rd Floor Stairs"
@@ -76,15 +77,15 @@
 2488 2597 24 "Command Post Spawn"
 -710 2886 64 "Empty Yard"
 2108 -421 64 "End Gate"
-1984 179 64 "End Gate yard"
+1984 179 64 "End Gate Yard"
 -2207 231 64 "First Barrier Stop"
 -4183 -2 64 "First Crossway"
 -4175 707 64 @
 -3505 2359 64 "First Nature Path"
--3922 1490 64 "First road curve"
+-3922 1490 64 "First Road Curve"
 -3504 -569 61 "Football Field"
 -3974 -460 64 @
--2949 -430 60 "Football goal"
+-2949 -430 60 "Football Goal"
 4978 6433 744 "Fountain"
 4846 5850 712 "Fountain Floor"
 4460 6533 708 @
@@ -149,7 +150,7 @@
 5124 5399 488 @
 5426 5741 584 "Palace Side Stairs Exit"
 5027 4340 141 "Palace Side Stairs Start"
-3942 6274 168 "Palace Side entrance"
+3942 6274 168 "Palace Side Entrance"
 3687 6260 160 "Palace Sidedoor"
 3668 6668 152 @
 4212 6839 168 "Palace Spawn"
@@ -159,7 +160,7 @@
 4312 7330 188 "Palace Spawn Door"
 4405 6618 392 "Palace Spawn Stairs"
 4440 6479 303 @
-3485 4289 133 "Palace front yard"
+3485 4289 133 "Palace Front Yard"
 4333 4241 164 @
 4814 3972 130 @
 4696 3621 71 @
@@ -178,7 +179,7 @@
 -1256 -181 64 @
 -1298 -930 64 @
 -2435 1244 64 "Second Nature Path"
--2982 1339 64 "Second road curve"
+-2982 1339 64 "Second Road Curve"
 551 3926 633 "Secret Rock"
 -1929 2854 64 "Sharp Bush Yard"
 -2418 2043 64 "Side Road"
@@ -196,15 +197,15 @@
 4604 7476 548 "Statue Floor"
 -1706 240 64 "Tank Barrier 1"
 3032 1220 1 "Tank Barrier 2"
--1000 862 64 "Tank Capture point"
+-1000 862 64 "Tank Capture Point"
 -5647 2253 64 "Tank Start"
 4556 3070 25 "Tank Stop"
 1431 1600 64 "Third Crossway"
--2901 254 64 "Third road curve"
+-2901 254 64 "Third Road Curve"
 3915 4865 -46 "Tunnel Door"
-2399 -70 81 "Uphill path"
+2399 -70 81 "Uphill Path"
 2876 -114 261 @
-3094 647 227 "Uphill small path"
+3094 647 227 "Uphill Small Path"
 4895 3295 32 "Wall Hole"
 -3189 2912 88 "Wasteland"
 -3876 2880 80 @

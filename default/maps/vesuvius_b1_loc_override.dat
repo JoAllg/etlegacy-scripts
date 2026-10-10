@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Vesuvius_b1                          //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-06-2007                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 20 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -1431 6926 2416 "Castle"
@@ -86,7 +86,7 @@
 -2488 3201 2181 @
 -1809 3985 2112 @
 -1283 3372 2120 @
--1432 6192 2452 "Outside The Castle"
+-1432 6192 2452 "Outside the Castle"
 289 6180 2137 @
 1031 5237 2196 @
 -553 3344 1467 "Ruins"

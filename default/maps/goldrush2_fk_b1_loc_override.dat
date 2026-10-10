@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Gold Rush 2 Beta 1                   //
 // Locations by   Rain                                 //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    12-02-2007                           //
+// Modified by    antman, Taranis                      //
+// Recommended    cg_locations, cg_locationMaxChars 22 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -3580 -220 -51 "Allied Spawn"
@@ -107,6 +107,6 @@
 -3290 -1066 -31 "Truck Escape"
 -2652 -785 -13 "Truck Path"
 -1856 -1071 11 @
-1838 74 -351 "Under The Bridge"
+1838 74 -351 "Under the Bridge"
 1439 286 225 "Upper Ladder Room"
 1140 395 224 @

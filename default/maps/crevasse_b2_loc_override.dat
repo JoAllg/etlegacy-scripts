@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Crevasse B2                          //
 // Locations by   Dersaidin                            //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 20 //
-// Last edited    09-11-2006                           //
+// Modified by    antman, Taranis                      //
+// Recommended    cg_locations, cg_locationMaxChars 18 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -9 181 344 "Allies First Spawn"
@@ -54,7 +54,7 @@
 -738 177 -319 @
 -1100 13 -305 "Elevator Vent"
 -1113 12 -727 @
--757 413 -823 "Elevator water"
+-757 413 -823 "Elevator Water"
 -332 414 -827 @
 1801 -1761 -1009 "Enricher"
 2585 -1860 -1009 @

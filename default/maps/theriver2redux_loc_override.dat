@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       TheRiver II Redux                    //
 // Locations by   McNite                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    antman, Taranis                      //
+// Recommended    cg_locations, cg_locationMaxChars 21 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -1152 3464 1216 "Abandoned Villa"
@@ -49,7 +49,7 @@
 3392 1216 1280 "Escape Truck"
 -768 -1920 1088 "Front Wall"
 384 -1920 1088 @
-384 -2752 896 "Inner compound"
+384 -2752 896 "Inner Compound"
 -768 -2752 896 @
 192 -3520 896 @
 -768 -3520 896 @

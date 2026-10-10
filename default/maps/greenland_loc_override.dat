@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Greenland                            //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 20 //
-// Last edited    02-05-2008                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 19 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 1428 1854 150 "^1Documents"
@@ -38,7 +38,7 @@
 -1919 1484 148 @
 -1822 326 67 @
 871 1382 724 "^3North Hill"
--229 -1187 512 "^3Out Of Order"
+-229 -1187 512 "^3Out of Order"
 -1331 22 108 "^3Railroad Tracks"
 1575 42 104 @
 560 143 104 @

@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Adlerhorst                           //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 27 //
-// Last edited    22-08-2008                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 26 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 5822 4184 1828 "^1Allied Command Post"
@@ -139,7 +139,7 @@
 -6035 -1486 1232 "^3Outside Main Gate"
 -5248 -1478 1232 @
 -5654 -1170 1216 @
-5837 4388 1700 "^3Outside The Hut"
+5837 4388 1700 "^3Outside the Hut"
 5186 3930 1664 @
 5819 3198 1664 @
 6451 4168 1677 @

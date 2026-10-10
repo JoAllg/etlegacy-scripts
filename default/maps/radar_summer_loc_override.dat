@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Radar Summer                         //
 // Locations by   Rain                                 //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    23-07-2006                           //
+// Modified by    antman, Taranis                      //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 1147 -3863 1288 "Axis Garage"
@@ -31,7 +31,7 @@
 3273 -893 1576 "Command Post MG42"
 2103 -2010 1459 "Command Post Yard"
 153 6070 512 "Dead!"
-200 5118 1341 "Don't do it, man!"
+200 5118 1341 "Don't Do It, Man!"
 195 5501 1142 "Dying..."
 3287 -1886 1780 "East Antenna"
 258 -3104 1576 "East Radar"

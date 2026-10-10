@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Ponza Isle                           //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 27 //
-// Last edited    02-08-2009                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 26 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 2420 -554 1368 "^1Aqueduct House Well Gate"
@@ -233,7 +233,7 @@
 2686 -1559 1079 "^3South Beach Bolders"
 1759 -1627 1021 @
 3040 -1391 1038 @
-649 -126 813 "^3Under The Aqueduct"
+649 -126 813 "^3Under the Aqueduct"
 -134 -135 865 @
 1142 -128 1108 @
 -3244 -521 278 "^3Water Tunnel"

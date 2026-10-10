@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Return To The Radar                  //
 // Locations by   Rain                                 //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    09-04-2007                           //
+// Modified by    antman, Taranis                      //
+// Recommended    cg_locations, cg_locationMaxChars 23 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 1147 -3863 1288 "Axis Garage"
@@ -30,7 +30,7 @@
 3273 -893 1576 "Command Post MG42"
 2103 -2010 1459 "Command Post Yard"
 153 6070 512 "Dead!"
-200 5118 1341 "Don't do it, man!"
+200 5118 1341 "Don't Do It, Man!"
 195 5501 1142 "Dying..."
 3287 -1886 1780 "East Antenna"
 258 -3104 1576 "East Radar"
@@ -87,7 +87,7 @@
 -1232 491 1453 "Truck"
 -1598 861 1359 @
 750 4593 1350 "Tunnel Gate"
--1323 -1208 1299 "Under The Bridge"
+-1323 -1208 1299 "Under the Bridge"
 3032 -805 1748 "Upper Side Entrance"
 3271 3948 1375 "Villa Back Yard"
 3217 2879 1390 @

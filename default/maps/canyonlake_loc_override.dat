@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Canyon Lake                          //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    11-05-2007                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 23 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 3356 3490 648 "#1 Gun"
@@ -194,7 +194,7 @@
 6625 231 119 @
 424 -98 146 @
 -2794 4339 712 "Main Facility Wall"
-4097 2792 192 "Outside The Wall"
+4097 2792 192 "Outside the Wall"
 3620 2439 192 @
 4582 2435 193 @
 4887 3100 192 @

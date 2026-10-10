@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Rushi                                //
 // Locations by   o-0._.0-o                            //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 22 //
-// Last edited    08-08-2026                           //
+// Last edited    10-10-2026                           //
 /////////////////////////////////////////////////////////
 -511 -577 102 "^3Allied Base"
 -271 -3345 102 "^3City Foltein"
@@ -37,9 +38,9 @@
 5377 -5505 230 "^3Rushi Bridge"
 4257 -6705 230 "^3Abandoned Hotel"
 3329 -4321 230 "^3Horse Barn"
-1793 -5697 54 "^3Weapon workplace"
+1793 -5697 54 "^3Weapon Workplace"
 6417 -4753 230 "^3Abandoned House"
-7169 -2337 230 "^3Rushi passage"
+7169 -2337 230 "^3Rushi Passage"
 7217 -1841 230 @
 5089 -1105 230 "^3Castle Rushi"
 7681 255 214 "^3Rushi Hotel"

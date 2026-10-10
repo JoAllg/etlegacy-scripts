@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Raiders                              //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -1402 4076 88 "Allied Command Post"
@@ -47,14 +47,14 @@
 1351 6222 304 @
 1078 6934 160 @
 1393 6630 304 @
-5033 369 72 "Outside The Sub Pen"
+5033 369 72 "Outside the Sub Pen"
 5055 1246 77 @
 5091 924 80 @
 5065 -187 77 @
 5447 -862 66 @
 5557 -647 74 @
 4260 512 93 @
-781 5150 144 "Outside The Temple"
+781 5150 144 "Outside the Temple"
 381 3517 86 @
 -563 4289 90 @
 2744 4431 349 @

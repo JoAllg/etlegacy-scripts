@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Battle of Wolken 2                   //
 // Locations by   chr1s                                //
-// Modified by    antman                               //
+// Modified by    antman, Taranis                      //
 // Recommended    cg_locations, cg_locationMaxChars 30 //
-// Last edited    16-07-2007                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 2488 -1472 776 "Abandoned Apartment"
@@ -53,7 +53,7 @@
 1568 832 720 "Crossroads"
 1168 816 720 @
 1648 1056 720 @
--3192 -184 904 "Dorm To Hangar 1 Lift"
+-3192 -184 904 "Dorm to Hangar 1 Lift"
 -3192 -184 136 @
 1504 64 672 "East Complex Exit"
 -3304 -688 1608 "External Walkway"
@@ -92,7 +92,7 @@
 -2248 -1408 192 @
 -2656 -896 192 "Hangar 1 (Substation)"
 -2816 -1208 192 @
--3192 -696 904 "Hangar 1 To Dorm Lift"
+-3192 -696 904 "Hangar 1 to Dorm Lift"
 -3192 -696 136 @
 -2088 -640 656 "Hangar 2 (Health & Ammo)"
 -2088 -256 656 @

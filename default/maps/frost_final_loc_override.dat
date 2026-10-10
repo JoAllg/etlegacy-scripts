@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Frost                                //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 23 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 4696 943 570 "Allied Spawn"
@@ -82,7 +82,7 @@
 3760 587 1033 @
 1596 885 715 @
 2101 503 865 @
-4409 1616 512 "North Path To Castle"
+4409 1616 512 "North Path to Castle"
 4990 1799 423 @
 3388 1736 586 @
 2292 1517 666 @
@@ -96,7 +96,7 @@
 -816 441 976 @
 -959 527 1152 @
 -816 764 737 "North Tower Wall"
--1882 2043 736 "Nothing To See Here!"
+-1882 2043 736 "Nothing to See Here!"
 -1148 -770 976 "Outer Courtyard"
 -1146 -1070 976 @
 -1243 -1273 992 @
@@ -122,7 +122,7 @@
 -2224 -483 992 @
 -2171 -117 992 @
 -2090 -1127 1000 "Outer Courtyard MG42"
--604 132 743 "Outside The Castle"
+-604 132 743 "Outside the Castle"
 -529 400 719 @
 -589 762 759 @
 -828 952 760 @
@@ -157,7 +157,7 @@
 -3894 -1068 944 "Radio Tower"
 -4228 -882 944 @
 -3980 -949 944 @
-2366 -148 775 "Road To Bridge"
+2366 -148 775 "Road to Bridge"
 3009 -148 785 @
 3676 -148 783 @
 4330 -148 776 @
@@ -169,7 +169,7 @@
 3801 -1102 999 @
 3801 -1481 928 @
 2217 -830 841 @
-4467 -766 537 "South Path To Castle"
+4467 -766 537 "South Path to Castle"
 4325 -1847 523 @
 3469 -2182 612 @
 2516 -1753 691 @
@@ -192,7 +192,7 @@
 -4488 70 800 @
 -4918 -137 880 "Storage Stairs"
 4598 -162 768 "Truck Escape"
-62 -729 61 "Under The Bridge"
+62 -729 61 "Under the Bridge"
 23 -193 138 @
 339 642 83 @
 1199 530 53 @

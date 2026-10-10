@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       MLB Bergheim Beta 09                 //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    12-05-2007                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -73 5415 -511 "Allied Camp"
@@ -126,7 +126,7 @@
 1815 7358 -548 @
 3921 6128 -532 "North Ruins"
 5650 6243 -540 @
--105 -2445 -541 "Outside The Fortress"
+-105 -2445 -541 "Outside the Fortress"
 -805 -3711 -319 @
 -749 -2795 -542 @
 -856 -2066 -354 @
@@ -144,7 +144,7 @@
 346 -5806 -287 @
 647 -5279 -420 @
 -348 -4522 -306 @
-6355 6091 -541 "Outside The Town"
+6355 6091 -541 "Outside the Town"
 5632 5575 -541 @
 5695 7023 -541 @
 3759 5165 -541 @
@@ -162,9 +162,9 @@
 6834 1653 -527 @
 6838 -356 -527 @
 5634 -789 -543 @
-2571 -2192 -542 "Road To Fortress"
+2571 -2192 -542 "Road to Fortress"
 113 -2413 -541 @
-1009 -5327 -471 "Ruins Outside The Caves"
+1009 -5327 -471 "Ruins Outside the Caves"
 2601 -5367 -526 @
 5419 -797 -535 "South Town House"
 4980 -1285 -535 @

@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       V-2 Factory                          //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 30 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 29 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 2504 -1813 -335 "Allied Command Post"
@@ -192,7 +192,7 @@
 1769 3703 -303 @
 1977 3697 -303 @
 2178 3694 -303 @
-265 69 -403 "Inside The Dam"
+265 69 -403 "Inside the Dam"
 -154 -1034 -203 @
 266 422 -403 @
 162 1446 -203 @
@@ -224,7 +224,7 @@
 2521 -456 -338 @
 2182 -460 -333 @
 2464 -1143 -48 @
--163 -1179 -251 "Outside The Factory"
+-163 -1179 -251 "Outside the Factory"
 -1548 -2003 -343 @
 -1551 -1658 -342 @
 -947 -1859 -343 @
@@ -258,7 +258,7 @@
 -2190 -2392 -343 "Railroad Tracks"
 -2189 -2012 -336 @
 -2190 -1477 -336 @
--3061 4237 -351 "Route To Launch Site"
+-3061 4237 -351 "Route to Launch Site"
 -2344 -1174 -343 "Train Bridge"
 -2240 -802 -343 @
 -2246 -471 -343 @

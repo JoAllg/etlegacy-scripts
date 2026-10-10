@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Würzburg Radar                       //
 // Locations by   Rain                                 //
-// Modified by    antman                               //
+// Modified by    antman, Taranis                      //
 // Recommended    cg_locations, cg_locationMaxChars 26 //
-// Last edited    14-10-2007                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 3172 -1270 1564 "^1Command Post"
@@ -37,7 +37,7 @@
 3273 -893 1576 "^3Command Post MG42"
 2103 -2010 1459 "^3Command Post Yard"
 153 6070 512 "^3Dead!"
-200 5118 1341 "^3Don't do it, man!"
+200 5118 1341 "^3Don't Do It, Man!"
 195 5501 1142 "^3Dying..."
 3287 -1886 1780 "^3East Antenna"
 236 -4127 1316 "^3East Radar Hill"

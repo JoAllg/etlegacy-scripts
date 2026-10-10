@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Raw Castle TE                        //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -754 -1051 695 "Allied Camp"
@@ -94,11 +94,11 @@
 604 162 350 "Main Wall"
 847 555 640 @
 417 129 640 @
-1432 -771 528 "Near The Frozen Pond"
+1432 -771 528 "Near the Frozen Pond"
 1768 -888 568 @
 1169 -820 533 @
 920 -939 544 @
--592 -1033 649 "Near The Windmill"
+-592 -1033 649 "Near the Windmill"
 -612 -1240 646 @
 -592 -1437 637 @
 -622 -1615 685 @
@@ -123,7 +123,7 @@
 537 -492 720 @
 292 -251 720 @
 931 -691 720 @
--1231 611 66 "Outside The Castle"
+-1231 611 66 "Outside the Castle"
 -923 603 74 @
 -594 1033 66 @
 -1535 514 115 @

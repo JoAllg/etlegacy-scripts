@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Marketgarden R2                      //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 30 //
-// Last edited    11-07-2009                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 29 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -7835 -2447 965 "^1Allied Command Center"
@@ -206,7 +206,7 @@
 5325 2275 1024 @
 5325 2980 1024 @
 4771 140 1024 @
--7315 -1915 963 "^3Outside The Mansion"
+-7315 -1915 963 "^3Outside the Mansion"
 -7301 -2514 1064 @
 -7367 -1478 1093 @
 -5719 -2072 1303 @
@@ -277,7 +277,7 @@
 5171 -1571 1152 @
 4833 -1606 1160 @
 5632 764 1138 "^3Tree"
-5752 -728 896 "^3Under The Bridge"
+5752 -728 896 "^3Under the Bridge"
 5547 -739 896 @
 5745 -566 813 @
 4860 -516 962 @

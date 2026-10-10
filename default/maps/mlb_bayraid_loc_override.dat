@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       MLB Bayraid                          //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -2118 -51 -299 "Ammo Cabinets"
@@ -228,7 +228,7 @@
 1 -2069 224 @
 258 -382 -1102 "Underground Water Tunnel"
 -424 -384 -1113 @
--71 -2297 66 "Weak Spot On The Roof"
+-71 -2297 66 "Weak Spot on the Roof"
 1526 1885 -360 "West Desert Path"
 1181 1439 -297 @
 991 908 -437 @

@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Eagles 2 Ways B1                     //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 2320 1953 1112 "Airfield Spawn"
@@ -187,13 +187,13 @@
 2890 -2239 1154 @
 3137 -1872 1154 @
 2929 -2037 1344 @
-2298 -3382 1111 "Near The Krankenhaus"
+2298 -3382 1111 "Near the Krankenhaus"
 2714 -3146 1111 @
 2881 -2708 1111 @
 3124 -2347 1136 @
 2870 -2357 1111 @
 3277 -2451 1111 @
-2863 -737 1108 "Near The Wooden Bridge"
+2863 -737 1108 "Near the Wooden Bridge"
 3746 -109 1111 @
 3155 -1740 1111 @
 2871 -1721 1111 @
@@ -241,7 +241,7 @@
 -1915 -3196 1111 @
 -1999 -3312 1111 @
 -2018 -3618 1111 @
-2532 1069 1111 "Outside The Airfield"
+2532 1069 1111 "Outside the Airfield"
 3082 1091 1111 @
 3078 814 1111 @
 3235 684 1111 @
@@ -278,7 +278,7 @@
 2028 -469 718 @
 1455 -694 882 "River Ramp"
 2615 -2814 1111 "Road MG"
--826 -2998 1111 "Road To Airfield"
+-826 -2998 1111 "Road to Airfield"
 -553 -3383 1111 @
 169 -3609 1111 @
 1388 -3573 1111 @
@@ -322,8 +322,8 @@
 -4479 3379 2281 "Tunnel Entrance"
 -4481 2297 1600 "Tunnel Exit"
 -4326 1797 1195 @
-2363 -642 898 "Under The Wooden Bridge"
--4142 -230 1108 "Underneath The Castle"
+2363 -642 898 "Under the Wooden Bridge"
+-4142 -230 1108 "Underneath the Castle"
 -3753 -520 1111 @
 -3337 -979 1111 @
 -2599 -1608 1111 @

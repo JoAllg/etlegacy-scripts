@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Adlernest B5                         //
 // Locations by   Dersaidin                            //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 20 //
-// Last edited    28-05-2006                           //
+// Modified by    antman, Taranis                      //
+// Recommended    cg_locations, cg_locationMaxChars 16 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 12 -642 -121 "Abyss"
@@ -17,7 +17,7 @@
 -994 98 -273 @
 -288 -668 -109 @
 3098 -1004 -55 "Allied Spawn"
--1155 -1343 -55 "Axis spawn"
+-1155 -1343 -55 "Axis Spawn"
 -1060 -1650 -55 @
 -1604 -1647 -55 @
 -1628 -1106 -55 @

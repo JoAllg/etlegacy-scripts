@@ -1,16 +1,16 @@
 /////////////////////////////////////////////////////////
 // Map name       X-Dam Complex                        //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 21 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 25 220 640 "Allied Command Post"
 208 2103 944 "Axis Command Post"
 311 1817 920 "Balcony MG"
 -1528 3592 745 "Burning Flames"
-1065 157 88 "Inside The Dam"
+1065 157 88 "Inside the Dam"
 754 164 88 @
 653 153 640 @
 264 194 640 @

@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Capture The Gold                     //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 20 //
-// Last edited    28-05-2006                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 1092 -970 848 "Allied Gold"
@@ -23,7 +23,7 @@
 1190 975 664 @
 1176 958 848 @
 722 1007 848 @
-1228 -959 856 "Capture The Gold"
+1228 -959 856 "Capture the Gold"
 888 -845 668 @
 689 -964 668 @
 202 -1073 668 @

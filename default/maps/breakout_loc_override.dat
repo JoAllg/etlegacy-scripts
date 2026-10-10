@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Breakout     )                       //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 4620 7800 160 "Allied Command Post"
@@ -86,7 +86,7 @@
 954 2459 79 @
 1393 5123 72 "Health and Ammo Cabinets"
 3166 1999 288 @
-1524 5330 64 "Near The Shack"
+1524 5330 64 "Near the Shack"
 1523 5054 64 @
 1426 5420 64 @
 1076 5414 93 @

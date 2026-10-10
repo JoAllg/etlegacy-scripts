@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Wacht Am Rhein (Beta1)               //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -3711 -66 336 "Allied Lookout"
@@ -205,7 +205,7 @@
 3527 121 346 @
 3493 655 346 @
 3239 409 352 @
--2551 -990 220 "Inside The Church"
+-2551 -990 220 "Inside the Church"
 -2284 -914 256 @
 -2290 -1148 254 @
 -2811 -1264 220 @
@@ -215,7 +215,7 @@
 -2919 -1352 220 @
 -2816 -1609 220 "Main Church Doors"
 -2811 -1451 220 @
--2516 -562 239 "Outside The Church"
+-2516 -562 239 "Outside the Church"
 -2304 -755 224 @
 -2063 -1018 216 @
 -2326 -1295 223 @

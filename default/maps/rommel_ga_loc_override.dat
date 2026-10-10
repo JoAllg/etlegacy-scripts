@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Rommel (GA)                          //
 // Locations by   KingJackaL                           //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    antman, Taranis                      //
+// Recommended    cg_locations, cg_locationMaxChars 23 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 2021 2136 -287 "Access Control"
@@ -152,7 +152,7 @@
 -2347 -1583 497 @
 -1542 -811 116 "West Tunnels"
 -965 -1049 116 @
--1200 -2494 753 "haX jumper"
+-1200 -2494 753 "haX Jumper"
 -1043 -1049 759 @
 -1915 16 759 @
 2377 -1352 759 @

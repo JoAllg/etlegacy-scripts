@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       2 Hide CAL                           //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 23 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 2309 -4617 68 "Allied Town"
@@ -189,7 +189,7 @@
 -3807 2787 666 @
 -4287 2829 582 @
 -4523 3018 673 @
-1855 2099 399 "Path To Town Cemetary"
+1855 2099 399 "Path to Town Cemetary"
 1826 2331 440 @
 1870 1883 427 @
 320 1582 64 @
@@ -212,7 +212,7 @@
 340 -4624 552 @
 74 -4501 416 @
 -65 -4495 416 @
-2504 -480 64 "South From Base"
+2504 -480 64 "South from Base"
 2715 -405 74 @
 2889 -338 78 @
 2292 -497 64 @
@@ -235,7 +235,7 @@
 -3366 -2726 259 @
 -3531 -2106 283 @
 -1546 -4322 263 @
--314 2983 602 "Top Of Town Road Bridge"
+-314 2983 602 "Top of Town Road Bridge"
 -58 2988 602 @
 -131 1626 64 "Town Cemetary"
 -352 1624 138 @

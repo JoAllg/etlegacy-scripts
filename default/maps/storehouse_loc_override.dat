@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Operation Storehouse                 //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    12-02-2007                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 3794 -5987 369 "Allied Spawn"
@@ -150,7 +150,7 @@
 -2146 587 1422 @
 -3175 1072 1421 @
 -2550 1155 1438 @
--2917 -5176 855 "Outside The Barrack"
+-2917 -5176 855 "Outside the Barrack"
 -3019 -5098 859 @
 -3348 -5088 859 @
 -3507 -5200 862 @

@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       MLB Daybreak                         //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 278 -5985 152 "Ancient Castle"
@@ -117,7 +117,7 @@
 2345 -2253 272 @
 5361 -2227 272 @
 2870 -2220 272 @
-3144 1401 -214 "Near The Train Bridge"
+3144 1401 -214 "Near the Train Bridge"
 2853 562 -282 @
 1884 -296 -297 @
 1589 289 -300 @
@@ -168,7 +168,7 @@
 -3196 5367 0 @
 -3607 5664 4 @
 -3795 5937 0 @
--5055 3845 32 "Outside The Armory"
+-5055 3845 32 "Outside the Armory"
 -5519 3969 32 @
 -5078 4012 32 @
 -4768 4010 32 @
@@ -178,7 +178,7 @@
 -4717 3593 32 @
 -4839 3633 32 @
 -4554 3814 32 @
-2554 4708 64 "Outside The Fortress"
+2554 4708 64 "Outside the Fortress"
 3012 4976 64 @
 3349 4576 64 @
 3349 4156 64 @

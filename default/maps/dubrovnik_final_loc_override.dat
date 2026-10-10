@@ -1,14 +1,14 @@
 /////////////////////////////////////////////////////////
 // Map name       Dubrovnik                            //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 21 //
-// Last edited    05-10-2009                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -338 -1077 76 "^1Access Codes"
 -1611 -1253 46 "^1Boat"
-1503 2707 212 "^1Box Of Gold"
+1503 2707 212 "^1Box of Gold"
 1509 2137 132 "^1Church Doors"
 -843 2053 72 "^1Generator"
 1435 -2396 80 "^2Allied Spawn"

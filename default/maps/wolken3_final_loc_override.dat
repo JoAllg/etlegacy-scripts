@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Battle of Wolken 3                   //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 26 //
-// Last edited    08-04-2009                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -1544 -2076 528 "^1Command Post"
@@ -60,7 +60,7 @@
 -3463 2109 257 @
 -3463 1342 308 @
 -4151 1947 544 "^3Headquarters Stairs"
--4131 347 304 "^3Health And Ammo Cabinets"
+-4131 347 304 "^3Health and Ammo Cabinets"
 4609 1878 560 "^3Island Entrance"
 -5182 1994 608 "^3Locker Room"
 -4973 2359 608 @

@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Ludendorff Bridge                    //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    25-04-2007                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 23 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 15189 10115 1152 "Allied Barricade"
@@ -57,7 +57,7 @@
 14634 11605 556 @
 14455 9093 560 @
 5875 10116 557 @
-16116 10319 719 "Under The Bridge"
+16116 10319 719 "Under the Bridge"
 4100 10316 636 @
 3110 10097 841 @
 17248 10118 832 @

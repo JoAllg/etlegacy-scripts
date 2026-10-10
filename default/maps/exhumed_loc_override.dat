@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Exhumed                              //
 // Locations by   antman                               //
-// Modified by    antman                               //
-// Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    29-04-2007                           //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 24 //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 -1171 4252 367 "Allied Spawn"
@@ -83,7 +83,7 @@
 4688 2311 -823 @
 7076 2327 -908 "East Tomb Door"
 6848 7154 329 "Health and Ammo Cabinets"
-6854 6402 329 "Inside The Pyramid"
+6854 6402 329 "Inside the Pyramid"
 6853 6808 337 @
 7251 6790 329 @
 6418 6765 329 @

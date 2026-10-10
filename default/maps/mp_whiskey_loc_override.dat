@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Whiskey                              //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 20 //
-// Last edited    28-05-2006                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 956 -866 -63 "Allied Spawn"
@@ -60,7 +60,7 @@
 -398 468 -63 @
 -188 594 -63 "North West Walkway"
 -384 578 -63 @
-0 9 424 "Safe With Formula"
+0 9 424 "Safe with Formula"
 -136 -319 424 @
 118 -341 448 @
 35 -139 425 @

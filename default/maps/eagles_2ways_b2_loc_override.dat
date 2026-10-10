@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////
 // Map name       Eagles 2 Ways B2                     //
 // Locations by   antman                               //
-// Modified by    antman                               //
+// Modified by    Taranis                              //
 // Recommended    cg_locations, cg_locationMaxChars 25 //
-// Last edited    28-05-2006                           //
+// Last edited    10-10-2026                           //
 // http://www.antman.info/wolf/etpro/locations/        //
 /////////////////////////////////////////////////////////
 1221 2832 1280 "Airfield Corridor Access"
@@ -230,7 +230,7 @@
 1210 2829 1136 @
 1212 2316 1136 @
 1208 2614 1136 @
-2863 -737 1108 "Near The Bridge"
+2863 -737 1108 "Near the Bridge"
 3746 -109 1111 @
 3155 -1740 1111 @
 2871 -1721 1111 @
@@ -238,7 +238,7 @@
 3212 -1479 1111 @
 3009 -1240 1111 @
 2762 -1475 1111 @
-2298 -3382 1111 "Near The Krankenhaus"
+2298 -3382 1111 "Near the Krankenhaus"
 2714 -3146 1111 @
 2881 -2708 1111 @
 3124 -2347 1136 @
@@ -295,7 +295,7 @@
 -2018 -3618 1111 @
 -2478 -3686 1114 @
 -2216 -3819 1111 @
-3082 1091 1111 "Outside The Airfield"
+3082 1091 1111 "Outside the Airfield"
 3078 814 1111 @
 3235 684 1111 @
 2727 187 1111 @
@@ -333,7 +333,7 @@
 2028 -469 718 @
 1455 -694 882 "River Ramp"
 2615 -2814 1111 "Road MG"
--553 -3383 1111 "Road To Airfield"
+-553 -3383 1111 "Road to Airfield"
 169 -3609 1111 @
 1388 -3573 1111 @
 1928 -3209 1111 @
@@ -376,8 +376,8 @@
 -4479 3379 2281 "Tunnel Entrance"
 -4481 2297 1600 "Tunnel Exit"
 -4326 1797 1195 @
-2390 -633 770 "Under The Bridge"
--4142 -230 1108 "Underneath The Castle"
+2390 -633 770 "Under the Bridge"
+-4142 -230 1108 "Underneath the Castle"
 -3753 -520 1111 @
 -3337 -979 1111 @
 -2599 -1608 1111 @
