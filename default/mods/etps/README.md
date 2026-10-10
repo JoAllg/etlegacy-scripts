@@ -6,11 +6,11 @@ etps is a server mod built on legacy 2.84 (its cgame reports `v2.84.0-552`). Eve
 - **Popups:** legacy's `editcomponent popupmessages` plus the cvar `cg_numPopups` (max 8), which caps the lines; `setPopupsMenu` in `mod_general.cfg` sets 8 for the echo menus, `setPopupsNormal` restores `numPopupsNormal` (`cvars.cfg`). Echo menus hold 8 lines, so the server menu uses its pages of 7 servers
 - **Chat shortcuts for vsays:** the server expands `[H]`, `[P]`, ... in chat (tested in game 2026-10-03 with `say_team`), so `mod_general.cfg` execs `scripts/vsays/chat_shortcuts.cfg` like nitmod
 - **HUD file:** the cgame of 2.84 reads `profiles/<cl_profile>/hud.dat` (HUD JSON version 4, upgraded to 7 in memory), not `huds/hud_v8.dat` (`.claude/rules/hud.md`)
-- **Class commands:** legacy weapon IDs up to 55, plus its own weapons 56 Shotgun, 57 Venom, 58 BAR, 59 StG44, 60 Johnson. `mod_classcommands.cfg` appends them as class steps to the cycles and gives the soldier a pistol as second weapon (bank 3 holds two weapons, an SMG would be a third). Every class gets its chosen SMG plus the other team's counterpart in bank 3 (seen in game, 2026-10-05; pairs from `weapEquiv` of the cgame weapon table: MP40/Thompson, StG44/BAR, Sten/MP34, Johnson → MP34), so the class echoes name both with their range
+- **Class commands:** legacy weapon IDs up to 55, plus its own weapons 56 Shotgun, 57 Venom, 58 BAR, 59 StG44, 60 Johnson. `mod_classcommands.cfg` appends them as class steps to the cycles and gives the soldier a pistol as second weapon for the default soldier weapons, which etps pairs with the SMG itself; Venom, BAR and StG44 take the SMG as second weapon (heavy weapons level 4). Every class gets its chosen SMG plus the other team's counterpart in bank 3 (seen in game, 2026-10-05; pairs from `weapEquiv` of the cgame weapon table: MP40/Thompson, StG44/BAR, Sten/MP34, Johnson → MP34), so the class echoes name both with their range
 
 ## Weapons
 
-**As of 2026-10-05**, from the cgame in `zzz_etps_2~.pk3` (pack built 2026-10-04). etps changes its packs often, so recheck after a new pack download.
+**As of 2026-10-10**, from the cgame in `zzz_etps_2~.pk3` (pack built 2026-10-09). etps changes its packs often, so recheck after a new pack download.
 
 Source: the weapon table (`weaponTable`, layout of legacy 2.84 `weaponTable_t`) in the cgame. No pack has `psweapons/*.weap` server tuning files (which the cgame would read for prediction), so the table values apply. Damage is server-side only and the etps server module is not available, so damage values are unverified.
 
