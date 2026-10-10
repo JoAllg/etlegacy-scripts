@@ -35,6 +35,12 @@ research/locations/*
 research/decompile/*
 !research/decompile/decompile.sh
 !research/decompile/DecompileFunctions.java
+!research/omnibot/
+research/omnibot/*
+!research/omnibot/download.py
+!research/maps/
+research/maps/*
+!research/maps/download.py
 TODO.md
 
 .claude/settings.local.json
