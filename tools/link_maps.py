@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Symlink downloaded map pk3s from etmain/dlcache/ into etmain/ so local hosting (+map) finds them.
 
-ET: Legacy mounts dlcache/ only while connected to a server, and then only the paks that server
-references (src/qcommon/files.c, FS_AddContainerDirectory), so a local server sees just pak0-2.
+ET: Legacy mounts dlcache/ only while connected to a server: all of it on a pure server, only the
+paks the server references on an unpure one (src/qcommon/files.c, FS_AddContainerDirectory), so a
+local server started from the menu sees just pak0-2.
 
 Skipped: pk3s without a map, pk3s containing a stock map or a map already provided by a real pk3
 in etmain/ (they would override it in every mod), and pk3s with a shader file that replaces a

@@ -8,7 +8,7 @@ and p7_<n>.cfg (heading + 7, all other mods). scripts/servermenu.cfg execs page 
 echoes its servers and binds the number keys to connect, TAB execs the next page (the same one if there is only
 one, which refreshes it). A server shows as name, playing humans+spectators+bots/slots, map, ping, mod, the columns
 aligned with spaces (the popup font courbd is monospaced). Servers are sorted by playing humans, then spectators and
-bots; servers that don't answer come last. The server the game connected to last (its console log) is left out.
+bots; servers that don't answer come last, the local host (helpers.menupages.LOCAL_MAP) is always the last entry. The server the game connected to last (its console log) is left out.
 Whatever a server doesn't send in a poll (no answer at all, no getstatus, no split) shows its last value for up to
 SERVERMENU_KEEP seconds (settings.conf); a missing split keeps the last spectators, the humans total stays the current one.
 
@@ -23,7 +23,7 @@ import re
 import time
 
 from helpers.common import last_connect, strip_colors, write_atomic
-from helpers.menupages import EXEC, cells, cut, order, pad, pages, players, table, width
+from helpers.menupages import EXEC, LOCAL_MAP, cells, cut, order, pad, pages, players, table, width
 from helpers.serverapi import CONFIGS, adr_string, favorites, history, identify, resolve, servers, status, summarize
 from helpers.settings import MENU, PROFILE, REPO, SERVERMENU_KEEP, SERVERMENU_POLL, VSAY
 
@@ -151,11 +151,12 @@ def selftest():
     assert first[3].startswith(f'echo "{m["key"]}1.  {t}') and first[14].startswith(f'echo "{m["key"]}12. {t}')  # keys 1-12 equally wide
     assert first[-1] == f'bind TAB "execq {EXEC}/p12_1.cfg"' and first.index("vstr unbindNumbers") < first.index(first[-1])
     assert p12["p12_1.cfg"].splitlines()[-1] == f'bind TAB "execq {EXEC}/p12_0.cfg"'  # last page wraps
-    assert 'bind 4 ' not in p12["p12_1.cfg"] and 'echo "' + m["key"] + "3. " in p12["p12_1.cfg"]
+    assert 'bind 5 ' not in p12["p12_1.cfg"] and 'echo "' + m["key"] + "3. " in p12["p12_1.cfg"]
+    assert f'bind 4 "vstr resetLayers; disconnect; map {LOCAL_MAP}"' in p12["p12_1.cfg"] and "LOCALHOST" in p12["p12_1.cfg"]  # local host last
     one = pages(many[:3], 7, "12:00:00")["p7_0.cfg"]
     assert "TAB refresh" in one and one.splitlines()[-1] == f'bind TAB "execq {EXEC}/p7_0.cfg"'
     empty = pages([], 7, "12:00:00")
-    assert list(empty) == ["p7_0.cfg"] and "No favorite servers" in empty["p7_0.cfg"]
+    assert list(empty) == ["p7_0.cfg"] and "No favorite servers" in empty["p7_0.cfg"] and f"bind 1 \"vstr resetLayers; disconnect; map {LOCAL_MAP}\"" in empty["p7_0.cfg"]
     history, a = {}, "192.0.2.1:27960"
     for ms, shown in ((300, 300), (40, 40), (320, 40)):
         rows = [{"address": a, "ping": ms}, {"address": "off", "ping": None}]
