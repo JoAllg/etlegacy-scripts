@@ -1,0 +1,68 @@
+/////////////////////////////////////////////////////////
+// Map name       Raid                                 //
+// Locations by   extracted from raid_final.pk3        //
+// Recommended    cg_locations, cg_locationMaxChars 25 //
+// Last edited                                         //
+/////////////////////////////////////////////////////////
+103 1976 27 "Allied spawn"
+-398 36 48 "Back Alley"
+-438 -757 274 @
+601 358 87 "Back yard"
+-28 320 49 @
+-1350 -3360 -18 "Bar"
+-5408 -1690 281 "Biblioteca"
+-4743 -1385 281 @
+-4983 -1363 281 @
+-4675 -956 281 @
+-4792 -1823 281 @
+-4618 -1373 566 @
+-4838 -732 566 @
+-5702 -681 566 @
+-5394 -990 566 @
+-6006 -2086 566 @
+-4920 -2453 53 "Biblioteca basement"
+-4683 -1841 81 @
+-5128 -1363 81 @
+-4140 -1368 273 "Biblioteca entrance"
+-4532 -1366 281 @
+-5940 -1375 566 "Biblioteca gold reservoir"
+-5674 -859 281 "Biblioteca side door"
+-5551 -654 281 @
+-4795 -672 281 @
+-4256 -458 286 "Biblioteca side entrance"
+-4307 -678 290 @
+-6210 -1375 378 "Biblioteca stairs"
+-4211 -2562 195 "Biblioteca yard"
+-3881 -3767 -138 "Bridge barriere"
+-3835 -4150 -126 @
+-3817 -3405 -93 @
+-3827 33 285 "Church"
+-3368 145 238 "Church alley"
+-3719 -487 774 "Church tower"
+-2194 -2900 83 "Citta Scalinata"
+-3875 -4112 173 "City bridge"
+-3870 -3505 180 @
+-2428 -949 284 "City fence"
+-2094 -952 285 @
+-3897 -5022 94 "Farmacia"
+-1788 -121 84 "Hotel"
+-2483 -1558 157 "Old city basement"
+-2406 -1466 348 "Old city commandroom"
+-2935 -591 286 "Piazza Cittadina"
+-2835 259 319 "Ristorante"
+-3783 -3122 -135 "Sewer"
+-4339 -1348 -277 @
+-1204 1854 22 "Strada Principale"
+-1126 -311 183 @
+-3784 -1903 239 "Switch"
+-1237 -1818 240 "Vicolo est"
+-1923 -2242 193 @
+-2828 -2509 248 "Vicolo ovest"
+-2831 -1867 279 @
+-2822 -3405 -3 "il parko"
+-1913 -1369 348 "old city entrance"
+-4611 -3763 -57 "via di panico"
+-3560 -2366 116 "via di parco"
+-2994 -4822 -48 "via fabriano"
+-1468 -4571 -46 "via matera"
+-2703 1438 29 "via salerno"

@@ -1,0 +1,23 @@
+/////////////////////////////////////////////////////////
+// Map name       ET Austria v1/b5                     //
+// Locations by   Pinn                                 //
+// Modified by    Pin                                  //
+// Recommended    cg_locations, cg_locationMaxChars 22 //
+// Last edited    16-06-2023                           //
+/////////////////////////////////////////////////////////
+-484 -500 -264 "^8Piano Room"
+-1968 -472 -112 "^8Tower Square"
+80 2016 -164 "^8North Gardens"
+580 740 -164 "^8East Gardens"
+136 -100 -264 "^8East Garden Decking"
+-1164 -1376 -272 "^8Tudor Lower Stair"
+-1332 -796 -200 "^8Upper Stairs"
+-1700 2104 -48 "^8Road Crossing"
+328 -1204 -240 "^8Lower Tudor East"
+-1100 224 -152 "^8The Cross Way"
+-520 276 -204 "^8Promenade South"
+-1092 1252 -208 "^8Central Building"
+-1980 1360 -180 "^8West Courtyard Upper"
+-820 2092 -260 "^8Building Tunnel"
+-516 1392 -168 "^8Promenade North"
+-1484 772 -276 "^8West Courtyard Lower"

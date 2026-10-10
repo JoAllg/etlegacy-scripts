@@ -1,0 +1,69 @@
+/////////////////////////////////////////////////////////
+// Map name       Rushi                                //
+// Locations by   o-0._.0-o                            //
+// Recommended    cg_locations, cg_locationMaxChars 22 //
+// Last edited    08-08-2026                           //
+/////////////////////////////////////////////////////////
+-511 -577 102 "^3Allied Base"
+-271 -3345 102 "^3City Foltein"
+721 -3521 102 @
+-1119 -2785 102 @
+497 -2673 102 @
+-783 -3921 102 @
+1002 -2630 104 @
+1383 -3328 104 @
+1656 -3295 104 "^3Tunnel"
+2051 -2641 104 @
+2665 -2201 104 @
+161 -2065 646 "^3Upper Terrace"
+1489 -1601 454"^3Terrace Stairs"
+689 -4353 102 "^3Abandoned Restaurant"
+-1503 -4561 102 "^3Secret Passage"
+-783 -4785 102 "^3City Passage"
+-975 -5697 102 "^3Old Castle"
+-1119 -6785 102 @
+-1215 -7569 102 "^3Old House"
+65 -6545 102 "^3City Flag"
+-591 -7009 102 @
+401 -5569 102 @
+625 -7265 102 @
+609 -4913 102 "^3Hacabinet"
+321 -4913 102 @
+401 -5473 310 "^3Balcony"
+2305 -7249 102 "^3Main Gate"
+2497 -5825 630 "^3Sniper Tower"
+3297 -5809 230 "^3Near Bridge"
+2513 -5057 230 @
+5377 -5505 230 "^3Rushi Bridge"
+4257 -6705 230 "^3Abandoned Hotel"
+3329 -4321 230 "^3Horse Barn"
+1793 -5697 54 "^3Weapon workplace"
+6417 -4753 230 "^3Abandoned House"
+7169 -2337 230 "^3Rushi passage"
+7217 -1841 230 @
+5089 -1105 230 "^3Castle Rushi"
+7681 255 214 "^3Rushi Hotel"
+5089 -1105 230 "^3Castle Rushi"
+5393 -641 230 @
+4641 -529 230 @
+3403 -2224 40 "^3Castle Underpass"
+4427 -2224 40 @
+7617 -897 86 "^3Boiler House"
+5409 1007 86 "^3Church Rushi"
+4337 1055 86 "^3Church Passage"
+4113 1055 86 "^3Side Wall"
+3841 975 342 @
+2497 559 230 "^3Back Road"
+3153 -593 198 "^3Destroyed Buildings"
+2557 -1313 104 @
+1665 -513 198 "^3Vault House"
+8225 -2273 134 "^3Underground Workshop"
+8145 -3105 134 "^3Underground Passage"
+7281 -3137 134 "^3Road to Rushi"
+6097 -7521 262 "^3Vieuwpoint"
+4385 -3457 230 "^3Rushi Lake"
+6273 -6353 230 @
+5505 -3217 454 @
+1706 2016 215 "^3UFO Control Room"
+2522 2016 215 "^3UFO Room"
+4586 2048 215 "^3UFO Generator"

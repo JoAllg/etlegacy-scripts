@@ -1,0 +1,213 @@
+/////////////////////////////////////////////////////////
+// Map name       Kerkyra                              //
+// Locations by   extracted from kerkyra_b1.pk3        //
+// Recommended    cg_locations, cg_locationMaxChars 25 //
+// Last edited                                         //
+/////////////////////////////////////////////////////////
+4010 5160 169 "1st Floor Artroom"
+3969 6541 168 "1st Floor Bathroom"
+3983 5842 168 "1st Floor Bedroom"
+3976 4794 169 "1st Floor Library"
+4612 5489 168 "1st Floor Side Corridor"
+4369 5350 288 "1st Floor Stairs"
+4697 4834 168 "1st Floor Work room"
+3968 5422 169 "1st floor Relax Room"
+4237 6534 168 "1st floor Spawn Corridor"
+4242 6137 168 @
+4275 5769 168 @
+4784 4774 468 "2nd Floor Balcony"
+4363 4789 468 @
+3862 4830 468 @
+4755 5045 464 "2nd Floor Chapel"
+4028 5167 464 "2nd Floor Corridor"
+4114 5759 464 @
+4251 6069 464 @
+4236 6477 464 @
+4130 6876 464 @
+4011 7020 464 "2nd Floor Diner"
+3558 6852 464 @
+3650 7168 464 @
+4745 5449 496 "2nd Floor Objective"
+3603 6257 464 "2nd Floor Side Balcony"
+3948 6277 464 @
+4358 5102 464 "2nd Floor Stairs"
+3995 4857 728 "3rd Floor Balcony"
+4784 4774 728 @
+4219 6525 728 "3rd Floor Exit"
+4013 6913 728 "3rd Floor Objectives"
+4001 6059 769 "3rd Floor Party Hall"
+4054 5651 728 "3rd Floor Piano"
+4058 5215 728 "3rd Floor Pre room"
+3603 6257 728 "3rd Floor Side Balcony"
+4700 5366 728 "3rd Floor Side Room"
+4364 5079 730 "3rd Floor Stairs"
+-5107 955 65 "Axis Spawn"
+-5104 1376 65 @
+-5138 1603 64 @
+-5009 520 64 "Axis Spawn Path Exit"
+-5119 1960 64 "Axis Spawn Road Exit"
+-864 -33 62 "Barrier Camp House"
+-2206 -234 64 "Barrier House"
+-2403 -979 60 "Barrier House Back"
+-1789 -686 64 "Barrier House Side"
+-2693 -846 64 @
+4269 5214 -47 "Basement"
+1332 2653 73 "Basement Complex Back"
+2007 2811 24 @
+2834 3677 70 "Basement Complex Corridor"
+2901 2940 -31 "Basement Complex Front"
+2910 4298 144 "Basement Complex Side"
+4387 5722 0 "Basement Stairs"
+2350 3251 24 "Basement Tunnel"
+2401 3837 -47 @
+2852 4391 -47 @
+3443 4795 -47 @
+-2699 -265 64 "Broken Wall"
+346 3212 84 "Bush House"
+795 260 64 "City Spawn"
+808 579 64 @
+-343 63 64 "City Spawn Side"
+125 48 64 @
+-358 606 64 "City Spawn Side Exit"
+948 52 119 "City Spawn Stairs"
+-1885 882 76 "Center House"
+-1901 1895 80 @
+2600 2928 24 "Command Post"
+2488 2597 24 "Command Post Spawn"
+-710 2886 64 "Empty Yard"
+2108 -421 64 "End Gate"
+1984 179 64 "End Gate yard"
+-2207 231 64 "First Barrier Stop"
+-4183 -2 64 "First Crossway"
+-4175 707 64 @
+-3505 2359 64 "First Nature Path"
+-3922 1490 64 "First road curve"
+-3504 -569 61 "Football Field"
+-3974 -460 64 @
+-2949 -430 60 "Football goal"
+4978 6433 744 "Fountain"
+4846 5850 712 "Fountain Floor"
+4460 6533 708 @
+4335 7101 728 @
+4695 1372 397 "Hill"
+5094 2447 328 @
+3982 2134 323 @
+3635 953 342 @
+3703 1619 331 @
+5417 3228 276 @
+4363 299 443 "Hill Back Path"
+3708 -148 472 @
+3277 -160 451 @
+103 1422 80 "Long House"
+-240 1404 84 @
+-798 1350 82 @
+-974 1783 84 @
+-813 2054 81 @
+-281 2054 75 @
+152 2135 78 @
+627 2054 78 @
+1162 2005 79 @
+1162 1581 134 @
+1179 1184 100 @
+700 1137 74 @
+271 1137 71 @
+130 1848 79 "Long House Tunnel"
+-447 883 64 "Main Road"
+119 904 64 @
+473 874 64 @
+1341 906 63 @
+6333 5373 8 "Minefield"
+6587 7713 11 @
+6532 9283 64 @
+5053 9514 79 @
+3273 9401 101 @
+2215 8965 257 @
+2119 7235 267 @
+3721 8188 268 "Palace Backyard"
+3619 7439 200 @
+4410 6127 168 "Palace Basement Entrance"
+3968 4523 148 "Palace Front Yard"
+4758 4543 146 @
+3272 3114 -30 "Palace Gates"
+4801 5504 168 "Palace Health and Ammo"
+5021 5601 148 "Palace Hideout"
+4356 4550 160 "Palace Main Entrance"
+4349 5101 168 "Palace Main Hall"
+4367 4808 168 @
+3134 5624 160 "Palace Pit"
+3248 2142 -29 "Palace Road"
+3200 1690 -6 @
+3877 2892 -23 "Palace Road Circle"
+3373 7005 170 "Palace Side"
+3141 6485 164 @
+3129 4948 147 @
+3665 5787 158 @
+3633 5377 152 @
+3646 4888 157 @
+5206 4790 248 "Palace Side Stairs"
+5180 5249 296 @
+5124 5399 488 @
+5426 5741 584 "Palace Side Stairs Exit"
+5027 4340 141 "Palace Side Stairs Start"
+3942 6274 168 "Palace Side entrance"
+3687 6260 160 "Palace Sidedoor"
+3668 6668 152 @
+4212 6839 168 "Palace Spawn"
+3638 7175 168 @
+3613 6851 169 @
+4120 7095 168 @
+4312 7330 188 "Palace Spawn Door"
+4405 6618 392 "Palace Spawn Stairs"
+4440 6479 303 @
+3485 4289 133 "Palace front yard"
+4333 4241 164 @
+4814 3972 130 @
+4696 3621 71 @
+4133 3575 62 @
+3147 3654 65 @
+4302 7143 464 "Poopyroom"
+383 -415 72 "Purple House"
+955 -281 72 @
+1653 -526 50 "Purple House Back"
+966 -733 50 @
+-141 -553 58 "Purple House Yard"
+1791 829 58 "Road End"
+-4763 2165 64 "Road Start"
+2662 932 25 "Second Barrier Stop"
+-1321 1816 64 "Second Crossway"
+-1256 -181 64 @
+-1298 -930 64 @
+-2435 1244 64 "Second Nature Path"
+-2982 1339 64 "Second road curve"
+551 3926 633 "Secret Rock"
+-1929 2854 64 "Sharp Bush Yard"
+-2418 2043 64 "Side Road"
+-1308 2397 64 @
+34 2383 64 @
+1086 2357 64 @
+599 2347 64 @
+-592 2375 64 @
+-1868 2360 64 @
+3096 168 537 "Sniper Hill"
+3617 320 625 @
+4145 719 587 @
+-6470 3031 64 "Start Gate"
+4937 8061 612 "Statue"
+4604 7476 548 "Statue Floor"
+-1706 240 64 "Tank Barrier 1"
+3032 1220 1 "Tank Barrier 2"
+-1000 862 64 "Tank Capture point"
+-5647 2253 64 "Tank Start"
+4556 3070 25 "Tank Stop"
+1431 1600 64 "Third Crossway"
+-2901 254 64 "Third road curve"
+3915 4865 -46 "Tunnel Door"
+2399 -70 81 "Uphill path"
+2876 -114 261 @
+3094 647 227 "Uphill small path"
+4895 3295 32 "Wall Hole"
+-3189 2912 88 "Wasteland"
+-3876 2880 80 @
+-4370 2749 84 @
+-4827 2815 78 @
+-5440 3007 69 @

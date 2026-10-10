@@ -1,0 +1,210 @@
+/////////////////////////////////////////////////////////
+// Map name       River Port                           //
+// Locations by   extracted from river_port_b1.pk3     //
+// Recommended    cg_locations, cg_locationMaxChars 26 //
+// Last edited                                         //
+/////////////////////////////////////////////////////////
+-3395 -4355 512 "1st Dock"
+-3321 -3735 512 "2nd Dock"
+-2983 -3709 512 "2nd Dock Stairs"
+-3367 -2272 512 "3rd Dock"
+-2832 -2302 469 "3rd Dock Ramp"
+4196 -30 452 "Anti-Tank Gun"
+-1522 -3217 472 "Back Alley"
+-1258 -4227 470 "Back Alley Way"
+1647 1262 856 "Balcony"
+1349 1216 850 "Balcony Passage"
+-836 -2877 448 "Cafe Henkka"
+3609 1091 604 "Camping Roof"
+3279 961 604 @
+-117 -2250 442 "Capuzzo Post"
+-1608 -1788 480 "Church"
+-1955 -1446 480 "Church Back door"
+-2479 -1534 452 "Church Backyard"
+-1326 -2290 440 "Church Drive"
+-1152 -1786 480 "Church Front Door"
+-554 -1670 441 "Church Front Yard"
+-1313 -1696 810 "Church Ladder"
+-1132 1788 984 "City Exit"
+-255 3472 984 @
+772 877 952 "City Overpass"
+953 2118 904 "City Road"
+285 2147 984 @
+1022 1035 753 @
+1112 323 696 "City Road Corner"
+-242 2556 992 "City Spawn"
+250 2847 992 "City Spawn Back"
+-660 1905 984 "City Square"
+-714 2519 984 @
+-745 3237 984 @
+264 993 832 "City Stairs"
+-170 993 992 @
+468 521 704 @
+3700 -3060 416 "River Spawn"
+3489 -568 416 "Crossing House"
+3067 -566 408 @
+3238 -163 388 @
+3294 -930 406 @
+3868 -774 405 "Crossing Street"
+3851 -436 392 @
+-3085 -4132 512 "Dock Walkway"
+-3256 -4825 512 @
+-3671 -5198 512 @
+-3110 -4556 512 @
+-3029 -2778 512 @
+-3042 -3275 512 @
+-3039 -1984 512 @
+-2634 -1247 512 "Dock Walkway entrance"
+1883 -2336 512 "East River Walkway"
+1893 -3846 512 @
+4175 1246 376 "Farm road"
+4159 2078 376 @
+4131 2717 376 @
+108 -3084 448 "Foot Bridge Exit"
+-36 -2737 441 @
+-509 -5144 464 "Headquarter 1st Floor"
+-477 -5140 656 "Headquarter 2nd Floor"
+-354 -5314 656 @
+-398 -5652 441 "Headquarter Back"
+-712 -5587 448 @
+-14 -5650 470 @
+-235 -5078 656 "Headquarter Back Door"
+-199 -5294 632 "Headquarter Back Stairs"
+-255 -5481 524 @
+-2 -5245 451 "Headquarter East Side"
+48 -4879 453 @
+-475 -4886 464 "Headquarter Front Door"
+-601 -5183 656 "Headquarter Radio"
+-482 -4486 440 "Headquarter Street"
+-475 -3931 440 @
+-493 -3302 440 @
+-483 -2922 440 @
+-819 -5201 441 "Headquarter West Side"
+4394 -1026 408 "House Near AT"
+-2570 -5824 576 "Mansion"
+-2543 -6196 576 @
+-2381 -5261 576 "Mansion Back Door"
+-3915 -5983 546 "Mansion Back way"
+-3764 -6471 553 @
+-3317 -6589 549 @
+-2840 -6622 544 @
+-2451 -6636 551 @
+-2072 -6454 567 @
+-2179 -6045 523 "Mansion Backyard"
+-2187 -5717 507 @
+-1955 -5208 507 @
+-1885 -4270 475 "Mansion Drive"
+-2111 -4666 480 @
+-2585 -4736 505 @
+-2917 -5541 576 "Mansion Front Door"
+-3209 -5522 551 "Mansion Front Yard"
+-3078 -4997 525 @
+-3620 -5579 539 @
+-2991 -6083 576 "Mansion Side Door"
+1385 2810 768 "North City Stairs"
+-1926 -2749 460 "Port Alley"
+-2293 -2270 448 "Port Entrance"
+-1963 -3761 496 "Port Spawn"
+-2357 -3376 480 "Port Spawn Back"
+-2613 -3870 480 "Port Yard"
+4313 -2941 384 "Riverine Street"
+2974 -2947 408 @
+3608 -3748 393 "Riverine Street Back"
+4240 -2167 407 "Riverine Street Entrance"
+2962 -2004 423 "Riverine Street Exit"
+2534 -1528 464 "Railway"
+3397 -1562 456 @
+2422 -635 356 @
+2913 -1610 464 @
+3338 316 488 "Railway Bridge"
+2670 328 640 @
+2267 328 640 @
+3011 204 575 @
+3114 427 548 @
+2054 316 640 "Railway Bridge Entrance"
+3775 305 376 "Railway Bridge Exit"
+3098 519 400 "Railway Bridge Side"
+3125 107 385 @
+2811 122 384 @
+2809 719 401 @
+2754 -152 520 "Railway Bridge Stairs"
+2695 761 520 @
+4093 -1568 464 "Railway Crossing"
+4628 -1566 456 "Railway Farm Exit"
+2396 2919 640 "Railway Foot Bridge"
+2702 2500 520 "Railway Foot Bridge Stairs"
+2385 2942 360 "Railway Gate Exit"
+2798 -1316 480 "Railway House"
+2348 -1572 464 "Railway Street"
+-564 -521 281 "River"
+143 -596 299 @
+763 -636 287 @
+1118 -2347 305 @
+1200 -3927 294 @
+1250 -4879 283 @
+1299 -3105 288 @
+1293 -1632 288 @
+942 -3011 301 @
+904 -1669 298 @
+-469 -913 422 "River Bank"
+723 -2385 305 @
+-1092 -837 313 @
+605 -931 292 @
+-362 -112 351 @
+1203 -625 351 @
+1620 -2416 350 @
+1637 -3933 354 @
+747 -3670 334 @
+1148 -1556 592 "River Bridge"
+1608 -1549 549 @
+728 -1582 559 @
+1292 -373 512 "River Curve Walkway"
+1746 -841 512 @
+433 -59 512 @
+-304 81 512 "River Far Walkway"
+1129 -3076 591 "River Foot Bridge"
+1729 -3041 523 @
+629 -3066 539 @
+-1737 -1062 512 "River Mouth"
+-1743 -337 270 @
+-1010 -1065 512 "River Mouth Stairs"
+-403 -1071 512 "River Mouth Walkway"
+1998 -149 632 "River Passage Stairs"
+2596 -2908 424 "River Resort"
+2545 -4166 426 "River Resort Side"
+-222 703 1000 "Riverside Balcony"
+-3469 -4626 481 "Sailboat"
+-3292 -298 260 "Sea"
+-4681 -1349 287 @
+-4994 -2190 423 @
+-4937 -3573 464 @
+-4597 -4672 443 @
+-4789 -5685 410 @
+-3335 -2993 393 "Sea Bank"
+-3469 -4017 371 @
+-3929 -5188 392 @
+-3298 -1978 391 @
+-2827 -992 340 @
+574 -740 469 "Speedboat Mammu"
+2683 2008 400 "Station"
+2672 1182 400 @
+3581 1614 400 "Station Backyard"
+3169 1014 400 @
+3608 1108 400 @
+2291 1974 352 "Station Front"
+2303 1170 352 @
+2107 761 640 "Station Overpass"
+2103 1285 640 @
+2102 2024 640 @
+3251 2363 405 "Station Side"
+-4097 -1866 461 "Submarine Spot"
+-4145 -2849 510 @
+-4133 -3679 481 @
+342 -1735 493 "Tank Barrier"
+346 -1470 493 @
+-462 -2306 440 "Tank Stop"
+-319 -1987 444 @
+2407 341 352 "Under Railway Bridge"
+454 -3702 512 "West River Walkway"
+433 -2427 512 @
+561 -4467 512 @

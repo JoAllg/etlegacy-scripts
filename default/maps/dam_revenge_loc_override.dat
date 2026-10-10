@@ -1,0 +1,44 @@
+/////////////////////////////////////////////////////////
+// Map name       Bramburg Dam Revenge                 //
+// Locations by   extracted from dam_revenge.pk3       //
+// Recommended    cg_locations, cg_locationMaxChars 27 //
+// Last edited                                         //
+/////////////////////////////////////////////////////////
+-1087 -4189 2380 "Axis Tank"
+-745 2130 2352 "Big Doors"
+-737 1941 2347 @
+-755 2614 2364 "Big Doors Hallway"
+-316 2814 2651 "Big Doors Hallway Stairwell"
+-2021 -1799 2374 "Command Post Room"
+-1268 227 2410 "Dam Road"
+-1635 -1058 2410 @
+-1527 -2210 2422 @
+-1350 -3308 2412 @
+81 2457 2672 "Generator Control Room"
+-104 1332 2469 "Generator Room"
+784 1282 2449 @
+188 2087 2638 "Generator Room Stairs"
+-347 1717 2673 "Generator Room Vents"
+532 2617 2658 "Generator Transformers"
+263 2980 2660 "Long Hallway"
+-794 -3686 1080 "Lower Dam Walkway"
+-958 -3332 1080 @
+-1551 -3096 1083 @
+-1669 -2512 1083 @
+-1691 -2235 1083 @
+-1994 -2465 1083 @
+-1833 -1855 2374 "MG Nest"
+-756 -3843 2684 "Observation Tower 1"
+-165 440 2747 "Observation Tower 2"
+-1746 -3813 2341 "Planning Room"
+-1289 1343 2553 "Radio Room"
+-1371 1656 2672 "Radio Room Vents"
+-1804 3959 2518 "Service Halls"
+-146 3817 2507 @
+-1062 4849 2466 "Service Yard"
+-752 3582 2370 "Service Yard Tunnel"
+-1304 1351 2347 "Sleeping Quarters"
+-756 -5694 2413 "South Access Tunnel"
+-2195 6257 2483 "Truck Path"
+-1478 2636 2447 "Warehouse"
+-1310 1892 2447 "Warehouse Passage"

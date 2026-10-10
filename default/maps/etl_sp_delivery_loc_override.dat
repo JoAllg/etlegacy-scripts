@@ -1,0 +1,153 @@
+/////////////////////////////////////////////////////////
+// Map name       ETL Special Delivery                 //
+// Locations by   999aciz                              //
+// Recommended    cg_locations, cg_locationMaxChars 23 //
+// Last edited    13-01-2022                           //
+/////////////////////////////////////////////////////////
+-192 -3584 0 "Allied Spawn"
+-11 -3034 -39 @
+219 -2940 -39 "Allied East Corridor"
+588 -2572 -39 @
+806 -2307 -75 "East Field"
+548 -2142 -19 "East Sniper Hill"
+225 -2013 135 @
+-198 -1956 202 "Middle Sniper Hill"
+-580 -1980 146 "West Sniper Hill"
+-999 -1968 -2 @
+-695 -2203 160 "Mountain Tunnel"
+-757 -3377 104 @
+-368 -3007 -39 "Allied Spawn"
+-556 -2924 -39 "Allied West Corridor"
+-970 -2574 -39 @
+-1234 -2274 -75 "West Field"
+-1375 -1802 -78 @
+-1136 −1421 -78 @
+-600 -1257 -87 @
+-356 -1684 -62 @
+-430 -1133 -99 @
+-446 -692 -76 "West Rock"
+-705 -541 -37 "West Wall"
+-543 -239 -49 @
+-572 -35 72 @
+-791 -402 72 @
+-838 -709 64 "West Tower"
+1083 -2002 -74 "East Field"
+754 −1587 -79 @
+43 -1122 -94 @
+-20 -1657 -63 @
+94 -698 -47 "East Rock"
+315 -547 -33 "East Wall"
+154 -202 -46 @
+185 -24 72 @
+426 -424 72 @
+475 -687 64 "East Tower"
+-190 -32 72 "Middle Wall"
+-191 -2129 -55 "Train Tracks"
+-191 -1702 -55 @
+-192 -1123 -97 @
+-194 -662 -135 @
+-191 -274 -161 @
+-188 14 -183 "Lower Bunker Entrance"
+-194 385 -187 "Train Tracks"
+-193 940 -187 @
+-193 1446 -187 @
+-622 985 -167 "Ladder"
+-635 732 72 "Gold Storage Lobby"
+-910 755 72 @
+-910 1116 152 "Gold Storage"
+-926 1491 152 @
+-648 1469 152 @
+-196 1370 152 "Forward Bunker Platform"
+-412 313 72 "Forward Bunker"
+25 305 72 @
+-189 127 112 @
+-420 726 72 "West Bunker Catwalk"
+-413 1166 72 @
+26 726 72 "East Bunker Catwalk"
+17 1180 72 @
+167 1726 149 "Cave"
+616 1741 128 @
+247 726 72 "Barracks Bedroom"
+545 937 72 @
+543 1118 72 "Barracks"
+612 1420 72 @
+427 1417 -7 "Barracks Stairs"
+171 1242 -167 @
+327 1229 72 "Barracks"
+766 1740 128 "Warehouse Catwalk"
+1010 1751 128 @
+1012 1977 128 @
+1017 2374 128 @
+1013 2511 -135 "Warehouse Ladder"
+1184 1973 128 "Upper Office"
+1171 2375 128 @
+1490 2183 128 @
+1709 2179 128 "Upper Office Lobby"
+1870 1839 128 @
+2675 1546 128 "Axis Spawn"
+2677 1963 128 @
+2290 1538 128 "Upper Office Lobby"
+2296 1956 128 @
+2302 2449 128 @
+2061 2618 -135 "Elevator Shaft"
+1794 2436 128 "Spawnway"
+1703 2719 128 @
+1532 2946 128 "Spawnway Nook"
+1719 2941 128 "Spawnway"
+1523 3162 128 "Spawnway Nook"
+1718 3158 128 "Spawnway"
+1691 3499 128 "Door Controls"
+1304 3324 128 "Controls Room"
+1508 3312 128 @
+1366 3597 128 @
+1299 3149 128 "Storage Room"
+1304 2861 128 @
+1304 2728 128 "Machine Room"
+1199 2605 128 @
+1533 2717 -135 "Elevator"
+1533 2717 131 @
+2009 1548 120 "Axis Spawn Stairs"
+1688 1659 -23 @
+1685 1979 -135 "Lower Corridor"
+1689 2382 -135 @
+1687 2719 -135 @
+1478 2377 -135 "North Lower Corridor"
+1151 2371 -135 @
+1197 1961 -135 "South Lower Corridor"
+1522 1965 -135 @
+378 1838 -135 "Lower Office"
+605 1838 -135 @
+134 1673 -135 "Train Station"
+189 1843 -135 @
+113 2331 -135 @
+112 2936 -135 @
+-309 2978 -167 "Trains"
+-315 2569 -167 @
+-319 2237 -167 @
+458 2933 -135 "Warehouse Entrance"
+960 3501 -135 "West Warehouse"
+501 3502 -135 @
+909 2924 -135 @
+818 2513 -135 @
+829 1840 -135 "Back West Warehouse"
+943 1932 -135 @
+1017 2372 -135 @
+468 2394 -135 "West Warehouse Barrels"
+929 3805 -135 "West Loading Bay"
+476 3808 -135 @
+1999 2852 -135 "East Warehouse"
+2072 3368 -135 @
+2063 3932 -135 "East Loading Bay"
+1309 3950 -135 "Loading Doors"
+1711 3930 -135 @
+1186 3721 47 "Loading Door Shelves"
+1739 3706 47 @
+1681 3581 128 "Door Controls"
+1450 3722 64 "Loading Door Shelves"
+1538 3613 128 "Controls Room"
+1548 3700 47 "Loading Door Shelves"
+1288 3717 47 @
+697 2263 47 "Warehouse Shelves"
+691 2629 47 @
+691 2776 47 @
+692 3132 47 @
