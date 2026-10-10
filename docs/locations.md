@@ -1,6 +1,6 @@
 # Location files (map location names)
 
-A location file names places on a map. The client uses it to show a place name (`Fuel Dump`) instead of a grid coordinate (`C,4`) wherever a position is printed. Valid for legacy 2.86 (source: `src/cgame/cg_locations.c`) and nitmod 2.3.5 (decompiled: `research/nitmod_2.3.5/decompiled/cgame_locations.c`).
+A location file names places on a map. The client uses it to show a place name (`Fuel Dump`) instead of a grid coordinate (`C,4`) wherever a position is printed. Valid for legacy 2.86 (source: `src/cgame/cg_locations.c`) and nitmod 2.3.5 (decompiled: `cgame_locations.c`).
 
 Location files are client-side only. The server sends coordinates, every client names them with its own files, so other players do not see these names.
 

@@ -116,6 +116,6 @@ Starting such an entry prints `Can't find map maps/<map>.bsp` and starts no serv
 
 ### Crash after a mod switch in the menu
 
-nitmod's `G_InitGame` checks `gamename` and `fs_game` = `nitmod`, `mod_version` = `2.3.5` and `mod_url` = `etmods.net` and returns without setting up the level when one differs (`research/nitmod_2.3.5/decompiled/qagame_runframe_crash.c`). The engine runs game frames right after the init (`src/server/sv_init.c` `SV_SpawnServer`), and the first one reads the missing entity array: segmentation fault in `G_RunFrame` → `CheckCvars` → `G_ReassignSkillLevel`, crash log `<fs_homepath>/nitmod/crash_*.log` with an empty `Map:`.
+nitmod's `G_InitGame` checks `gamename` and `fs_game` = `nitmod`, `mod_version` = `2.3.5` and `mod_url` = `etmods.net` and returns without setting up the level when one differs. The engine runs game frames right after the init (`src/server/sv_init.c` `SV_SpawnServer`), and the first one reads the missing entity array: segmentation fault in `G_RunFrame` → `CheckCvars` → `G_ReassignSkillLevel`, crash log `<fs_homepath>/nitmod/crash_*.log` with an empty `Map:`.
 
 Likely trigger, not reproduced: a legacy game hosted before switching to nitmod in the mods menu. Legacy registers `mod_version` and `mod_url` with its own values, cvars survive the mod switch, and registering an existing cvar keeps its value (`src/qcommon/cvar.c` `Cvar_Get`). The crashes seen so far followed that order. Workaround: start the game in nitmod (`+set fs_game nitmod`) to host there.

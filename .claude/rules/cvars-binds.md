@@ -15,10 +15,10 @@ paths:
 
 Check the local dumps first, they are taken from the running game and cost one grep (the folder is local, not in version control; if it is missing, use the docs):
 ```
-grep -i '^cg_fov	' research/*/cvars.tsv   # name, flags, value, default, side, source
-grep -i '^forcetapout	' research/*/cmds.tsv
+grep -i '^cg_fov	' research/dumps/*/cvars.tsv   # name, flags, value, default, side, source
+grep -i '^forcetapout	' research/dumps/*/cmds.tsv
 ```
-- Dumped: legacy, nitmod, jaymod. A cvar missing in one mod is listed in `research/<mod>/diff_legacy.md`. `value` is the profile's value at dump time, `default` the code default.
+- Dumped: legacy, nitmod, jaymod. A cvar missing in one mod is listed in `research/dumps/<mod>_<version>/diff_legacy.md`. `value` is the value at dump time (no profile loaded), `default` the code default.
 - Meaning and value range: ET: Legacy docs or source (`src/cgame/cg_cvars.c`, `src/client`, `src/renderer`); only then the web. Never read `console.log`.
 - A cvar that exists in only some mods: say so in its comment, and put a value that differs per mod into `mods/<mod>/mod_general.cfg`.
 - Server-side commands of a mod (handled by qagame) are not in `cmds.tsv`: unverified until tested in game, say so.

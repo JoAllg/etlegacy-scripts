@@ -21,7 +21,20 @@ default/huds/*backup*.dat
 Others/
 archive/
 assets/
-research/
+research/*
+!research/README.md
+!research/dumps/
+research/dumps/*
+!research/dumps/dump_cvars.py
+!research/dumps/build_docs.py
+!research/dumps/diff_profile.py
+!research/locations/
+research/locations/*
+!research/locations/locations.py
+!research/decompile/
+research/decompile/*
+!research/decompile/decompile.sh
+!research/decompile/DecompileFunctions.java
 TODO.md
 
 .claude/settings.local.json

@@ -1,7 +1,6 @@
 ---
 paths:
   - "tools/**"
-  - "research/*.py"
   - "deploy.sh"
   - "launcher.sh"
   - "launcher32.sh"
@@ -12,7 +11,7 @@ paths:
 What each tool does and its usage line: `tools/README.md` and the module docstring at the top of each script (read those, not the whole script).
 
 - Python 3, standard library only, no new dependencies.
-- Machine paths and preferences come only from `settings.conf` through `tools/helpers/settings.py` (`HOMEPATH`, `BASEPATH`, `GAME_BIN`, `PROFILE`, `REPO`, `VSAY`, `MENU`, ...): never hard-code a path, never derive the game folder from the repo location. Shared modules are imported as `helpers.<module>`; scripts outside `tools/` itself (subfolders, `research/`, helpers that run as a command) add `tools/` to `sys.path` first.
+- Machine paths and preferences come only from `settings.conf` through `tools/helpers/settings.py` (`HOMEPATH`, `BASEPATH`, `GAME_BIN`, `PROFILE`, `REPO`, `VSAY`, `MENU`, ...): never hard-code a path, never derive the game folder from the repo location. Shared modules are imported as `helpers.<module>`; scripts outside `tools/` itself (subfolders, helpers that run as a command) add `tools/` to `sys.path` first.
 - Code that more than one tool needs lives in `tools/helpers/common.py` (game log, color codes, cfg-safe text, atomic write); everything that asks a server or tells servers apart in `tools/helpers/serverapi.py`; the server menu pages in `tools/helpers/menupages.py`. Import from there, never from another tool.
 - A new setting needs three places: `tools/helpers/settings.py`, its detection/default in `deploy.sh` (only missing values are appended, existing ones never changed), and the `settings.conf` line in `CLAUDE.md`.
 - cfg, location and pk3 text files have no fixed encoding: classic mods draw 8-bit bytes, legacy decodes UTF-8 (`docs/special_chars.md`). A tool that writes them back reads and writes `latin1`, which keeps every byte as it is; UTF-8 would re-encode the bytes above 0x7F.
@@ -21,7 +20,6 @@ What each tool does and its usage line: `tools/README.md` and the module docstri
 - A generated cfg that a key press execs, and every `exec` it binds to a key, uses `execq` (`.claude/rules/exec-chain.md`).
 - Tools are rerunnable: a rerun keeps what the user edited (vsay texts, the settings block of a map autoexec) and reports what it added or removed.
 - A new tool gets a section in `tools/README.md` and a line in the `CLAUDE.md` folder tree; the usage stays in the docstring.
-- Tools that start the game (`research/dump_cvars.py`) need the display and write to `fs_homepath`: run them outside the sandbox.
 
 Generated output, never read whole or edited by hand:
 
@@ -34,6 +32,5 @@ Generated output, never read whole or edited by hand:
 | `default/serverconfigs/current.cfg`, `current_vsay.cfg`, `history.tsv` | `tools/serverconfig.py`, on every server change (`.claude/rules/serverconfigs.md`) |
 | the `HUD VALUES` block of `user.cfg` | `tools/helpers/hudvalues.py`, on every `deploy.sh` run (`.claude/rules/hud.md`) |
 | `tools/vsaycolors.html`, `default/scripts/vsays/vsaycolors.tsv` | `tools/vsaycolors.py` |
-| `research/<mod>/*.tsv`, `diff_*.md`, `research/README.md` | `research/dump_cvars.py`, `build_docs.py`, `diff_profile.py` |
 
 `deploy.sh`: safe to rerun, asks before replacing a folder or foreign link, never touches `guid_backup/` contents except to back up and link keys. Its header comment lists every step: keep it in sync with the code. Mod list: `MODS` (all mod folders). `default/autoexecs/autoexec_*.cfg` and `default/maps/` need no list: they are linked once into `etmain/` and to `etmain/maps`.

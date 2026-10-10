@@ -7,16 +7,19 @@
 # Sets up this repo as the profile of every mod: one set of configs for all mods.
 # Safe to rerun (after pulling, adding autoexecs, new mods or new GUID keys).
 #
+# Usage: ./deploy.sh [--unattended]
+#   --unattended (launcher.sh): asks nothing, every question takes its default; settings that need an answer
+#   (ETLEGACY_SRC, GAME_BIN/HOMEPATH/BASEPATH the game can't tell) stay missing for the next run in a terminal.
+#   Without a terminal the same applies.
+#
 # WHAT THIS SCRIPT DOES:
 # ----------------------
 # 0. Setup: writes machine-specific values to settings.conf (read by the Python tools too).
 #    Only missing values are detected and appended; existing ones are never changed,
 #    so delete a line to detect it again:
-#    - GAME_BIN:  the running game's executable (/proc), else etl/etl.x86_64 on PATH, else asks
-#    - HOMEPATH, BASEPATH (fs_homepath, fs_basepath): the search path the game prints, taken from
-#      the running game's etconsole.log (/proc), else from a quick `etlded +quit`, else asks
-#    - GAME_BIN_I386 (32-bit client next to GAME_BIN, for i386-only mods), PROFILE ("default"),
-#      KEYMAP_MOD (default mod of tools/keymap)
+#    - PLAYER_NAME (editor in Modified by of location files, research/locations/locations.py): written empty,
+#      the user puts their name in by hand
+#    - KEYMAP_MOD (default mod of tools/keymap), PROFILE ("default")
 #    - VSAY_TEAM, VSAY_GLOBAL, VSAY_BUDDY (base color of vsay_team/vsay/vsay_buddy text), VSAY_PUNCT (punctuation),
 #      VSAY_HIGHLIGHT, VSAY_URGENT (key words): colors of the vsay texts (tools/voicemenu.py, vsay skill)
 #    - MENU_HEAD, MENU_KEY, MENU_TEXT, MENU_NAV (TAB line), MENU_GLOBAL (global chat), MENU_AXIS, MENU_ALLIES (spawnpoint owner),
@@ -24,6 +27,11 @@
 #      (voice chat, spawn selector, server menu; tools/vsaycolors.py apply, voicemenu.py, spawnpoints.py, servermenu.py)
 #    - SERVERMENU_POLL (seconds between two polls, at least 5), SERVERMENU_KEEP (seconds a server's last values stay
 #      while it doesn't send them: no answer, no getstatus, no split): tools/servermenu.py
+#    - GAME_BIN:  the running game's executable (/proc), else etl/etl.x86_64 on PATH, else asks
+#    - HOMEPATH, BASEPATH (fs_homepath, fs_basepath): the search path the game prints, taken from
+#      the running game's etconsole.log (/proc), else from a quick `etlded +quit`, else asks
+#    - GAME_BIN_I386 (32-bit client next to GAME_BIN, for i386-only mods)
+#    - ETLEGACY_SRC (ET: Legacy source checkout, optional, only research/dumps needs it): asked, empty = none
 # 1. Asks to set defaultprofile.dat to PROFILE, the profile the game writes etconfig.cfg into
 # 2. Creates user.cfg from user.example.cfg (personal settings, omnibot_path from HOMEPATH) if missing,
 #    else appends the set/seta values of the template that user.cfg lacks (reported)
@@ -92,10 +100,20 @@ GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-# ask <question> <default y|n>: true on yes; without a terminal the default is taken
+UNATTENDED=""
+case "$*" in
+	"") ;;
+	--unattended) UNATTENDED=1 ;;
+	*) echo "Usage: $0 [--unattended]" >&2; exit 1 ;;
+esac
+
+# true when questions can be asked
+interactive() { [ -z "$UNATTENDED" ] && [ -t 0 ]; }
+
+# ask <question> <default y|n>: true on yes; unattended the default is taken
 ask() {
 	local reply=""
-	[ -t 0 ] && read -r -p "$1 " reply
+	interactive && read -r -p "$1 " reply
 	case "${reply:-$2}" in [yY]*) return 0 ;; *) return 1 ;; esac
 }
 
@@ -153,13 +171,41 @@ setup() {
 	local missing="" key
 	# shellcheck source=/dev/null
 	[ -f "$SETTINGS" ] && source "$SETTINGS"
-	for key in GAME_BIN HOMEPATH BASEPATH GAME_BIN_I386 PROFILE KEYMAP_MOD VSAY_TEAM VSAY_GLOBAL VSAY_BUDDY VSAY_PUNCT VSAY_HIGHLIGHT VSAY_URGENT MENU_HEAD MENU_KEY MENU_TEXT MENU_NAV MENU_GLOBAL MENU_AXIS MENU_ALLIES MENU_PLAYING MENU_SPEC MENU_BOTS SERVERMENU_POLL SERVERMENU_KEEP; do
+	for key in PLAYER_NAME KEYMAP_MOD PROFILE VSAY_TEAM VSAY_GLOBAL VSAY_BUDDY VSAY_PUNCT VSAY_HIGHLIGHT VSAY_URGENT MENU_HEAD MENU_KEY MENU_TEXT MENU_NAV MENU_GLOBAL MENU_AXIS MENU_ALLIES MENU_PLAYING MENU_SPEC MENU_BOTS SERVERMENU_POLL SERVERMENU_KEEP GAME_BIN HOMEPATH BASEPATH GAME_BIN_I386 ETLEGACY_SRC; do
 		grep -q "^$key=" "$SETTINGS" 2>/dev/null || missing+=" $key"
 	done
 	[ -z "$missing" ] && return
 	needs() { [[ "$missing " == *" $1 "* ]]; }
 	echo -e "\n${CYAN}🔍 Detecting settings:${missing}${NC}"
 	[ -f "$SETTINGS" ] || echo "# Machine-specific values and personal preferences, written by deploy.sh (existing values are kept, delete a line to detect it again)" >"$SETTINGS"
+
+	if needs PLAYER_NAME; then
+		set_value PLAYER_NAME ""
+		echo -e "  ${ORANGE}⚠️  Put your player name into PLAYER_NAME in $SETTINGS (editor in location file headers)${NC}"
+	fi
+	needs KEYMAP_MOD && set_value KEYMAP_MOD "nitmod"
+	needs PROFILE && set_value PROFILE "default"
+	# the colors of scripts/vsays/chat.cfg; base colors = the game's own team (cyan), global (green) and fireteam (yellow) chat
+	needs VSAY_TEAM && set_value VSAY_TEAM "^5"
+	needs VSAY_GLOBAL && set_value VSAY_GLOBAL "^2"
+	needs VSAY_BUDDY && set_value VSAY_BUDDY "^3"
+	needs VSAY_PUNCT && set_value VSAY_PUNCT "^9"
+	needs VSAY_HIGHLIGHT && set_value VSAY_HIGHLIGHT "^7"
+	needs VSAY_URGENT && set_value VSAY_URGENT "^i"
+	# the colors of the echo menus; readable on bright and dark maps with the popup shadow (huds/hud_v<version>.dat textStyle 3)
+	needs MENU_HEAD && set_value MENU_HEAD "^5"
+	needs MENU_KEY && set_value MENU_KEY "^o"
+	needs MENU_TEXT && set_value MENU_TEXT "^z"
+	needs MENU_NAV && set_value MENU_NAV "^g"
+	needs MENU_GLOBAL && set_value MENU_GLOBAL "^2"
+	needs MENU_AXIS && set_value MENU_AXIS "^1"
+	needs MENU_ALLIES && set_value MENU_ALLIES "^f"
+	needs MENU_PLAYING && set_value MENU_PLAYING "^2"
+	needs MENU_SPEC && set_value MENU_SPEC "^n"
+	needs MENU_BOTS && set_value MENU_BOTS "^m"
+	# server menu: poll every 5 s (ET: Legacy servers answer 1 packet/s per address after a burst of 10), keep missing values 60 s
+	needs SERVERMENU_POLL && set_value SERVERMENU_POLL "5"
+	needs SERVERMENU_KEEP && set_value SERVERMENU_KEEP "60"
 
 	local pid dirs log fd
 	pid=$(game_pid)
@@ -173,7 +219,7 @@ setup() {
 		fi
 		while [ -z "$bin" ]; do
 			echo -e "  ${ORANGE}⚠️  ET: Legacy executable not found${NC}"
-			[ -t 0 ] || exit 1
+			interactive || exit 1
 			read -r -p "  Name or path of the game executable (empty = abort): " bin
 			[ -z "$bin" ] && exit 1
 			bin=$(command -v "${bin/#\~/$HOME}")
@@ -203,7 +249,7 @@ setup() {
 		[[ $dirs == */$probe* && -d "$home/$probe" ]] && rm -rf "${home:?}/$probe"
 		if [ -z "$dirs" ] || [ ! -d "$home" ] || [ ! -d "$base/etmain" ]; then
 			echo -e "  ${ORANGE}⚠️  Could not read the search path from the game${NC}"
-			[ -t 0 ] || exit 1
+			interactive || exit 1
 			home=$(read_dir "  fs_homepath" "$HOME/.etlegacy" "")
 			base=$(read_dir "  fs_basepath (folder with etmain/pak0.pk3)" "/usr/lib/etlegacy" "etmain")
 		fi
@@ -216,29 +262,22 @@ setup() {
 		[ -x "$i386" ] || i386=""
 		set_value GAME_BIN_I386 "$i386"
 	fi
-	needs PROFILE && set_value PROFILE "default"
-	needs KEYMAP_MOD && set_value KEYMAP_MOD "nitmod"
-	# the colors of scripts/vsays/chat.cfg; base colors = the game's own team (cyan), global (green) and fireteam (yellow) chat
-	needs VSAY_TEAM && set_value VSAY_TEAM "^5"
-	needs VSAY_GLOBAL && set_value VSAY_GLOBAL "^2"
-	needs VSAY_BUDDY && set_value VSAY_BUDDY "^3"
-	needs VSAY_PUNCT && set_value VSAY_PUNCT "^9"
-	needs VSAY_HIGHLIGHT && set_value VSAY_HIGHLIGHT "^7"
-	needs VSAY_URGENT && set_value VSAY_URGENT "^i"
-	# the colors of the echo menus; readable on bright and dark maps with the popup shadow (huds/hud_v<version>.dat textStyle 3)
-	needs MENU_HEAD && set_value MENU_HEAD "^5"
-	needs MENU_KEY && set_value MENU_KEY "^o"
-	needs MENU_TEXT && set_value MENU_TEXT "^z"
-	needs MENU_NAV && set_value MENU_NAV "^g"
-	needs MENU_GLOBAL && set_value MENU_GLOBAL "^2"
-	needs MENU_AXIS && set_value MENU_AXIS "^1"
-	needs MENU_ALLIES && set_value MENU_ALLIES "^f"
-	needs MENU_PLAYING && set_value MENU_PLAYING "^2"
-	needs MENU_SPEC && set_value MENU_SPEC "^n"
-	needs MENU_BOTS && set_value MENU_BOTS "^m"
-	# server menu: poll every 5 s (ET: Legacy servers answer 1 packet/s per address after a burst of 10), keep missing values 60 s
-	needs SERVERMENU_POLL && set_value SERVERMENU_POLL "5"
-	needs SERVERMENU_KEEP && set_value SERVERMENU_KEEP "60"
+
+	if needs ETLEGACY_SRC; then
+		local src
+		if interactive; then
+			while true; do
+				read -r -p "  ET: Legacy source checkout (empty = none): " src
+				src=${src/#\~/$HOME}
+				src=${src%/}
+				{ [ -z "$src" ] || [ -d "$src/src/qcommon" ]; } && break
+				echo -e "  ${ORANGE}⚠️  Not found: $src/src/qcommon${NC}" >&2
+			done
+			set_value ETLEGACY_SRC "$src"
+		else
+			echo "  ETLEGACY_SRC left missing: asked on the next run in a terminal"
+		fi
+	fi
 }
 
 setup

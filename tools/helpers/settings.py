@@ -1,4 +1,5 @@
 """Machine-specific values from settings.conf (written by deploy.sh), shared by all tools."""
+import os
 import sys
 from pathlib import Path
 
@@ -24,6 +25,8 @@ HOMEPATH = Path(_get("HOMEPATH"))  # fs_homepath: mod folders, etmain/dlcache
 BASEPATH = Path(_get("BASEPATH"))  # fs_basepath: stock and legacy pk3s
 GAME_BIN = _get("GAME_BIN")
 GAME_BIN_I386 = _values.get("GAME_BIN_I386", "")  # 32-bit client, only for i386-only mods
+# ET: Legacy source checkout, optional, only research/dumps needs it; the environment wins
+ETLEGACY_SRC = os.environ.get("ETLEGACY_SRC") or _values.get("ETLEGACY_SRC", "")
 PROFILE = _get("PROFILE")
 KEYMAP_MOD = _get("KEYMAP_MOD")
 # colors of the vsay texts: base of vsay_team / vsay / vsay_buddy, punctuation, key words, urgent words
@@ -34,4 +37,6 @@ VSAY = {k: _get("VSAY_" + k.upper()) for k in ("team", "global", "buddy", "punct
 # while it doesn't send them (no answer, no getstatus, no split)
 SERVERMENU_POLL = float(_get("SERVERMENU_POLL"))
 SERVERMENU_KEEP = float(_get("SERVERMENU_KEEP"))
+# editor written into Modified by of location files (research/locations/locations.py); empty until set
+PLAYER_NAME = _values.get("PLAYER_NAME", "")
 MENU = {k: _get("MENU_" + k.upper()) for k in ("head", "key", "text", "nav", "global", "axis", "allies", "playing", "spec", "bots")}
