@@ -8,7 +8,7 @@ spectators and bots; servers that don't answer come last. Also used by tools/key
 import re
 
 from helpers.common import COLOR, clean, strip_colors
-from helpers.settings import MENU
+from helpers.settings import MENU, VSAY
 
 EXEC = "profile/servermenu"  # the profile link of deploy.sh in each mod folder
 KEYS = ("1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "US_MINUS", "US_EQUALS")
@@ -76,8 +76,14 @@ def order(rows):
     return sorted(rows, key=lambda r: (r["playing"] is None, -(r["playing"] or 0), -(r["spec"] or 0), -r["bots"]))
 
 
-def pages(rows, size, stamp):
-    """{file name: cfg text} of one page set; the columns are aligned over all pages."""
+def connect_say(row, vsay):
+    """Sets the vsay `vsay` (id) of a number key that scripts/servermenu.cfg sends behind its gates: the full hostname in its own colors."""
+    g = VSAY["global"]
+    return f"set connectSayText vsay {vsay} {g}Connecting to {cut(row['name'], 999)}{VSAY['punct']}."
+
+
+def pages(rows, size, stamp, vsay="Bye"):
+    """{file name: cfg text} of one page set; the columns are aligned over all pages. vsay: id of the connect say."""
     count = max(1, -(-len(rows) // size))
     lines = table(rows)
     out = {}
@@ -91,7 +97,7 @@ def pages(rows, size, stamp):
             cfg.append(f'echo "{MENU["text"]}No favorite servers: add some in the server browser"')
         cfg += [f'echo "{MENU["key"]}{f"{n}.":<4}{MENU["text"]}{text}"' for n, text in enumerate(lines[page * size:(page + 1) * size], 1)]
         cfg.append("vstr unbindNumbers")
-        cfg += [f'bind {key} "vstr resetLayers; connect {row["address"]}"' for key, row in zip(KEYS, part)]
+        cfg += [f'bind {key} "vstr resetLayers; {connect_say(row, vsay)}; vstr connectSayClass; set timerDone connect {row["address"]}; vstr timer400"' for key, row in zip(KEYS, part)]
         cfg.append(f'bind TAB "execq {EXEC}/p{size}_{(page + 1) % count}.cfg"')  # execq: a key press prints no "execing" line
         out[f"p{size}_{page}.cfg"] = "\n".join(cfg) + "\n"
     return out

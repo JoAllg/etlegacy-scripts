@@ -19,12 +19,13 @@ Usage: tools/servermenu.py [--interval <s>] [--once]
        tools/servermenu.py --selftest
 """
 import argparse
+import re
 import time
 
 from helpers.common import last_connect, strip_colors, write_atomic
 from helpers.menupages import EXEC, cells, cut, order, pad, pages, players, table, width
-from helpers.serverapi import adr_string, favorites, resolve, status, summarize
-from helpers.settings import MENU, PROFILE, REPO, SERVERMENU_KEEP, SERVERMENU_POLL
+from helpers.serverapi import CONFIGS, adr_string, favorites, history, identify, resolve, servers, status, summarize
+from helpers.settings import MENU, PROFILE, REPO, SERVERMENU_KEEP, SERVERMENU_POLL, VSAY
 
 OUT = REPO / PROFILE / "servermenu"
 SIZES = (12, 7)  # servers per page: all keys / nitmod's cap of 8 popup lines minus the heading
@@ -86,16 +87,30 @@ def others(addresses, current):
     return [a for a in addresses if not current or (resolve(a) and adr_string(resolve(a))) != current]
 
 
+def connect_vsay(current, known=None, rows=None, configs=CONFIGS):
+    """Vsay id of the connect say on the server the game is on: connectVsayServer of its <id>.cfg
+    (set connectVsayServer "vsay <id>"), Bye without a server, id, file or line."""
+    name = (history() if known is None else known).get(current or "", "")
+    server = identify(name, servers() if rows is None else rows) if name else None
+    try:
+        text = (configs / f"{server}.cfg").read_text("latin1") if server else ""
+    except OSError:
+        text = ""
+    m = re.search(r'^\s*seta?\s+connectVsayServer\s+"?vsay\s+(\w+)', text, re.M)
+    return m.group(1) if m else "Bye"
+
+
 def update(history, known):
     favs = favorites()
-    rows = list(status(others(favs, last_connect()), names=favs).values())
+    current = last_connect()
+    rows = list(status(others(favs, current), names=favs).values())
     steady(history, rows)
     keep(known, rows, time.monotonic())
     rows = order(rows)
     stamp = time.strftime("%H:%M:%S")
     files = {}
     for size in SIZES:
-        files.update(pages(rows, size, stamp))
+        files.update(pages(rows, size, stamp, connect_vsay(current)))
     write(files)
     return rows
 
@@ -129,8 +144,10 @@ def selftest():
     first = p12["p12_0.cfg"].splitlines()
     assert first[1] == "vstr popupsMenu" and "SERVERS 1/2 12:00:00" in first[2] and "TAB next page" in first[2]
     assert sum(l.startswith("echo") for l in first) == 13 and sum(l.startswith("echo") for l in p7["p7_0.cfg"].splitlines()) == 8
-    assert 'bind 1 "vstr resetLayers; connect 192.0.2.14:27960"' in first  # most playing humans first
-    assert 'bind US_EQUALS "vstr resetLayers; connect 192.0.2.3:27960"' in first
+    one_key = next(line for line in first if line.startswith("bind 1 "))
+    assert one_key.endswith('; vstr connectSayClass; set timerDone connect 192.0.2.14:27960; vstr timer400"')  # most playing humans first
+    assert f'set connectSayText vsay Bye {VSAY["global"]}Connecting to ' in one_key and one_key.count('"') == 2
+    assert any(line.startswith("bind US_EQUALS ") and line.endswith('connect 192.0.2.3:27960; vstr timer400"') for line in first)
     assert first[3].startswith(f'echo "{m["key"]}1.  {t}') and first[14].startswith(f'echo "{m["key"]}12. {t}')  # keys 1-12 equally wide
     assert first[-1] == f'bind TAB "execq {EXEC}/p12_1.cfg"' and first.index("vstr unbindNumbers") < first.index(first[-1])
     assert p12["p12_1.cfg"].splitlines()[-1] == f'bind TAB "execq {EXEC}/p12_0.cfg"'  # last page wraps
@@ -167,6 +184,18 @@ def selftest():
     favs = ["192.0.2.1:27960", "192.0.2.1", "192.0.2.2:27961", "[2001:db8::1]:27960"]
     assert others(favs, "192.0.2.1:27960") == ["192.0.2.2:27961", "[2001:db8::1]:27960"]
     assert others(favs, "[2001:db8::1]:27960") == favs[:3] and others(favs, None) == favs
+    import tempfile
+    from pathlib import Path
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "xy.cfg").write_text('set connectVsayServer "vsay xy16"  // joke\n')
+        (Path(tmp) / "zz.cfg").write_text('// set connectVsayServer "vsay zz1"\n//   eg16 Hasta la vista\n  //set connectVsayServer "vsay zz2"\n')
+        known = {"192.0.2.1:27960": "^1[^7xY^1] FRAGHOUSE", "192.0.2.2:27960": "^2ZZ land", "192.0.2.3:27960": "Other"}
+        ids = [("xy", "[xy]"), ("zz", "zz"), ("qq", "other")]
+        assert connect_vsay("192.0.2.1:27960", known, ids, Path(tmp)) == "xy16"
+        assert connect_vsay("192.0.2.2:27960", known, ids, Path(tmp)) == "Bye"  # commented lines only
+        assert connect_vsay("192.0.2.3:27960", known, ids, Path(tmp)) == "Bye"  # no file
+        assert connect_vsay("192.0.2.9:27960", known, ids, Path(tmp)) == "Bye" and connect_vsay(None, known, ids, Path(tmp)) == "Bye"
+    assert 'set connectSayText vsay xy16 ' in pages(many[:1], 7, "", "xy16")["p7_0.cfg"]
     print("selftest ok")
 
 

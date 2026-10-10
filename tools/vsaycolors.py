@@ -23,6 +23,7 @@ from helpers.settings import MENU, PROFILE, REPO, VSAY
 
 LIVE = REPO / PROFILE
 SKIP = {"etconfig.cfg"}  # game-generated
+GENERATED = LIVE / "servermenu"  # pages of tools/servermenu.py, rewritten while it runs; the connect say keeps the hostname colors
 RECORD = LIVE / "scripts/vsays/vsaycolors.tsv"  # colors of the last apply + reviewed texts (cmd, id, plain text)
 HTML = REPO / "tools/vsaycolors.html"
 ROLES = ("team", "global", "buddy", "punct", "highlight", "urgent")
@@ -127,7 +128,7 @@ def menu_echo(text, menu, old=None, server=False):
 
 
 def files():
-    return [f for f in sorted(LIVE.rglob("*.cfg")) if f.name not in SKIP and not f.is_symlink()]
+    return [f for f in sorted(LIVE.rglob("*.cfg")) if f.name not in SKIP and GENERATED not in f.parents and not f.is_symlink()]
 
 
 def texts(f):
