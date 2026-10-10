@@ -86,13 +86,13 @@
   "vstr classSay; set timerDone vstr spawnsay; vstr timer1000": "Announce spawn",
   "vstr spawnSelector": "Spawn select",
   "vstr serverMenu": "Server menu",
-  "vstr resetLayers; connect 192.0.2.1:27960": "Server 1",
-  "vstr resetLayers; connect 192.0.2.2:27960": "Server 2",
-  "vstr resetLayers; connect 192.0.2.3:27960": "Server 3",
-  "vstr resetLayers; connect 192.0.2.4:27960": "Server 4",
-  "vstr resetLayers; connect 192.0.2.5:27960": "Server 5",
-  "vstr resetLayers; connect 192.0.2.6:27960": "Server 6",
-  "vstr resetLayers; connect 192.0.2.7:27960": "Server 7",
+  "vstr resetLayers; set connectSayText vsay Bye ^lConnecting to 192.0.2.1:27960^3.; vstr connectSay; set timerDone connect 192.0.2.1:27960; vstr timer400": "Server 1",
+  "vstr resetLayers; set connectSayText vsay Bye ^lConnecting to 192.0.2.2:27960^3.; vstr connectSay; set timerDone connect 192.0.2.2:27960; vstr timer400": "Server 2",
+  "vstr resetLayers; set connectSayText vsay Bye ^lConnecting to 192.0.2.3:27960^3.; vstr connectSay; set timerDone connect 192.0.2.3:27960; vstr timer400": "Server 3",
+  "vstr resetLayers; set connectSayText vsay Bye ^lConnecting to 192.0.2.4:27960^3.; vstr connectSay; set timerDone connect 192.0.2.4:27960; vstr timer400": "Server 4",
+  "vstr resetLayers; set connectSayText vsay Bye ^lConnecting to 192.0.2.5:27960^3.; vstr connectSay; set timerDone connect 192.0.2.5:27960; vstr timer400": "Server 5",
+  "vstr resetLayers; set connectSayText vsay Bye ^lConnecting to 192.0.2.6:27960^3.; vstr connectSay; set timerDone connect 192.0.2.6:27960; vstr timer400": "Server 6",
+  "vstr resetLayers; set connectSayText vsay Bye ^lConnecting to 192.0.2.7:27960^3.; vstr connectSay; set timerDone connect 192.0.2.7:27960; vstr timer400": "Server 7",
   "execq profile/servermenu/p7_0.cfg": "Refresh servers",
   "execq profile/servermenu/p12_0.cfg": "Refresh servers",
   "+vstr null resetLayers": "Menu",
@@ -114,5 +114,6 @@
   "vstr classVsaysToggle": "Class Vsays",
   "+vstr grenadeON grenadeOFF": "Grenade",
   "vstr classReportToggle": "Class Report",
-  "vstr spawnReportToggle": "Spawn Report"
+  "vstr spawnReportToggle": "Spawn Report",
+  "vstr connectSayToggle": "Server Say"
 }

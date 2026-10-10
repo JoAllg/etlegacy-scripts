@@ -145,7 +145,7 @@ def selftest():
     assert first[1] == "vstr popupsMenu" and "SERVERS 1/2 12:00:00" in first[2] and "TAB next page" in first[2]
     assert sum(l.startswith("echo") for l in first) == 13 and sum(l.startswith("echo") for l in p7["p7_0.cfg"].splitlines()) == 8
     one_key = next(line for line in first if line.startswith("bind 1 "))
-    assert one_key.endswith('; vstr connectSayClass; set timerDone connect 192.0.2.14:27960; vstr timer400"')  # most playing humans first
+    assert one_key.endswith('; vstr connectSay; set timerDone connect 192.0.2.14:27960; vstr timer400"')  # most playing humans first
     assert f'set connectSayText vsay Bye {VSAY["global"]}Connecting to ' in one_key and one_key.count('"') == 2
     assert any(line.startswith("bind US_EQUALS ") and line.endswith('connect 192.0.2.3:27960; vstr timer400"') for line in first)
     assert first[3].startswith(f'echo "{m["key"]}1.  {t}') and first[14].startswith(f'echo "{m["key"]}12. {t}')  # keys 1-12 equally wide
