@@ -17,15 +17,19 @@
 
 Config, scripts and keybinds for **Wolfenstein: Enemy Territory** on **ET: Legacy**: one script set for every mod (legacy, nitmod, jaymod, etps; etpub, silEnT and ETJump with default values, not tested in game).
 
-- **Class scripts:** class keys that step through the weapons of a class and set that class's binds.
-- **Autoexecs** per map, team and mod, with a spawn menu for every map (`ENTER`).
+- **Class menu:** class keys that step through the weapons of a class and set that class's binds.
+- **Spawn menu** (`ENTER`): the numbered spawnpoints of every map, generated from the map pk3s.
 - **Voice chat menu** (`V`) with colored texts.
 - **[Server menu](#server-menu)** (`RIGHTCTRL`): your favorite servers with players, map and ping, a number key connects.
-- **[Settings per server](#settings-per-server):** your own settings and the server's own voice chat, applied when you join it.
 - **[Keymap](#keymap):** the live binds as a keyboard + mouse overview in the browser.
+- **Customization:**
+  - **Autoexecs** per map, team and mod.
+  - **[Scripts per server](#settings-per-server):** your own settings and scripts, applied when you join the server.
+  - **[Voice chat per server](#settings-per-server):** the server's own voice chat on `TAB` of the voice chat menu.
 
 ## Contents
 
+- [Contents](#contents)
 - [Setup](#setup)
   - [Requirements](#requirements)
   - [Install](#install)
@@ -135,19 +139,25 @@ All binds, per class: open `tools/keymap/keymap.html` in a browser ([Keymap](#ke
 | `V` | voice chat menu; `TAB` opens the [server's own](#settings-per-server), on a page the next page (the last back to the first), `CAPSLOCK` goes back to the parent page |
 | `ENTER` | spawn menu of the map |
 | `RIGHTCTRL` | [server menu](#server-menu) |
-| `ESC` | closes the open menu |
 | `HOME`, `END`, `PGUP`, `PGDN`, `DEL` | cycle crosshair color, FPS limit, gamma, name, network settings |
 | `INS` | fullscreen ⇄ borderless window |
 
 <img src="docs/images/voicemenu.png" alt="Voice chat menu: numbered categories, TAB opens the server's own voice chat" height="250"> <img src="docs/images/spawnmenu.png" alt="Spawn menu: numbered spawnpoints of the map" height="250">
 
-- On a map load the mod execs `autoexec_<mapname>.cfg` (spawnpoint menu); team and class autoexecs follow on respawn. Per-mod support: [`docs/autoexec.md`](docs/autoexec.md).
+More in the scripts:
+
+- **Autoexecs:** on a map load the mod execs `autoexec_<mapname>.cfg` (spawn menu); team and class autoexecs follow on respawn. Per-mod support: [`docs/autoexec.md`](docs/autoexec.md).
+- **Crosshair color per map:** a color chosen with `HOME` is saved into the map's autoexec and set again on every later load of that map (`tools/serverconfig.py`).
+- **Team reports:** the class report tells the team your class and weapon 3 s after the last class key, the spawn report every spawnpoint you choose, the class vsays announce class actions (`KP_SLASH`, `KP_STAR`, `KP_MINUS`).
+- **Class actions:** hold `MOUSE1` with grenades to cook, the grenade is thrown on release or after 2.9 s; hold the dynamite key to plant and arm it. Other keys keep working meanwhile (one shared timer, `scripts/common.cfg`).
+- **Movement:** opposite directions don't block each other (the last pressed wins), sprint resumes after scripted actions, `LEFTCTRL` toggles prone and `LEFTALT` crouches, both with a lower FOV for long-distance aiming.
+- **Location names:** better location names for many maps (`default/maps/<map>_loc_override.dat`, [`docs/locations.md`](docs/locations.md)).
 
 Console, commands, FPS/network settings, recoil and spread: [`docs/gameplay.md`](docs/gameplay.md).
 
 ## Tools
 
-`launcher.sh` runs the helpers that have to run next to the game; the commands below start them on their own. All tools: [`tools/README.md`](tools/README.md).
+`launcher.sh` runs the helpers that have to run next to the game; the commands below start them on their own. After downloading new maps, run `python3 tools/link_maps.py` by hand so local hosting finds them. All tools: [`tools/README.md`](tools/README.md).
 
 ### Keymap
 
@@ -175,13 +185,13 @@ Serves the page at <http://127.0.0.1:27999/>, opens the browser and follows the 
 
 ![Server menu: numbered favorite servers with players, map, ping and mod](docs/images/servermenu.png)
 
-`RIGHTCTRL` lists your favorite servers of the server browser in game, in aligned columns `name  playing+spectators+bots/slots  map  ping  mod` (playing humans green, spectators cyan, bots grey: `MENU_PLAYING`, `MENU_SPEC`, `MENU_BOTS` in `settings.conf`), sorted by playing humans. A number key connects, `TAB` shows the next page (or refreshes), `RIGHTCTRL` or `ESC` closes it.
+`RIGHTCTRL` lists your favorite servers of the server browser in game, in aligned columns `name  playing+spectators+bots/slots  map  ping  mod` (playing humans green, spectators cyan, bots grey: `MENU_PLAYING`, `MENU_SPEC`, `MENU_BOTS` in `settings.conf`), sorted by playing humans. The server you are on is left out; the last entry, `LOCALHOST`, hosts goldrush locally. A number key connects (with `KP_NUMLOCK` on, after the vsay "Connecting to <server>."), `TAB` shows the next page (or refreshes), `RIGHTCTRL` or `ESC` closes it.
 
 ```sh
 python3 tools/servermenu.py
 ```
 
-The game can't query servers from a script, so this helper has to run next to it: it asks the favorites every 5 seconds and writes the menu pages. The time in the menu heading shows how old the list is.
+The game can't query servers from a script, so this helper has to run next to it: it asks the favorites every `SERVERMENU_POLL` seconds (`settings.conf`, default and minimum 5) and writes the menu pages. A server that doesn't answer keeps its last values for `SERVERMENU_KEEP` seconds (default 60). The time in the menu heading shows how old the list is.
 
 ### Settings per server
 
@@ -230,7 +240,8 @@ Adding a server:
 | `default/autoexecs/`, `default/maps/` | per-map spawnpoints and location name overrides |
 | `default/serverconfigs/` | settings per server (`default.cfg`; your `servers.tsv` and `<id>.cfg` are gitignored) |
 | `docs/` | mirrored to the [wiki](https://github.com/JoAllg/etlegacy-scripts/wiki) on push (`.github/workflows/wiki.yml`): game knowledge ([`gameplay.md`](docs/gameplay.md)), load order, scripting patterns, conventions, key names, colors, characters |
-| `tools/` | keymap renderer, generators for spawnpoints and server voice menus, server menu and server settings helpers, nitmod stock shield ([`tools/README.md`](tools/README.md)) |
+| `tools/` | keymap renderer, generators for spawnpoints and server voice menus, vsay and menu colors, server menu and server settings helpers, map pk3 links for local hosting, nitmod stock shield ([`tools/README.md`](tools/README.md)) |
+| `research/` | cvar/command dumps per mod, mod decompiles, map and location file downloads; outputs stay local ([`research/README.md`](research/README.md)) |
 
 ## Developing
 
@@ -247,4 +258,5 @@ The repo ships project skills in `.claude/skills/` (`.agents` links to `.claude`
 | Skill | Use |
 | --- | --- |
 | `keymap` | regenerates `tools/keymap/keymap.html` and names new binds in `labels.json`; after bind, class script or menu layer changes |
+| `locations` | brings the location files of downloaded maps into `default/maps/`, merges upstream changes after your review; after new map downloads |
 | `vsay` | translates non-English voice chat pages, colors all vsay and chat texts and echo menus with the `VSAY_*` / `MENU_*` colors from `settings.conf`, previews and changes them, highlights key words; after `tools/voicemenu.py` or new vsay texts |
