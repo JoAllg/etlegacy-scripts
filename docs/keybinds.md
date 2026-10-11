@@ -114,7 +114,7 @@ Only keys that differ from the US table.
 
 - \*Dead key: a typing term. The key types nothing by itself and changes the next letter (`´` + `e` = `é`). For binds it counts as a key without an ASCII character, so it gets its US-position name like `ö`/`ä`/`ü`.
 - Not bindable on German keyboards (only typed with a modifier): `=`, `}`, `{`, `[`, `]`, `\`, `~`, `` ` ``, `'`, `/`, `;`, `:`, `_`, `*`, `?`, `!`, `"`, `§`, `$`, `%`, `&`, `(`, `)`, `>`, `|`, `@`, `€`.
-- Free keys close to WASD (per `default/binds_custom.cfg`): `t`, `z`, `x`, `CAPSLOCK`, `LEFTALT`.
+- Free keys close to WASD (per `default/binds_custom.cfg`): `t`, `z`, `x`, `CAPSLOCK` (back in the voice chat menu only), `LEFTALT`.
 
 ## Mouse
 

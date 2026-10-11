@@ -5,10 +5,10 @@ Reads ui/wm_quickmessageAlt.menu (the number-key variant) from the server's pk3 
 menu page the server adds; entries that open a stock page (etmain pak0.pk3, covered by the general voice chat
 pages vsays/chat/) or say the class vsay are left out; a stock page the server added vsays to keeps only those. <clan>.cfg is the top page (TAB of the voice chat opens it on that server, tools/serverconfig.py); the other pages are named after
 their menu (wm_ and _alt stripped). Custom vsays of the pk3's voice scripts that its menu leaves out go on
-extra pages behind TAB of the top page (extra1, extra2, ...): only those available to both teams whose
+extra pages behind TAB of the top page (extra1, extra2, ..., the last one back to the top page): only those available to both teams whose
 sounds no listed or stock vsay (etmain pak0.pk3) plays already, e.g. as a random variant. Each page is exec'd when
 opened: it defines its vsays in the aliases vsay<key> that all voice chat pages share (vsays/chat.cfg), echoes the menu
-and binds the keys; aliases of their own for the ~300 server vsays would exceed MAX_CVARS (2048).
+and binds the keys, CAPSLOCK to the parent page (a TAB page: the parent of its chain; the top page: the stock voice chat); aliases of their own for the ~300 server vsays would exceed MAX_CVARS (2048).
 
 Vsays send their text from the voice script, colored with the VSAY_* colors of settings.conf (base color, punctuation);
 the echo shows it without colors. Vsays with several different texts send none: the sound is random and only the server's own
@@ -195,12 +195,12 @@ def unlisted(menus, sounds, texts, stock):
 
 
 def add_extra(menus, clan, extra, root="wm_quickmessageAlt"):
-    """Menu pages for the unlisted vsays, reached with TAB from root (TAB pages on, the last back to the first)."""
+    """Menu pages for the unlisted vsays, reached with TAB from root (TAB pages on, the last back to root)."""
     pages = [extra[i:i + 10] for i in range(0, len(extra), 10)]
     for n, page in enumerate(pages, 1):
         items = [(f"{KEYS[i]}. ^2{txt}", f'exec "VoiceChat {vsay}"', KEYS[i]) for i, (vsay, txt) in enumerate(page)]
-        if len(pages) > 1:
-            items.append(("TAB ^2More sounds", f"open wm_extra{n % len(pages) + 1}_alt", "TAB"))
+        nxt = f"wm_extra{n + 1}_alt" if n < len(pages) else root
+        items.append(("TAB ^2More sounds" if n < len(pages) else "TAB ^2First page", f"open {nxt}", "TAB"))
         menus[f"wm_extra{n}_alt"] = items
     if pages:
         menus[root] = menus[root] + [("TAB ^2More sounds (not in the server menu)", "open wm_extra1_alt", "TAB")]
@@ -216,13 +216,13 @@ def vsay_of(action):
     return m and ("vsay_team" if m.group(1) == "VoiceTeamChat" else "vsay", m.group(2))
 
 
-def bind(clan, label, action, key, pages):
+def bind(clan, label, action, key, pages, root):
     """(bind line, submenu to render or None); a vsay key runs its alias vsay<key>."""
     if vsay_of(action):
         return f'bind {key} "vstr vsay{key}; vstr resetLayers"', None
     o = re.search(r"open (\w+)", action)
     if o and o.group(1) in pages:
-        return f'bind {key} "execq {EXEC}/{clan}/{page_name(o.group(1), None, clan)}.cfg"', o.group(1)  # execq: a key press prints no "execing" line
+        return f'bind {key} "execq {EXEC}/{clan}/{page_name(o.group(1), root, clan)}.cfg"', o.group(1)  # execq: a key press prints no "execing" line
     if o:  # a UI menu that isn't a chat page (e.g. name editor): not reachable from the console
         return f'bind {key} "echo ^1Only in the server\'s own menu ({o.group(1)}); vstr resetLayers"', None
     cmds = [c or f"{v} {x}" for c, v, x in re.findall(r'exec "([^"]+)"|setCvar (\w+) "([^"]*)"', action)]
@@ -262,10 +262,10 @@ def render(clan, pk3name, menus, stock={}, root="wm_quickmessageAlt", tag=None, 
     {(cmd, vsay): (page, key, text or None)} of its vsays; kept = {(cmd, vsay): text} to send instead of the voice script's,
     labels = {(cmd, vsay) or page file: item} to echo for the keys that send no text, {("head", page file): heading}."""
     tag = tag or f"[{clan}]"
-    full = {m for m, v in stock.items() if vsays_of(menus[m]) <= v}  # nothing added: the general voice chat covers it
-    files, vsays, todo = {}, {}, [(root, "VOICE CHAT")]
+    full = {m for m, v in stock.items() if m != root and vsays_of(menus[m]) <= v}  # nothing added: the general voice chat covers it; root: the last extra page's TAB
+    files, vsays, todo = {}, {}, [(root, "VOICE CHAT", "vstr chatCategories")]  # chatCategories: top page of the stock voice chat (vsays/chat.cfg)
     while todo:
-        menu, head = todo.pop(0)
+        menu, head, back = todo.pop(0)
         name = page_name(menu, root, clan)
         if name + ".cfg" in files:
             continue
@@ -286,17 +286,18 @@ def render(clan, pk3name, menus, stock={}, root="wm_quickmessageAlt", tag=None, 
                 vsays.setdefault((v[0], v[1].lower()), (name + ".cfg", key, text))
                 sets.append(f'set vsay{key} "{v[0]} {v[1]}{" " + text if text else ""}"')
             item = shown or re.sub(rf"^(?:{COLOR})*(?:\d+\.|TAB)?\s*", "", label)
-            line, sub = bind(clan, label, action, key, menus)
+            line, sub = bind(clan, label, action, key, menus, root)
             binds.append(line)
             own = labels.get((v[0], v[1].lower()) if v else sub and page_name(sub, root, clan) + ".cfg")
             if own and not text:
                 item = own
             lines.append(f'echo "{menu_echo(f"{key}. {item}", menu_colors)}"')
             if sub:
-                todo.append((sub, re.sub(r"^(\^?\w?\d+\^?\w?\.|TAB)\s*", "", label).strip()))
+                todo.append((sub, re.sub(r"^(\^?\w?\d+\^?\w?\.|TAB)\s*", "", label).strip(),
+                             back if key == "TAB" else f"execq {EXEC}/{clan}/{name}.cfg"))  # a TAB page shares the parent of its chain
         # unbindNumbers (binds_custom.cfg) frees every layer key first, so no action of the parent page stays on a key
         files[name + ".cfg"] = "\n".join(top + (["", "// Vsays"] + sets if sets else []) + ["", "// Echos"] + lines
-                                         + ["", "// Binds", "vstr unbindNumbers"] + binds) + "\n"
+                                         + ["", "// Binds", "vstr unbindNumbers"] + binds + [f'bind CAPSLOCK "{back}"']) + "\n"
     return files, vsays
 
 
@@ -367,10 +368,12 @@ QM_MENU_END''')
     extra = unlisted(menus, sounds, texts, {"medic"})
     assert [v for v, _ in extra] == ["E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "XYV"], extra
     add_extra(menus, "x", extra)
-    files, _ = render("x", "x.pk3", menus, stock, texts=texts, colors=col, menu_colors=mc)
+    files, _ = render("x", "x.pk3", menus, dict(stock, wm_quickmessageAlt=set()), texts=texts, colors=col, menu_colors=mc)
     assert f'bind TAB "execq {EXEC}/x/extra1.cfg"' in files["x.cfg"] and "unbind TAB" not in files["fun.cfg"]
     assert files["fun.cfg"].index("\nvstr unbindNumbers\n") < files["fun.cfg"].index("\nbind 1 "), files["fun.cfg"]
-    assert 'set vsay1 "vsay XYV ^ltext xyv"\n' in files["extra2.cfg"] and f'bind TAB "execq {EXEC}/x/extra1.cfg"' in files["extra2.cfg"]
+    assert 'set vsay1 "vsay XYV ^ltext xyv"\n' in files["extra2.cfg"] and f'bind TAB "execq {EXEC}/x/x.cfg"' in files["extra2.cfg"]
+    assert files["x.cfg"].endswith('bind CAPSLOCK "vstr chatCategories"\n') and files["extra2.cfg"].endswith('bind CAPSLOCK "vstr chatCategories"\n')
+    assert files["fun.cfg"].endswith(f'bind CAPSLOCK "execq {EXEC}/x/x.cfg"\n'), files["fun.cfg"]
     assert 'echo "[x] ^8More sounds (not in the server menu):"' in files["extra1.cfg"], files["extra1.cfg"]
     print("selftest ok")
 

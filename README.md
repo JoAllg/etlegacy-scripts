@@ -132,7 +132,7 @@ All binds, per class: open `tools/keymap/keymap.html` in a browser ([Keymap](#ke
 | `F3` | re-execs the definitions and `user.cfg` (after a server enforced its own values) and keeps the current state of toggles and cycles |
 | `F4` | fixes a stuck script state without touching settings: closes the open menu (voice chat, spawn menu, server menu), resets the class toggles (sniper mode, mortar map) and prone, and releases every held key (attack, sprint, movement, ...) |
 | `F5` | cycles what `MOUSE2` does: switch to the first weapon, to the second weapon, or alt fire / reload |
-| `V` | voice chat menu; `TAB` opens the [server's own](#settings-per-server) |
+| `V` | voice chat menu; `TAB` opens the [server's own](#settings-per-server), on a page the next page (the last back to the first), `CAPSLOCK` goes back to the parent page |
 | `ENTER` | spawn menu of the map |
 | `RIGHTCTRL` | [server menu](#server-menu) |
 | `ESC` | closes the open menu |

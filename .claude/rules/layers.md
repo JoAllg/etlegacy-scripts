@@ -11,7 +11,7 @@ paths:
 
 # Number row key layers
 
-- `1`–`0`, `US_MINUS`, `US_EQUALS` (and `TAB`, voicechat and server menu only) are rebound by the spawn selector (`spawnscript.cfg`, map autoexecs; opened by `ENTER`), voicechat (`voicechat.cfg`, `vsays/`; opened by `v`) and server menu (`servermenu.cfg`, generated pages in `default/servermenu/`; opened by `KP_MINUS`) layers.
+- `1`–`0`, `US_MINUS`, `US_EQUALS` (and `TAB`, voicechat and server menu only; `CAPSLOCK`, voicechat only) are rebound by the spawn selector (`spawnscript.cfg`, map autoexecs; opened by `ENTER`), voicechat (`voicechat.cfg`, `vsays/`; opened by `v`) and server menu (`servermenu.cfg`, generated pages in `default/servermenu/`; opened by `KP_MINUS`) layers.
 - `bindWeapons` (`binds_custom.cfg`) is the normal number-row binding. `reBindNumbers` (`binds_custom.cfg`, shared by all layers) must restore every key any layer binds: update it when a layer binds another key or the normal binds of these keys change.
 - One alias closes every layer: `resetLayers` (`scripts.cfg`: `reBindNumbers`, `popupsClose`, resets the openers). Every exit path (option, opener again, `F4`, the release of `ESCAPE`) and every layer's opener run it, so opening one layer closes the others. A new layer adds the reset of its opener there.
 - Every echo menu page starts with `vstr popupsMenu` (clears the previous page, menu popup values) and `resetLayers` runs `vstr popupsClose` (restores them once the menu is closed); `scripts.cfg`, with the per-mod values `setPopupsMenu`/`setPopupsNormal` in `mods/<mod>/mod_general.cfg`.
