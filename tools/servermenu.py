@@ -129,6 +129,8 @@ def selftest():
     assert cells(split)[1] == ["1", "1", "1", "40"] and cells(etl)[1] == ["17", "", "2", "40"]
     assert players(["1", "1", "1", "40"], [2, 1, 2, 2]) == f"{m['playing']} 1{t}+{m['spec']}1{t}+{m['bots']} 1{t}/40"
     assert players(["17", "", "2", ""], [2, 1, 1, 2]) == f"{t}17{t} {m['spec']} {t}+{m['bots']}2{t}   "
+    assert players(["32", "8", "2", "40"], [2, 1, 1, 2]) == f"{m['full']}32+8+2/40{t}"
+    assert players(["40", "", "0", "40"], [2, 1, 1, 2]) == f"{m['full']}40  +0/40{t}" and m["full"] not in players(["30", "8", "2", "40"], [2, 1, 1, 2])  # bots don't count
     lines = table([split, etl, off])
     assert len({width(l[:l.index("ms") + 2]) for l in lines[:2]}) == 1  # name, players, map and ping end in the same column
     assert lines[0].endswith("5ms  nitmod") and lines[1].endswith("48ms  nitmod") 

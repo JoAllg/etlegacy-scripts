@@ -23,7 +23,7 @@
 #    - VSAY_TEAM, VSAY_GLOBAL, VSAY_BUDDY (base color of vsay_team/vsay/vsay_buddy text), VSAY_PUNCT (punctuation),
 #      VSAY_HIGHLIGHT, VSAY_URGENT (key words): colors of the vsay texts (tools/voicemenu.py, vsay skill)
 #    - MENU_HEAD, MENU_KEY, MENU_TEXT, MENU_NAV (TAB line), MENU_GLOBAL (global chat), MENU_AXIS, MENU_ALLIES (spawnpoint owner),
-#      MENU_PLAYING, MENU_SPEC, MENU_BOTS (server menu player numbers): colors of the echo menus
+#      MENU_PLAYING, MENU_SPEC, MENU_BOTS, MENU_FULL (server menu player numbers; full server): colors of the echo menus
 #      (voice chat, spawn selector, server menu; tools/vsaycolors.py apply, voicemenu.py, spawnpoints.py, servermenu.py)
 #    - SERVERMENU_POLL (seconds between two polls, at least 5), SERVERMENU_KEEP (seconds a server's last values stay
 #      while it doesn't send them: no answer, no getstatus, no split): tools/servermenu.py
@@ -171,7 +171,7 @@ setup() {
 	local missing="" key
 	# shellcheck source=/dev/null
 	[ -f "$SETTINGS" ] && source "$SETTINGS"
-	for key in PLAYER_NAME KEYMAP_MOD PROFILE VSAY_TEAM VSAY_GLOBAL VSAY_BUDDY VSAY_PUNCT VSAY_HIGHLIGHT VSAY_URGENT MENU_HEAD MENU_KEY MENU_TEXT MENU_NAV MENU_GLOBAL MENU_AXIS MENU_ALLIES MENU_PLAYING MENU_SPEC MENU_BOTS SERVERMENU_POLL SERVERMENU_KEEP GAME_BIN HOMEPATH BASEPATH GAME_BIN_I386 ETLEGACY_SRC; do
+	for key in PLAYER_NAME KEYMAP_MOD PROFILE VSAY_TEAM VSAY_GLOBAL VSAY_BUDDY VSAY_PUNCT VSAY_HIGHLIGHT VSAY_URGENT MENU_HEAD MENU_KEY MENU_TEXT MENU_NAV MENU_GLOBAL MENU_AXIS MENU_ALLIES MENU_PLAYING MENU_SPEC MENU_BOTS MENU_FULL SERVERMENU_POLL SERVERMENU_KEEP GAME_BIN HOMEPATH BASEPATH GAME_BIN_I386 ETLEGACY_SRC; do
 		grep -q "^$key=" "$SETTINGS" 2>/dev/null || missing+=" $key"
 	done
 	[ -z "$missing" ] && return
@@ -203,6 +203,7 @@ setup() {
 	needs MENU_PLAYING && set_value MENU_PLAYING "^2"
 	needs MENU_SPEC && set_value MENU_SPEC "^n"
 	needs MENU_BOTS && set_value MENU_BOTS "^m"
+	needs MENU_FULL && set_value MENU_FULL "^1"
 	# server menu: poll every 5 s (ET: Legacy servers answer 1 packet/s per address after a burst of 10), keep missing values 60 s
 	needs SERVERMENU_POLL && set_value SERVERMENU_POLL "5"
 	needs SERVERMENU_KEEP && set_value SERVERMENU_KEEP "60"

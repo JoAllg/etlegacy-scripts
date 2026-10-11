@@ -50,9 +50,13 @@ def cells(row):
 
 def players(numbers, sizes):
     """playing+spectators+bots/slots, every number right-aligned in its own column so the last digits line up;
-    playing humans colored only when the spectators are known (without P they are all humans)."""
-    t = MENU["text"]
+    playing humans colored only when the spectators are known (without P they are all humans);
+    all of it in the full color when the humans fill the slots (bots don't count: servers kick them for joining humans)."""
+    full = numbers[3] and sum(int(n or 0) for n in numbers[:2]) >= int(numbers[3])
+    t = MENU["full"] if full else MENU["text"]
     playing, spec, bots, slots = (n.rjust(size) for n, size in zip(numbers, sizes))
+    if full:
+        return f"{t}{playing}{'+' if numbers[1] else ' '}{spec}+{bots}/{slots}{MENU['text']}"
     colored = MENU["playing"] if numbers[1] else t
     text = f"{colored}{playing}{t}{'+' if numbers[1] else ' '}{MENU['spec']}{spec}{t}+{MENU['bots']}{bots}{t}"
     return text + (f"/{slots}" if numbers[3] else " " * (sizes[3] + 1))

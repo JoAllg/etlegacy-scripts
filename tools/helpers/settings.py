@@ -32,11 +32,11 @@ KEYMAP_MOD = _get("KEYMAP_MOD")
 # colors of the vsay texts: base of vsay_team / vsay / vsay_buddy, punctuation, key words, urgent words
 VSAY = {k: _get("VSAY_" + k.upper()) for k in ("team", "global", "buddy", "punct", "highlight", "urgent")}
 # colors of the echo menus (voice chat, spawn selector, server menu): heading, key, item, TAB line, global chat item, spawnpoint owner,
-# server menu player numbers (playing humans, spectators, bots)
+# server menu player numbers (playing humans, spectators, bots; all of them on a full server)
 # server menu (tools/servermenu.py): seconds between two polls (at least 5); seconds a server's last values are shown
 # while it doesn't send them (no answer, no getstatus, no split)
 SERVERMENU_POLL = float(_get("SERVERMENU_POLL"))
 SERVERMENU_KEEP = float(_get("SERVERMENU_KEEP"))
 # editor written into Modified by of location files (research/locations/locations.py); empty until set
 PLAYER_NAME = _values.get("PLAYER_NAME", "")
-MENU = {k: _get("MENU_" + k.upper()) for k in ("head", "key", "text", "nav", "global", "axis", "allies", "playing", "spec", "bots")}
+MENU = {k: _get("MENU_" + k.upper()) for k in ("head", "key", "text", "nav", "global", "axis", "allies", "playing", "spec", "bots", "full")}
