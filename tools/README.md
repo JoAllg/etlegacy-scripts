@@ -61,7 +61,7 @@ Symlinks downloaded map pk3s from `etmain/dlcache/` into `etmain/`, so local hos
 
 ## stock_shield/
 
-Builds the nitmod stock shield pk3 from your own `etmain/pak*.pk3`: it keeps the nitmod main menu, local games and unpure servers on stock menus and sounds after servers pushed their own menu and sound packs. `deploy.sh` offers it. Details: [`stock_shield/README.md`](stock_shield/README.md).
+Builds the nitmod stock shield pk3 from your own `etmain/pak*.pk3`: it keeps the nitmod main menu, local games and unpure servers on stock menus and sounds after servers pushed their own menu and sound packs, and hides host game list entries of server packs whose map a local nitmod game can't load. `deploy.sh` offers it; rebuild by hand after new server downloads. Details: [`stock_shield/README.md`](stock_shield/README.md).
 
 ## helpers/
 

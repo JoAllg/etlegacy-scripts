@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
 """Build the nitmod stock shield pk3 from the stock etmain pk3s and install it into the nitmod folder.
 
+Also hides arena files of server packs whose map can't be hosted locally (bsp only in etmain/dlcache/ or nowhere):
+the host game list shows every arena, starting one without its bsp leaves the menu at "connecting".
+Rebuild after new server downloads.
+
 Usage: python3 tools/stock_shield/stock_shield.py   (see README.md next to it)
        python3 tools/stock_shield/stock_shield.py --selftest
 The files are game assets (ET EULA), so the pk3 is built from the local game instead of being shipped.
 """
 import argparse
+import re
 import sys
 import zipfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from helpers.common import ETMAIN, STOCK_PAKS, maps  # noqa: E402
 from helpers.settings import BASEPATH, HOMEPATH  # noqa: E402
 
 # more tildes than any server pk3, so it sorts last and wins (README.md)
@@ -45,6 +51,10 @@ ui/wm_ftquickmessageAlt.menu ui/wm_quickmessage.menu ui/wm_quickmessageAlt.menu
 """.split()
 # whole folders: sound packs replace stock sounds under their stock names
 FOLDERS = ("sound/",)
+# search path of a local nitmod game, lowest priority first; dlcache/ is not mounted there
+MOUNTED = (STOCK_PAKS, ETMAIN, BASEPATH / "nitmod", HOMEPATH / "nitmod")
+HIDDEN = b"// map not hostable locally, hidden by the stock shield\n"
+TOKEN = re.compile(rb'//[^\n]*|/\*.*?(?:\*/|$)|"[^"]*"?|[{}]|[^\s{}"]+', re.S)
 
 
 def shielded(paks):
@@ -57,6 +67,54 @@ def shielded(paks):
     return found
 
 
+def arena_blocks(text):
+    """[(map name lowercase, block bytes)] of an arena file, tokens as the engine's precompiler splits them."""
+    blocks, start, name, key = [], None, None, False
+    for m in TOKEN.finditer(text):
+        tok = m.group()
+        if tok.startswith((b"//", b"/*")):
+            continue
+        if tok == b"{" and start is None:
+            start, name, key = m.start(), None, False
+        elif tok == b"}" and start is not None:
+            blocks.append((name, text[start:m.end()]))
+            start = None
+        elif start is not None:
+            if key and name is None:
+                name = tok.strip(b'"').decode("latin1").lower()
+            key = tok.lower() == b"map"
+    return blocks
+
+
+def arenas(hostable):
+    """{arena path: new content} for the winning arena files whose maps aren't all hostable."""
+    winners = {}
+    for folder in MOUNTED:
+        for pk3 in sorted(folder.glob("*.pk3"), key=lambda p: p.name.upper()):  # FS_PathCmp: later wins
+            if pk3.name == NAME:
+                continue
+            try:
+                with zipfile.ZipFile(pk3) as z:
+                    for i in z.infolist():
+                        path = i.filename.replace("\\", "/").lower()
+                        if re.fullmatch(r"scripts/[^/]+\.arena", path) and path not in FILES:
+                            winners[path] = z.read(i)
+            except (zipfile.BadZipFile, OSError):
+                continue
+    out = {}
+    for path, text in winners.items():
+        blocks = arena_blocks(text)
+        kept = [b for name, b in blocks if name in hostable]
+        if len(kept) < len(blocks):
+            out[path] = b"\n".join(kept) + b"\n" if kept else HIDDEN
+    return out
+
+
+def hostable_maps():
+    """Lowercase names of the maps a local nitmod game can load (bsp in a pk3 of its search path)."""
+    return {m for folder in MOUNTED for pk3 in folder.glob("*.pk3") if pk3.name != NAME for m in maps(pk3) or {}}
+
+
 def main():
     paks = [zipfile.ZipFile(BASEPATH / "etmain" / p) for p in PAKS]
     out = HOMEPATH / "nitmod" / NAME
@@ -66,14 +124,22 @@ def main():
     missing = sorted(set(FILES) - set(found))
     if missing:
         sys.exit(f"{', '.join(missing)} in none of {', '.join(PAKS)} in {BASEPATH / 'etmain'}")
+    hidden = arenas(hostable_maps())
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as pk3:
         for name, pak in sorted(found.items()):
             pk3.writestr(name, pak.read(name))
-    print(f"wrote {out} ({len(found)} files)")
+        for name, text in sorted(hidden.items()):
+            pk3.writestr(name, text)
+    print(f"wrote {out} ({len(found) + len(hidden)} files)")
+    for name, text in sorted(hidden.items()):
+        print(f"  {'hidden' if text == HIDDEN else 'trimmed'}: {name}")
 
 
 def selftest():
-    """Every listed file and every folder exists in the local stock paks (reads only)."""
+    """Arena parsing; every listed file and every folder exists in the local stock paks (reads only)."""
+    text = b'// x { map "no" }\n{\n map "Alpha"\n longname "A { b"\n}\n/* { */ {map beta briefing "x"}'
+    assert [n for n, _ in arena_blocks(text)] == ["alpha", "beta"], arena_blocks(text)
+    assert arena_blocks(text)[0][1] == b'{\n map "Alpha"\n longname "A { b"\n}'
     assert len(set(FILES)) == len(FILES), [f for f in FILES if FILES.count(f) > 1]
     found = shielded([zipfile.ZipFile(BASEPATH / "etmain" / p) for p in PAKS])
     assert not set(FILES) - set(found), sorted(set(FILES) - set(found))
