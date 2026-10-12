@@ -14,7 +14,7 @@ without it applies no server's settings. Written to default/serverconfigs/:
   whenever this tool was slower than the game. A second guard runs snd_restart once after every change of the
   address: the engine keeps loaded sounds by file name across servers (src/client/snd_dma.c S_FindName), so the vsay
   sounds of the last server's packs would play on the next one where both use the same names.
-- current_vsay.cfg: exec'd each time the voice chat opens; puts the server's voice chat (scripts/vsays/servers/<id>/,
+- current_vsay.cfg: exec'd each time the voice chat opens; puts the server's voice chat (serverconfigs/vsays/<id>/,
   tools/voicemenu.py) on TAB, or nothing.
 
 Crosshair color per map (docs/autoexec.md): a step of the color cycle taken on a map is written into
@@ -46,8 +46,8 @@ from helpers.serverapi import CONFIGS, ID, ID_RULE, SERVERS, adr_string, history
 from helpers.settings import MENU, PROFILE, REPO
 
 EXEC = "profile/serverconfigs"  # the profile link of deploy.sh in each mod folder
-VOICE = REPO / PROFILE / "scripts/vsays/servers"
-VOICE_EXEC = "profile/scripts/vsays/servers"
+VOICE = REPO / PROFILE / "serverconfigs/vsays"
+VOICE_EXEC = "profile/serverconfigs/vsays"
 PIDFILE = REPO / PROFILE / "profile.pid"  # the game's profiles/<profile>/profile.pid, through the profiles link of deploy.sh
 RETRY, RETRY_MAX = 2, 60  # seconds until a server that didn't answer is asked again: doubled after every try, up to the maximum
 GENERATED = {"default", "current", "current_vsay"}  # cfgs of serverconfigs/ that are no server's settings

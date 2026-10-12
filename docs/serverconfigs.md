@@ -41,7 +41,7 @@ fun	Full Name Of A Server Without Tag
 - The first matching row wins. One clan tag covers every server of the clan; a single server of that clan with settings of its own goes above it.
 - An id is a name of your choice for the server or clan. It is part of file names and of an alias name (`serverIs_<id>`), which is why the tag itself can't serve: a path with spaces needs quotes, and a bind that execs it is already quoted. 1 to 4 characters of `a-z`, `0-9`, `_`. If the server's own page titles start with a short tag (`PS VOICE MUSIC`), use that as id: `tools/voicemenu.py` cuts the id from the titles.
 - Several rows may carry the same id (a clan whose servers share no common text).
-- The id links both parts and either may be missing: `serverconfigs/<id>.cfg` (settings) and `scripts/vsays/servers/<id>/` (voice chat pages of `tools/voicemenu.py <id> <pk3>`).
+- The id links both parts and either may be missing: `serverconfigs/<id>.cfg` (settings) and `serverconfigs/vsays/<id>/` (voice chat pages of `tools/voicemenu.py <id> <pk3>`).
 
 `tools/serverconfig.py add <id> [address] [--match <text>]` appends a row: it asks the server (default: the one the game connected to last) for its name, proposes the tag at the start of the name as text, prints name and row and creates an empty `<id>.cfg`. An id that already has a row gets the new text in its place, after a question; further rows of one id are added by hand.
 
@@ -135,7 +135,7 @@ A server cfg is a personal preference for that server, so it overrides these fil
 
 ## Voice chat
 
-`scripts/vsays/chat/categories.cfg` (first page of the voice chat) execs `current_vsay.cfg` each time it opens. On a server with voice chat pages the file echoes the `TAB` line with the server's tag and binds `TAB` to the top page `scripts/vsays/servers/<id>/<id>.cfg`; on every other server it is empty and `TAB` does nothing. The file is read when the page opens, so it needs no guard.
+`scripts/vsays/chat/categories.cfg` (first page of the voice chat) execs `current_vsay.cfg` each time it opens. On a server with voice chat pages the file echoes the `TAB` line with the server's tag and binds `TAB` to the top page `serverconfigs/vsays/<id>/<id>.cfg`; on every other server it is empty and `TAB` does nothing. The file is read when the page opens, so it needs no guard.
 
 The tag in the headings of the pages and in the `TAB` line is the text of `servers.tsv` as the server writes it in its name, with its colors.
 

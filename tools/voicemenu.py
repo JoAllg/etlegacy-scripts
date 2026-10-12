@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Copy a server's quick chat menu (V) into voicechat pages: default/scripts/vsays/servers/<clan>/*.cfg.
+"""Copy a server's quick chat menu (V) into voicechat pages: default/serverconfigs/vsays/<clan>/*.cfg.
 
 Reads ui/wm_quickmessageAlt.menu (the number-key variant) from the server's pk3 and writes one cfg per
 menu page the server adds; entries that open a stock page (etmain pak0.pk3, covered by the general voice chat
@@ -41,8 +41,8 @@ from helpers.serverapi import history, hostname, server_tag, servers, tag as sho
 from helpers.settings import BASEPATH, HOMEPATH, MENU as MENU_COLORS, PROFILE, REPO, VSAY
 from vsaycolors import colorize, menu_echo, plain
 
-OUT = REPO / PROFILE / "scripts/vsays/servers"
-EXEC = "profile/scripts/vsays/servers"  # the profile link of deploy.sh in each mod folder
+OUT = REPO / PROFILE / "serverconfigs/vsays"
+EXEC = "profile/serverconfigs/vsays"  # the profile link of deploy.sh in each mod folder
 MENU = "ui/wm_quickmessageAlt.menu"
 KEYS = "1234567890"
 STOCK = [HOMEPATH / "etmain/pak0.pk3", BASEPATH / "etmain/pak0.pk3"]

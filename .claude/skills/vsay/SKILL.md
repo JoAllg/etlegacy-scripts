@@ -17,7 +17,7 @@ Run `python3 tools/vsaycolors.py status` and tell the user the values (code, hex
 
 ## 2. Translate
 
-Judge the language per page (voice chat pages in `default/scripts/vsays/`, server pages in `servers/<clan>/` included). If most texts of a page are not English, translate the whole page to English: its vsay and chat texts and its echoes that are not a vsay key (heading, page links, TAB line, keys of random vsays without text). A single text in another language on an English page is on purpose: leave it.
+Judge the language per page (voice chat pages in `default/scripts/vsays/`, server pages in `default/serverconfigs/vsays/<clan>/` included). If most texts of a page are not English, translate the whole page to English: its vsay and chat texts and its echoes that are not a vsay key (heading, page links, TAB line, keys of random vsays without text). A single text in another language on an English page is on purpose: leave it.
 
 - Short chat English in the style of the stock pages, same meaning and tone; keep names, map/server words and the server tag at the start of a heading.
 - Keep the color codes: base color around the words, punctuation color on the punctuation, an existing highlight on the translated word that carries it.
@@ -51,7 +51,7 @@ For each todo text edit only the color codes inside the text (file:line from the
 - Leave pure sounds and jokes plain (onomatopoeia, laughs, song lines): not every text needs a highlight.
 - No highlights on the general talk pages `chat/talk.cfg`, `chat/global.cfg`, `chat/global2.cfg` (yes/no, thanks, greetings); they stay plain. The same kind of text on server pages may be highlighted.
 - Never change the words, the id, the key or the rest of the line, and never add `;` or `"`.
-- Server pages (`default/scripts/vsays/servers/`): the same vsay can be on several pages; `voicemenu.py` keeps the text of the first page in file-name order, so edit every copy the same way.
+- Server pages (`default/serverconfigs/vsays/`): the same vsay can be on several pages; `voicemenu.py` keeps the text of the first page in file-name order, so edit every copy the same way.
 
 Large todo lists: work through them file by file and show the user the first file's result before doing the rest.
 

@@ -222,7 +222,7 @@ Adding a server:
    python3 tools/voicemenu.py <id> <fs_homepath>/<mod>/<server pack>.pk3
    ```
 
-   The pages go to `default/scripts/vsays/servers/<id>/`. Rerun it after the server ships a new pack; edited texts are kept.
+   The pages go to `default/serverconfigs/vsays/<id>/`. Rerun it after the server ships a new pack; edited texts are kept.
 
 5. **In game:** the settings apply on the next map load, team or class change, or with `F3`. `TAB` in the voice chat (`V`) opens the server's own menu.
 

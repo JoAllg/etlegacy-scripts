@@ -34,7 +34,7 @@ Standards used in the live scripts. Not enforced everywhere yet — follow them 
 | `null`                                                   | empty no-op alias for disabled hooks                     | `set preJoinHookb vstr null`                                                                  |
 
 
-Menu layers (voicechat, spawn selector): `chat<Category>` opens a category, `echo<Item>` prints one line. A voice chat page is a file (`scripts/vsays/chat/`, `vsays/servers/<clan>/`) exec'd when opened, in three blocks: `// Vsays` (`set vsay<key> "vsay <id> <text>"`, nothing else on the line), `// Echos`, `// Binds` (`bind <key> "vstr vsay<key>; vstr resetLayers"`). All pages share the aliases `vsay1`..`vsay0` (cycle steps `vsay<n>a` / `b`, pointer `cycleVsay<Name>` in `vsays/chat.cfg`).
+Menu layers (voicechat, spawn selector): `chat<Category>` opens a category, `echo<Item>` prints one line. A voice chat page is a file (`scripts/vsays/chat/`, `serverconfigs/vsays/<clan>/`) exec'd when opened, in three blocks: `// Vsays` (`set vsay<key> "vsay <id> <text>"`, nothing else on the line), `// Echos`, `// Binds` (`bind <key> "vstr vsay<key>; vstr resetLayers"`). All pages share the aliases `vsay1`..`vsay0` (cycle steps `vsay<n>a` / `b`, pointer `cycleVsay<Name>` in `vsays/chat.cfg`).
 
 Team/class (`scripts/classcript.cfg`, `scripts/class/`):
 

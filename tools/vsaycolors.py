@@ -24,11 +24,12 @@ from helpers.settings import MENU, PROFILE, REPO, VSAY
 LIVE = REPO / PROFILE
 SKIP = {"etconfig.cfg"}  # game-generated
 GENERATED = LIVE / "servermenu"  # pages of tools/servermenu.py, rewritten while it runs; the connect say keeps the hostname colors
+SERVER_PAGES = LIVE / "serverconfigs/vsays"  # pages of tools/voicemenu.py
 RECORD = LIVE / "scripts/vsays/vsaycolors.tsv"  # colors of the last apply + reviewed texts (cmd, id, plain text)
 HTML = REPO / "tools/vsaycolors.html"
 ROLES = ("team", "global", "buddy", "punct", "highlight", "urgent")
 MENU_ROLES = ("head", "key", "text", "nav", "global", "axis", "allies")
-MENU_DIRS = ("scripts/vsays", "scripts/spawn", "autoexecs")  # files with echo menus
+MENU_DIRS = ("scripts/vsays", "serverconfigs/vsays", "scripts/spawn", "autoexecs")  # files with echo menus
 ECHO = re.compile(r'(\becho "?)([^;"]+)')
 # vsay_buddy (fireteam) needs the class (-1) and the target clients; VoiceFireTeamChat <id> takes no text
 TEXT = re.compile(r'\b(vsay(?:_team)?|vsay_buddy(?: -?\d+)+) (\w+) ([^;"]+)')
@@ -177,7 +178,7 @@ def apply(colors):
     changed, irregular = [], []
     for f in files():
         lines = f.read_text(encoding="latin-1").splitlines()
-        server = "servers" in f.parts
+        server = SERVER_PAGES in f.parents
         for n, line in enumerate(lines):
             if line.lstrip().startswith("//"):
                 continue
