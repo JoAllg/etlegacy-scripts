@@ -59,15 +59,23 @@ def base(cmd):
     return {"vsay_team": "team", "say_team": "team", "say_teamnl": "team", "vsay_buddy": "buddy", "say_buddy": "buddy"}.get(cmd.split()[0], "global")
 
 
+def split_comment(line):
+    """(code, comment): // outside quotes starts a comment, like the engine's tokenizer."""
+    m = re.match(r'(?:[^"/]|"[^"]*"?|/(?!/))*', line)
+    return line[:m.end()], line[m.end():]
+
+
 def found(line):
     """[(cmd, id, text)] of a line; chat texts have no id ("")."""
+    line = split_comment(line)[0]
     return [m.groups() for m in TEXT.finditer(line)] + [(m.group(2), "", m.group(3)) for m in SAY.finditer(line)]
 
 
 def sub_texts(line, fn):
     """line with every text replaced by fn(cmd, id, text)."""
+    line, comment = split_comment(line)
     line = TEXT.sub(lambda m: f"{m.group(1)} {m.group(2)} {fn(*m.groups())}", line)
-    return SAY.sub(lambda m: f"{m.group(1)}{m.group(2)} {fn(m.group(2), '', m.group(3))}", line)
+    return SAY.sub(lambda m: f"{m.group(1)}{m.group(2)} {fn(m.group(2), '', m.group(3))}", line) + comment
 
 
 def plain(text):
@@ -290,6 +298,8 @@ def selftest():
     assert menu_echo("^9[^7xY^9] ^1FUN:", m, server=True) == "^9[^7xY^9] ^8FUN:" and menu_echo("[x] FUN:", m, server=True) == "[x] ^8FUN:"
     assert menu_echo("^31. ^2Hi", m) == "^31. ^7Hi" and menu_echo("^5    *** CHAT LOADED!", m, old_m) == "^5    *** CHAT LOADED!"
     assert render("^1a^3b") == '<span style="color:#ff0000">a</span><span style="color:#ffff00">b</span>'
+    assert found('set x "vsay Bye"  // vsay of the menu; say it') == [], found('set x "vsay Bye"  // vsay of the menu; say it')
+    assert found('bind 1 "vsay hi Go // now"  // vsay of x') == [("vsay", "hi", "Go // now")]
     print("selftest ok")
 
 
