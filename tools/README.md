@@ -21,7 +21,12 @@ python3 tools/spawnpoints/spawnpoints.py [map ...]
 
 ## voicemenu.py
 
-Copies a server's quick chat menu (`V`) from its pk3 into voicechat pages in `default/serverconfigs/vsays/<clan>/`; in game they are on `TAB` of the voice chat while playing on that server (`serverconfig.py`). `<clan>` is the server's id in `default/serverconfigs/servers.tsv`, and the headings carry its tag as the server writes it (taken from `[address]` or from a server the game connected to before). Pages that duplicate the stock menu are left out; custom vsays the menu leaves out go on extra pages behind `TAB` (the last one back to the top page). `CAPSLOCK` on a page opens its parent page (on the top page and the extra pages: the stock voice chat). The pages have the format of the stock pages (`default/scripts/vsays/chat/`) and share their `vsay<key>` aliases. Menu items on letter keys are left out (the pages bind their keys); vsays only reachable through them go on the extra pages. A rerun after a new server pack keeps edited texts and the edited echoes of keys that send no text (random vsays, page names) and page headings, and reports added and removed vsays.
+Copies a server's quick chat menu (`V`) from its pk3 into voice chat pages in `default/serverconfigs/vsays/<clan>/`. `<clan>` is the server's id in `default/serverconfigs/servers.tsv`; the headings carry its tag as the server writes it (taken from `[address]` or from a server the game connected to before). The pages have the format of the stock pages (`default/scripts/vsays/chat/`) and share their `vsay<key>` aliases.
+
+- Kept: only the server's own sound pages. Left out: pages named like a stock menu or sending only stock vsays (the general voice chat has those), settings/options pages, keys that are neither a vsay nor a page link, items on letter keys.
+- Extra pages: the server's vsays its menu doesn't offer, 10 per page (`extra1.cfg`, ...), each linked from the server's sound menu.
+- Navigation: `<clan>_menu.cfg` is the top page; `TAB` of the general voice chat opens it while playing on that server (`serverconfig.py`). A page with more than 10 links continues on a second page (`<clan>_menu2.cfg`); `TAB` goes through these pages and back to the general voice chat. `CAPSLOCK` opens the parent page.
+- Rerun after a new server pack: keeps edited texts, colors, echoes of keys without text and page headings, and reports added and removed vsays.
 
 ```sh
 python3 tools/voicemenu.py <clan> <pk3> [address]

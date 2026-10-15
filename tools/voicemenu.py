@@ -2,10 +2,14 @@
 """Copy a server's quick chat menu (V) into voicechat pages: default/serverconfigs/vsays/<clan>/*.cfg.
 
 Reads ui/wm_quickmessageAlt.menu (the number-key variant) from the server's pk3 and writes one cfg per
-menu page the server adds; entries that open a stock page (etmain pak0.pk3, covered by the general voice chat
-pages vsays/chat/) or say the class vsay are left out; a stock page the server added vsays to keeps only those. <clan>.cfg is the top page (TAB of the voice chat opens it on that server, tools/serverconfig.py); the other pages are named after
+menu page the server adds; pages named like a stock menu (etmain pak0.pk3) or sending only stock vsays (the general
+voice chat pages vsays/chat/ offer those) and the class vsay are left out, the server's own vsays of such a page go to the
+extra pages. <clan>_menu.cfg is the top page (TAB of the voice chat opens it on that server, tools/serverconfig.py; a top page with a
+single link is the page that link opens), its TAB goes through its pages and back to the general voice chat; the other pages are named after
 their menu (wm_ and _alt stripped). Custom vsays of the pk3's voice scripts that its menu leaves out go on
-extra pages behind TAB of the top page (extra1, extra2, ..., the last one back to the top page): only those available to both teams whose
+extra pages of 10 (extra1, extra2, ...), each linked from the server's sound menu (the page of the top page with the most
+vsays below it) on a free number key; a page with more than 10 keys continues on a second page (<page>2.cfg, <clan>_menu2.cfg, TAB
+switches between them). Extra pages hold only those available to both teams whose
 sounds no listed or stock vsay (etmain pak0.pk3) plays already, e.g. as a random variant. Each page is exec'd when
 opened: it defines its vsays in the aliases vsay<key> that all voice chat pages share (vsays/chat.cfg), echoes the menu
 and binds the keys, CAPSLOCK to the parent page (a TAB page: the parent of its chain; the top page: the stock voice chat); aliases of their own for the ~300 server vsays would exceed MAX_CVARS (2048).
@@ -17,7 +21,10 @@ existing pages are kept per vsay (edited or highlighted ones too), and so are th
 (random vsays, page links) and the page headings; added and removed vsays are reported.
 
 Menu items on other keys than the number row are left out: a page binds its keys, and a letter is a game bind. Pages
-only such items open are left out with them; their vsays count as not in the server menu (extra pages).
+only such items open are left out with them; their vsays count as not in the server menu (extra pages). Only vsay keys
+and links to pages that send vsays (themselves or a subpage) are kept, so pages of cvar toggles and server commands
+drop out. Settings pages (name, title or link says settings/options/config, also in the languages of the servers) without
+vsays of their own are left out too; the key that opened one opens its first subpage with more than 3 vsays instead.
 
 Every page heading starts with the server tag as the server writes it in its name, colors included: the text of
 <clan> in default/serverconfigs/servers.tsv, looked up in the name of [address] (asked now) or of a server the game
@@ -30,6 +37,7 @@ Usage: tools/voicemenu.py <clan> <pk3> [address]
 Rerun after the server ships a new pack; the old pages of that clan are replaced.
 """
 import argparse
+import datetime
 import re
 import sys
 import tempfile
@@ -45,6 +53,8 @@ OUT = REPO / PROFILE / "serverconfigs/vsays"
 EXEC = "profile/serverconfigs/vsays"  # the profile link of deploy.sh in each mod folder
 MENU = "ui/wm_quickmessageAlt.menu"
 KEYS = "1234567890"
+# settings/options pages (cvar toggles, server commands), also in the languages of the servers: no vsays to send
+SETTINGS = re.compile(r"(?i)setting|option|config|setup|pref|einstellung|ustawieni|opcj|r[eé]glage|param[eè]tre|opcion|impostazion|opzion")
 STOCK = [HOMEPATH / "etmain/pak0.pk3", BASEPATH / "etmain/pak0.pk3"]
 COLORS = {"vsay_team": VSAY["team"], "vsay": VSAY["global"], "punct": VSAY["punct"]}
 
@@ -74,15 +84,48 @@ def tokens(text):
     return out
 
 
+def is_settings(menu, label, menus, heads):
+    """A settings page: its name, title or the label linking to it says so, and it sends no vsay."""
+    return bool(SETTINGS.search(f"{menu} {heads.get(menu, '')} {strip_colors(label)}")) and not vsays_of(menus.get(menu, []))
+
+
 def visible(menus, root="wm_quickmessageAlt"):
     """The pages reachable from root with their items on number keys."""
     out, todo = {}, [root]
     while todo:
         menu = todo.pop()
         if menu not in out and menu in menus:
-            out[menu] = [i for i in menus[menu] if i[2] in KEYS]
+            out[menu] = [i for i in menus[menu] if i[2] in KEYS + "?"]  # ?: a key split() gives
             todo += [m for _, action, _ in out[menu] for m in re.findall(r"open (\w+)", action)]
     return out
+
+
+def prune(menus, heads={}, root="wm_quickmessageAlt", stock=set(), stock_menus=()):
+    """The pages reachable from root with only vsay keys and links to pages that send vsays (themselves or a subpage);
+    a link to a settings page is replaced by links to its subpages with more than 3 vsays (the first on its key, the
+    others on "?", see split()), else it is left out.
+    Pages named like a stock menu or sending only stock vsays (stock: vsays of etmain pak0.pk3) are left out:
+    the general voice chat offers stock vsays, the server's own ones of such a page go to the extra pages."""
+    def gone(menu):
+        return menu != root and (menu in stock_menus or bool(vsays_of(menus.get(menu, []))) and vsays_of(menus[menu]) <= stock)
+
+    def below(menu, seen=()):
+        return menu in menus and menu not in seen and not gone(menu) and (bool(vsays_of(menus[menu])) or any(
+            below(t, seen + (menu,)) for _, a, _ in menus[menu] for t in re.findall(r"open (\w+)", a)))
+    out = {}
+    for menu, items in menus.items():
+        keep, more = [], []
+        for label, action, key in items:
+            t = re.findall(r"open (\w+)", action)
+            if vsay_of(action) or t and not is_settings(t[0], label, menus, heads) and below(t[0]):
+                keep.append((label, action, key))
+            elif t:
+                subs = [s for _, a, _ in menus.get(t[0], []) for s in re.findall(r"open (\w+)", a) if s != menu and not gone(s) and len(vsays_of(menus.get(s, []))) > 3]
+                links = [(heads.get(s, page_name(s, root, "")), f"open {s}") for s in dict.fromkeys(subs)]
+                keep += [(f"{key}. {h}", a, key) for h, a in links[:1]]
+                more += [(f"?. {h}", a, "?") for h, a in links[1:]]
+        out[menu] = (renumber(keep) if len(keep) < len(items) else keep) + more
+    return visible(out, root)
 
 
 def parse_voice(text):
@@ -194,20 +237,58 @@ def unlisted(menus, sounds, texts, stock):
     return out
 
 
+def hub(menus, root="wm_quickmessageAlt"):
+    """The server's own sound menu: the page linked from root with the most vsays on it and its subpages, else root."""
+    def count(menu, seen):
+        if menu in seen or menu not in menus:
+            return 0
+        seen.add(menu)
+        return len(vsays_of(menus[menu])) + sum(count(t, seen) for _, a, _ in menus[menu] for t in re.findall(r"open (\w+)", a))
+    subs = [t for _, a, _ in menus.get(root, []) for t in re.findall(r"open (\w+)", a)]
+    return max(subs, key=lambda t: count(t, {root}), default=root)
+
+
 def add_extra(menus, clan, extra, root="wm_quickmessageAlt"):
-    """Menu pages for the unlisted vsays, reached with TAB from root (TAB pages on, the last back to root)."""
-    pages = [extra[i:i + 10] for i in range(0, len(extra), 10)]
+    """Menu pages of 10 for the unlisted vsays, each linked from the server's sound menu (hub) on "?" (see split())."""
+    pages, top = [extra[i:i + 10] for i in range(0, len(extra), 10)], hub(menus, root)
     for n, page in enumerate(pages, 1):
-        items = [(f"{KEYS[i]}. ^2{txt}", f'exec "VoiceChat {vsay}"', KEYS[i]) for i, (vsay, txt) in enumerate(page)]
-        nxt = f"wm_extra{n + 1}_alt" if n < len(pages) else root
-        items.append(("TAB ^2More sounds" if n < len(pages) else "TAB ^2First page", f"open {nxt}", "TAB"))
-        menus[f"wm_extra{n}_alt"] = items
-    if pages:
-        menus[root] = menus[root] + [("TAB ^2More sounds (not in the server menu)", "open wm_extra1_alt", "TAB")]
+        menus[f"wm_extra{n}_alt"] = [(f"{KEYS[i]}. ^2{txt}", f'exec "VoiceChat {vsay}"', KEYS[i]) for i, (vsay, txt) in enumerate(page)]
+        menus[top] = menus[top] + [(f"?. More sounds {n}", f"open wm_extra{n}_alt", "?")]
+
+
+def collapse(menus, root="wm_quickmessageAlt"):
+    """A top page with a single link is replaced by the page it opens (links to that page then open root)."""
+    t = len(menus[root]) == 1 and re.findall(r"open (\w+)", menus[root][0][1])
+    if t and t[0] in menus and t[0] != root:
+        menus[root] = menus.pop(t[0])
+        for m in menus:
+            menus[m] = [(l, re.sub(rf"open {t[0]}\b", f"open {root}", a), k) for l, a, k in menus[m]]
+
+
+def split(menus, root="wm_quickmessageAlt"):
+    """Items on "?" get the free number keys; a page with more than 10 number keys goes on pages of 10 that TAB cycles
+    through (wm_x_alt, wm_x2_alt, ...), the number keys of each in list order. The pages of root end on TAB back to
+    the general voice chat, whose TAB opens root (tools/serverconfig.py)."""
+    for menu in list(menus):
+        num = [i for i in menus[menu] if i[2] != "TAB"]
+        if len(num) <= 10:
+            free = iter(k for k in KEYS if k not in {i[2] for i in num})
+            menus[menu] = [i if i[2] != "?" else (lambda k: (k + i[0][1:], i[1], k))(next(free)) for i in menus[menu]]
+            chunks = [menus[menu]]
+        else:
+            chunks = [renumber(num[i:i + 10]) for i in range(0, len(num), 10)]
+        if len(chunks) == 1 and menu != root:
+            continue
+        names = [menu] + [re.sub(r"(_alt)?$", rf"{n}\1", menu, count=1) for n in range(2, len(chunks) + 1)]
+        for n, chunk in enumerate(chunks):
+            nxt = n + 1 if n + 1 < len(chunks) or menu != root else None
+            tab = ("TAB ^2Voice chat", "vstr chatCategories", "TAB") if nxt is None else (f"TAB ^2Page {nxt % len(chunks) + 1}", f"open {names[nxt % len(chunks)]}", "TAB")
+            menus[names[n]] = [i for i in chunk if i[2] != "TAB"] + [tab]
 
 
 def page_name(menu, root, clan):
-    return clan if menu == root else re.sub(r"^wm_|_alt$", "", menu)
+    """<clan>_menu, <clan>_menu2, ... for the pages of root (split()), else the menu without wm_ and _alt."""
+    return f"{clan}_menu{menu[len(root):]}" if re.fullmatch(rf"{re.escape(root)}\d*", menu) else re.sub(r"^wm_|_alt$", "", menu)
 
 
 def vsay_of(action):
@@ -220,6 +301,8 @@ def bind(clan, label, action, key, pages, root):
     """(bind line, submenu to render or None); a vsay key runs its alias vsay<key>."""
     if vsay_of(action):
         return f'bind {key} "vstr vsay{key}; vstr resetLayers"', None
+    if action.startswith("vstr "):  # back to the general voice chat
+        return f'bind {key} "{action}"', None
     o = re.search(r"open (\w+)", action)
     if o and o.group(1) in pages:
         return f'bind {key} "execq {EXEC}/{clan}/{page_name(o.group(1), root, clan)}.cfg"', o.group(1)  # execq: a key press prints no "execing" line
@@ -250,14 +333,14 @@ def renumber(items):
     """Number keys in list order, also in the label ("^78. x" -> "^71. x"); TAB stays."""
     out, n = [], 0
     for label, action, key in items:
-        if key in KEYS:
+        if key in KEYS or key == "?":
             key, n = KEYS[n], n + 1
-            label = re.sub(rf"^((?:{COLOR})*)\d", lambda m: m.group(1) + key, label, count=1)
+            label = re.sub(rf"^((?:{COLOR})*)[\d?]", lambda m: m.group(1) + key, label, count=1)
         out.append((label, action, key))
     return out
 
 
-def render(clan, pk3name, menus, stock={}, root="wm_quickmessageAlt", tag=None, texts={}, kept={}, colors=COLORS, heads={}, menu_colors=MENU_COLORS, names=(), labels={}):
+def render(clan, pk3name, menus, stock={}, root="wm_quickmessageAlt", tag=None, texts={}, kept={}, colors=COLORS, heads={}, menu_colors=MENU_COLORS, names=(), labels={}, date="2000-01-01"):
     """{file name: cfg text} for every page reachable from root, without the stock entries, and
     {(cmd, vsay): (page, key, text or None)} of its vsays; kept = {(cmd, vsay): text} to send instead of the voice script's,
     labels = {(cmd, vsay) or page file: item} to echo for the keys that send no text, {("head", page file): heading}."""
@@ -271,7 +354,7 @@ def render(clan, pk3name, menus, stock={}, root="wm_quickmessageAlt", tag=None, 
             continue
         head = labels.get(("head", name + ".cfg")) or strip_tag(heads.get(menu, head) if menu != root else head, clan, names)
         title = strip_colors(f"{tag} {head}")
-        top = [f"// {title}: menu {menu} of {MENU} in {pk3name}, generated by tools/voicemenu.py"]
+        top = [f"// {title}: menu {menu} of {MENU} in {pk3name}, generated by tools/voicemenu.py on {date}"]
         lines = ["vstr popupsMenu",  # clears the previous page (scripts/scripts.cfg)
                  f'echo "{tag} {menu_colors["head"]}{plain(head)}:"']  # format of menu_echo(server=True)
         sets, binds = [], []
@@ -321,10 +404,11 @@ QM_MENU_END''')
     assert "xy11" not in part["fun.cfg"] and 'set vsay1 "vsay_team FTAttack"\n' in part["fun.cfg"], part["fun.cfg"]
     texts = {"xy11": ("xy11", ["^4Hi; you!"]), "ftattack": ("FTAttack", ["Attack!", "Go go!"])}
     files, vsays = render("x", "x.pk3", menus, stock, texts=texts, colors=col, menu_colors=mc)
-    assert set(files) == {"x.cfg", "fun.cfg"}, files
-    assert files["x.cfg"].splitlines()[1:4] == ["", "// Echos", "vstr popupsMenu"]  # no vsays: no Vsays section
-    assert "Statements" not in files["x.cfg"] and 'echo "^31. ^7FUN"' in files["x.cfg"]
-    assert f"bind 1 \"execq {EXEC}/x/fun.cfg\"" in files["x.cfg"], files["x.cfg"]
+    assert set(files) == {"x_menu.cfg", "fun.cfg"}, files
+    assert files["x_menu.cfg"].startswith("// [x] VOICE CHAT: menu wm_quickmessageAlt of ui/wm_quickmessageAlt.menu in x.pk3, generated by tools/voicemenu.py on 2000-01-01\n"), files["x_menu.cfg"]
+    assert files["x_menu.cfg"].splitlines()[1:4] == ["", "// Echos", "vstr popupsMenu"]  # no vsays: no Vsays section
+    assert "Statements" not in files["x_menu.cfg"] and 'echo "^31. ^7FUN"' in files["x_menu.cfg"]
+    assert f"bind 1 \"execq {EXEC}/x/fun.cfg\"" in files["x_menu.cfg"], files["x_menu.cfg"]
     assert renumber([("^78. a", "", "8"), ("^70. b", "", "0"), ("TAB c", "", "TAB")]) == [("^71. a", "", "1"), ("^72. b", "", "2"), ("TAB c", "", "TAB")]
     fun = files["fun.cfg"]
     assert 'set vsay1 "vsay xy11 ^lHi^3, ^lyou^3!"\n' in fun and 'bind 1 "vstr vsay1; vstr resetLayers"' in fun and 'echo "^31. ^7Hi, you!"' in fun, fun
@@ -339,14 +423,29 @@ QM_MENU_END''')
             (Path(d) / n).write_text(t, encoding="latin1")
         assert read_pages(Path(d)) == new, read_pages(Path(d))
         assert read_labels(Path(d)) == {"fun.cfg": "FUN", ("vsay_team", "ftattack"): "Attack! (random)",
-                                        ("head", "x.cfg"): "VOICE CHAT", ("head", "fun.cfg"): "FUN"}, read_labels(Path(d))
+                                        ("head", "x_menu.cfg"): "VOICE CHAT", ("head", "fun.cfg"): "FUN"}, read_labels(Path(d))
     own = {"fun.cfg": "Jokes", ("vsay_team", "ftattack"): "Charge! (random)", ("vsay", "xy11"): "unused", ("head", "fun.cfg"): "Fun time"}
     files3, _ = render("x", "x.pk3", menus, stock, texts=texts, kept=kept, colors=col, menu_colors=mc, labels=own)
-    assert 'echo "^31. ^7Jokes"' in files3["x.cfg"] and 'echo "[x] ^8Fun time:"' in files3["fun.cfg"] and 'echo "[x] ^8VOICE CHAT:"' in files3["x.cfg"], files3
+    assert 'echo "^31. ^7Jokes"' in files3["x_menu.cfg"] and 'echo "[x] ^8Fun time:"' in files3["fun.cfg"] and 'echo "[x] ^8VOICE CHAT:"' in files3["x_menu.cfg"], files3
     assert 'echo "^32. ^7Charge! (random)"' in files3["fun.cfg"] and 'echo "^31. ^7Hi you!"' in files3["fun.cfg"], files3["fun.cfg"]
     hidden = {"r": [("1. A", "open a", "1"), ("", "open b", "g")], "a": [("1. x", 'exec "VoiceChat v1"', "1"), ("Q. Quit", "close a", "q")],
               "b": [("1. y", 'exec "VoiceChat v2"', "1")]}
     assert visible(hidden, "r") == {"r": hidden["r"][:1], "a": hidden["a"][:1]}, visible(hidden, "r")
+    opts = {"r": [("1. Sounds", "open a", "1"), ("2. ^1Extra Options", "open o", "2"), ("3. Misc", "open s", "3"), ("4. More", "open m", "4")],
+            "a": [("1. x", 'exec "VoiceChat v1"', "1")], "o": [("1. Off", 'setCvar cg_novoicechats "1"', "1"), ("2. Sub", "open q", "2")],
+            "q": [("1. y", 'exec "VoiceChat v2"', "1")], "s": [("1. Off", "close s", "1")], "m": [("1. z", 'exec "VoiceChat v3"', "1")]}
+    opts["o"].append(("3. Back", "open b", "3"))
+    opts["b"] = [(f"{k}. b{k}", f'exec "VoiceChat b{k}"', k) for k in "1234"]
+    pruned = prune(opts, {"s": "[x] Settings", "m": "More Sounds & Options", "b": "Big"}, "r")
+    assert set(pruned) == {"r", "a", "m", "b"}, pruned
+    loop = {"r": [("1. Settings", "open s", "1")], "s": [("1. Back", "open m", "1")],
+            "m": [(f"{k}. m{k}", f'exec "VoiceChat m{k}"', k) for k in "1234"] + [("0. Settings", "open s", "0")]}
+    assert prune(loop, root="r")["m"] == loop["m"][:4] and prune(loop, root="r")["r"][0][1] == "open m"  # never a link to itself
+    alt = {"r": [("1. Statements", "open st", "1"), ("2. More", "open nq", "2"), ("3. Mix", "open mx", "3")],
+           "st": [("1. x", 'exec "VoiceChat xy1"', "1")], "nq": [("1. f", 'exec "VoiceTeamChat FTMortar"', "1")],
+           "mx": [("1. f", 'exec "VoiceTeamChat FTMortar"', "1"), ("2. x", 'exec "VoiceChat xy2"', "2")]}
+    assert set(prune(alt, root="r", stock={"ftmortar"}, stock_menus={"st": []})) == {"r", "mx"}
+    assert pruned["r"] == [("1. Sounds", "open a", "1"), ("2. Big", "open b", "2"), ("3. More", "open m", "3")], pruned["r"]
     old = {("vsay", "xy11"): ("fun.cfg", "1", "^lHi"), ("vsay", "gone"): ("fun.cfg", "4", "^lBye"), ("vsay_team", "ftattack"): ("fun.cfg", "2", "^9Go")}
     assert report(old, {**new, ("vsay", "xynew"): ("fun.cfg", "5", None)}) == [
         "+ vsay xynew  fun.cfg key 5", "- vsay gone  (was fun.cfg key 4: ^lBye)",
@@ -367,14 +466,41 @@ QM_MENU_END''')
     texts = {v: (v.upper(), [f"text {v}"]) for v in sounds}
     extra = unlisted(menus, sounds, texts, {"medic"})
     assert [v for v, _ in extra] == ["E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "XYV"], extra
+    assert hub(menus) == "wm_fun_alt" and hub({"r": [("1. x", 'exec "VoiceChat v"', "1")]}, "r") == "r"
+    side = {"r": [("1. a", "open a", "1")], "a": [("1. x", 'exec "VoiceChat v"', "1")]}
+    add_extra(side, "x", extra[:1], "r")
+    split(side)
+    assert side["a"][-1] == ("2. More sounds 1", "open wm_extra1_alt", "2") and "TAB" not in str(side["wm_extra1_alt"]), side
+    full = {"r": [("1. a", "open a", "1")], "a": [(f"{k}. x", f'exec "VoiceChat v{k}"', k) for k in KEYS]}
+    add_extra(full, "x", extra, "r")
+    split(full)
+    assert full["a"][-1] == ("TAB ^2Page 2", "open a2", "TAB") and len(full["a"]) == 11, full["a"]
+    assert full["a2"] == [("1. More sounds 1", "open wm_extra1_alt", "1"), ("2. More sounds 2", "open wm_extra2_alt", "2"),
+                          ("TAB ^2Page 1", "open a", "TAB")], full["a2"]
+    multi = {"r": [("1. Settings", "open s", "1")], "s": [("1. A", "open m", "1"), ("2. B", "open n", "2")],
+             "m": [(f"{k}. m", f'exec "VoiceChat m{k}"', k) for k in "1234"], "n": [(f"{k}. n", f'exec "VoiceChat n{k}"', k) for k in "1234"]}
+    multi = prune(multi, {"m": "Mm", "n": "Nn"}, "r")
+    split(multi, "r")
+    assert multi["r"] == [("1. Mm", "open m", "1"), ("2. Nn", "open n", "2"), ("TAB ^2Voice chat", "vstr chatCategories", "TAB")], multi["r"]
+    one = {"r": [("1. Fun", "open f", "1")], "f": [(f"{k}. f", f'exec "VoiceChat f{k}"', k) for k in KEYS] + [("?. More", "open e", "?")],
+           "e": [("1. e", 'exec "VoiceChat e1"', "1")]}
+    collapse(one, "r")
+    split(one, "r")
+    assert page_name("r2", "r", "x") == "x_menu2" and page_name("r", "r", "x") == "x_menu" and page_name("wm_ra_alt", "r", "x") == "ra"
+    assert set(one) == {"r", "r2", "e"} and one["r"][-1] == ("TAB ^2Page 2", "open r2", "TAB"), one
+    assert one["r2"] == [("1. More", "open e", "1"), ("TAB ^2Voice chat", "vstr chatCategories", "TAB")], one["r2"]
+    assert bind("x", "TAB", "vstr chatCategories", "TAB", one, "r") == ('bind TAB "vstr chatCategories"', None)
     add_extra(menus, "x", extra)
+    split(menus)
     files, _ = render("x", "x.pk3", menus, dict(stock, wm_quickmessageAlt=set()), texts=texts, colors=col, menu_colors=mc)
-    assert f'bind TAB "execq {EXEC}/x/extra1.cfg"' in files["x.cfg"] and "unbind TAB" not in files["fun.cfg"]
+    assert f'bind 4 "execq {EXEC}/x/extra1.cfg"' in files["fun.cfg"] and f'bind 5 "execq {EXEC}/x/extra2.cfg"' in files["fun.cfg"], files["fun.cfg"]
+    assert "extra1" not in files["x_menu.cfg"] and "TAB" not in files["extra2.cfg"], files["extra2.cfg"]
     assert files["fun.cfg"].index("\nvstr unbindNumbers\n") < files["fun.cfg"].index("\nbind 1 "), files["fun.cfg"]
-    assert 'set vsay1 "vsay XYV ^ltext xyv"\n' in files["extra2.cfg"] and f'bind TAB "execq {EXEC}/x/x.cfg"' in files["extra2.cfg"]
-    assert files["x.cfg"].endswith('bind CAPSLOCK "vstr chatCategories"\n') and files["extra2.cfg"].endswith('bind CAPSLOCK "vstr chatCategories"\n')
-    assert files["fun.cfg"].endswith(f'bind CAPSLOCK "execq {EXEC}/x/x.cfg"\n'), files["fun.cfg"]
-    assert 'echo "[x] ^8More sounds (not in the server menu):"' in files["extra1.cfg"], files["extra1.cfg"]
+    assert 'set vsay1 "vsay XYV ^ltext xyv"\n' in files["extra2.cfg"], files["extra2.cfg"]
+    assert files["x_menu.cfg"].endswith('bind CAPSLOCK "vstr chatCategories"\n')
+    assert files["extra2.cfg"].endswith(f'bind CAPSLOCK "execq {EXEC}/x/fun.cfg"\n'), files["extra2.cfg"]
+    assert files["fun.cfg"].endswith(f'bind CAPSLOCK "execq {EXEC}/x/x_menu.cfg"\n'), files["fun.cfg"]
+    assert 'echo "[x] ^8More sounds 1:"' in files["extra1.cfg"], files["extra1.cfg"]
     print("selftest ok")
 
 
@@ -392,11 +518,12 @@ def main():
     clan, pk3 = a.clan, Path(a.pk3).expanduser()
     with zipfile.ZipFile(pk3) as z:
         menu_text = z.read(MENU).decode("latin-1")
-        menus, heads = visible(parse(menu_text)), titles(menu_text)
+        heads = titles(menu_text)
         sounds, texts = voices(z)
     with zipfile.ZipFile(next(p for p in STOCK if p.exists())) as z:
         stock = set(voices(z)[0])
         stock_menus = parse(z.read(MENU).decode("latin-1"))
+    menus = prune(visible(parse(menu_text)), heads, stock=stock, stock_menus=stock_menus)
     names, rows = [hostname(a.address)] if a.address else list(history().values()), servers()
     if a.address and not names[0]:  # also a tag passed where the address belongs
         sys.exit(f"'{a.address}' doesn't answer: the third argument is the address of a server, its tag is taken from the server's name")
@@ -405,11 +532,13 @@ def main():
         print(f"⚠️  no server name with the text of '{clan}' (serverconfigs/servers.tsv) known: headings get [{clan}]", file=sys.stderr)
     extra = unlisted(menus, sounds, texts, stock)
     add_extra(menus, clan, extra)
+    collapse(menus)
+    split(menus)
     out = OUT / clan
     old = read_pages(out)
     kept = {k: text for k, (_, _, text) in old.items() if text}
     files, new = render(clan, pk3.name, menus, stock_pages(menus, stock_menus), tag=tag, names=[t for i, t in rows if i == clan],
-                        texts=texts, kept=kept, heads=heads, labels=read_labels(out))
+                        texts=texts, kept=kept, heads=heads, labels=read_labels(out), date=datetime.date.today().isoformat())
     out.mkdir(parents=True, exist_ok=True)
     for f in out.glob("*.cfg"):
         f.unlink()
