@@ -28,7 +28,7 @@ All in `default/serverconfigs/`; only `default.cfg` and `servers.example.tsv` ar
 | `default.cfg` | you | normal value of everything a server cfg sets |
 | `current.cfg` | tool | execs `default.cfg` and the `<id>.cfg` of the server the game is on |
 | `current_vsay.cfg` | tool | puts that server's voice chat on `TAB` of the voice chat |
-| `history.tsv` | tool | `<ip:port><TAB><server name>` of the servers seen |
+| `history.tsv` | tool | `<ip:port><TAB><server name><TAB><mod>` of the servers seen |
 
 ### servers.tsv
 

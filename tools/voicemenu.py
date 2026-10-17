@@ -524,7 +524,7 @@ def main():
         stock = set(voices(z)[0])
         stock_menus = parse(z.read(MENU).decode("latin-1"))
     menus = prune(visible(parse(menu_text)), heads, stock=stock, stock_menus=stock_menus)
-    names, rows = [hostname(a.address)] if a.address else list(history().values()), servers()
+    names, rows = [hostname(a.address)[0]] if a.address else list(history().values()), servers()
     if a.address and not names[0]:  # also a tag passed where the address belongs
         sys.exit(f"'{a.address}' doesn't answer: the third argument is the address of a server, its tag is taken from the server's name")
     tag = server_tag(clan, names, rows)

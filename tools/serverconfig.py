@@ -165,10 +165,10 @@ def write(server, name="", rows=(), out=CONFIGS, voice=VOICE, address=None):
 
 def ask(target, name=hostname):
     """Asks the server "ip:port" for its name once and brings the files up to the answer; False without one."""
-    name = name(target)
+    name, mod = name(target)
     if not name:
         return False
-    remember(target, name)
+    remember(target, name, mod)
     rows = servers()
     write(identify(name, rows), name, rows, address=target)
     return True
@@ -248,7 +248,7 @@ def add(server, address, text):
     address = address or last_connect()
     if not address:
         sys.exit("no address given and no connect in the game's log")
-    name = hostname(address)
+    name, mod = hostname(address)
     if not name:
         sys.exit(f"{address} doesn't answer")
     text = text or guess(name)
@@ -266,7 +266,7 @@ def add(server, address, text):
     cfg = CONFIGS / f"{server}.cfg"
     if not cfg.exists():
         cfg.write_text(f"// Settings on the servers of '{server}' (docs/serverconfigs.md): absolute values only, and every name set here gets its normal value in default.cfg\n", "latin1")
-    remember(adr_string(resolve(address)), name)
+    remember(adr_string(resolve(address)), name, mod)
     print(f"{name}\n{SERVERS.relative_to(REPO)}: {server}\t{text}\n{cfg.relative_to(REPO)}")
     first = identify(name, servers())
     if first != server:
@@ -404,7 +404,7 @@ def selftest():
     assert with_row(tsv, "new", "x y") == (tsv + ["new\tx y"], []) and with_row(tsv, "xy", "[xY]")[1] == ["[xY]"]
     wait = pauses()
     assert [next(wait) for _ in range(7)] == [2, 4, 8, 16, 32, 60, 60]
-    assert ask("192.0.2.1:27960", lambda address: "") is False  # no answer: nothing is written
+    assert ask("192.0.2.1:27960", lambda address: ("", "")) is False  # no answer: nothing is written
     with tempfile.TemporaryDirectory() as d:
         pid, log = Path(d) / "profile.pid", Path(d) / "etconsole.log"
         assert not game_running(pid)  # no file: no game

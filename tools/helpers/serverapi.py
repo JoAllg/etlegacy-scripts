@@ -11,7 +11,8 @@ Query (same as the game's server browser, src/server/sv_main.c SVC_Info / SVC_St
 Identity: default/serverconfigs/servers.tsv (user-maintained, "<id><TAB><text>") names the servers that have settings
 or a voice chat of their own. A row matches a server whose name contains the text (colors ignored, any case); the
 first matching row wins, so one clan tag covers all servers of a clan. history.tsv next to it remembers the name
-of every server the game connected to, so a server is recognized without asking it again.
+and mod ("<ip:port><TAB><name><TAB><mod>") of every server the game connected to, so a server is recognized without
+asking it again.
 
 Usage: tools/helpers/serverapi.py <address> ...   (prints name, id, mod, map, players, ping)
        tools/helpers/serverapi.py --selftest
@@ -209,10 +210,12 @@ def status(addresses, path=HISTORY, names=None):
 
 
 def hostname(address):
-    """Name of the server "host[:port]" as it sends it, "" if it doesn't answer: a single getstatus packet."""
+    """(name, mod) of the server "host[:port]" as it sends them, ("", "") if it doesn't answer: a single getstatus
+    packet. The mod is its gamename (MODNAME, e.g. "legacy"), "" if the server doesn't send one."""
     addr = resolve(address)
     answer = query([addr], (b"getstatus",)).get(addr, {}) if addr else {}
-    return answer.get("status", {}).get("sv_hostname", "")
+    status = answer.get("status", {})
+    return status.get("sv_hostname", ""), status.get("gamename", "")
 
 
 def servers(path=SERVERS):
@@ -266,23 +269,28 @@ def server_tag(server, names, rows):
     return None
 
 
-def history(path=HISTORY):
-    """{"ip:port": server name as the server sent it} of the servers remembered so far."""
+def seen(path=HISTORY):
+    """{"ip:port": (server name, mod)} of the servers remembered so far, as the servers sent them; mod "" if unknown."""
     try:
         lines = path.read_text("latin1").splitlines()
     except OSError:
         return {}
-    return dict(line.split("\t", 1) for line in lines if "\t" in line)
+    return {a: (n, m[0] if m else "") for a, n, *m in (line.split("\t") for line in lines if "\t" in line)}
 
 
-def remember(address, hostname, path=HISTORY):
-    """Stores the name of a server; a server that got a new name replaces its old one."""
-    known = history(path)
-    hostname = "".join(c for c in hostname if c >= " ")  # a tab or line break would break the file
-    if hostname and known.get(address) != hostname:
-        known[address] = hostname
+def history(path=HISTORY):
+    """{"ip:port": server name as the server sent it} of the servers remembered so far."""
+    return {a: n for a, (n, _) in seen(path).items()}
+
+
+def remember(address, hostname, mod="", path=HISTORY):
+    """Stores the name and mod of a server; a server that got a new name or mod replaces its old row."""
+    known = seen(path)
+    hostname, mod = ("".join(c for c in t if c >= " ") for t in (hostname, mod))  # a tab or line break would break the file
+    if hostname and known.get(address) != (hostname, mod):
+        known[address] = hostname, mod
         path.parent.mkdir(parents=True, exist_ok=True)
-        write_atomic(path, "".join(f"{a}\t{h}\n" for a, h in known.items()))
+        write_atomic(path, "".join(f"{a}\t{h}\t{m}\n" for a, (h, m) in known.items()))
 
 
 def selftest():
@@ -324,11 +332,14 @@ def selftest():
         assert identify("^3Full ^7Name | Of {Server} #2", rows) == "solo" and identify("nobody", rows) is None
         log = Path(d) / "sub/history.tsv"
         assert history(log) == {}
-        remember("192.0.2.1:27960", name, log)
-        remember("192.0.2.2:27960", "Tab\there", log)
-        remember("192.0.2.1:27960", "^2renamed", log)
-        remember("192.0.2.3:27960", "", log)
-        assert history(log) == {"192.0.2.1:27960": "^2renamed", "192.0.2.2:27960": "Tabhere"}, history(log)
+        log.parent.mkdir()
+        log.write_text("192.0.2.4:27960\tOld row\n", "latin1")  # a row without mod
+        remember("192.0.2.1:27960", name, "legacy", log)
+        remember("192.0.2.2:27960", "Tab\there", "", log)
+        remember("192.0.2.1:27960", "^2renamed", "nitmod", log)
+        remember("192.0.2.3:27960", "", "legacy", log)
+        assert history(log) == {"192.0.2.4:27960": "Old row", "192.0.2.1:27960": "^2renamed", "192.0.2.2:27960": "Tabhere"}, history(log)
+        assert seen(log)["192.0.2.1:27960"] == ("^2renamed", "nitmod") and seen(log)["192.0.2.4:27960"] == ("Old row", "")
         off = status(["192.0.2.1", "192.0.2.9:27960"], log)  # TEST-NET: no answer
         assert off["192.0.2.1"]["name"] == "^2renamed" and off["192.0.2.1"]["hostname"] == "" and off["192.0.2.9:27960"]["name"] == "192.0.2.9:27960"
         off = status(["192.0.2.1", "192.0.2.9:27960", "192.0.2.8"], log, {"192.0.2.1": "^3old", "192.0.2.9:27960": "^3Browser", "192.0.2.8": ""})
