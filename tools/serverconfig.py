@@ -331,7 +331,7 @@ def selftest():
     assert event("    1200 ----- Server Initialization ----\n") == "local"
 
     with tempfile.TemporaryDirectory() as d:
-        out, note = Path(d), "  // crosshair color on this map (HOME), saved by tools/serverconfig.py"
+        out, note = Path(d), "  // crosshair color on this map as set in-game via HOME key and saved by tools/serverconfig.py"
         radar = out / "autoexec_radar.cfg"
         radar.write_text("// Settings\nexec autoexec_mod.cfg  // x\nset spawnSelectorMap \"vstr spawnSelector3\"\n\n// Spawnpoints\n")
         assert on_map("     100 ^8CROSSHAIR COLOR ^2cyan\n", None, out) is None and "Color" not in radar.read_text()  # no map yet

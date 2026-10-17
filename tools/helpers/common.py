@@ -85,7 +85,7 @@ def fix_name(name):
 RESERVED = {"default", "mod", "axis", "allies", "spectator", "soldier", "medic", "engineer", "fieldops", "covertops"}
 # The crosshair color of a map: a step of the HOME cycle (default/scripts/display.cfg) in the map's autoexec
 MAP_COLOR = re.compile(r"\s*vstr crosshairColor([A-Z][a-z]+)\b")
-MAP_COLOR_NOTE = "  // crosshair color on this map (HOME), saved by tools/serverconfig.py"
+MAP_COLOR_NOTE = "  // crosshair color on this map as set in-game via HOME key and saved by tools/serverconfig.py"
 SETTING = re.compile(r"\s*(exec autoexec_\w+\.cfg|set spawnSelectorMap)\b")
 
 
