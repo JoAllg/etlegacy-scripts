@@ -165,7 +165,7 @@ def location(locs, point):
 
 
 def analyse(ents, locs):
-    """{team letter: ([(N, label, objective description)], [unselectable label])}, None if the map has no spawn objectives."""
+    """{team letter: ([(N, label, objective description)], [objective description of each unselectable room])}, None if the map has no spawn objectives."""
     objs = [e for e in ents if e.get("classname", "").lower() == "team_wolf_objective"]
     origins = [vec(e.get("origin", "")) or (0.0, 0.0, 0.0) for e in objs]
     if not objs:
@@ -185,7 +185,7 @@ def analyse(ents, locs):
         labels = [f"{desc(o)} - {location(locs, centre(g))}" if owners.count(o) > 1 else desc(o) for _, o, g in chosen]
         labels = disambiguate(labels, [centre(g) for _, _, g in chosen])
         result[team] = ([(n, label, desc(o)) for (n, o, _), label in zip(chosen, labels)][:MAX_ENTRIES - 1],
-                        list(dict.fromkeys(f"{desc(o)} - {location(locs, centre(g))}" for o, g in missed)))
+                        list(dict.fromkeys(desc(o) for o, _ in missed)))
     return result
 
 
@@ -276,7 +276,7 @@ def render(mapname, title, pk3name, result):
         for k, (_, label, _) in enumerate(entries):
             lines.append(f'set echosp{k}{team:<5}"echo {MENU["key"]}{k + 1}. {MENU["text"] if k == 0 else color}{label}"')
         if result[team][1]:
-            lines.append(f"// not selectable while the rooms above are active: {'; '.join(result[team][1])}")
+            lines.append(f"// other rooms exist for the following spawnpoints but no setspawnpt reaches them directly: {'; '.join(result[team][1])}")
         lines.append("")
     lines.append("// Announce spawnpoints")
     for label, i in says.items():
