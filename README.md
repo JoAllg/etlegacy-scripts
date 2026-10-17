@@ -22,6 +22,7 @@ Config, scripts and keybinds for **Wolfenstein: Enemy Territory** on **ET: Legac
 - **Voice chat menu** (`V`) with colored texts.
 - **[Server menu](#server-menu)** (`RIGHTCTRL`): your favorite servers with players, map and ping, a number key connects.
 - **[Keymap](#keymap):** the live binds as a keyboard + mouse overview in the browser.
+- **Dev mode** (`MODE`): cheats and the location editor on the number keys, for local testing.
 - **Customization:**
   - **Autoexecs** per map, team and mod.
   - **[Scripts per server](#settings-per-server):** your own settings and scripts, applied when you join the server.
@@ -139,6 +140,7 @@ All binds, per class: open `tools/keymap/keymap.html` in a browser ([Keymap](#ke
 | `V` | voice chat menu; `TAB` opens the [server's own](#settings-per-server), on a page the next page (the last back to the first), `CAPSLOCK` goes back to the parent page |
 | `ENTER` | spawn menu of the map |
 | `RIGHTCTRL` | [server menu](#server-menu) |
+| `MODE` (AltGr) | dev mode on the number keys, `TAB` switches the page: cheats (noclip, god, notarget, nofatigue, give all), location editor (`loc` commands, `viewpos`, spawnpoints on/off; [`docs/locations.md`](docs/locations.md)). Needs cheats: host with `/devmap <map>`; `loc` is legacy only. `MODE`, `ESC` or `F4` close it |
 | `HOME`, `END`, `PGUP`, `PGDN`, `DEL` | cycle crosshair color, FPS limit, gamma, name, network settings |
 | `INS` | fullscreen ⇄ borderless window |
 
@@ -260,3 +262,4 @@ The repo ships project skills in `.claude/skills/` (`.agents` links to `.claude`
 | `keymap` | regenerates `tools/keymap/keymap.html` and names new binds in `labels.json`; after bind, class script or menu layer changes |
 | `locations` | brings the location files of downloaded maps into `default/maps/`, merges upstream changes after your review; after new map downloads |
 | `vsay` | translates non-English voice chat pages, colors all vsay and chat texts and echo menus with the `VSAY_*` / `MENU_*` colors from `settings.conf`, previews and changes them, highlights key words; after `tools/voicemenu.py` or new vsay texts |
+| `vsay-server-overrides` | puts a server's own sounds on the stock voice chat keys for that server only (stock text kept, several sounds per key cycle), you pick per key; removes sounds the server no longer has; after `tools/voicemenu.py` brought a new or changed server pack |
