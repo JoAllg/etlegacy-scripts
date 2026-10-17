@@ -1,4 +1,4 @@
-"""Helpers shared by the tools: the game's console log, color codes, cfg-safe text, file writes, map pk3s."""
+"""Helpers shared by the tools: the game's console log, color codes, cfg-safe text, Title Case of names, file writes, map pk3s."""
 import os
 import re
 import time
@@ -35,6 +35,50 @@ def clean(text):
     /* would swallow every command after it."""
     text = re.sub(r"/(?=[/*])", "/ ", text.replace('"', "'").replace(";", ","))
     return "".join(c for c in text if 32 <= ord(c) < 256 and ord(c) != 127)
+
+
+# Title Case of a name (location, objective): short words lowercase, caps and leet words kept, typos fixed
+SMALL = {"an", "and", "or", "of", "to", "the", "in", "at", "on", "by", "for", "from", "with", "near", "di"}
+UPPER = {"mg": "MG", "cp": "CP"}
+TYPO = {"llied": "Allied", "barier": "Barrier", "barriere": "Barrier", "celler": "Cellar", "commandpost": "Command Post",
+        "spawnexit": "Spawn Exit", "commandroom": "Command Room", "radarpart": "Radar Part", "floornear": "Floor near",
+        "neat": "near"}
+WORD = re.compile(r"^((?:\^.|[(\[\"'])*)([A-Za-z][\w.'!?,]*)(.*)$")
+
+
+def fix_word(tok, first):
+    m = WORD.match(tok)
+    if not m:
+        return tok
+    pre, w, post = m.groups()
+    core = re.match(r"[A-Za-z]+", w).group(0)
+    rest = w[len(core):]
+    if core.lower() in TYPO and (rest == "" or not rest[0].isalnum()):
+        w = TYPO[core.lower()] + rest
+        core = w.split(" ")[0]
+    if w[0].islower() and (re.search(r"[a-z]\d+[a-z]", w.lower()) or re.search(r"[A-Z]", w[1:])):
+        return tok                                                      # leet and nicknames: h4x0r, n00b, haX
+    if len(core) > 1 and core.isupper():
+        pass                                                            # AT, MG, CP
+    elif core.lower() in UPPER and rest == "":
+        w = UPPER[core.lower()]
+    elif not first and core.lower() in SMALL and w.lower() == core.lower() and " " not in w:
+        w = w.lower()
+    else:
+        w = w[0].upper() + w[1:]
+    return pre + re.sub(r"-([a-z])", lambda x: "-" + x.group(1).upper(), w) + post
+
+
+def fix_name(name):
+    out, first = [], True
+    for tok in name.split(" "):
+        if tok:
+            out.append(fix_word(tok, first))
+            bare = re.sub(r"\^.", "", tok)
+            first = bare in ("-", ":", "/", "|", "") or bare.endswith(":")
+        else:
+            out.append(tok)
+    return " ".join(out)
 
 
 # Names that are no map's autoexec_<name>.cfg: event autoexecs of the mods (docs/autoexec.md) and the mod switch guard

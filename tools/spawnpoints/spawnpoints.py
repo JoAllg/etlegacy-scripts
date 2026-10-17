@@ -11,8 +11,8 @@ setspawnpt 3 = Allied Entrance, closest axis spot is in the west tunnel room).
 Per team: spots are grouped into rooms, each room belongs to the objective closest to it. A room is
 selectable when it holds the closest spot for some N (the room's own objective preferred). Spots are taken
 as all enabled, so the entry is the first choice while that room is active; the others are listed as a comment.
-Labels: the objective description, plus the room's location name when an objective has several selectable
-rooms. Location: nearest entry of default/maps/<map>_loc_override.dat, else of a pk3's
+Labels: the objective description in Title Case, _ as space (helpers.common fix_name), plus the room's location name
+when an objective has several selectable rooms. Location: nearest entry of default/maps/<map>_loc_override.dat, else of a pk3's
 maps/<map>_loc_override.dat or _loc.dat, else target_location entities; coordinates if none within LOC_RANGE.
 Each file defines its own menu (spawnpsr/-psb: echo list + binds of exactly its keys), so a previous map's
 spawnpoints are on no key and no generic list has to be exec'd first.
@@ -39,8 +39,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from helpers import common  # noqa: E402
 from helpers.settings import VSAY  # noqa: E402
-from helpers.common import (DLCACHE, ETMAIN, LEGACY_PAKS, RESERVED, STOCK_PAKS, clean, map_color, maps, rank,  # noqa: E402
-                            strip_colors, with_map_color, write_atomic)
+from helpers.common import (DLCACHE, ETMAIN, LEGACY_PAKS, RESERVED, STOCK_PAKS, clean, fix_name, map_color, maps,  # noqa: E402
+                            rank, strip_colors, with_map_color, write_atomic)
 from helpers.settings import MENU, PROFILE as PROFILE_NAME, REPO  # noqa: E402
 
 PROFILE = REPO / PROFILE_NAME
@@ -181,7 +181,7 @@ def analyse(ents, locs):
             continue
         chosen, missed = menu(origins, spots, {i for i, e in enumerate(objs) if int(e.get("spawnflags", "0") or 0) & flag})
         owners = [o for _, o, _ in chosen]
-        desc = lambda o: label(objs[o].get("description", "")) or f"Spawn {o + 1}"
+        desc = lambda o: fix_name(label(objs[o].get("description", "").replace("_", " "))) or f"Spawn {o + 1}"
         labels = [f"{desc(o)} - {location(locs, centre(g))}" if owners.count(o) > 1 else desc(o) for _, o, g in chosen]
         labels = disambiguate(labels, [centre(g) for _, _, g in chosen])
         result[team] = ([(n, label, desc(o)) for (n, o, _), label in zip(chosen, labels)][:MAX_ENTRIES - 1],
@@ -302,6 +302,7 @@ def selftest():
     assert undated("// Last edited    01.10.2026 //\nset a 1\n") == undated("// Last edited    02.10.2026 //\nset a 1\n")
     assert undated("// Last edited    01.10.2026 //\nset a 1\n") != undated("// Last edited    01.10.2026 //\nset a 2\n")
     assert label(' ^1Axis; quit"\n^^2x ') == "Axis, quit'^x" and label("^ a") == "^ a"  # nothing a cfg would execute
+    assert fix_name(label("^1allied spawn")) == "Allied Spawn"
     assert label("a /* b // c ///") == "a / * b / / c / / /"  # no comment start: the menu's binds come after the label
     assert parse_locations('1 2 3 "^3Bun;ker"\n4 5 6 @\n') == [((1.0, 2.0, 3.0), "Bun,ker"), ((4.0, 5.0, 6.0), "Bun,ker")]
     assert vec("1 2 3 4") == (1.0, 2.0, 3.0) and vec("1 2") is None and vec("a b c") is None

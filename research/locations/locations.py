@@ -29,6 +29,7 @@ from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
+from helpers.common import fix_name  # noqa: E402
 from helpers.settings import HOMEPATH, PLAYER_NAME, PROFILE, REPO  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
@@ -38,12 +39,6 @@ TODAY = f"{date.today():%d-%m-%Y}"
 LOC = re.compile(r"maps/([^/]+)_loc(_override)?\.dat", re.I)            # file inside a pk3
 SNAP = re.compile(r"(?:.+__)?(.+)_loc(?:_override)?\.dat", re.I)        # snapshot file name -> map
 POINT = re.compile(r'^\s*(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(.*?)\s*$')
-SMALL = {"an", "and", "or", "of", "to", "the", "in", "at", "on", "by", "for", "from", "with", "near", "di"}
-UPPER = {"mg": "MG", "cp": "CP"}
-TYPO = {"llied": "Allied", "barier": "Barrier", "barriere": "Barrier", "celler": "Cellar", "commandpost": "Command Post",
-        "spawnexit": "Spawn Exit", "commandroom": "Command Room", "radarpart": "Radar Part", "floornear": "Floor near",
-        "neat": "near"}
-WORD = re.compile(r"^((?:\^.|[(\[\"'])*)([A-Za-z][\w.'!?,]*)(.*)$")
 
 
 # ---- files ------------------------------------------------------------------------------------------------------
@@ -149,41 +144,6 @@ def finish(head, lines, renamed):
 
 
 # ---- names ------------------------------------------------------------------------------------------------------
-
-def fix_word(tok, first):
-    m = WORD.match(tok)
-    if not m:
-        return tok
-    pre, w, post = m.groups()
-    core = re.match(r"[A-Za-z]+", w).group(0)
-    rest = w[len(core):]
-    if core.lower() in TYPO and (rest == "" or not rest[0].isalnum()):
-        w = TYPO[core.lower()] + rest
-        core = w.split(" ")[0]
-    if w[0].islower() and (re.search(r"[a-z]\d+[a-z]", w.lower()) or re.search(r"[A-Z]", w[1:])):
-        return tok                                                      # leet and nicknames: h4x0r, n00b, haX
-    if len(core) > 1 and core.isupper():
-        pass                                                            # AT, MG, CP
-    elif core.lower() in UPPER and rest == "":
-        w = UPPER[core.lower()]
-    elif not first and core.lower() in SMALL and w.lower() == core.lower() and " " not in w:
-        w = w.lower()
-    else:
-        w = w[0].upper() + w[1:]
-    return pre + re.sub(r"-([a-z])", lambda x: "-" + x.group(1).upper(), w) + post
-
-
-def fix_name(name):
-    out, first = [], True
-    for tok in name.split(" "):
-        if tok:
-            out.append(fix_word(tok, first))
-            bare = re.sub(r"\^.", "", tok)
-            first = bare in ("-", ":", "/", "|", "") or bare.endswith(":")
-        else:
-            out.append(tok)
-    return " ".join(out)
-
 
 def fix_lines(lines):
     """Lines with fixed names, {old: new}."""

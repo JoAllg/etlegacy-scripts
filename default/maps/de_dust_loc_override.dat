@@ -1,0 +1,22 @@
+/////////////////////////////////////////////////////////
+// Map name       De Dust                              //
+// Locations by   Pinn                                 //
+// Modified by    Taranis                              //
+// Recommended    cg_locations, cg_locationMaxChars 21 //
+// Last edited    17-10-2026                           //
+/////////////////////////////////////////////////////////
+656 2864 160 "^8Central Square"
+-280 -8 160 "^8Axis Spawn"
+752 1544 160 "^8The Mosque"
+1896 1248 -40 "^8The Tunnel"
+-176 2344 160 "^8Wood Gate"
+-1448 2184 160 "^8Bomb Site A"
+-920 3392 160 "^8West Square"
+672 4520 160 "^8Allied Spawn"
+1500 4270 160 "^8Allied Spawn Lower"
+1420 4680 240 "^8Allied Spawn Upper"
+1232 -224 160 "^8South Square"
+2464 592 160 "^8Hazi Ab Naba"
+1904 1216 160 "^8The House"
+1792 2312 -40 "^8End of the Tunnel"
+1864 344 96 "^8Start of the Tunnel"
