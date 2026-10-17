@@ -1,5 +1,15 @@
 # Key names for `bind` (ET: Legacy)
 
+- [Key names for `bind` (ET: Legacy)](#key-names-for-bind-et-legacy)
+  - [How a key name is resolved](#how-a-key-name-is-resolved)
+  - [How a physical key becomes a key number](#how-a-physical-key-becomes-a-key-number)
+  - [Keyboard (US ANSI)](#keyboard-us-ansi)
+    - [Numpad](#numpad)
+  - [German QWERTZ layout](#german-qwertz-layout)
+  - [Mouse](#mouse)
+  - [Other names](#other-names)
+
+
 **All key tables below describe a US ANSI keyboard** (as in the key name chart this is transcribed from), except the sections "German QWERTZ layout" and "Other names". On another layout, first read "How a physical key becomes a key number": letter and symbol keys follow the active layout, so the same physical key can have a different bind name.
 
 **Test which name a key has** before binding it:

@@ -2,6 +2,15 @@
 
 Standards used in the live scripts. Not enforced everywhere yet — follow them for new code; see "Known deviations" for existing exceptions.
 
+- [Script conventions (Taranis)](#script-conventions-taranis)
+  - [Keys and binds](#keys-and-binds)
+  - [Alias naming](#alias-naming)
+  - [Variables](#variables)
+  - [Feedback](#feedback)
+  - [File layout](#file-layout)
+  - [Known deviations](#known-deviations)
+
+
 ## Keys and binds
 
 - `binds_default.cfg` holds the game's default binds (`unbindall` runs before it, in `mods/<mod>/autoexec.cfg`). Each default key is marked:

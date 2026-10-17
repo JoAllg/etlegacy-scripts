@@ -2,6 +2,31 @@
 
 General knowledge about client-side config scripting. Verified against the ET: Legacy source at `<ET: Legacy source checkout>` (engine: `src/qcommon/cmd.c`, `src/qcommon/cvar.c`, `src/client/cl_keys.c`; legacy mod: `src/cgame/cg_consolecmds.c`). Mods other than legacy may differ — check `/cmdlist` there.
 
+- [ET config scripting](#et-config-scripting)
+  - [Command buffer and syntax](#command-buffer-and-syntax)
+  - [Variables (aliases)](#variables-aliases)
+  - [Binds](#binds)
+  - [Built-in helpers](#built-in-helpers)
+  - [Script patterns](#script-patterns)
+    - [Toggle (alias switching)](#toggle-alias-switching)
+    - [Manual cycle (alias switching)](#manual-cycle-alias-switching)
+    - [Bidirectional cycle](#bidirectional-cycle)
+    - [Resettable cycle](#resettable-cycle)
+    - [Hold with side effects](#hold-with-side-effects)
+    - [Value aliases (Normal/Low)](#value-aliases-normallow)
+    - [Bind aliases (runtime key remapping)](#bind-aliases-runtime-key-remapping)
+    - [Temporary key layer (modal menu)](#temporary-key-layer-modal-menu)
+    - [Override chain](#override-chain)
+    - [State-dependent dispatch and guards](#state-dependent-dispatch-and-guards)
+    - [Run-once hook](#run-once-hook)
+    - [Change guard (run only when the context changed)](#change-guard-run-only-when-the-context-changed)
+    - [Extension points and shared resets](#extension-points-and-shared-resets)
+    - [Remember-and-resume (movement)](#remember-and-resume-movement)
+    - [Live data from an external tool (generated cfg)](#live-data-from-an-external-tool-generated-cfg)
+    - [Feedback](#feedback)
+  - [Useful console commands for debugging](#useful-console-commands-for-debugging)
+  - [Sources](#sources)
+
 ## Command buffer and syntax
 
 - Commands are split at `;` and newlines, but not inside `"..."`.

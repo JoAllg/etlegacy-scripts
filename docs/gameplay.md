@@ -2,6 +2,27 @@
 
 How ET works in game: console, commands, settings, tips. Scripting syntax and patterns: `docs/scripting.md`.
 
+- [Game knowledge](#game-knowledge)
+  - [Good to read](#good-to-read)
+  - [Tips](#tips)
+  - [FAQ](#faq)
+    - [Sniper](#sniper)
+    - [Console](#console)
+      - [Console view shortcuts:](#console-view-shortcuts)
+      - [Browsing the console:](#browsing-the-console)
+      - [Finding cvar values:](#finding-cvar-values)
+      - [Useful console commands:](#useful-console-commands)
+  - [Commands](#commands)
+    - [+prone](#prone)
+  - [Settings](#settings)
+    - [FPS (`com_maxfps`)](#fps-com_maxfps)
+    - [maxpackets (`cl_maxpackets`)](#maxpackets-cl_maxpackets)
+    - [snaps](#snaps)
+    - [Recoil (pistols, scoped weapons)](#recoil-pistols-scoped-weapons)
+    - [Spread](#spread)
+    - [Understanding the lagometer](#understanding-the-lagometer)
+
+
 ## Good to read
 - https://te666.forumotion.com/t522-interpreting-the-lagometer-rate-fps-snaps-etc#4979
 

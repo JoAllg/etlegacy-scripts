@@ -2,6 +2,11 @@
 
 Transcribed from two community charts (color names; index, hex, characters). Verified against ET: Legacy source (`src/qcommon/q_math.c` `g_color_table[32]`, `src/qcommon/q_shared.h` `ColorIndex`, `Q_IsColorString`).
 
+- [Color codes](#color-codes)
+  - [Rules](#rules)
+  - [Table](#table)
+
+
 ## Rules
 
 - `^` + character colors the following text: `echo ^1red ^7white`.

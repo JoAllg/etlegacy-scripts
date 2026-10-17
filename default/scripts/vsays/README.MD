@@ -1,4 +1,24 @@
-# Messages
+# Vsays and Messages
+
+- [Vsays and Messages](#vsays-and-messages)
+  - [Messages](#messages)
+  - [Voice Commands](#voice-commands)
+    - [Vsays](#vsays)
+      - [Statements](#statements)
+      - [Requests](#requests)
+      - [Commands](#commands)
+      - [Talk](#talk)
+      - [Global](#global)
+      - [Function](#function)
+      - [Objectives](#objectives)
+      - [Fireteam](#fireteam)
+  - [Shortcuts](#shortcuts)
+    - [jaymod (probably)](#jaymod-probably)
+    - [legacy (not merged)](#legacy-not-merged)
+
+
+## Messages
+
 Details and color formats: `docs/commands.md` (legacy), `docs/commands_nitmod.md` (nitmod).
 
 | Command | Sends to |
@@ -11,7 +31,8 @@ Details and color formats: `docs/commands.md` (legacy), `docs/commands_nitmod.md
 
 Text max. 149 characters, a color code in the text overrides the default color.
 
-# Voice Commands
+## Voice Commands
+
 | Command | Sends to |
 |---|---|
 | `vsay [<n>] <vsay> [<text>]` | all |
@@ -24,10 +45,10 @@ Text max. 149 characters, a color code in the text overrides the default color.
 - `<n>`: variant number (0-based, see lists), else random; out of range = random. Legacy only, nitmod takes `<n>` as vsay name.
 - Spectators: `say_buddy`/`vsay_buddy` refused; legacy also refuses `VoiceTeamChat`/`VoiceFireTeamChat`. Spam limit: about `g_voiceChatsAllowed` vsays per 30 s.
 
-## Vsays
+### Vsays
 Legacy 2.86 (`scripts/wm_allies_chat.voice`, `wm_axis_chat.voice` in `legacy_v2.86.0.pk3`), grouped like the quick chat menu (`mp_QuickMessage`, team except Global). Several texts: variants by number. Axis `=`: same as Allies.
 
-### Statements
+#### Statements
 
 `TakingFire`: only in the fireteam version of the menu.
 
@@ -44,7 +65,7 @@ Legacy 2.86 (`scripts/wm_allies_chat.voice`, `wm_axis_chat.voice` in `legacy_v2.
 | `MinesCleared` | Mines cleared. | = |
 | `EnemyDisguised` | Enemy in disguise. | = |
 
-### Requests
+#### Requests
 
 | Vsay | Allies | Axis |
 |---|---|---|
@@ -57,7 +78,7 @@ Legacy 2.86 (`scripts/wm_allies_chat.voice`, `wm_axis_chat.voice` in `legacy_v2.
 | `WhereTo` | Where to? | = |
 | `NeedOps` | We need Covert Ops! | = |
 
-### Commands
+#### Commands
 
 | Vsay | Allies | Axis |
 |---|---|---|
@@ -71,7 +92,7 @@ Legacy 2.86 (`scripts/wm_allies_chat.voice`, `wm_axis_chat.voice` in `legacy_v2.
 | `ReinforceOffense` | Reinforce the offense! | = |
 | `ReinforceDefense` | Reinforce the defense! | = |
 
-### Talk
+#### Talk
 
 | Vsay | Allies | Axis |
 |---|---|---|
@@ -82,7 +103,7 @@ Legacy 2.86 (`scripts/wm_allies_chat.voice`, `wm_axis_chat.voice` in `legacy_v2.
 | `Sorry` | Sorry! | = |
 | `Oops` | Oops! | = |
 
-### Global
+#### Global
 
 Global menu (`vsay`) also has `Affirmative`, `Negative`, `EnemyWeak`, `Thanks`, `Welcome`, `Oops`, `Sorry`, `HoldFire`.
 
@@ -94,7 +115,7 @@ Global menu (`vsay`) also has `Affirmative`, `Negative`, `EnemyWeak`, `Thanks`, 
 | `Cheer` | 0: Hahaa! / 1: Alright! / 2: Yes! / 3: Yes! / 4: 'Atta way, baby! / 5: You got it, man! / 6: Yeehaa! / 7: Yoohoo! / 8: Yeah! / 9: Yeah! / 10: Yeah! / 11: Woo! | 0: Oh yes! / 1: Wunderbar! / 2: Excellent! / 3: Excellent! / 4: Jahaa! / 5: Sehr gut! / 6: Sehr gut! / 7: Wunderbar! |
 | `GoodGame` | Good game! | = |
 
-### Function
+#### Function
 
 Menu sends only the vsay of your own class.
 
@@ -106,7 +127,7 @@ Menu sends only the vsay of your own class.
 | `IamFieldOps` | I'm a field ops. | I'm a field op. |
 | `IamCovertOps` | I'm a covert ops. | I'm a covert op. |
 
-### Objectives
+#### Objectives
 
 | Vsay | Allies | Axis |
 |---|---|---|
@@ -121,7 +142,7 @@ Menu sends only the vsay of your own class.
 | `DestroyVehicle` | Disable the vehicle! | = |
 | `EscortVehicle` | Escort the vehicle! | = |
 
-### Fireteam
+#### Fireteam
 
 Sent from the fireteam menu (`mp_fireteammsg`, pages per class). `FTCheckLandmines`: not in any menu.
 
@@ -153,7 +174,7 @@ Sent from the fireteam menu (`mp_fireteammsg`, pages per class). `FTCheckLandmin
 | `FTProvideSniperCover` | Provide sniper cover! | = |
 | `FTCheckLandmines` | Check for landmines! | = |
 
-# Shortcuts
+## Shortcuts
 Is supposed to work at jaymod, etpub, nitmod or noquarter
 
 | Shortcut | Replaced by |
@@ -172,7 +193,7 @@ Is supposed to work at jaymod, etpub, nitmod or noquarter
 
 A name shortcut (`[A]`, `[D]`, `[H]`, `[K]`, `[P]`, `[R]`) whose person is not known (nobody pointed at, nobody gave ammo yet, ...) becomes `*unknown*` (nitmod; tested in game with `[P]`).
 
-## jaymod (probably)
+### jaymod (probably)
 Can be shown with `/textshortcuts` command
 
 | Shortcut | Replaced by |
@@ -180,7 +201,7 @@ Can be shown with `/textshortcuts` command
 | `[B]` | Last teammate who inflicted damaged to you |
 | `[C]` | The amount of damage that the last teammate inflicted to you |
 
-## legacy (not merged)
+### legacy (not merged)
 https://github.com/etlegacy/etlegacy-lua-scripts/pull/17/commits/4b60d5b4c50223d902c2922d1dc2df8c51a4e257
 
 | Shortcut | Replaced by |

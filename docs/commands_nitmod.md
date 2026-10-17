@@ -2,6 +2,14 @@
 
 Valid for nitmod 2.3.5. nitmod is closed-source, so this is based on its live `/cmdlist` and `/cvarlist` output, the mod's own config/README (`default/mods/nitmod/`) and, where noted, its decompiled binaries — not source like `docs/commands.md`. Baseline for comparison is `docs/commands.md`.
 
+- [nitmod command differences (vs legacy)](#nitmod-command-differences-vs-legacy)
+  - [Alt-fire: weapalt vs +attack2](#alt-fire-weapalt-vs-attack2)
+  - [Known interaction differences](#known-interaction-differences)
+  - [Chat and voice chat syntax](#chat-and-voice-chat-syntax)
+  - [Commands legacy has that nitmod doesn't](#commands-legacy-has-that-nitmod-doesnt)
+  - [Commands nitmod has that legacy doesn't](#commands-nitmod-has-that-legacy-doesnt)
+
+
 ## Alt-fire: weapalt vs +attack2
 
 `weapalt` does not work in nitmod. MOUSE2 is bound to `+attack2` by default there, and `+attack2` is what triggers the alt-fire behavior (scoped-weapon swap / reload-on-empty / quickchat), controlled by the same `cg_weapaltReloads`, `cg_weapaltSwitches` and `cg_weapaltMgAutoProne` cvars as legacy.

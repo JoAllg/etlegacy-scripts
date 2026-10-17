@@ -2,6 +2,18 @@
 
 Settings and a voice chat page per server or clan. A config script cannot tell which server the game is on ([Limitations](limitations.md)), so `tools/serverconfig.py` runs next to the game, finds it out and writes two cfg files the scripts exec. Pattern: [Config scripting](scripting.md), "Live data from an external tool".
 
+- [Server configs](#server-configs)
+  - [Detection](#detection)
+  - [Files](#files)
+    - [servers.tsv](#serverstsv)
+  - [How the game applies the settings](#how-the-game-applies-the-settings)
+    - [Sound restart](#sound-restart)
+  - [Precedence](#precedence)
+  - [Voice chat](#voice-chat)
+    - [Server sounds on the stock pages](#server-sounds-on-the-stock-pages)
+  - [Limits](#limits)
+
+
 ## Detection
 
 The tool follows the console log `<fs_homepath>/<mod>/etconsole.log` (`logfile 2`, `default/cvars.cfg`).

@@ -4,6 +4,15 @@ A location file names places on a map. The client uses it to show a place name (
 
 Location files are client-side only. The server sends coordinates, every client names them with its own files, so other players do not see these names.
 
+- [Location files (map location names)](#location-files-map-location-names)
+  - [Files and lookup order](#files-and-lookup-order)
+  - [Mod support](#mod-support)
+  - [Format](#format)
+  - [How a name is chosen](#how-a-name-is-chosen)
+  - [Cvars](#cvars)
+  - [Location editor (legacy)](#location-editor-legacy)
+
+
 ## Files and lookup order
 
 The client looks in `maps/` of the mod search path and takes the first file it finds:

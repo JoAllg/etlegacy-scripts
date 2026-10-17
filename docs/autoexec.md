@@ -2,6 +2,13 @@
 
 Background for how configs get executed automatically. Verify changes against sources listed per row.
 
+- [Autoexec behavior](#autoexec-behavior)
+  - [Engine startup (ET: Legacy, all mods)](#engine-startup-et-legacy-all-mods)
+  - [Event autoexecs per mod](#event-autoexecs-per-mod)
+  - [Two passes: definitions and state](#two-passes-definitions-and-state)
+  - [How this repo uses them](#how-this-repo-uses-them)
+
+
 ## Engine startup (ET: Legacy, all mods)
 
 `src/qcommon/common.c`: `default.cfg` → `profiles/<profile>/etconfig.cfg` → `exec autoexec.cfg`.

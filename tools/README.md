@@ -2,6 +2,19 @@
 
 Optional Python 3 helpers (stdlib only). They read the game paths and color preferences from `settings.conf` (via `helpers/settings.py`), so run `deploy.sh` first. All have a `--selftest` and reject unknown arguments.
 
+- [Tools](#tools)
+  - [keymap/](#keymap)
+  - [spawnpoints/](#spawnpoints)
+  - [voicemenu.py](#voicemenupy)
+  - [vsaycolors.py](#vsaycolorspy)
+  - [vsayoverrides.py](#vsayoverridespy)
+  - [servermenu.py](#servermenupy)
+  - [serverconfig.py](#serverconfigpy)
+  - [link\_maps.py](#link_mapspy)
+  - [stock\_shield/](#stock_shield)
+  - [helpers/](#helpers)
+
+
 ## keymap/
 
 Keyboard + mouse overview of the live binds. `keymap.py` emulates the exec chain, presses every bound key and writes `keymap.html` (one self-contained page, tabs per class bind set). New commands get their short names in `labels.json` (`--missing` lists unnamed ones). `live.py` serves the page and switches to the class picked in the running game by following the newest `<HOMEPATH>/<mod>/etconsole.log`. Details: [`keymap/README.md`](keymap/README.md).

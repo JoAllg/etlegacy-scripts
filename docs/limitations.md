@@ -2,6 +2,20 @@
 
 What this profile cannot do or work around, why, and the workarounds: config scripts, the engine, mods and local hosting. Syntax and patterns of config scripts: [Config scripting](scripting.md).
 
+- [Limitations](#limitations)
+  - [Scripts cannot read the game state](#scripts-cannot-read-the-game-state)
+    - [State that goes out of sync](#state-that-goes-out-of-sync)
+    - [Workarounds](#workarounds)
+  - [Timing depends on the frame rate](#timing-depends-on-the-frame-rate)
+    - [Suggested: wait aliases that follow the FPS (not implemented)](#suggested-wait-aliases-that-follow-the-fps-not-implemented)
+  - [Limits of the engine](#limits-of-the-engine)
+  - [Server configs do not tell the mods of a clan apart](#server-configs-do-not-tell-the-mods-of-a-clan-apart)
+  - [Stock shield hides server sounds and menus on unpure servers](#stock-shield-hides-server-sounds-and-menus-on-unpure-servers)
+  - [Pure servers run out of open files](#pure-servers-run-out-of-open-files)
+  - [Local hosting in nitmod](#local-hosting-in-nitmod)
+    - [Maps in the host game list that do not start](#maps-in-the-host-game-list-that-do-not-start)
+    - [Crash after a mod switch in the menu](#crash-after-a-mod-switch-in-the-menu)
+
 ## Scripts cannot read the game state
 
 A cfg script can only run commands and set cvars. It has no conditions and cannot read a cvar, the player state or a server answer (`vstr` only runs the text of a cvar, `src/qcommon/cmd.c` `Cmd_Vstr_f`). Every toggle, cycle and layer therefore keeps its own guess of the state in an alias, and the guess is only right as long as the script is the only thing that changes the state.

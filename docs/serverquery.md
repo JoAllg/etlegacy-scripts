@@ -2,6 +2,14 @@
 
 How to ask an ET server for its state from outside the game, as done by `tools/helpers/serverapi.py` for the server menu (`tools/servermenu.py`, `RIGHTCTRL`) and the settings per server (`tools/serverconfig.py`, [Server configs](serverconfigs.md)). Verified against the ET: Legacy source (`src/server/sv_main.c` `SVC_Info`, `SVC_Status`; client side `src/client/cl_main.c` `CL_SetServerInfo`) and a live test against the 392 servers of `master.etlegacy.com:27950` on 2026-10-01 (348 answered).
 
+- [Server queries](#server-queries)
+  - [Protocol](#protocol)
+  - [Humans and bots](#humans-and-bots)
+  - [Rate limit](#rate-limit)
+  - [Favorites of the server browser](#favorites-of-the-server-browser)
+  - [Other tools](#other-tools)
+
+
 ## Protocol
 
 One UDP packet to the server's game port: four `0xff` bytes followed by the command. The answer is one packet with the same prefix, lines separated by `\n`.

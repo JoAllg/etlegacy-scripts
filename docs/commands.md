@@ -2,6 +2,20 @@
 
 Verified against the ET: Legacy source at `<ET: Legacy source checkout>` (engine: `src/qcommon/cmd.c`, `src/qcommon/cvar.c`, `src/client/cl_input.c`, `cl_keys.c`, `cl_console.c`, `cl_demo.c`, `cl_main.c`; legacy mod: `src/cgame/cg_consolecmds.c`, `src/game/g_cmds_ext.c`). Case shown is the source's registered casing; the engine matches command names case-insensitively, so casing in binds doesn't matter. `+cmd` commands take an implicit key/time arg from a bind and support release (`-cmd`) — see `docs/scripting.md`.
 
+- [ET: Legacy player/console commands](#et-legacy-playerconsole-commands)
+  - [Movement](#movement)
+  - [Combat \& weapons](#combat--weapons)
+    - [weapalt vs +attack2](#weapalt-vs-attack2)
+  - [Class, team \& spawn](#class-team--spawn)
+  - [HUD, view \& UI](#hud-view--ui)
+  - [Communication](#communication)
+  - [Match / spectator](#match--spectator)
+  - [Timer](#timer)
+  - [Demo \& capture](#demo--capture)
+  - [Cheat/debug (sv\_cheats or local hosting only)](#cheatdebug-sv_cheats-or-local-hosting-only)
+  - [Config \& scripting](#config--scripting)
+
+
 ## Movement
 
 | Command | Effect |

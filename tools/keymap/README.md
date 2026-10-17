@@ -19,6 +19,21 @@ Nothing in `keymap.py` is written for a particular script. The keymap is derived
 
 Names are maintained with the `keymap` skill (`.claude/skills/keymap/SKILL.md`).
 
+- [Keymap](#keymap)
+  - [1. Console emulator](#1-console-emulator)
+  - [2. Views](#2-views)
+  - [3. Key presses](#3-key-presses)
+    - [Pointers](#pointers)
+    - [Icon (first match wins)](#icon-first-match-wins)
+    - [Affected keys (hover)](#affected-keys-hover)
+  - [4. Names and rendering](#4-names-and-rendering)
+    - [Search](#search)
+  - [Live view (`live.py`)](#live-view-livepy)
+  - [Naming contract](#naming-contract)
+  - [Limits](#limits)
+  - [Selftest](#selftest)
+
+
 ## 1. Console emulator
 
 Rules follow the ET: Legacy source (`src/qcommon/cmd.c`, `cvar.c`, `src/client/cl_keys.c`, `src/cgame/cg_consolecmds.c`).
