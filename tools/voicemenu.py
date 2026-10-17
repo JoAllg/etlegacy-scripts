@@ -567,7 +567,7 @@ def main():
     out = OUT / clan
     old = read_pages(out)
     kept = {k: text for k, (_, _, text) in old.items() if text}
-    files, new = render(clan, pk3.name, menus, stock_pages(menus, stock_menus), tag=tag, names=[t for i, t in rows if i == clan],
+    files, new = render(clan, pk3.name, menus, stock_pages(menus, stock_menus), tag=tag, names=[r.text for r in rows if r.id == clan],
                         texts=texts, kept=kept, heads=heads, labels=read_labels(out), date=datetime.date.today().isoformat())
     out.mkdir(parents=True, exist_ok=True)
     for f in out.glob("*.cfg"):

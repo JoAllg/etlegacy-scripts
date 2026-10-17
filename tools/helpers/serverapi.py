@@ -8,9 +8,11 @@ Query (same as the game's server browser, src/server/sv_main.c SVC_Info / SVC_St
   0 connecting); team players minus bots are the playing humans. Without P only humans and bots are known. omnibot_playing is not used: nitmod servers report 0 or -1 with bots playing
 - ET: Legacy servers answer one packet per second per address after a burst of 10, so a poll interval must stay above 2 s
 
-Identity: default/serverconfigs/servers.tsv (user-maintained, "<id><TAB><text>") names the servers that have settings
-or a voice chat of their own. A row matches a server whose name contains the text (colors ignored, any case); the
-first matching row wins, so one clan tag covers all servers of a clan. history.tsv next to it remembers the name
+Identity: default/serverconfigs/servers.tsv (user-maintained, "<id><TAB><text>[<TAB><mod>[<TAB><addresses>]]") names
+the servers that have settings or a voice chat of their own. A row matches a server whose name contains the text
+(colors ignored, any case) and, if the row names a mod, whose gamename is that mod; the first matching row wins, so
+one clan tag covers all servers of a clan. The addresses (ip:port, comma-separated) only record the servers a row
+matched, they play no part in the match. history.tsv next to it remembers the name
 and mod ("<ip:port><TAB><name><TAB><mod>") of every server the game connected to, so a server is recognized without
 asking it again.
 
@@ -18,6 +20,7 @@ Usage: tools/helpers/serverapi.py <address> ...   (prints name, id, mod, map, pl
        tools/helpers/serverapi.py --selftest
 """
 import argparse
+import collections
 import contextlib
 import io
 import json
@@ -38,9 +41,10 @@ DB = HOMEPATH / "etl.db"
 CONFIGS = REPO / PROFILE / "serverconfigs"
 SERVERS = CONFIGS / "servers.tsv"
 HISTORY = CONFIGS / "history.tsv"
-ID = re.compile(r"[a-z0-9_]{1,4}")  # an id is part of a file name and of an alias name; short like a clan tag, which also
-# keeps it apart from the other files of serverconfigs/ (default, local, current, current_vsay)
-ID_RULE = "1 to 4 characters of a-z, 0-9, _"
+ID = re.compile(r"(?!(?:default|local|current|current_vsay)$)[a-z0-9_]{1,16}")  # part of a file name and of an alias
+# name; not the name of another file of serverconfigs/
+ID_RULE = "1 to 16 characters of a-z, 0-9, _, not default, local, current, current_vsay"
+Row = collections.namedtuple("Row", "id text mod addresses", defaults=("", ()))
 TIMEOUT = 1.5
 
 
@@ -218,29 +222,59 @@ def hostname(address):
     return status.get("sv_hostname", ""), status.get("gamename", "")
 
 
+def row(line):
+    """The Row of a line of servers.tsv; None for a comment, an empty line or a line without text."""
+    cells = [c.strip() for c in line.split("\t")] + ["", ""]
+    if len(cells) < 4 or not cells[1] or cells[0].startswith("#"):
+        return None
+    return Row(cells[0], cells[1], cells[2].lower(), tuple(a.strip() for a in cells[3].split(",") if a.strip()))
+
+
+def row_line(r):
+    """The line of servers.tsv for a Row."""
+    return "\t".join((r.id, r.text, r.mod, ",".join(r.addresses))).rstrip("\t")
+
+
 def servers(path=SERVERS):
-    """[(id, text)] of servers.tsv in file order; no file, no rows. Lines starting with # are comments."""
+    """[Row] of servers.tsv in file order; no file, no rows. Lines starting with # are comments."""
     try:
         lines = path.read_text("latin1").splitlines()
     except OSError:
         return []
     rows = []
-    for line in lines:
-        name, sep, text = line.partition("\t")
-        name, text = name.strip(), text.strip()
-        if not sep or not text or name.startswith("#"):
+    for r in filter(None, map(row, lines)):
+        if not ID.fullmatch(r.id):
+            print(f"⚠️  {path.name}: id '{r.id}' skipped ({ID_RULE})", file=sys.stderr)
             continue
-        if not ID.fullmatch(name):
-            print(f"⚠️  {path.name}: id '{name}' skipped ({ID_RULE})", file=sys.stderr)
-            continue
-        rows.append((name, text))
+        rows.append(r)
     return rows
 
 
-def identify(hostname, rows):
-    """Id of the first row of servers() whose text is in the server name, else None."""
-    name = strip_colors(hostname).lower()
-    return next((i for i, text in rows if text.lower() in name), None)
+def matches(r, hostname, mod):
+    """True if the Row covers the server: its text in the name, and its mod (if any) the server's mod. An unknown mod
+    ("") only matches rows without one: a config written for one mod never applies on another."""
+    return r.text.lower() in strip_colors(hostname).lower() and r.mod in ("", mod.lower())
+
+
+def identify(hostname, rows, mod=""):
+    """Id of the first row of servers() that covers the server, else None."""
+    return next((r.id for r in rows if matches(r, hostname, mod)), None)
+
+
+def note_address(hostname, mod, address, path=SERVERS):
+    """Adds the address to the first row of servers.tsv that covers the server, if it doesn't list it yet; returns
+    the id of that row, None if no row covers it."""
+    try:
+        lines = path.read_text("latin1").splitlines()
+    except OSError:
+        return None
+    for n, r in enumerate(map(row, lines)):
+        if r and ID.fullmatch(r.id) and matches(r, hostname, mod):
+            if address not in r.addresses:
+                lines[n] = row_line(r._replace(addresses=r.addresses + (address,)))
+                write_atomic(path, "\n".join(lines) + "\n")
+            return r.id
+    return None
 
 
 def tag(hostname, text):
@@ -263,7 +297,7 @@ def server_tag(server, names, rows):
     """The tag of a server id as a server shows it, safe inside a cfg: the longest text of the id (rows of servers())
     found in one of the server names; None if no name shows one."""
     for name in names:
-        for text in sorted((t for i, t in rows if i == server), key=len, reverse=True):
+        for text in sorted((r.text for r in rows if r.id == server), key=len, reverse=True):
             if tag(name, text):
                 return clean(tag(name, text))
     return None
@@ -324,12 +358,21 @@ def selftest():
     with tempfile.TemporaryDirectory() as d:
         tsv = Path(d) / "servers.tsv"
         assert servers(tsv) == []
-        tsv.write_text("# id\ttext\nxy\t[xY]\n\nBad Id\tx\ncurrent\tx\nlocal\tx\nnotab\nsolo\tFull Name | Of {Server}\nxy2\tfraghouse\n", "latin1")
+        tsv.write_text("# id\ttext\nxy_legacy\t[xY]\tLegacy\t192.0.2.1:27960, 192.0.2.1:27961\nxy\t[xY]\n\nBad Id\tx\ncurrent\tx\nlocal\tx\nnotab\n"
+                       "solo\tFull Name | Of {Server}\t\t192.0.2.5:27960\nxy2\tfraghouse\tnitmod\n", "latin1")
         with contextlib.redirect_stderr(io.StringIO()):  # the three bad ids are reported
             rows = servers(tsv)
-        assert rows == [("xy", "[xY]"), ("solo", "Full Name | Of {Server}"), ("xy2", "fraghouse")], rows
-        assert identify(name, rows) == "xy" and identify("^7Other ^1Fraghouse", rows) == "xy2"  # first row wins, any case
-        assert identify("^3Full ^7Name | Of {Server} #2", rows) == "solo" and identify("nobody", rows) is None
+        assert rows == [("xy_legacy", "[xY]", "legacy", ("192.0.2.1:27960", "192.0.2.1:27961")), ("xy", "[xY]", "", ()),
+                        ("solo", "Full Name | Of {Server}", "", ("192.0.2.5:27960",)), ("xy2", "fraghouse", "nitmod", ())], rows
+        assert identify(name, rows, "legacy") == "xy_legacy" and identify(name, rows, "nitmod") == identify(name, rows) == "xy"  # first row wins
+        assert identify("^7Other ^1Fraghouse", rows, "nitmod") == "xy2" and identify("^7Other ^1Fraghouse", rows) is None  # any case; unknown mod
+        assert identify("^3Full ^7Name | Of {Server} #2", rows, "etpub") == "solo" and identify("nobody", rows) is None
+        assert [row_line(r) for r in rows] == ["xy_legacy\t[xY]\tlegacy\t192.0.2.1:27960,192.0.2.1:27961", "xy\t[xY]",
+                                              "solo\tFull Name | Of {Server}\t\t192.0.2.5:27960", "xy2\tfraghouse\tnitmod"]
+        assert note_address(name, "legacy", "192.0.2.1:27961", tsv) == "xy_legacy" and note_address("nobody", "", "192.0.2.9:1", tsv) is None
+        text = tsv.read_text("latin1")
+        assert note_address(name, "etpub", "192.0.2.2:27960", tsv) == "xy" and note_address(name, "etpub", "192.0.2.2:27960", tsv) == "xy"
+        assert tsv.read_text("latin1") == text.replace("\nxy\t[xY]\n", "\nxy\t[xY]\t\t192.0.2.2:27960\n")  # once, the rest as it was
         log = Path(d) / "sub/history.tsv"
         assert history(log) == {}
         log.parent.mkdir()
@@ -344,13 +387,14 @@ def selftest():
         assert off["192.0.2.1"]["name"] == "^2renamed" and off["192.0.2.1"]["hostname"] == "" and off["192.0.2.9:27960"]["name"] == "192.0.2.9:27960"
         off = status(["192.0.2.1", "192.0.2.9:27960", "192.0.2.8"], log, {"192.0.2.1": "^3old", "192.0.2.9:27960": "^3Browser", "192.0.2.8": ""})
         assert [r["name"] for r in off.values()] == ["^2renamed", "^3Browser", "192.0.2.8"]  # history first, then the browser's name
-    assert all(ID.fullmatch(i) for i in ("e", "xy", "e_2", "abcd")) and not any(ID.fullmatch(i) for i in ("", "local", "default", "current", "Eg", "e g", "e-g"))
+    assert all(ID.fullmatch(i) for i in ("e", "xy", "e_2", "abcd", "tm_nitmod", "locals", "abc_legacy_server"[:16]))
+    assert not any(ID.fullmatch(i) for i in ("", "local", "default", "current", "current_vsay", "Eg", "e g", "e-g", "a" * 17))
     assert tag(name, "[xy]") == "^1[^7xY^1]" and tag(name, "fraghouse") == "FRAGHOUSE" and tag(name, "24maps") == "^324MAPS"
     assert tag(name, "nope") is None and tag(name, "") is None and tag("plain [x] name", "[x]") == "[x]"
     assert tag("^1a^", "a^") == "^1a^" and tag("^4^5ab", "b") == "b" and tag("^4^5ab", "ab") == "^4^5ab"
-    rows = [("abc", "ABc|"), ("x", "[x]"), ("x", "X-Clan")]
+    rows = [Row("abc", "ABc|"), Row("x", "[x]"), Row("x", "X-Clan")]
     assert server_tag("x", ["^7other", "^1The ^4X-^5Clan ^7#1"], rows) == "^4X-^5Clan"
-    assert server_tag("x", ['^1[^7X"^1]; fun'], [("x", '[x"]')]) == "^1[^7X'^1]"  # cfg-safe
+    assert server_tag("x", ['^1[^7X"^1]; fun'], [Row("x", '[x"]')]) == "^1[^7X'^1]"  # cfg-safe
     assert server_tag("x", ["^1[x] ^2X-Clan"], rows) == "^2X-Clan"  # the longest text
     assert server_tag("x", ["nope"], rows) is None and server_tag("y", ["[x]"], rows) is None
     print("selftest ok")
@@ -371,7 +415,7 @@ def main():
             print(f"{address}  offline")
             continue
         spec = "" if row["spec"] is None else f"+{row['spec']}"
-        print(f"{address}  {row['hostname']}  id {identify(row['hostname'], rows) or '-'}  {row['mod']}  {row['map']}  "
+        print(f"{address}  {row['hostname']}  id {identify(row['hostname'], rows, row['mod']) or '-'}  {row['mod']}  {row['map']}  "
               f"{row['playing']}{spec}+{row['bots']}/{row['slots']}  {row['ping']}ms")
 
 

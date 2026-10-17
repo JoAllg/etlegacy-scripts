@@ -1,7 +1,10 @@
-# Copy to servers.tsv (or let "tools/serverconfig.py add <id>" write it): <id><TAB><text in the server name>
-# A server whose name contains the text (colors ignored, any case) gets serverconfigs/<id>.cfg and the voice chat of
-# serverconfigs/vsays/<id>/. The first matching row wins, so list a single server before the tag of its clan.
-# Ids: 1 to 4 characters of a-z, 0-9, _.
-clan	[TAG]
-oc	OtherClan|
-fun	Full Name Of A Server Without Tag
+# Copy to servers.tsv (or let "tools/serverconfig.py add <id>" write it): <id><TAB><text in the server name><TAB><mod><TAB><addresses>
+# A server whose name contains the text (colors ignored, any case) and whose mod is the row's (empty: any mod) gets
+# serverconfigs/<id>.cfg and the voice chat of serverconfigs/vsays/<id>/. The first matching row wins, so list a single
+# server before the tag of its clan. A clan with servers of two mods: one id per mod, <clan>_<mod>.
+# Addresses (ip:port, comma-separated): the servers the row matched, added by tools/serverconfig.py, not used to match.
+# Ids: 1 to 16 characters of a-z, 0-9, _.
+clan	[TAG]	nitmod	192.0.2.1:27960,192.0.2.1:27970
+oc_legacy	OtherClan|	legacy	192.0.2.2:27960
+oc_nitmod	OtherClan|	nitmod	192.0.2.2:27961
+fun	Full Name Of A Server Without Tag		192.0.2.3:27960

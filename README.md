@@ -201,7 +201,7 @@ Your own settings and the server's own voice chat, applied when you join it. The
 
 Adding a server:
 
-1. **Pick an id:** a short name for the server or the whole clan, e.g. `xy` for all servers with `[xY]` in their name. 1 to 4 characters of lowercase letters, digits and `_`. It names the server's files and an alias in game, so it can't be the clan tag itself (colors, spaces, brackets and `|` don't work there).
+1. **Pick an id:** a short name for the server or the whole clan, e.g. `xy` for all servers with `[xY]` in their name. 1 to 16 characters of lowercase letters, digits and `_`. If a clan runs servers of two mods, use one id per mod: `<clan>_<mod>` (`xy_legacy`, `xy_nitmod`). It names the server's files and an alias in game, so it can't be the clan tag itself (colors, spaces, brackets and `|` don't work there).
 
 2. **Add the server:** join it, then run:
 
@@ -210,7 +210,7 @@ Adding a server:
    python3 tools/serverconfig.py add <id> <address>  # any other server
    ```
 
-   This asks the server for its name, appends the row `<id><TAB><text in the server name>` to `default/serverconfigs/servers.tsv` and creates an empty `default/serverconfigs/<id>.cfg`. The text is the tag at the start of the name, which covers every server of the clan; `--match <text>` sets another one. If a clan renames its servers, only this text changes. Further rows for the same id are added by hand (format: `servers.example.tsv`).
+   This asks the server for its name and mod, appends the row `<id><TAB><text in the server name><TAB><mod><TAB><address>` to `default/serverconfigs/servers.tsv` and creates an empty `default/serverconfigs/<id>.cfg`. The text is the tag at the start of the name, which covers every server of the clan on that mod; `--match <text>` sets another one, `--any-mod` covers every mod. Running it for a further server of the clan only adds its address. If a clan renames its servers, only this text changes. Further rows for the same id are added by hand (format: `servers.example.tsv`).
 
 3. **Settings (optional):** write them into `default/serverconfigs/<id>.cfg`. They override `user.cfg`. `default.cfg` runs before every server cfg and resets them on all other servers, so give each name you set its normal value there; this lists the ones you missed:
 

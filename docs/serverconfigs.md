@@ -26,7 +26,7 @@ The tool follows the console log `<fs_homepath>/<mod>/etconsole.log` (`logfile 2
 
 The log the tool finds at its start belongs to an earlier session unless a game runs, so its connects don't count then. A game runs while `profiles/<profile>/profile.pid` holds a live pid (`src/sys/sys_main.c` `Sys_WritePIDFile`, removed in `Sys_Exit`).
 
-A connect names only the address, the server's name is not logged. The tool asks the server for it (`getstatus`, [Server queries](serverquery.md)) and looks the name up in `servers.tsv`. `history.tsv` keeps the name of every server asked so far, so a known server is recognized without waiting for its answer; the answer still follows and corrects the result. An unknown server counts as "no server of the list" until it answers. A server that doesn't answer (map change, restart, its rate limit dropping the packet) is asked again after 2, 4, 8, ... up to 60 s, with one packet per try, until it answers or the game connects elsewhere.
+A connect names only the address, the server's name is not logged. The tool asks the server for it (`getstatus`, [Server queries](serverquery.md)) and looks its name and mod (`gamename`) up in `servers.tsv`. `history.tsv` keeps the name of every server asked so far, so a known server is recognized without waiting for its answer; the answer still follows and corrects the result. An unknown server counts as "no server of the list" until it answers. A server that doesn't answer (map change, restart, its rate limit dropping the packet) is asked again after 2, 4, 8, ... up to 60 s, with one packet per try, until it answers or the game connects elsewhere.
 
 ## Files
 
@@ -34,7 +34,7 @@ All in `default/serverconfigs/`; only `default.cfg` and `servers.example.tsv` ar
 
 | File | Written by | Content |
 |---|---|---|
-| `servers.tsv` | you, or `tools/serverconfig.py add` | the servers that have settings or a voice chat: `<id><TAB><text>` |
+| `servers.tsv` | you, or `tools/serverconfig.py add`; the tool adds addresses | the servers that have settings or a voice chat: `<id><TAB><text><TAB><mod><TAB><addresses>` |
 | `<id>.cfg` | you | settings on the servers of that id |
 | `local.cfg` | you | settings while hosting a map yourself |
 | `default.cfg` | you | normal value of everything a server cfg sets |
@@ -45,17 +45,20 @@ All in `default/serverconfigs/`; only `default.cfg` and `servers.example.tsv` ar
 ### servers.tsv
 
 ```
-xy	[xY]
-fun	Full Name Of A Server Without Tag
+xy_legacy	[xY]	legacy	192.0.2.1:27960
+xy_nitmod	[xY]	nitmod	192.0.2.1:27970,192.0.2.2:27960
+fun	Full Name Of A Server Without Tag		192.0.2.3:27960
 ```
 
-- A row matches a server whose name contains the text. Color codes are ignored, upper and lower case are the same, the text is taken literally (no patterns).
+- A row matches a server whose name contains the text and, if the row names a mod, whose mod (`gamename` of `getstatus`, as in `history.tsv`) is that mod. Color codes are ignored, upper and lower case are the same, the text is taken literally (no patterns). An empty mod matches every mod; a server whose mod is unknown only matches rows without one.
 - The first matching row wins. One clan tag covers every server of the clan; a single server of that clan with settings of its own goes above it.
-- An id is a name of your choice for the server or clan. It is part of file names and of an alias name (`serverIs_<id>`), which is why the tag itself can't serve: a path with spaces needs quotes, and a bind that execs it is already quoted. 1 to 4 characters of `a-z`, `0-9`, `_`. If the server's own page titles start with a short tag (`PS VOICE MUSIC`), use that as id: `tools/voicemenu.py` cuts the id from the titles.
+- The mod keeps a config away from servers of another mod: names that differ between the mods (alt-fire, weapon IDs, cvars only one mod has: `default/mods/<mod>/README.md`), the override texts with the nitmod/etps chat shortcuts and the variant numbers of the legacy mod ([Server sounds on the stock pages](#server-sounds-on-the-stock-pages)) only work on their mod. A clan with servers of two mods gets one id per mod, named `<clan>_<mod>` with the full mod name (`tm_nitmod`, `tm_legacy`), each with its own `<id>.cfg` and voice chat. What both share goes into a cfg without a row that both `execq`.
+- The addresses (`ip:port`, comma-separated) record the servers the row matched; they play no part in the match. `tools/serverconfig.py` adds the address of a server it identifies to the first matching row.
+- An id is a name of your choice for the server or clan. It is part of file names and of an alias name (`serverIs_<id>`), which is why the tag itself can't serve: a path with spaces needs quotes, and a bind that execs it is already quoted. 1 to 16 characters of `a-z`, `0-9`, `_`, not `default`, `local`, `current`, `current_vsay` (the other files of the folder). If the server's own page titles start with a short tag (`PS VOICE MUSIC`), use that as id: `tools/voicemenu.py` cuts the id from the titles.
 - Several rows may carry the same id (a clan whose servers share no common text).
 - The id links both parts and either may be missing: `serverconfigs/<id>.cfg` (settings) and `serverconfigs/vsays/<id>/` (voice chat pages of `tools/voicemenu.py <id> <pk3>`).
 
-`tools/serverconfig.py add <id> [address] [--match <text>]` appends a row: it asks the server (default: the one the game connected to last) for its name, proposes the tag at the start of the name as text, prints name and row and creates an empty `<id>.cfg`. An id that already has a row gets the new text in its place, after a question; further rows of one id are added by hand.
+`tools/serverconfig.py add <id> [address] [--match <text>] [--any-mod]` appends a row: it asks the server (default: the one the game connected to last) for its name and mod, proposes the tag at the start of the name as text, prints name and row and creates an empty `<id>.cfg`. The row names the server's mod; `--any-mod` leaves it empty, which a server that doesn't tell its mod needs. Adding a further server with the same text and mod only adds its address; an id that has a row with another text or mod gets the new one in its place, after a question; further rows of one id are added by hand.
 
 ## How the game applies the settings
 

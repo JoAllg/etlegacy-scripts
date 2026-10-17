@@ -18,7 +18,7 @@ Background and mechanism: `docs/serverconfigs.md` ("Server sounds on the stock p
 
 ## 1. Scope
 
-- The user names a server (tag, part of its name or id): find its id in `default/serverconfigs/servers.tsv` (text in the server name, first matching row wins). Only that id.
+- The user names a server (tag, part of its name or id): find its id in `default/serverconfigs/servers.tsv` (text in the server name and the row's mod, first matching row wins; a clan with servers of two mods has one id per mod, `<clan>_<mod>`: ask which mod if the user didn't say). Only that id.
 - Else: the ids with a `default/serverconfigs/vsays/<id>/vsays.tsv`. Ask (multiSelect) which of them; never leave one out on your own (some packs only play for VIP players, the user knows which).
 - Ask whether the Fireteam pages (8.1–8.3) should get overrides too; default no.
 
@@ -34,7 +34,7 @@ Don't read any override file in this step.
 
 - Server sounds: read `vsays/<id>/vsays.tsv` (`vsay`, `variant`, `team`, `text`). Every sound plays for both teams; `team` only tells which team the pack meant it for.
 - Stock vsays: the pages `default/scripts/vsays/chat/*.cfg` without `*_shortcuts.cfg` (Fireteam pages only if chosen in step 1), the class vsays of `chat.cfg` (`vsay<Class>`) and the vsays of the other cfgs in `default/scripts/vsays/` (e.g. `vsays_custom.cfg`). Never `chat_shortcuts.cfg` (its texts are the stock text on nitmod/etps, see above) or `chat_function.cfg` (not live). Ids and meanings: `default/scripts/vsays/README.MD`.
-- Mod of the server: its address from `default/serverconfigs/history.tsv` (row whose name contains the `servers.tsv` text), then `cd tools && python3 -m helpers.serverapi <address>` (needs the network: outside the sandbox). nitmod/etps: the shortcut texts apply.
+- Mod of the server: the mod column of the id's row in `default/serverconfigs/servers.tsv`; if empty, the mod in `default/serverconfigs/history.tsv` of the row's addresses, else `cd tools && python3 -m helpers.serverapi <address>` (needs the network: outside the sandbox). nitmod/etps: the shortcut texts apply.
 - For each stock key, the server sounds whose meaning fits it (greeting for Hi, "Nein!" for No, "Run!" for Move, ...). Judge the sound by its text; a joke that still says the same thing fits.
 - Class vsays of `vsays_custom.cfg` (`vsayGrenade`, `vsaySatchel`, ...) inform the teammates of what the class script just did: only sounds that name that action unmistakably (grenade, dynamite, satchel, airstrike, ...). A sound that hides it ("Surprise!", "Say hello to my little friend!") is no candidate, however well it fits the mood.
 

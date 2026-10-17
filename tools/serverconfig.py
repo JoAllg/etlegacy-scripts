@@ -3,10 +3,11 @@
 
 Runs next to the game and follows its console log (tools/helpers/common.py follow). A connect ("<address> resolved to
 <ip:port>", src/client/cl_main.c CL_Connect_f) names only the address, so the server is asked for its name
-(tools/helpers/serverapi.py) and the name is looked up in default/serverconfigs/servers.tsv; a server seen before is
-recognized at once from history.tsv, the answer then corrects it. A server that doesn't answer (map change, restart,
-its rate limit) is asked again after 2, 4, 8, ... up to 60 s, until it answers or the game moves on. A locally hosted map ("----- Server
-Initialization ----", src/server/sv_init.c SV_SpawnServer) is the id "local". The log found at the tool's start counts
+(tools/helpers/serverapi.py) and its name and mod are looked up in default/serverconfigs/servers.tsv; a server seen before
+is recognized at once from history.tsv, the answer then corrects it and adds the server's address to its row. A server
+that doesn't answer (map change, restart, its rate limit) is asked again after 2, 4, 8, ... up to 60 s, until it
+answers or the game moves on. A locally hosted map ("----- Server Initialization ----", src/server/sv_init.c
+SV_SpawnServer) is the id "local". The log found at the tool's start counts
 only while a game runs (profile.pid), and the tool leaves the files for "no server" when it ends, so a game started
 without it applies no server's settings. Written to default/serverconfigs/:
 - current.cfg: execs default.cfg, then <id>.cfg if the id has one. Its guard applies them only when another id was
@@ -24,10 +25,12 @@ At start (and with --check) every name a server cfg sets is looked up in default
 cfg: a name it doesn't mention keeps the server's value on all other servers, so it is reported (warning only).
 
 Usage: tools/serverconfig.py                                      follow the game (Ctrl+C stops)
-       tools/serverconfig.py add <id> [address] [--match <text>]  row in servers.tsv, <id>.cfg if missing; the
+       tools/serverconfig.py add <id> [address] [--match <text>] [--any-mod]
+                                                                  row in servers.tsv, <id>.cfg if missing; the
                                                                   address defaults to the last connect in the log,
-                                                                  the text to the tag at the start of the server's name;
-                                                                  an id that has a row is replaced after asking
+                                                                  the text to the tag at the start of the server's name,
+                                                                  the mod to the server's (--any-mod: none); an id that
+                                                                  has a row is replaced after asking
        tools/serverconfig.py --check | --selftest
 """
 import argparse
@@ -42,7 +45,8 @@ import time
 from pathlib import Path
 
 from helpers.common import RESERVED, STAMP, clean, event, follow, last_connect, map_color, strip_colors, with_map_color, write_atomic
-from helpers.serverapi import CONFIGS, ID, ID_RULE, SERVERS, adr_string, history, hostname, identify, remember, resolve, server_tag, servers
+from helpers.serverapi import CONFIGS, ID, ID_RULE, SERVERS, Row, adr_string, hostname, identify, note_address, remember, resolve, row, row_line, \
+    seen, server_tag, servers
 from helpers.settings import MENU, PROFILE, REPO
 
 EXEC = "profile/serverconfigs"  # the profile link of deploy.sh in each mod folder
@@ -170,7 +174,8 @@ def ask(target, name=hostname):
         return False
     remember(target, name, mod)
     rows = servers()
-    write(identify(name, rows), name, rows, address=target)
+    write(identify(name, rows, mod), name, rows, address=target)
+    note_address(name, mod, target)
     return True
 
 
@@ -181,8 +186,8 @@ def settle(target):
         write(target, address=target)
         return True
     rows = servers()
-    name = history().get(target, "")
-    write(identify(name, rows), name, rows, address=target)
+    name, mod = seen().get(target, ("", ""))
+    write(identify(name, rows, mod), name, rows, address=target)
     return ask(target)
 
 
@@ -227,22 +232,24 @@ def guess(name):
     return m.group() if m else ""
 
 
-def with_row(lines, server, text):
-    """(lines of servers.tsv with the row "<id><TAB><text>", texts it replaces): the row takes the place of the id's
-    first row and its other rows go; a new id is appended."""
+def with_row(lines, new):
+    """(lines of servers.tsv with the Row, rows it replaces): the row takes the place of the id's first row and its
+    other rows go; a new id is appended. It keeps the addresses of the replaced rows with its own text and mod."""
     out, old = [], []
     for line in lines:
-        name, sep, was = line.partition("\t")
-        if sep and name.strip() == server:
+        r = row(line)
+        if r and r.id == new.id:
             if not old:
-                out.append(f"{server}\t{text}")
-            old.append(was.strip())
+                out.append(None)
+            old.append(r)
         else:
             out.append(line)
-    return (out if old else out + [f"{server}\t{text}"]), old
+    kept = [a for r in old if (r.text, r.mod) == (new.text, new.mod) for a in r.addresses]
+    line = row_line(new._replace(addresses=tuple(dict.fromkeys(kept + list(new.addresses)))))
+    return ([line if x is None else x for x in out] if old else out + [line]), old
 
 
-def add(server, address, text):
+def add(server, address, text, any_mod=False):
     if not ID.fullmatch(server):
         sys.exit(f"id '{server}': {ID_RULE}")
     address = address or last_connect()
@@ -252,23 +259,28 @@ def add(server, address, text):
     if not name:
         sys.exit(f"{address} doesn't answer")
     text = text or guess(name)
-    if not text or "\t" in text or identify(name, [(server, text)]) != server:
+    if not text or "\t" in text or identify(name, [Row(server, text)]) != server:
         sys.exit(f"the server's name doesn't contain '{text}': {name}")
+    if not mod and not any_mod:
+        sys.exit(f"{address} doesn't tell its mod: --any-mod adds the row for every mod")
+    address = adr_string(resolve(address))
+    new = Row(server, text, "" if any_mod else mod.lower(), (address,))
     CONFIGS.mkdir(parents=True, exist_ok=True)
     lines = SERVERS.read_text("latin1").splitlines() if SERVERS.exists() else \
-        ["# <id><TAB><text in the server name>, the first matching row wins (docs/serverconfigs.md)"]
-    lines, old = with_row(lines, server, text)
-    if old and old != [text]:
-        print(f"⚠️  '{server}' is in {SERVERS.name} already, with: {' | '.join(old)}", file=sys.stderr)
-        if not sys.stdin.isatty() or input(f"Replace with '{text}'? [y/N] ").strip().lower() != "y":  # no terminal: nobody to ask
+        ["# <id><TAB><text in the server name><TAB><mod, empty: any><TAB><addresses seen>, the first matching row wins (docs/serverconfigs.md)"]
+    lines, old = with_row(lines, new)
+    if any((r.text, r.mod) != (new.text, new.mod) for r in old):
+        shown = " | ".join(f"{r.text} ({r.mod or 'any mod'})" for r in old)
+        print(f"⚠️  '{server}' is in {SERVERS.name} already, with: {shown}", file=sys.stderr)
+        if not sys.stdin.isatty() or input(f"Replace with '{text}' ({new.mod or 'any mod'})? [y/N] ").strip().lower() != "y":  # no terminal: nobody to ask
             sys.exit(f"{SERVERS.name} unchanged")
     write_atomic(SERVERS, "\n".join(lines) + "\n")
     cfg = CONFIGS / f"{server}.cfg"
     if not cfg.exists():
         cfg.write_text(f"// Settings on the servers of '{server}' (docs/serverconfigs.md): absolute values only, and every name set here gets its normal value in default.cfg\n", "latin1")
-    remember(adr_string(resolve(address)), name, mod)
-    print(f"{name}\n{SERVERS.relative_to(REPO)}: {server}\t{text}\n{cfg.relative_to(REPO)}")
-    first = identify(name, servers())
+    remember(address, name, mod)
+    print(f"{name}\n{SERVERS.relative_to(REPO)}: {row_line(new)}\n{cfg.relative_to(REPO)}")
+    first = identify(name, servers(), mod)
     if first != server:
         print(f"⚠️  the earlier row of '{first}' matches this server first", file=sys.stderr)
 
@@ -366,7 +378,7 @@ def selftest():
 
     with tempfile.TemporaryDirectory() as d:
         out, voice = Path(d) / "serverconfigs", Path(d) / "voice"
-        rows = [("xy", "[xY]"), ("solo", "Solo Server")]
+        rows = [Row("xy", "[xY]"), Row("solo", "Solo Server")]
         assert write(None, out=out, voice=voice) == ("default", None)
         assert (out / "current.cfg").read_text() == settings_cfg("default") and (out / "current_vsay.cfg").read_text() == vsay_cfg(None, None)
         assert write("xy", "^1[^7xY^1] x", rows, out, voice) == ("default", None)  # neither a cfg nor voice pages yet
@@ -375,7 +387,7 @@ def selftest():
         (voice / "xy/xy_menu.cfg").write_text("")
         (voice / "solo").mkdir()
         (voice / "solo/solo_menu.cfg").write_text("")
-        assert write("xy", '^1[^7xY"^1] x', [("xy", '[xY"]')], out, voice) == ("xy", "xy")
+        assert write("xy", '^1[^7xY"^1] x', [Row("xy", '[xY"]')], out, voice) == ("xy", "xy")
         assert (out / "current.cfg").read_text() == settings_cfg("xy")
         assert f"TAB ^1[^7xY'^1]{nav} Voice chat" in (out / "current_vsay.cfg").read_text()  # cfg-safe tag
         before = (out / "current.cfg").stat().st_mtime_ns
@@ -399,9 +411,11 @@ def selftest():
             (out / "default.cfg").write_text('vstr fovLowNormal  // fovLow\nCG_FOV 90\nbind F9 "vstr b"\n')
             assert check(out) == ["⚠️  serverconfigs/xy.cfg: r_gamma is not in default.cfg, so it keeps this value on other servers"]
     assert [guess(n) for n in ("^1[^7xY^1] FRAGHOUSE", "^8ABc|^4Clan^9,XPSave", " {SomeName} #1", "^3Full Name", "^1")] == ["[xY]", "ABc|", "{SomeName}", "Full", ""]
-    tsv = ["# head", "xy\t[xY]", "sn\tSOME", "abc\tABc|", "sn\tSOME NAME"]
-    assert with_row(tsv, "sn", "Name") == (["# head", "xy\t[xY]", "sn\tName", "abc\tABc|"], ["SOME", "SOME NAME"])
-    assert with_row(tsv, "new", "x y") == (tsv + ["new\tx y"], []) and with_row(tsv, "xy", "[xY]")[1] == ["[xY]"]
+    tsv = ["# head", "xy\t[xY]\tnitmod\t192.0.2.1:27960", "sn\tSOME", "abc\tABc|", "sn\tSOME NAME"]
+    assert with_row(tsv, Row("sn", "Name")) == (["# head", tsv[1], "sn\tName", "abc\tABc|"], [Row("sn", "SOME"), Row("sn", "SOME NAME")])
+    assert with_row(tsv, Row("new", "x y", "legacy", ("192.0.2.3:27960",))) == (tsv + ["new\tx y\tlegacy\t192.0.2.3:27960"], [])
+    assert with_row(tsv, Row("xy", "[xY]", "nitmod", ("192.0.2.2:27960",)))[0][1] == "xy\t[xY]\tnitmod\t192.0.2.1:27960,192.0.2.2:27960"  # same row: one more address
+    assert with_row(tsv, Row("xy", "[xY]", "legacy", ("192.0.2.2:27960",)))[0][1] == "xy\t[xY]\tlegacy\t192.0.2.2:27960"  # other mod: its servers go
     wait = pauses()
     assert [next(wait) for _ in range(7)] == [2, 4, 8, 16, 32, 60, 60]
     assert ask("192.0.2.1:27960", lambda address: ("", "")) is False  # no answer: nothing is written
@@ -430,6 +444,7 @@ def main():
     ap.add_argument("id", nargs="?")
     ap.add_argument("address", nargs="?", help="host[:port], default: the last connect in the game's log")
     ap.add_argument("--match", metavar="TEXT", help="text in the server's name, default: the tag at its start")
+    ap.add_argument("--any-mod", action="store_true", help="the row covers servers of every mod, default: only the server's mod")
     ap.add_argument("--check", action="store_true", help="only report names that default.cfg doesn't reset")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
@@ -440,7 +455,7 @@ def main():
     if a.command:
         if not a.id:
             ap.error("add needs an id")
-        return add(a.id, a.address, a.match)
+        return add(a.id, a.address, a.match, a.any_mod)
     run()
 
 

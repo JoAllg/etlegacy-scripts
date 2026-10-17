@@ -9,7 +9,6 @@ What this profile cannot do or work around, why, and the workarounds: config scr
   - [Timing depends on the frame rate](#timing-depends-on-the-frame-rate)
     - [Suggested: wait aliases that follow the FPS (not implemented)](#suggested-wait-aliases-that-follow-the-fps-not-implemented)
   - [Limits of the engine](#limits-of-the-engine)
-  - [Server configs do not tell the mods of a clan apart](#server-configs-do-not-tell-the-mods-of-a-clan-apart)
   - [Stock shield hides server sounds and menus on unpure servers](#stock-shield-hides-server-sounds-and-menus-on-unpure-servers)
   - [Pure servers run out of open files](#pure-servers-run-out-of-open-files)
   - [Local hosting in nitmod](#local-hosting-in-nitmod)
@@ -95,16 +94,6 @@ At another FPS the time waits are wrong by the factor 125 / FPS: at 76 FPS the g
 - `reset <alias>` returns to the first value of the game session, not to the value in the cfg ([Config scripting](scripting.md), `reset`).
 - Loaded sounds stay cached by file name across servers until `snd_restart` (`vid_restart` keeps them): vsay packs of different servers share names, so the last server's voices play on the next one. `tools/serverconfig.py` runs `snd_restart` once per server change ([Server configs](serverconfigs.md#sound-restart)); `F2` does it by hand.
 - A server can enforce cvar values; a script does not notice it. `F3` restores the definitions afterwards.
-
-## Server configs do not tell the mods of a clan apart
-
-`tools/serverconfig.py` picks the id by the first row of `servers.tsv` whose text is in the server name (`tools/helpers/serverapi.py` `identify`); the server's mod plays no part. A clan with servers of different mods (e.g. a legacy and a nitmod server with the same tag) therefore gets one id, and both servers get the same files of `default/serverconfigs/`:
-
-- `<id>.cfg`: its values are written for one mod. Names that differ between the mods (alt-fire, weapon IDs, cvars only one mod has: `default/mods/<mod>/README.md`) are wrong or unknown on the other server.
-- `vsays/<id>/`: the voice chat pages come from one server pack (`tools/voicemenu.py`); vsays the other server's pack lacks play nothing there.
-- `vsays/<id>/override/`: the overrides copy the stock text of the key, in nitmod and etps with its chat shortcut (`[A]`, `[H]`, ..., [Server configs](serverconfigs.md#server-sounds-on-the-stock-pages)). On a server of a mod without shortcuts the text shows the shortcut as it is (unverified, not tested in game).
-
-Workaround: one id per server, through a row with a text only that server's name contains (e.g. the mod or the server's own name after the tag), above the clan's general row: the first matching row wins. Each id then has its own `<id>.cfg` and voice chat.
 
 ## Stock shield hides server sounds and menus on unpure servers
 

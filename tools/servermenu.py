@@ -24,7 +24,7 @@ import time
 
 from helpers.common import last_connect, strip_colors, write_atomic
 from helpers.menupages import EXEC, LOCAL_MAP, cells, cut, order, pad, pages, players, table, width
-from helpers.serverapi import CONFIGS, adr_string, favorites, history, identify, resolve, servers, status, summarize
+from helpers.serverapi import CONFIGS, Row, adr_string, favorites, identify, resolve, seen, servers, status, summarize
 from helpers.settings import MENU, PROFILE, REPO, SERVERMENU_KEEP, SERVERMENU_POLL, VSAY
 
 OUT = REPO / PROFILE / "servermenu"
@@ -90,8 +90,8 @@ def others(addresses, current):
 def connect_vsay(current, known=None, rows=None, configs=CONFIGS):
     """Vsay id of the connect say on the server the game is on: connectVsayServer of its <id>.cfg
     (set connectVsayServer "vsay <id>"), Bye without a server, id, file or line."""
-    name = (history() if known is None else known).get(current or "", "")
-    server = identify(name, servers() if rows is None else rows) if name else None
+    name, mod = (seen() if known is None else known).get(current or "", ("", ""))
+    server = identify(name, servers() if rows is None else rows, mod) if name else None
     try:
         text = (configs / f"{server}.cfg").read_text("latin1") if server else ""
     except OSError:
@@ -192,8 +192,8 @@ def selftest():
     with tempfile.TemporaryDirectory() as tmp:
         (Path(tmp) / "xy.cfg").write_text('set connectVsayServer "vsay xy16"  // joke\n')
         (Path(tmp) / "zz.cfg").write_text('// set connectVsayServer "vsay zz1"\n//   eg16 Hasta la vista\n  //set connectVsayServer "vsay zz2"\n')
-        known = {"192.0.2.1:27960": "^1[^7xY^1] FRAGHOUSE", "192.0.2.2:27960": "^2ZZ land", "192.0.2.3:27960": "Other"}
-        ids = [("xy", "[xy]"), ("zz", "zz"), ("qq", "other")]
+        known = {"192.0.2.1:27960": ("^1[^7xY^1] FRAGHOUSE", "nitmod"), "192.0.2.2:27960": ("^2ZZ land", ""), "192.0.2.3:27960": ("Other", "")}
+        ids = [Row("xy", "[xy]", "nitmod"), Row("zz", "zz"), Row("qq", "other")]
         assert connect_vsay("192.0.2.1:27960", known, ids, Path(tmp)) == "xy16"
         assert connect_vsay("192.0.2.2:27960", known, ids, Path(tmp)) == "Bye"  # commented lines only
         assert connect_vsay("192.0.2.3:27960", known, ids, Path(tmp)) == "Bye"  # no file
