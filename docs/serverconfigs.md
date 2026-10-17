@@ -73,16 +73,16 @@ set serverIs_xy "vstr serverApply"
 
 This is the change guard of [Config scripting](scripting.md): `serverLast` runs the alias of the id applied last, which does nothing while the file of that same id runs. So exec'ing the file is free of side effects until the id changes. A server without `<id>.cfg` has the id `default` and only execs `default.cfg`.
 
-The tool can be slower than the game: the map autoexec may run before `current.cfg` is rewritten. The scripts therefore exec it on every event that can follow a server change (`vstr serverCheck`, `default/definitions.cfg`), and the first one after the tool wrote applies the settings:
+Every server change loads a map, also a change between two servers of one mod and a change to another mod (file system restart, then the map). The map autoexec execs `current.cfg` (`vstr serverCheck`, `default/definitions.cfg`); the first exec after the tool wrote applies the settings:
 
 | Event | Where |
 |---|---|
-| map load | `mods/<mod>/autoexec_mod.cfg`, exec'd by every map and default autoexec |
-| join, team change | `autoexecs/autoexec_spectator.cfg`, `autoexec_axis.cfg`, `autoexec_allies.cfg` |
+| map load | `mods/<mod>/autoexec_mod.cfg`, exec'd by every map and default autoexec; after a mod switch the chain it runs ends with `vstr serverForce` |
 | class key | `classHook`, `scripts/class/cs_backend.cfg` |
-| voice chat | `voiceChatSelector`, `scripts/voicechat.cfg` |
 
-jaymod runs no event autoexecs ([Autoexec behavior](autoexec.md)), so only the class keys and the voice chat apply there.
+The tool usually writes before the map load: it reads the log every 0.2 s and a server of `history.tsv` is known at once, while the connect still waits for the gamestate and the map. It is late only for a server that is not in `history.tsv` and whose first answer is lost (next try after 2 s); then the next class key applies the settings. jaymod runs no event autoexecs ([Autoexec behavior](autoexec.md)), so only the class keys apply there.
+
+In-game test on 2026-10-18 (legacy, local host of de_dust): the map autoexec applied the settings at the first map load.
 
 ### Sound restart
 
@@ -100,6 +100,8 @@ set serverRestart_b "vstr null"
 vstr serverRestartLast
 set serverRestart_b "vstr serverRestart"
 ```
+
+The file ends with `echo "^5Server: <id> <address>"`, so each exec shows in the console which server the settings belong to.
 
 The tool swaps the key (`a`, `b`) whenever the game joins another address (`ip:port`, `local`) and reads the last address and key back from the comment line; "no server" keeps both. Two keys instead of one alias per address keep the number of cvars fixed (`MAX_CVARS`). This works for every server, also without a row in `servers.tsv`. `F3` does not touch this guard. Not tested in game.
 
@@ -129,7 +131,7 @@ set modIs_nitmod "set serverRestartModSwitch set serverRestartLast vstr serverRe
 
 In-game test on 2026-10-02 (legacy, local host of fueldump with a `local.cfg`): game start exec'd `current.cfg` and `default.cfg` after `state.cfg`; the map autoexec exec'd `current.cfg`, `default.cfg` and `local.cfg` in this order; the spectator autoexec exec'd `current.cfg` only. A remote server change and the other mods are not tested in game.
 
-`serverCheck` and `serverApply` use `execq` (a class key or the voice chat can run them, [Config scripting](scripting.md)), so the console shows no `execing` line for these files; an apply shows as the load marker of `default.cfg` (`>>> SERVER DEFAULTS LOADED!`). Not tested in game with `execq`.
+`serverCheck` and `serverApply` use `execq` (a class key can run them, [Config scripting](scripting.md)), so the console shows no `execing` line for these files; an apply shows as the load marker of `default.cfg` (`>>> SERVER DEFAULTS LOADED!`). Not tested in game with `execq`.
 
 ## Precedence
 
@@ -141,7 +143,7 @@ Later wins:
 4. `serverconfigs/default.cfg`
 5. `serverconfigs/<id>.cfg`
 
-A server cfg is a personal preference for that server, so it overrides these files. It does not override what the event that applies it sets afterwards: `serverCheck` runs at the start of the event, so the class script of a class key, the rest of a map or team autoexec and the binds of the voice chat page run after the server cfg and win for the names they set. `F3` and `autoexec.cfg` apply it last (`serverForce`).
+A server cfg is a personal preference for that server, so it overrides these files. It does not override what the event that applies it sets afterwards: `serverCheck` runs at the start of the event, so the class script of a class key and the rest of a map autoexec run after the server cfg and win for the names they set. `F3` and `autoexec.cfg` apply it last (`serverForce`).
 
 - Nothing undoes a server cfg except `default.cfg`, which runs before every server cfg: each name a server cfg sets (cvar, alias, bind) needs its normal value there, or it keeps the server's value on all other servers. The tool reports such names at its start (`tools/serverconfig.py --check`); it only compares names.
 - Both files run again after every server change, `F3` and `F1`: absolute values only (`cg_fov 100`), no toggle or cycle steps.
@@ -170,8 +172,8 @@ set chatServerGlobal "execq profile/serverconfigs/vsays/xy/override/global.cfg"
 
 ## Limits
 
-- Until the tool has written, the settings of the previous server stay; the next event of the table corrects it.
+- Until the tool has written, the settings of the previous server stay; the next map load or class key corrects it.
 - Leaving a server for the main menu and playing a demo keep the last server's settings.
-- The sound restart (a short black screen) comes with the first event after the tool wrote, e.g. the map load or the team join. `F2` does it by hand.
+- The sound restart (a short black screen) comes with the first event after the tool wrote, usually the map load. `F2` does it by hand.
 - Without the tool (`tools/serverconfig.py`, started by `./launcher.sh`) no server's settings apply: when it ends (Ctrl+C, the `SIGTERM` of `./launcher.sh`) it writes both files for "no server". Only a tool that is killed hard (`SIGKILL`, power loss) leaves the files of its last server, until it starts again. Tested on 2026-10-02 without a game: start with an old log and `SIGTERM` both wrote the "no server" files.
 - A failed write or query is reported and tried again with the pauses above; the tool keeps running.

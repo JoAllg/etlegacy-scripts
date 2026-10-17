@@ -131,7 +131,8 @@ def settings_cfg(server, address="-", key="a"):
         'set serverRestart "vstr serverRestartAdopt; snd_restart"',
         f'set serverRestart_{key} "vstr null"',
         "vstr serverRestartLast",
-        f'set serverRestart_{key} "vstr serverRestart"']) + "\n"
+        f'set serverRestart_{key} "vstr serverRestart"',
+        f'echo "^5Server: {server} {address}"']) + "\n"
 
 
 def vsay_cfg(server, tag):
@@ -370,7 +371,7 @@ def selftest():
     assert xy[2:5] == ['set serverIs_xy "vstr null"', "vstr serverLast", 'set serverIs_xy "vstr serverApply"']
     assert xy[5:] == ["// Address: - a", 'set serverRestartAdopt "set serverRestartLast vstr serverRestart_a"',
                       'set serverRestart "vstr serverRestartAdopt; snd_restart"', 'set serverRestart_a "vstr null"',
-                      "vstr serverRestartLast", 'set serverRestart_a "vstr serverRestart"']
+                      "vstr serverRestartLast", 'set serverRestart_a "vstr serverRestart"', 'echo "^5Server: xy -"']
     assert f'set serverApply "execq {EXEC}/default.cfg; set serverLast vstr serverIs_default"' in settings_cfg("default")
     assert vsay_cfg(None, None).count("\n") == 1 and vsay_cfg(None, None).startswith("//")
     nav = MENU["nav"]

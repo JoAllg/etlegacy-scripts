@@ -86,7 +86,7 @@ The engine execs `autoexec.cfg` from the mod folder at startup (details: `docs/a
 ├─ exec profile/state.cfg                            # start values of state, skipped by F3; applies user.cfg aliases
 │   └─ vstr modState                                 # mod specific state, defined in mod_general.cfg
 └─ vstr serverForce                                  # exec profile/serverconfigs/current.cfg → default.cfg, <id>.cfg of the current server; also run by F3,
-                                                     # and behind its guard (vstr serverCheck) on map load, team and class change and by the voice chat
+                                                     # and behind its guard (vstr serverCheck) on map load and by the class keys
 ```
 
 Each file's `echo ^5*** ... LOADED!` marker is indented by its depth in this tree, so the console prints the chain as a tree (children before their parent). `F3` re-execs the definitions and `user.cfg` in game (needed after servers enforce values) and keeps state (`state.cfg`); the settings of the current server come last in both and override everything (`docs/serverconfigs.md`); `F1` is the full reset; a mod switch goes through `autoexec_mod.cfg` (mechanism and mod matrix: `docs/autoexec.md`). `*.backup`, `vsays/chat_function.cfg`, commented-out execs and `mods/example/` (template for new mods) are not live.
