@@ -27,7 +27,7 @@ Background and mechanism: `docs/serverconfigs.md` ("Server sounds on the stock p
 Don't read any override file in this step.
 
 1. `python3 tools/vsayoverrides.py <ids>`: per id "no overrides" (first run) or its override files and the lines whose sound is missing.
-2. For every id with missing sounds, start one subagent (general-purpose) with this task: remove the listed sounds from `default/serverconfigs/vsays/<id>/override/*.cfg` following "How it is built" (paste the section): drop the step, relink the remaining steps (`a`, `b`, … in order, last back to `a`); one step left: plain `set vsay<key> "<cmd> <sound> <text>"`; none left: drop the key's lines; a file without vsay lines: delete it and remove its `chatServer<Page>` or `execq` line (and an alias it alone served) from `<id>.cfg`; pointers in `default/serverconfigs/vsays/cycles.cfg` that no override file of any server uses any more: remove them. A pointer that names a removed step is harmless in the files (it starts at `a` again), but a running game keeps the old aliases: tell the user to press `F3` (default.cfg resets the pointers). It must answer only with the removed sounds per file and key, nothing of the remaining content.
+2. For every id with missing sounds, start one subagent (general-purpose) with this task: remove the listed sounds from `default/serverconfigs/vsays/<id>/override/*.cfg` following "How it is built" (paste the section): drop the step, relink the remaining steps (`a`, `b`, … in order, last back to `a`); one server sound left: plain `set vsay<key> "<cmd> <sound> <text>"`; only stock steps or none left: the key is no override any more, drop its lines (an alias: also its line in `<id>.cfg`); a file without vsay lines: delete it and remove its `chatServer<Page>` or `execq` line from `<id>.cfg`; an alias no server overrides any more: remove its `reset` line from `default.cfg`; pointers in `default/serverconfigs/vsays/cycles.cfg` that no override file of any server uses any more: remove them. A pointer that names a removed step is harmless in the files (it starts at `a` again), but a running game keeps the old aliases: tell the user to press `F3` (default.cfg resets the pointers). It must answer only with the removed sounds per file and key, nothing of the remaining content.
 3. Tell the user what was removed.
 
 ## 3. Candidates (before reading the existing overrides)
@@ -36,6 +36,7 @@ Don't read any override file in this step.
 - Stock vsays: the pages `default/scripts/vsays/chat/*.cfg` without `*_shortcuts.cfg` (Fireteam pages only if chosen in step 1), the class vsays of `chat.cfg` (`vsay<Class>`) and the vsays of the other cfgs in `default/scripts/vsays/` (e.g. `vsays_custom.cfg`). Never `chat_shortcuts.cfg` (its texts are the stock text on nitmod/etps, see above) or `chat_function.cfg` (not live). Ids and meanings: `default/scripts/vsays/README.MD`.
 - Mod of the server: its address from `default/serverconfigs/history.tsv` (row whose name contains the `servers.tsv` text), then `cd tools && python3 -m helpers.serverapi <address>` (needs the network: outside the sandbox). nitmod/etps: the shortcut texts apply.
 - For each stock key, the server sounds whose meaning fits it (greeting for Hi, "Nein!" for No, "Run!" for Move, ...). Judge the sound by its text; a joke that still says the same thing fits.
+- Class vsays of `vsays_custom.cfg` (`vsayGrenade`, `vsaySatchel`, ...) inform the teammates of what the class script just did: only sounds that name that action unmistakably (grenade, dynamite, satchel, airstrike, ...). A sound that hides it ("Surprise!", "Say hello to my little friend!") is no candidate, however well it fits the mood.
 
 ## 4. Existing choices
 
@@ -55,7 +56,7 @@ One question per key that has candidates or a current override, `AskUserQuestion
 
 For each server, from the answers (keys without a change stay as they are):
 
-- `vsays/<id>/override/<page>.cfg`: header line `// <heading of the page>: server sounds of '<id>' with the stock texts, exec'd after the page (chatServer<Page>, serverconfigs/<id>.cfg)`, empty line, `// Vsays`, the key lines in key order `1`..`9`, `0`. Rewrite the lines of the changed keys; drop keys answered `none`; a file without keys is deleted with its hook line.
+- `vsays/<id>/override/<page>.cfg`: header line `// <heading of the page>: server sounds of '<id>' with the stock texts, exec'd after the page (chatServer<Page>, serverconfigs/<id>.cfg)`, empty line, `// Vsays`, the key lines in key order `1`..`9`, `0`. Rewrite the lines of the changed keys; drop keys answered `none` or only `stock` (no server sound = no override); a file without keys is deleted with its hook line.
 - `<id>.cfg` (the user's file, but this skill is asked to write it): one block, which replaces the existing block and stays at the end of the file. Hooks in page order, then per alias the `execq` of its steps file (only for a cycle) and the alias:
 
   ```
