@@ -3,7 +3,6 @@ user.cfg
 settings.conf
 guid_backup/
 tools/vsaycolors.html
-default/scripts/vsays/vsaycolors.tsv
 default/servermenu/
 default/serverconfigs/*
 !default/serverconfigs/default.cfg

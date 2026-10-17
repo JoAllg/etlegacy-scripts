@@ -31,6 +31,6 @@ Generated output, never read whole or edited by hand:
 | `default/servermenu/p12_<n>.cfg`, `p7_<n>.cfg` | `tools/servermenu.py`, rewritten every few seconds while it runs |
 | `default/serverconfigs/current.cfg`, `current_vsay.cfg`, `history.tsv` | `tools/serverconfig.py`, on every server change (`.claude/rules/serverconfigs.md`) |
 | the `HUD VALUES` block of `user.cfg` | `tools/helpers/hudvalues.py`, on every `deploy.sh` run (`.claude/rules/hud.md`) |
-| `tools/vsaycolors.html`, `default/scripts/vsays/vsaycolors.tsv` | `tools/vsaycolors.py` |
+| `tools/vsaycolors.html`, `default/serverconfigs/vsays/vsaycolors.tsv` | `tools/vsaycolors.py` |
 
 `deploy.sh`: safe to rerun, asks before replacing a folder or foreign link, never touches `guid_backup/` contents except to back up and link keys. Its header comment lists every step: keep it in sync with the code. Mod list: `MODS` (all mod folders). `default/autoexecs/autoexec_*.cfg` need no list: they are linked once into `etmain/`. `default/maps/` is linked to `<mod>/maps` of every mod in `MODS`, so `/loc save` writes into the repo.
