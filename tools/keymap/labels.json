@@ -116,5 +116,15 @@
   "+vstr grenadeON grenadeOFF": "Grenade",
   "vstr classReportToggle": "Class Report",
   "vstr spawnReportToggle": "Spawn Report",
-  "vstr connectSayToggle": "Server Say"
+  "vstr connectSayToggle": "Server Say",
+  "vstr devMode": "Dev mode",
+  "vstr resetLayers; disconnect; map goldrush": "Host goldrush",
+  "execq profile/servermenu/p7_1.cfg": "Next servers",
+  "execq profile/servermenu/p12_1.cfg": "Next servers",
+  "noclip": "Noclip",
+  "execq profile/scripts/devmode/page2.cfg": "Next page",
+  "god": "God mode",
+  "notarget": "No target",
+  "nofatigue": "No fatigue",
+  "give all": "Give all"
 }

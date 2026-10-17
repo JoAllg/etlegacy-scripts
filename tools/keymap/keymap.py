@@ -848,7 +848,7 @@ def selftest(mod):
     scoped = next(v["keys"] for v in data if v["name"].startswith("Covops: fg42"))
     assert "MOUSE3" not in base, base["MOUSE3"]  # sniper mode only with a scope
     assert [x[:2] for x in scoped["MOUSE3"]["a"]["LEFTALT"]] == [["Crouch", "toggle"]], scoped["MOUSE3"]
-    assert all(m != "menu" for k, alts in base["ENTER"]["a"].items() if k not in ("v", "RIGHTCTRL") for _, m, *_ in alts), base["ENTER"]  # ENTER closes the voice chat and the server menu (resetLayers)
+    assert all(m != "menu" for k, alts in base["ENTER"]["a"].items() if k not in ("v", "RIGHTCTRL", "MODE") for _, m, *_ in alts), base["ENTER"]  # ENTER closes the voice chat, the server menu and the dev mode (resetLayers)
     assert base["v"]["a"]["1"][0][1] == "menu", base["v"]  # a chat category opens its vsay list
     medic_i = next(i for i, v in enumerate(data) if v["name"].startswith("Medic"))
     assert base["KP_UPARROW"]["a"]["MOUSE4"][0][3] == medic_i, base["KP_UPARROW"]  # a class key lands in its class view
