@@ -8,7 +8,7 @@ paths:
 Read `docs/locations.md` before working on these files (lookup order, format, limits, cvars, legacy vs nitmod).
 
 - ~450 files: never read or list the folder as a whole; open only the map you work on and change many files with a script.
-- Only `<map>_loc_override.dat` files belong here; the folder is symlinked to `<fs_homepath>/etmain/maps` and serves every mod.
+- Only `<map>_loc_override.dat` files belong here; the folder is symlinked to `<fs_homepath>/<mod>/maps` of every mod. A `<map>_loc_local.dat` here was written by `/loc save` (dev mode) and wins over the override: merge it into the override and delete it **if** you want to keep those changes.
 - `<map>` is lowercase: legacy looks the file up in lowercase (`docs/locations.md`). A map whose server name has capitals also gets a link in that case to the lowercase file (`StarGate_1945_loc_override.dat`), for mods that use the name as reported.
 - Every header has the line `// Recommended    cg_locations, cg_locationMaxChars <n>` (`cg_locations` without a value, `<n>` about the longest name incl. color codes); legacy cvar names, never the ETPro ones (`b_locationMaxChars`).
 - Keep the author credits in the headers.

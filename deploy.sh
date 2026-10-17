@@ -47,8 +47,10 @@
 #    profiles -> this repo (engine profile folder: etconfig.cfg, defaultprofile.dat, user.cfg)
 #    profile  -> this repo's PROFILE folder (all cfg exec paths: exec profile/...)
 # 5. Backs up GUID key files to guid_backup/<key>_<date> and symlinks them into the mod directories
-# 6. Symlinks the map/team autoexecs into HOMEPATH/etmain and the location overrides to HOMEPATH/etmain/maps
-#    (etmain is in every mod's search path); removes links to the same files/folder from the mod directories
+# 6. Symlinks the map/team autoexecs into HOMEPATH/etmain (etmain is in every mod's search path) and removes links to
+#    the same files from the mod directories. Symlinks the location overrides to HOMEPATH/<mod>/maps for every mod,
+#    so /loc save (written into the running mod's folder) lands in the repo; a real maps folder is renamed to
+#    maps.bak_<date> after asking (kept if declined)
 # 7. Symlinks the mod-specific autoexec* and mod_* files
 # 8. Offers to build the nitmod stock shield pk3 from the stock etmain pk3s (tools/stock_shield/README.md)
 # 9. Offers desktop files (application menu entries with the game's icon) that start launcher.sh and,
@@ -62,7 +64,8 @@
 #   including ones this script did not create
 # - Existing symlinks are replaced to ensure they point to the correct locations
 # - profiles: a real directory is renamed to profiles.bak_<date> after asking (kept if declined)
-# - profile and maps: real files/directories are PRESERVED with orange
+# - maps: a real directory is renamed to maps.bak_<date> after asking (kept if declined)
+# - profile: real files/directories are PRESERVED with orange
 #   warning messages; remove them manually if you want to replace them
 # - GUID keys: a real key file in a mod directory is backed up, then replaced by a symlink.
 #   If it differs from guid_backup/<key>, you are asked which one to keep (default: guid_backup)
@@ -409,12 +412,13 @@ link_dir() {
 	fi
 }
 
-# move_aside <path>: asks to rename a real folder at <path> to <path>.bak_<date>; true if <path> is free now
+# move_aside <path> [target]: asks to rename a real folder at <path> to <path>.bak_<date> so a link to target (default: the repo)
+# can take its place; true if <path> is free now
 move_aside() {
 	[ -e "$1" ] && [ ! -L "$1" ] || return 0
 	local backup="$1.bak_$(date +%F_%H%M%S)"
 	echo -e "    ${ORANGE}⚠️  $1 is a real folder, not a link to this repo${NC}"
-	ask "    Move it to ${backup##*/} and link $REPO there? [y/N]" n && mv "$1" "$backup" && echo "    - Moved $1 -> $backup"
+	ask "    Move it to ${backup##*/} and link ${2:-$REPO} there? [y/N]" n && mv "$1" "$backup" && echo "    - Moved $1 -> $backup"
 }
 
 # 4. Create mod folders and symlink the profile folders into each
@@ -501,8 +505,7 @@ for guid_entry in "${GUID[@]}"; do
 	fi
 done
 
-# 6. Symlink the map/team autoexecs and the location overrides into etmain:
-# it is in the search path of every mod, so one set of links serves all of them
+# 6. Symlink the map/team autoexecs into etmain: it is in the search path of every mod, so one set of links serves all of them
 mkdir -p "$HOMEPATH/etmain"
 echo -e "\n${CYAN}⚙️  Symlinking autoexec files...${NC}"
 AUTOEXEC_DIR="$REPO/$PROFILE/autoexecs"
@@ -525,14 +528,11 @@ fi
 
 echo -e "\n${CYAN}🗺️  Symlinking location overrides...${NC}"
 if [ -d "$REPO/$PROFILE/maps" ]; then
-	link_dir "$REPO/$PROFILE/maps" "$HOMEPATH/etmain/maps"
-	# a link to the same folder in a mod folder would outrank the mod's own pk3s
+	# one link per mod, not only etmain: /loc save writes into the running mod's folder (legacy cg_locations.c),
+	# so its <map>_loc_local.dat lands in the repo
 	for mod in $MODS; do
-		mod_maps="$HOMEPATH/$mod/maps"
-		if [ "$mod" != etmain ] && [ -L "$mod_maps" ] && [ "$(readlink -f "$mod_maps")" = "$(readlink -f "$REPO/$PROFILE/maps")" ]; then
-			rm "$mod_maps"
-			echo "    - Removed $mod_maps (etmain/maps covers it)"
-		fi
+		[ -d "$HOMEPATH/$mod" ] || continue
+		move_aside "$HOMEPATH/$mod/maps" "$REPO/$PROFILE/maps" && link_dir "$REPO/$PROFILE/maps" "$HOMEPATH/$mod/maps"
 	done
 else
 	echo -e "    ${RED}⚠️  WARNING:${NC} Maps directory not found"

@@ -21,7 +21,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
 ```
 ~/.etlegacy/              fs_homepath (HOMEPATH in settings.conf)
 ├─ <mod>/                game mod folders (legacy, nitmod, etpub, jaymod, silent, etjump, etps, etmain):
-│                        pk3s/binaries + symlinks into the repo (profiles, profile, autoexec*; etmain: map/team autoexecs, maps)
+│                        pk3s/binaries + symlinks into the repo (profiles, profile, autoexec*, maps; etmain: map/team autoexecs)
 └─ profiles -> <repo>    symlink to this repo (deploy.sh)
 
 <repo>/                  THIS REPO, can live anywhere; tools find the game via settings.conf, never via the repo location
@@ -58,7 +58,7 @@ Most ET scripting info online targets vanilla ET 2.60b or old mods. **Always ver
    └─ guid_backup/       OFF-LIMITS
 ```
 
-Symlinks (`deploy.sh`): `<fs_homepath>/profiles -> <repo>` (convenience, the game does not use it; asks before replacing a folder or other link there); every mod folder gets `profiles -> <repo>` (engine profile folder: etconfig.cfg, defaultprofile.dat, `exec profiles/user.cfg`) and `profile -> <repo>/<PROFILE>` (so cfg paths are written `profile/...`, independent of the profile name); `default/mods/<mod>/autoexec*` and `mod_*` → `<fs_homepath>/<mod>/` (the game finds them through the mod search path, which is how `exec mod_general.cfg` reaches the current mod's file; `mods/example/` is skipped); `default/autoexecs/autoexec_*.cfg` → `<fs_homepath>/etmain/` and `default/maps/` → `<fs_homepath>/etmain/maps` (etmain is in every mod's search path, so one link serves all mods; `docs/autoexec.md`, `docs/locations.md`); `guid_backup/<key>` → mod folders (real key files the game wrote are backed up to `guid_backup/<key>_<date>` first).
+Symlinks (`deploy.sh`): `<fs_homepath>/profiles -> <repo>` (convenience, the game does not use it; asks before replacing a folder or other link there); every mod folder gets `profiles -> <repo>` (engine profile folder: etconfig.cfg, defaultprofile.dat, `exec profiles/user.cfg`) and `profile -> <repo>/<PROFILE>` (so cfg paths are written `profile/...`, independent of the profile name); `default/mods/<mod>/autoexec*` and `mod_*` → `<fs_homepath>/<mod>/` (the game finds them through the mod search path, which is how `exec mod_general.cfg` reaches the current mod's file; `mods/example/` is skipped); `default/autoexecs/autoexec_*.cfg` → `<fs_homepath>/etmain/` (etmain is in every mod's search path, so one link serves all mods; `docs/autoexec.md`); `default/maps/` → `<fs_homepath>/<mod>/maps` of every mod (so `/loc save` writes into the repo; `docs/locations.md`); `guid_backup/<key>` → mod folders (real key files the game wrote are backed up to `guid_backup/<key>_<date>` first).
 
 ## Only the exec chain is live
 
@@ -78,7 +78,7 @@ The engine execs `autoexec.cfg` from the mod folder at startup (details: `docs/a
 │   │                             the first page execs serverconfigs/current_vsay.cfg: TAB = voice chat of the current server)
 │   ├─ server/server.cfg
 │   ├─ scripts/servermenu.cfg    # (servermenu/p12_<n>.cfg, p7_<n>.cfg: server menu pages written by tools/servermenu.py, exec'd at runtime when opened)
-│   ├─ scripts/devmode.cfg       # (devmode/page.cfg: location editor on the number keys, MODE, exec'd when opened)
+│   ├─ scripts/devmode.cfg       # (devmode/page1.cfg, page2.cfg: cheats and location editor on the number keys, MODE, TAB next page, exec'd when opened)
 │   ├─ exec mod_general.cfg        # = mods/<mod>/mod_general.cfg (symlink, mod search path), overrides the general values
 │   │   └─ (nitmod, etps) scripts/vsays/chat_shortcuts.cfg
 │   └─ exec mod_classcommands.cfg  # = mods/<mod>/mod_classcommands.cfg, mod weapon IDs
