@@ -19,6 +19,8 @@ the echo shows it without colors. Vsays with several different texts send none: 
 text matches it (picking a variant with "vsay <n> <id>" only works in the legacy mod). On a rerun the texts of the
 existing pages are kept per vsay (edited or highlighted ones too), and so are the echoes of the keys that send no text
 (random vsays, page links) and the page headings; added and removed vsays are reported.
+vsays.tsv next to the pages lists the server's own vsays (not in etmain pak0.pk3) of the voice scripts: id, variant
+number, team (allies, axis, both) and text without color codes of every sound.
 
 Menu items on other keys than the number row are left out: a page binds its keys, and a letter is a game bind. Pages
 only such items open are left out with them; their vsays count as not in the server menu (extra pages). Only vsay keys
@@ -128,6 +130,11 @@ def prune(menus, heads={}, root="wm_quickmessageAlt", stock=set(), stock_menus=(
     return visible(out, root)
 
 
+def natural(v):
+    """Sort key: numbers in the id by value (xy2 before xy10)."""
+    return [int(c) if c.isdigit() else c for c in re.split(r"(\d+)", v)]
+
+
 def parse_voice(text):
     """[(vsay, [(sound, text)])] like CG_ParseVoiceChats: gender, then id { sound text [sprite on the same line] ... }."""
     toks, out, i = tokens(text), [], 1
@@ -155,6 +162,21 @@ def voices(z):
             texts.setdefault(vsay.lower(), (vsay, [t for _, t in lines]))
     return sounds, texts
 
+
+def vsay_list(z, stock):
+    """vsays.tsv text: the server's own vsays (not in stock) with every variant's text without color codes, one row per team or "both"."""
+    teams = {}
+    for team in ("allies", "axis"):
+        name = f"scripts/wm_{team}_chat.voice"
+        for vsay, lines in parse_voice(z.read(name).decode("latin-1")) if name in z.namelist() else []:
+            teams.setdefault(vsay.lower(), {}).setdefault(team, (vsay, [strip_colors(t).replace("\t", " ") for _, t in lines]))
+    rows = ["# variant: \"vsay <variant> <vsay>\" plays that sound, legacy mod only (other mods pick one at random)", "vsay\tvariant\tteam\ttext"]
+    for v in sorted(teams.keys() - stock, key=natural):
+        t = teams[v]
+        same = len(t) == 2 and t["allies"][1] == t["axis"][1]
+        for team, (vsay, texts) in ({"both": t["allies"]} if same else t).items():
+            rows += [f"{vsay}\t{n}\t{team}\t{text}" for n, text in enumerate(texts)]
+    return "\n".join(rows) + "\n"
 
 
 def say_text(cmd, vsay, texts, kept, colors):
@@ -229,7 +251,7 @@ def unlisted(menus, sounds, texts, stock):
     listed = {v for items in menus.values() for v in vsays_of(items)}
     reachable = {w for v, t in sounds.items() if v in listed or v in stock for ws in t.values() for w in ws}
     out = []
-    for v in sorted(set(sounds) - listed - stock, key=lambda v: [int(c) if c.isdigit() else c for c in re.split(r"(\d+)", v)]):
+    for v in sorted(set(sounds) - listed - stock, key=natural):
         ws = {w for t in sounds[v].values() for w in t}
         if len(sounds[v]) == 2 and not ws & reachable:
             out.append((texts[v][0], texts[v][1][0]))
@@ -501,6 +523,13 @@ QM_MENU_END''')
     assert files["extra2.cfg"].endswith(f'bind CAPSLOCK "execq {EXEC}/x/fun.cfg"\n'), files["extra2.cfg"]
     assert files["fun.cfg"].endswith(f'bind CAPSLOCK "execq {EXEC}/x/x_menu.cfg"\n'), files["fun.cfg"]
     assert 'echo "[x] ^8More sounds 1:"' in files["extra1.cfg"], files["extra1.cfg"]
+    with tempfile.TemporaryDirectory() as d:
+        with zipfile.ZipFile(Path(d) / "x.pk3", "w") as z:
+            z.writestr("scripts/wm_allies_chat.voice", 'male\nxy1 {\n a.wav "Hi!"\n b.wav "Yo\tx"\n}\nxy10 {\n c.wav "Ten"\n}\nmedic {\n m.wav "Medic!"\n}')
+            z.writestr("scripts/wm_axis_chat.voice", 'male\nxy1 {\n a.wav "Hi!"\n b.wav "^1Yo\tx"\n}\nxy2 {\n d.wav "Two"\n}')
+        with zipfile.ZipFile(Path(d) / "x.pk3") as z:
+            rows = vsay_list(z, {"medic"}).splitlines()
+    assert rows[1:] == ["vsay\tvariant\tteam\ttext", "xy1\t0\tboth\tHi!", "xy1\t1\tboth\tYo x", "xy2\t0\taxis\tTwo", "xy10\t0\tallies\tTen"], rows
     print("selftest ok")
 
 
@@ -520,9 +549,10 @@ def main():
         menu_text = z.read(MENU).decode("latin-1")
         heads = titles(menu_text)
         sounds, texts = voices(z)
-    with zipfile.ZipFile(next(p for p in STOCK if p.exists())) as z:
-        stock = set(voices(z)[0])
-        stock_menus = parse(z.read(MENU).decode("latin-1"))
+        with zipfile.ZipFile(next(p for p in STOCK if p.exists())) as s:
+            stock = set(voices(s)[0])
+            stock_menus = parse(s.read(MENU).decode("latin-1"))
+        listing = vsay_list(z, stock)
     menus = prune(visible(parse(menu_text)), heads, stock=stock, stock_menus=stock_menus)
     names, rows = [hostname(a.address)[0]] if a.address else list(history().values()), servers()
     if a.address and not names[0]:  # also a tag passed where the address belongs
@@ -544,6 +574,7 @@ def main():
         f.unlink()
     for name, text in files.items():
         (out / name).write_text(text, encoding="latin1")
+    (out / "vsays.tsv").write_text(listing, encoding="latin1")
     print(f"{out.relative_to(REPO)}: {len(files)} pages, {len(extra)} vsays not in the server menu: {' '.join(v for v, _ in extra)}")
     print("\n".join(report(old, new)) if old else f"{len(new)} vsays")
 

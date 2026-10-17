@@ -26,6 +26,7 @@ Copies a server's quick chat menu (`V`) from its pk3 into voice chat pages in `d
 - Kept: only the server's own sound pages. Left out: pages named like a stock menu or sending only stock vsays (the general voice chat has those), settings/options pages, keys that are neither a vsay nor a page link, items on letter keys.
 - Extra pages: the server's vsays its menu doesn't offer, 10 per page (`extra1.cfg`, ...), each linked from the server's sound menu.
 - Navigation: `<clan>_menu.cfg` is the top page; `TAB` of the general voice chat opens it while playing on that server (`serverconfig.py`). A page with more than 10 links continues on a second page (`<clan>_menu2.cfg`); `TAB` goes through these pages and back to the general voice chat. `CAPSLOCK` opens the parent page.
+- `vsays.tsv`: the server's own vsays (not in stock `pak0.pk3`) with id, variant number, team and text (without color codes) of every sound. `vsay <variant> <id>` plays one variant in the legacy mod only (`docs/commands.md`); other mods pick at random.
 - Rerun after a new server pack: keeps edited texts, colors, echoes of keys without text and page headings, and reports added and removed vsays.
 
 ```sh
