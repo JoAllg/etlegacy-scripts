@@ -130,7 +130,7 @@ A server cfg is a personal preference for that server, so it overrides these fil
 
 - Nothing undoes a server cfg except `default.cfg`, which runs before every server cfg: each name a server cfg sets (cvar, alias, bind) needs its normal value there, or it keeps the server's value on all other servers. The tool reports such names at its start (`tools/serverconfig.py --check`); it only compares names.
 - Both files run again after every server change, `F3` and `F1`: absolute values only (`cg_fov 100`), no toggle or cycle steps.
-- Never set state a key changes (toggle and cycle pointers of `state.cfg`): `F3` would throw the player's choice away. Set what the steps mean instead, so the pointer stays untouched: the weapon switch cycle (`F5`) steps through first, second and off, and `vstr weaponSwitchOrderPistol` / `vstr weaponSwitchOrderSMG` (`scripts/movement.cfg`) choose the weapon of the first step, the start mode on that server.
+- Never set state a key changes (toggle and cycle pointers of `state.cfg`): `F3` would throw the player's choice away. Pointers of cycles the server configs introduce themselves are the exception: they start again on every server change, `F3` and `F1` (`vsays/cycles.cfg` below; losing the step of a vsay cycle doesn't matter). Set what the steps mean instead, so the pointer stays untouched: the weapon switch cycle (`F5`) steps through first, second and off, and `vstr weaponSwitchOrderPistol` / `vstr weaponSwitchOrderSMG` (`scripts/movement.cfg`) choose the weapon of the first step, the start mode on that server.
 - A fixed value in `default.cfg` overrides `user.cfg` and the definitions on every server. Where a value alias exists, restore with it and name the cvar in a comment for the check: `vstr fovNormal  // cg_fov`.
 
 ## Voice chat
@@ -138,6 +138,20 @@ A server cfg is a personal preference for that server, so it overrides these fil
 `scripts/vsays/chat/categories.cfg` (first page of the voice chat) execs `current_vsay.cfg` each time it opens. On a server with voice chat pages the file echoes the `TAB` line with the server's tag and binds `TAB` to the top page `serverconfigs/vsays/<id>/<id>_menu.cfg`; on every other server it is empty and `TAB` does nothing. The file is read when the page opens, so it needs no guard.
 
 The tag in the headings of the pages and in the `TAB` line is the text of `servers.tsv` as the server writes it in its name, with its colors.
+
+### Server sounds on the stock pages
+
+A server's own sounds can replace stock vsays on the stock pages, with the stock text. Each page opener of `scripts/vsays/chat.cfg` (and `chat_shortcuts.cfg`) ends with `vstr chatServer<Page>`, which `chat.cfg` and `default.cfg` set to `vstr null` (without the tool `default.cfg` doesn't run). A server cfg points it to a file that redefines some `vsay<key>` of that page:
+
+```
+set chatServerGlobal "execq profile/serverconfigs/vsays/xy/override/global.cfg"
+```
+
+- `vsays/<id>/override/<page>.cfg`: only the replaced `set vsay<key>` lines, in the page format. The subfolder survives a rerun of `tools/voicemenu.py`, which replaces the `*.cfg` of `vsays/<id>/`.
+- A key with several sounds is a cycle (pointers named `cycleServerVsay...`, apart from the stock pointers `cycleVsay<Name>` of `chat.cfg`): steps `vsay<key>a`, `b`, ... in the override file, pointer `cycleServerVsay<Page>Key<key>` in `vsays/cycles.cfg`, one per page and key, shared by all servers. The pointers can't live on the page (it restarts what it defines each time it opens); `default.cfg` execs the file, so the cycles start again on every server change, `F3` and `F1`, since a pointer may name a step the new server lacks. Not in version control (it lists the keys the servers use), `deploy.sh` creates it empty.
+- The hook runs after the nitmod/etps shortcut files, so an override of a key with a shortcut text copies that text.
+- Aliases outside the pages (class vsays of `scripts/vsays/vsays_custom.cfg` and `chat.cfg`, e.g. `vsayGrenade`) are set in the server cfg; `default.cfg` restores them with `reset <alias>` (the first value of the game session, from the stock file). The steps of their cycles are server sounds, so they go into `vsays/<id>/override/<stock file>.cfg`, which the server cfg execs; the pointer `cycleServerVsay<Name>` is shared in `vsays/cycles.cfg`.
+- `tools/vsayoverrides.py` lists the servers with overrides and the sounds there that the server's `vsays.tsv` no longer has; the vsay-server-overrides skill builds and updates them.
 
 ## Limits
 

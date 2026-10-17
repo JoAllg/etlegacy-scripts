@@ -18,6 +18,7 @@ Key layer mechanics (number row, `resetLayers`, popups): `.claude/rules/layers.m
 | `vsays/vsays_custom.cfg` | texts of the class vsays (`class/cs_classcripts.cfg`); live |
 | `vsays/chat_shortcuts.cfg` | nitmod and etps (exec'd by their `mods/<mod>/mod_general.cfg`): redefines `chatRequests` / `chatGlobal` to exec `chat/<page>_shortcuts.cfg` after the page, which redefines some of its `vsay<key>` with `[S]`-style shortcuts, and redefines the syringe class vsay of `vsays_custom.cfg` with `[P]`. A text changed on a page or in `vsays_custom.cfg` may have its copy there |
 | `serverconfigs/vsays/<clan>/*.cfg` | server voice chat pages; generated, not in version control, exec'd when opened |
+| `serverconfigs/vsays/<clan>/override/*.cfg`, `serverconfigs/vsays/cycles.cfg` | server sounds on the stock pages (`<page>.cfg`) and class vsays (`<stock file>.cfg`) with the stock texts (hook `chatServer<Page>` of the openers, set in `<clan>.cfg`, reset in `default.cfg`) and their cycle pointers (`cycleServerVsay<Page>Key<key>`, `cycleServerVsay<Name>`; one per page and key, all servers; exec'd and so reset by `default.cfg`); written by the vsay-server-overrides skill, not in version control (`docs/serverconfigs.md`) |
 | `vsays/servers` | versioned link to `serverconfigs/vsays/`, only for browsing: tools and exec paths use the real path |
 | `vsays/chat_function.cfg` | not live (exec commented out in `chat.cfg`) |
 | `vsays/vsaycolors.tsv` | record of `tools/vsaycolors.py` (colors of the last apply, reviewed texts): never edit |
@@ -29,3 +30,4 @@ Key layer mechanics (number row, `resetLayers`, popups): `.claude/rules/layers.m
 - Colors: never pick color codes by hand. Vsay texts and chat texts (`say`, `say_team`, `say_teamnl`, `say_buddy`, anywhere in the profile: class report in `class/cs_output.cfg` and server cfgs, spawn lines of the autoexecs; not `say !command`) use the `VSAY_*` colors and echo menus the `MENU_*` colors of `settings.conf`; write the text, then use the vsay skill (`tools/vsaycolors.py apply`).
 - A vsay text is one chat line: at most 149 characters including color codes, no `;` or `"` inside.
 - nitmod sends the text as a normal chat line and takes no variant number (`vsay <n> <id>` is legacy only).
+- Variant number: the text can't be quoted (a vsay sits inside a quoted alias, cfg quotes don't nest), so tools and skills read an all-digit first word after `vsay` / `vsay_team` as the variant number (`vsay <n> <id> <text>`); a vsay id is never all digits.

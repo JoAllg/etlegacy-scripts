@@ -41,6 +41,14 @@ Colors all vsay texts and chat texts (`say`, `say_team`, `say_teamnl`, `say_budd
 python3 tools/vsaycolors.py status | preview [role=^c ...] | apply | todo | done
 ```
 
+## vsayoverrides.py
+
+Server sounds on the stock voice chat pages (vsay-server-overrides skill, `docs/serverconfigs.md`): lists which servers have override files in `default/serverconfigs/vsays/<id>/override/` and the sounds in them that the server's `vsays.tsv` no longer has.
+
+```sh
+python3 tools/vsayoverrides.py [id ...]
+```
+
 ## servermenu.py
 
 Feeds the in-game server menu (`RIGHTCTRL`, `default/scripts/servermenu.cfg`): while it runs, it asks the favorite servers of the server browser for their state every `SERVERMENU_POLL` seconds (`settings.conf`, default and minimum 5) and writes the menu pages to `default/servermenu/`. Each server shows as `name  playing+spectators+bots/slots  map  ping  mod` in columns aligned with spaces, sorted by playing humans; a full server (humans fill the slots, bots don't count) shows its numbers in `MENU_FULL` (default red). The number keys connect. The last entry, `LOCALHOST`, hosts goldrush locally (`disconnect; map goldrush`, [`docs/limitations.md`](../docs/limitations.md)). The server the game is on (its last connect in the console log) is left out. Whatever a server doesn't send in a poll (no answer at all, no `getstatus`, no split of playing humans and spectators) shows its last value for `SERVERMENU_KEEP` seconds (default 60). Start it before or while playing and leave it running; `--once` prints the list in the terminal. How servers are queried: [`docs/serverquery.md`](../docs/serverquery.md).

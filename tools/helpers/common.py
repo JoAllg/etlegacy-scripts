@@ -19,6 +19,10 @@ LEGACY_PAKS = BASEPATH / "legacy"
 # than ^ ("^^1" shows "^" in color 1, "^ " stays as it is). COLOR is its regex text for building other patterns.
 COLOR_CHAR = r"[^\x00-\x20\x7f^]"
 COLOR = rf"\^{COLOR_CHAR}"
+# vsay command with id and text: groups (command, id, text). An all-digit first word after vsay / vsay_team is the legacy
+# variant number (vsay <n> <id> <text>; a vsay id is never all digits), vsay_buddy (fireteam) takes the class (-1) and the
+# target clients; VoiceFireTeamChat <id> takes no text
+VSAY_TEXT = re.compile(r'\b(vsay(?:_team)?(?: \d+(?= \w))?|vsay_buddy(?: -?\d+)+) (\w+) ([^;"]+)')
 
 
 def strip_colors(text):

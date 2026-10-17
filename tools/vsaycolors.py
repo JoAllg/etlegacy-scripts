@@ -18,7 +18,7 @@ import html
 import re
 from pathlib import Path
 
-from helpers.common import COLOR, COLOR_CHAR, strip_colors
+from helpers.common import COLOR, COLOR_CHAR, VSAY_TEXT, strip_colors
 from helpers.settings import MENU, PROFILE, REPO, VSAY
 
 LIVE = REPO / PROFILE
@@ -31,8 +31,7 @@ ROLES = ("team", "global", "buddy", "punct", "highlight", "urgent")
 MENU_ROLES = ("head", "key", "text", "nav", "global", "axis", "allies")
 MENU_DIRS = ("scripts/vsays", "serverconfigs/vsays", "scripts/spawn", "autoexecs")  # files with echo menus
 ECHO = re.compile(r'(\becho "?)([^;"]+)')
-# vsay_buddy (fireteam) needs the class (-1) and the target clients; VoiceFireTeamChat <id> takes no text
-TEXT = re.compile(r'\b(vsay(?:_team)?|vsay_buddy(?: -?\d+)+) (\w+) ([^;"]+)')
+TEXT = VSAY_TEXT
 # say at the start of a command (not a word of an echo text or an alias name); "say !stats", "say /cmd" are commands of the server
 SAY = re.compile(r'((?:^|(?<!echo )"|;)\s*|\bset \w+ )(say(?:_team(?:nl)?|_buddy)?) (?![!/\\])([^;"]+)')
 CODE = re.compile(rf"\^({COLOR_CHAR})")  # the code's character as group 1
@@ -66,9 +65,9 @@ def split_comment(line):
 
 
 def found(line):
-    """[(cmd, id, text)] of a line; chat texts have no id ("")."""
+    """[(cmd, id, text)] of a line; chat texts have no id (""). The cmd leaves out a variant number: every variant sends the same text."""
     line = split_comment(line)[0]
-    return [m.groups() for m in TEXT.finditer(line)] + [(m.group(2), "", m.group(3)) for m in SAY.finditer(line)]
+    return [(c if c.startswith("vsay_buddy") else c.split()[0], i, t) for c, i, t in (m.groups() for m in TEXT.finditer(line))] + [(m.group(2), "", m.group(3)) for m in SAY.finditer(line)]
 
 
 def sub_texts(line, fn):
@@ -268,6 +267,8 @@ td,th{{padding:6px 12px;border-bottom:1px solid #333;text-align:left}} code{{fon
 def selftest():
     c = {"team": "^9", "global": "^l", "buddy": "^f", "punct": "^3", "highlight": "^x", "urgent": "^1"}
     assert TEXT.search('x "vsay_buddy -1 2 3 5 Medic ^fHeal me^3!; y"').groups() == ("vsay_buddy -1 2 3 5", "Medic", "^fHeal me^3!")
+    assert TEXT.search('x "vsay_team 2 xy7 ^9No^3!"').groups() == ("vsay_team 2", "xy7", "^9No^3!") and base("vsay_team 2") == "team"
+    assert TEXT.search('x "vsay Hi ^lHi^3!"').groups() == ("vsay", "Hi", "^lHi^3!") and found('x "vsay_team 2 xy7 ^9No^3!"') == [("vsay_team", "xy7", "^9No^3!")]
     assert base("vsay_buddy -1 0") == "buddy" and base_done("^fHeal ^1me^3!", "vsay_buddy -1 0", c)
     assert colorize("^4Can you do this? :D }:) (: 1.5 ok...", "^l", "^3") == "^lCan you do this^3? ^l:D }:) (: 1.5 ok^3..."
     assert base_done("^9I need ^1backup^3!", "vsay_team", c) and base_done("^9Clear the ^Xpath^3!", "vsay_team", c)

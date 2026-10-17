@@ -19,7 +19,7 @@ Background (detection, guard, events, precedence): `docs/serverconfigs.md`.
 
 - A name set in a server cfg (cvar, alias, bind) gets its normal value in `default.cfg` in the same change; `tools/serverconfig.py --check` lists the missing ones.
 - Server cfgs and `default.cfg` hold absolute values only: they run again after every server change, `F3` and `F1`.
-- Never set state a key changes there (pointers of `state.cfg`): `F3` re-runs them and would drop the player's choice. Define what the steps of the cycle mean instead (`weaponSwitchOrder*`, `docs/serverconfigs.md` "Precedence").
+- Never set state a key changes there (pointers of `state.cfg`): `F3` re-runs them and would drop the player's choice. Define what the steps of the cycle mean instead (`weaponSwitchOrder*`, `docs/serverconfigs.md` "Precedence"). Exception: pointers of cycles the server configs introduce themselves (`vsays/cycles.cfg`) are reset there, on every server change, `F3` and `F1`: losing the step of a vsay cycle doesn't matter.
 - They are exec'd through `current.cfg` only (`vstr serverCheck` / `vstr serverForce`, `default/definitions.cfg`), never directly from the chain or an autoexec.
 - A new event that can follow a server change gets `vstr serverCheck`, and a line in the table of `docs/serverconfigs.md`. Whatever re-execs the definitions ends with `vstr serverForce`.
 - One alias per id (`serverIs_<id>`) exists in game: ids come from `servers.tsv` only, never one per server address (`MAX_CVARS`, `.claude/rules/vsays.md`). The per-address sound restart uses two fixed keys (`serverRestart_a`/`_b`) that the tool swaps.

@@ -37,6 +37,8 @@
 #    else appends the set/seta values of the template that user.cfg lacks (reported)
 #    Rewrites the HUD VALUES block of user.cfg from the legacy HUD file (tools/helpers/hudvalues.py): the aliases
 #    that put the HUD back after a script changed it in game
+#    Creates the gitignored cfgs the chain execs as empty files if missing (serverconfigs/current.cfg,
+#    current_vsay.cfg, vsays/cycles.cfg): a missing file prints "couldn't exec" even with execq
 # 3. Deletes broken symlinks at the top level of each mod directory
 # 4. Symlinks HOMEPATH/profiles -> this repo (the repo can live anywhere); asks before replacing a
 #    folder or a symlink to another path (a folder is renamed to profiles.bak_<date>, not deleted).
@@ -372,6 +374,13 @@ if [ -e "$USER_CFG" ]; then
 		echo -e "  ${ORANGE}⚠️  python3 not found, HUD values in user.cfg not updated${NC}"
 	fi
 fi
+
+# Gitignored cfgs the chain execs: written by tools/serverconfig.py (current*.cfg) or the vsay-server-overrides skill (cycles.cfg),
+# empty until then, since a missing file prints "couldn't exec" even with execq
+mkdir -p "$REPO/$PROFILE/serverconfigs/vsays"
+for f in current.cfg current_vsay.cfg vsays/cycles.cfg; do
+	[ -e "$REPO/$PROFILE/serverconfigs/$f" ] || : >"$REPO/$PROFILE/serverconfigs/$f"
+done
 
 echo -e "${CYAN}🚀 Setting up ET Legacy mod symlinks...${NC}"
 
