@@ -160,7 +160,7 @@ A server cfg is a personal preference for that server, so it overrides these fil
 
 ## Voice chat
 
-`scripts/vsays/chat/categories.cfg` (first page of the voice chat) execs `current_vsay.cfg` each time it opens. On a server with voice chat pages the file echoes the `TAB` line with the server's tag and binds `TAB` to the top page `serverconfigs/vsays/<id>/<id>_menu.cfg`; on every other server it is empty and `TAB` does nothing. The file is read when the page opens, so it needs no guard.
+`scripts/vsays/chat/categories.cfg` (first page of the voice chat) execs `current_vsay.cfg` each time it opens. On a server with voice chat pages the file echoes the `TAB` line with the server's tag and binds `TAB` to the top page `serverconfigs/vsays/<id>/_menu.cfg`; on every other server it is empty and `TAB` does nothing. The file is read when the page opens, so it needs no guard.
 
 The tag in the headings of the pages and in the `TAB` line is the text of `servers.tsv` as the server writes it in its name, with its colors.
 
