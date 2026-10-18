@@ -948,9 +948,7 @@
 					"showBorder":	false
 				},
 				"disconnect":	{
-					"visible":	false,
-					"showBackGround":	false,
-					"showBorder":	false
+					"visible":	false
 				},
 				"chat":	{
 					"rect":	{
@@ -2244,12 +2242,12 @@
 				},
 				"hudhead":	{
 					"rect":	{
-						"x":	-37.000019073486328,
-						"y":	0.5,
-						"w":	62,
-						"h":	80
+						"x":	43.83331298828125,
+						"y":	-4.5,
+						"w":	31,
+						"h":	40
 					},
-					"visible":	false,
+					"visible":	true,
 					"style":	0,
 					"scale":	100,
 					"mainColor":	"ffffffff",
@@ -2269,9 +2267,9 @@
 					"feedTime":	0,
 					"feedStayTime":	0,
 					"feedFadeTime":	0,
-					"anchor":	4,
+					"anchor":	7,
 					"parent":	{
-						"anchor":	4,
+						"anchor":	5,
 						"component":	null
 					}
 				},
