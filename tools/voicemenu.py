@@ -405,7 +405,7 @@ def split(menus, root="wm_quickmessageAlt"):
         names = [menu] + [re.sub(r"(_alt)?$", rf"{n}\1", menu, count=1) for n in range(2, len(chunks) + 1)]
         for n, chunk in enumerate(chunks):
             nxt = n + 1 if n + 1 < len(chunks) or menu != root else None
-            tab = ("TAB ^2Voice chat", "vstr chatCategories", "TAB") if nxt is None else (f"TAB ^2Page {nxt % len(chunks) + 1}", f"open {names[nxt % len(chunks)]}", "TAB")
+            tab = ("TAB ^2Voice chat", "vstr chatMenu", "TAB") if nxt is None else (f"TAB ^2Page {nxt % len(chunks) + 1}", f"open {names[nxt % len(chunks)]}", "TAB")
             menus[names[n]] = [i for i in chunk if i[2] != "TAB"] + [tab]
 
 
@@ -470,7 +470,7 @@ def render(clan, pk3name, menus, stock={}, root="wm_quickmessageAlt", tag=None, 
     shortcuts = {(cmd, vsay): text with [S]-style shortcuts}: shortcuts/<page>.cfg, exec'd by the page after its vsays."""
     tag = tag or f"[{clan}]"
     full = {m for m, v in stock.items() if m != root and vsays_of(menus[m]) <= v}  # nothing added: the general voice chat covers it; root: the last extra page's TAB
-    files, vsays, todo = {}, {}, [(root, "VOICE CHAT", "vstr chatCategories")]  # chatCategories: top page of the stock voice chat (vsays/chat.cfg)
+    files, vsays, todo = {}, {}, [(root, "VOICE CHAT", "vstr chatMenu")]  # chatMenu: top page of the stock voice chat (vsays/chat.cfg)
     while todo:
         menu, head, back = todo.pop(0)
         name = page_name(menu, root)
@@ -715,15 +715,15 @@ QM_MENU_END''')
              "m": [(f"{k}. m", f'exec "VoiceChat m{k}"', k) for k in "1234"], "n": [(f"{k}. n", f'exec "VoiceChat n{k}"', k) for k in "1234"]}
     multi = prune(multi, {"m": "Mm", "n": "Nn"}, "r")
     split(multi, "r")
-    assert multi["r"] == [("1. Mm", "open m", "1"), ("2. Nn", "open n", "2"), ("TAB ^2Voice chat", "vstr chatCategories", "TAB")], multi["r"]
+    assert multi["r"] == [("1. Mm", "open m", "1"), ("2. Nn", "open n", "2"), ("TAB ^2Voice chat", "vstr chatMenu", "TAB")], multi["r"]
     one = {"r": [("1. Fun", "open f", "1")], "f": [(f"{k}. f", f'exec "VoiceChat f{k}"', k) for k in KEYS] + [("?. More", "open e", "?")],
            "e": [("1. e", 'exec "VoiceChat e1"', "1")]}
     collapse(one, "r")
     split(one, "r")
     assert page_name("r2", "r") == "_menu2" and page_name("r", "r") == "_menu" and page_name("wm_ra_alt", "r") == "ra"
     assert set(one) == {"r", "r2", "e"} and one["r"][-1] == ("TAB ^2Page 2", "open r2", "TAB"), one
-    assert one["r2"] == [("1. More", "open e", "1"), ("TAB ^2Voice chat", "vstr chatCategories", "TAB")], one["r2"]
-    assert bind("x", "TAB", "vstr chatCategories", "TAB", one, "r") == ('bind TAB "vstr chatCategories"', None)
+    assert one["r2"] == [("1. More", "open e", "1"), ("TAB ^2Voice chat", "vstr chatMenu", "TAB")], one["r2"]
+    assert bind("x", "TAB", "vstr chatMenu", "TAB", one, "r") == ('bind TAB "vstr chatMenu"', None)
     add_extra(menus, "x", extra)
     split(menus)
     files, _ = render("x", "x.pk3", menus, dict(stock, wm_quickmessageAlt=set()), texts=texts, colors=col, menu_colors=mc)
@@ -731,7 +731,7 @@ QM_MENU_END''')
     assert "extra1" not in files["_menu.cfg"] and "TAB" not in files["extra2.cfg"], files["extra2.cfg"]
     assert files["fun.cfg"].index("\nvstr unbindNumbers\n") < files["fun.cfg"].index("\nbind 1 "), files["fun.cfg"]
     assert 'set vsay1 "vsay XYV ^ltext xyv"\n' in files["extra2.cfg"], files["extra2.cfg"]
-    assert files["_menu.cfg"].endswith('bind CAPSLOCK "vstr chatCategories"\n')
+    assert files["_menu.cfg"].endswith('bind CAPSLOCK "vstr chatMenu"\n')
     assert files["extra2.cfg"].endswith(f'bind CAPSLOCK "execq {EXEC}/x/fun.cfg"\n'), files["extra2.cfg"]
     assert files["fun.cfg"].endswith(f'bind CAPSLOCK "execq {EXEC}/x/_menu.cfg"\n'), files["fun.cfg"]
     assert 'echo "[x] ^8More sounds 1:"' in files["extra1.cfg"], files["extra1.cfg"]

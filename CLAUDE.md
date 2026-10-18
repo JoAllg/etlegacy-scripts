@@ -78,7 +78,7 @@ The engine execs `autoexec.cfg` from the mod folder at startup (details: `docs/a
 │   │                             the first page execs serverconfigs/current_vsay.cfg: TAB = voice chat of the current server)
 │   ├─ server/server.cfg
 │   ├─ scripts/servermenu.cfg    # (servermenu/p12_<n>.cfg, p7_<n>.cfg: server menu pages written by tools/servermenu.py, exec'd at runtime when opened)
-│   ├─ scripts/devmode.cfg       # (devmode/page1.cfg, page2.cfg, page3.cfg: cheats, location editor, omni-bot class switch on the number keys, MODE, TAB next page; on a server MODE opens bots.cfg (bot class switch) alone; bots_<class>.cfg: the class to switch to; exec'd when opened)
+│   ├─ scripts/devmode.cfg       # (devmode/_menu.cfg: top page, 1-3 open cheats.cfg, locations.cfg, bots.cfg: cheats, location editor, omni-bot class switch on the number keys, CAPSLOCK back; on a server MODE opens bots.cfg alone; bots_<class>.cfg: the class to switch to; exec'd when opened)
 │   ├─ exec mod_general.cfg        # = mods/<mod>/mod_general.cfg (symlink, mod search path), overrides the general values
 │   │   └─ (nitmod, etps) scripts/vsays/chat_shortcuts.cfg
 │   └─ exec mod_classcommands.cfg  # = mods/<mod>/mod_classcommands.cfg, mod weapon IDs

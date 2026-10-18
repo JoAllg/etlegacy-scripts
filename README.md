@@ -140,7 +140,7 @@ All binds, per class: open `tools/keymap/keymap.html` in a browser ([Keymap](#ke
 | `V` | voice chat menu; `TAB` opens the [server's own](#settings-per-server), on a page the next page (the last back to the first), `CAPSLOCK` goes back to the parent page |
 | `ENTER` | spawn menu of the map |
 | `RIGHTCTRL` | [server menu](#server-menu) |
-| `MODE` (AltGr) | dev mode on the number keys, `TAB` switches the page: cheats (noclip, god, notarget, nofatigue, give all), location editor (`loc` commands, `viewpos`, spawnpoints on/off; [`docs/locations.md`](docs/locations.md)). Needs cheats: host with `/devmap <map>`; `loc` is legacy only. `MODE`, `ESC` or `F4` close it |
+| `MODE` (AltGr) | dev mode: a menu on the number keys opens its pages, `CAPSLOCK` goes back: cheats (noclip, god, notarget, nofatigue, give all), location editor (`loc` commands, `viewpos`, spawnpoints on/off; [`docs/locations.md`](docs/locations.md)), bot class switch (omni-bot). Cheats and location editor need cheats: host with `/devmap <map>`; `loc` is legacy only. `MODE`, `ESC` or `F4` close it |
 | `HOME`, `END`, `PGUP`, `PGDN`, `DEL` | cycle crosshair color, FPS limit, gamma, name, network settings |
 | `INS` | fullscreen ⇄ borderless window |
 
