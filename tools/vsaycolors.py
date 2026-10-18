@@ -168,9 +168,10 @@ def todo(colors, reviewed):
             if base_done(text, cmd, colors) and not highlighted(text, colors) and (cmd, vsay.lower(), plain(text)) not in reviewed]
 
 
-def fix_echoes(lines):
-    """Server pages: the echo of a vsay key shows the text of its alias vsay<key> without colors (random vsays: their own text)."""
-    binds = {m.group(1): m.group(2) for m in (re.match(r'set vsay(\S+) "vsay(?:_team)? \w+(?: ([^;"]*))?"', l) for l in lines) if m}
+def fix_echoes(lines, shortcuts=()):
+    """Server pages: the echo of a vsay key shows the text of its alias vsay<key> without colors (random vsays: their own text);
+    shortcuts: lines of the page's shortcuts/<page>.cfg, whose texts win (tools/voicemenu.py)."""
+    binds = {m.group(1): m.group(2) for m in (re.match(r'set vsay(\S+) "vsay(?:_team)? \w+(?: ([^;"]*))?"', l) for l in [*lines, *shortcuts]) if m}
     out = []
     for line in lines:
         m = re.match(rf'echo "((?:{COLOR})*(\d)\.) (.*)"$', line)
@@ -202,7 +203,8 @@ def apply(colors):
                 return new
             lines[n] = sub_texts(line, fix)
         if server:
-            lines = fix_echoes(lines)
+            short = f.parent / "shortcuts" / f.name
+            lines = fix_echoes(lines, short.read_text(encoding="latin-1").splitlines() if short.exists() else ())
         if any(d in f.relative_to(LIVE).as_posix() for d in MENU_DIRS):
             lines = [l if l.lstrip().startswith("//") else ECHO.sub(lambda m: m.group(1) + menu_echo(m.group(2), MENU, None if server else old_menu, server), l)
                      for l in lines]
@@ -287,6 +289,7 @@ def selftest():
     s = samples_of([("say_teamnl", "^9I will spawn at ^xBunker"), ("vsay_buddy -1 0", "^fHeal ^1me"), ("say", "^lHi ^xall"), ("say_team", "^9plain")], c)
     assert s == {"vsay_team": ["^9I will spawn at ^xBunker"], "vsay": ["^lHi ^xall"], "vsay_buddy": ["^fHeal ^1me"]}, s
     assert fix_echoes(lines)[:2] == ['echo "^31. New!"', 'echo "2. X (random)"']
+    assert fix_echoes(lines, ['set vsay1 "vsay a ^lI have [S] HP"'])[0] == 'echo "^31. I have [S] HP"'
     m = {"head": "^8", "key": "^3", "text": "^7", "nav": "^2", "global": "^6", "axis": "^i", "allies": "^d"}
     old_m = dict(m, **{"global": "^2"})
     assert menu_echo("^05.1 GLOBAL:", m, old_m) == "^85.1 GLOBAL:" and menu_echo("^9[^7xY^9] ^1FUN:", m) == "^9[^7xY^9] ^8FUN:"

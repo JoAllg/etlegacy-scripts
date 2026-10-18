@@ -221,10 +221,11 @@ Adding a server:
 4. **Voice menu (optional):** generate it from the server's pk3, which the game downloaded into the mod folder when you joined:
 
    ```sh
-   python3 tools/voicemenu.py <id> <fs_homepath>/<mod>/<server pack>.pk3
+   python3 tools/voicemenu.py --find <id>
+   python3 tools/voicemenu.py <id> <fs_homepath>/<mod>/<server pack>.pk3 [<more pk3s of the pack>]
    ```
 
-   The pages go to `default/serverconfigs/vsays/<id>/`. Rerun it after the server ships a new pack; edited texts are kept.
+   `--find` lists the pk3s that may hold the server's voice chat, the ones the game loaded on that server first (`SERVER`). The pages go to `default/serverconfigs/vsays/<id>/`. Rerun it after the server ships a new pack; edited texts are kept.
 
 5. **In game:** the settings apply on the next map load, team or class change, or with `F3`. `TAB` in the voice chat (`V`) opens the server's own menu.
 

@@ -41,6 +41,7 @@ DB = HOMEPATH / "etl.db"
 CONFIGS = REPO / PROFILE / "serverconfigs"
 SERVERS = CONFIGS / "servers.tsv"
 HISTORY = CONFIGS / "history.tsv"
+PACKS = CONFIGS / "packs.tsv"  # pk3 of the voice chat files per server, from the game's "which" (tools/serverconfig.py)
 ID = re.compile(r"(?!(?:default|local|current|current_vsay)$)[a-z0-9_]{1,16}")  # part of a file name and of an alias
 # name; not the name of another file of serverconfigs/
 ID_RULE = "1 to 16 characters of a-z, 0-9, _, not default, local, current, current_vsay"
@@ -327,6 +328,26 @@ def remember(address, hostname, mod="", path=HISTORY):
         write_atomic(path, "".join(f"{a}\t{h}\t{m}\n" for a, (h, m) in known.items()))
 
 
+def packs(path=PACKS):
+    """{"ip:port": {file: (pk3 or "" if the server has none, date)}} of the voice chat files the game loaded on a server."""
+    try:
+        lines = path.read_text("latin1").splitlines()
+    except OSError:
+        return {}
+    out = {}
+    for a, f, p, d in (line.split("\t") for line in lines if line.count("\t") == 3):
+        out.setdefault(a, {})[f] = (p, d)
+    return out
+
+
+def remember_pack(address, file, pk3, date, path=PACKS):
+    """Stores the pk3 a file of a server came from ("" for none); a newer answer replaces the row."""
+    known = packs(path)
+    if known.get(address, {}).get(file, (None,))[0] != pk3:
+        known.setdefault(address, {})[file] = (pk3, date)
+        write_atomic(path, "".join(f"{a}\t{f}\t{p}\t{d}\n" for a, fs in known.items() for f, (p, d) in fs.items()))
+
+
 def selftest():
     info = b'\xff\xff\xff\xffinfoResponse\n\\challenge\\xxx\\hostname\\^1[^7xY^1] FRAGHOUSE ^324MAPS ^2NOL\\mapname\\radar\\clients\\19\\humans\\17\\sv_maxclients\\40\\game\\nitmod'
     status_packet = b'\xff\xff\xff\xffstatusResponse\n\\sv_hostname\\Old "Server"; x\\mapname\\oasis\\gamename\\jaymod\\sv_maxclients\\32\\sv_privateClients\\2\n0 0 "^o[BOT]^7Bean"\n12 48 "Pl ayer"\n3 0 "Bot"\n-5 999 "Joining"\n'
@@ -381,6 +402,11 @@ def selftest():
         remember("192.0.2.2:27960", "Tab\there", "", log)
         remember("192.0.2.1:27960", "^2renamed", "nitmod", log)
         remember("192.0.2.3:27960", "", "legacy", log)
+        pk = Path(d) / "packs.tsv"
+        remember_pack("192.0.2.1:27960", "ui/x.menu", "xymod/a.pk3", "2000-01-01", pk)
+        remember_pack("192.0.2.1:27960", "ui/x.menu", "xymod/b.pk3", "2000-01-02", pk)
+        remember_pack("192.0.2.1:27960", "scripts/y.voice", "", "2000-01-02", pk)
+        assert packs(pk) == {"192.0.2.1:27960": {"ui/x.menu": ("xymod/b.pk3", "2000-01-02"), "scripts/y.voice": ("", "2000-01-02")}}, packs(pk)
         assert history(log) == {"192.0.2.4:27960": "Old row", "192.0.2.1:27960": "^2renamed", "192.0.2.2:27960": "Tabhere"}, history(log)
         assert seen(log)["192.0.2.1:27960"] == ("^2renamed", "nitmod") and seen(log)["192.0.2.4:27960"] == ("Old row", "")
         off = status(["192.0.2.1", "192.0.2.9:27960"], log)  # TEST-NET: no answer

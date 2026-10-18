@@ -41,6 +41,7 @@ All in `default/serverconfigs/`; only `default.cfg` and `servers.example.tsv` ar
 | `current.cfg` | tool | execs `default.cfg` and the `<id>.cfg` of the server the game is on |
 | `current_vsay.cfg` | tool | puts that server's voice chat on `TAB` of the voice chat |
 | `history.tsv` | tool | `<ip:port><TAB><server name><TAB><mod>` of the servers seen |
+| `packs.tsv` | tool | `<ip:port><TAB><file><TAB><pk3><TAB><date>`: the pk3 the game loaded each voice chat file from on that server ([Voice chat pk3s](#voice-chat-pk3s)) |
 
 ### servers.tsv
 
@@ -56,7 +57,7 @@ fun	Full Name Of A Server Without Tag		192.0.2.3:27960
 - The addresses (`ip:port`, comma-separated) record the servers the row matched; they play no part in the match. `tools/serverconfig.py` adds the address of a server it identifies to the first matching row.
 - An id is a name of your choice for the server or clan. It is part of file names and of an alias name (`serverIs_<id>`), which is why the tag itself can't serve: a path with spaces needs quotes, and a bind that execs it is already quoted. 1 to 16 characters of `a-z`, `0-9`, `_`, not `default`, `local`, `current`, `current_vsay` (the other files of the folder). If the server's own page titles start with a short tag (`PS VOICE MUSIC`), use that as id: `tools/voicemenu.py` cuts the id from the titles.
 - Several rows may carry the same id (a clan whose servers share no common text).
-- The id links both parts and either may be missing: `serverconfigs/<id>.cfg` (settings) and `serverconfigs/vsays/<id>/` (voice chat pages of `tools/voicemenu.py <id> <pk3>`).
+- The id links both parts and either may be missing: `serverconfigs/<id>.cfg` (settings) and `serverconfigs/vsays/<id>/` (voice chat pages of `tools/voicemenu.py <id> <pk3> [<pk3> ...]`).
 
 `tools/serverconfig.py add <id> [address] [--match <text>] [--any-mod]` appends a row: it asks the server (default: the one the game connected to last) for its name and mod, proposes the tag at the start of the name as text, prints name and row and creates an empty `<id>.cfg`. The row names the server's mod; `--any-mod` leaves it empty, which a server that doesn't tell its mod needs. Adding a further server with the same text and mod only adds its address; an id that has a row with another text or mod gets the new one in its place, after a question; further rows of one id are added by hand.
 
@@ -88,13 +89,13 @@ In-game test on 2026-10-18 (legacy, local host of de_dust): the map autoexec app
 
 The engine keeps every loaded sound by its file name until `snd_restart` (`src/client/snd_dma.c` `S_FindName`, `S_Base_BeginRegistration`), also across servers. Vsay packs of different servers use the same names (`sound/chat/allies/21c.wav`), so after a server change the voices of the last server's pack play, even on a pure server that doesn't load that pack. `vid_restart` keeps the cache; `snd_restart` empties it and runs `vid_restart` itself (`src/client/cl_main.c` `CL_Snd_Restart_f`).
 
-**Workaround for an engine bug: remove it once ET: Legacy empties the sound cache itself** ([etlegacy PR #3639](https://github.com/etlegacy/etlegacy/pull/3639)). Then remove: the guard lines and `RESTART` in `tools/serverconfig.py` (`settings_cfg`, `write`, selftest), the `serverRestart*` lines in `default/state.cfg`, the `set serverRestartModSwitch ...;` part of `modIs_<mod>` in every `mods/<mod>/autoexec_mod.cfg`, this section and its mentions in `docs/limitations.md`, `tools/README.md`, `CLAUDE.md` and `.claude/rules/serverconfigs.md`.
+**Workaround for an engine bug: remove it once ET: Legacy empties the sound cache itself** ([etlegacy PR #3639](https://github.com/etlegacy/etlegacy/pull/3639)). Then remove (keep the `which` part, [Voice chat pk3s](#voice-chat-pk3s)): the guard lines and `RESTART` in `tools/serverconfig.py` (`settings_cfg`, `write`, selftest), the `serverRestart*` lines in `default/state.cfg`, the `set serverRestartModSwitch ...;` part of `modIs_<mod>` in every `mods/<mod>/autoexec_mod.cfg`, this section and its mentions in `docs/limitations.md`, `tools/README.md`, `CLAUDE.md` and `.claude/rules/serverconfigs.md`.
 
 `current.cfg` therefore ends with a second guard of the same kind, for the address instead of the id:
 
 ```
 // Address: 192.0.2.1:27960 b
-set serverRestartAdopt "set serverRestartLast vstr serverRestart_b"
+set serverRestartAdopt "set serverRestartLast vstr serverRestart_b; which ui/wm_quickmessageAlt.menu; which scripts/wm_allies_chat.voice; which scripts/wm_axis_chat.voice"
 set serverRestart "vstr serverRestartAdopt; snd_restart"
 set serverRestart_b "vstr null"
 vstr serverRestartLast
@@ -102,6 +103,12 @@ set serverRestart_b "vstr serverRestart"
 ```
 
 The file ends with `echo "^5Server: <id> <address>"`, so each exec shows in the console which server the settings belong to.
+
+### Voice chat pk3s
+
+A server's voice chat can be split over several pk3s (menu in one, voice scripts in another), and a server that updates its pack gets downloaded under the same name plus its checksum (`<name>.<checksum>.pk3`, `src/qcommon/files.c` `FS_ComparePaks`), so the mod folder holds many versions. Which ones a pure server uses is in its pak list, which `getstatus` doesn't send. `which <file>` prints the pk3 the game reads a file from, with the same pure check as every read (`FS_Which_f`, `FS_FOpenFileReadDir`; `ALLOW_RAW_FILE_ACCESS` is off on a client). `serverRestartAdopt` runs it for the quick chat menu and both voice scripts once per address (also for the first server after game start), and `tools/serverconfig.py` stores the answers in `packs.tsv`; `tools/voicemenu.py --find <id>` lists that pack first (`SERVER`). The three lines show in the console and the notify area once per server change.
+
+When the sound restart guard goes (above), keep the `which` part: move it into `serverApply` (once per id) or a guard of its own.
 
 The tool swaps the key (`a`, `b`) whenever the game joins another address (`ip:port`, `local`) and reads the last address and key back from the comment line; "no server" keeps both. Two keys instead of one alias per address keep the number of cvars fixed (`MAX_CVARS`). This works for every server, also without a row in `servers.tsv`. `F3` does not touch this guard. Not tested in game.
 
@@ -164,7 +171,7 @@ A server's own sounds can replace stock vsays on the stock pages, with the stock
 set chatServerGlobal "execq profile/serverconfigs/vsays/xy/override/global.cfg"
 ```
 
-- `vsays/<id>/override/<page>.cfg`: only the replaced `set vsay<key>` lines, in the page format. The subfolder survives a rerun of `tools/voicemenu.py`, which replaces the `*.cfg` of `vsays/<id>/`.
+- `vsays/<id>/override/<page>.cfg`: only the replaced `set vsay<key>` lines, in the page format. The subfolder survives a rerun of `tools/voicemenu.py`, which replaces the `*.cfg` of `vsays/<id>/` and rewrites `vsays/<id>/shortcuts/` (shortcut texts, kept per vsay).
 - A key with several sounds is a cycle (pointers named `cycleServerVsay...`, apart from the stock pointers `cycleVsay<Name>` of `chat.cfg`): steps `vsay<key>a`, `b`, ... in the override file, pointer `cycleServerVsay<Page>Key<key>` in `vsays/cycles.cfg`, one per page and key, shared by all servers. The pointers can't live on the page (it restarts what it defines each time it opens); `default.cfg` execs the file, so the cycles start again on every server change, `F3` and `F1`, since a pointer may name a step the new server lacks. Not in version control (it lists the keys the servers use), `deploy.sh` creates it empty.
 - The hook runs after the nitmod/etps shortcut files, so an override of a key with a shortcut text copies that text.
 - Aliases outside the pages (class vsays of `scripts/vsays/vsays_custom.cfg` and `chat.cfg`, e.g. `vsayGrenade`) are set in the server cfg; `default.cfg` restores them with `reset <alias>` (the first value of the game session, from the stock file). The steps of their cycles are server sounds, so they go into `vsays/<id>/override/<stock file>.cfg`, which the server cfg execs; the pointer `cycleServerVsay<Name>` is shared in `vsays/cycles.cfg`.
