@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Colors of the vsay texts (vsay / vsay_team <id> <text>, vsay_buddy <class> <n> [client ids] <id> <text>) and the chat texts
-(say / say_team / say_teamnl / say_buddy <text>; not "say !command") in the profile cfgs, from the VSAY_* values of settings.conf.
+(say / say_team / say_teamnl / say_buddy <text>; not "say !command" or the omni-bot "say_teamnl sol eng") in the profile cfgs, from the VSAY_* values of settings.conf.
 
   status              current colors and how many texts still need base/punctuation colors or a highlight review
   preview [role=^c]   tools/vsaycolors.html: current vs proposed colors (roles: team global buddy punct highlight urgent),
@@ -32,8 +32,10 @@ MENU_ROLES = ("head", "key", "text", "nav", "global", "axis", "allies")
 MENU_DIRS = ("scripts/vsays", "serverconfigs/vsays", "scripts/spawn", "autoexecs")  # files with echo menus
 ECHO = re.compile(r'(\becho "?)([^;"]+)')
 TEXT = VSAY_TEXT
-# say at the start of a command (not a word of an echo text or an alias name); "say !stats", "say /cmd" are commands of the server
-SAY = re.compile(r'((?:^|(?<!echo )"|;)\s*|\bset \w+ )(say(?:_team(?:nl)?|_buddy)?) (?![!/\\])([^;"]+)')
+# say at the start of a command (not a word of an echo text or an alias name); "say !stats", "say /cmd" are commands of the server,
+# "say_teamnl sol eng" one of omni-bot (class change, exactly 7 plain characters: scripts/devmode/bots_<class>.cfg)
+BOT_CLASS = r"(?:sol|med|eng|fop|cov)"
+SAY = re.compile(rf'((?:^|(?<!echo )"|;)\s*|\bset \w+ )(say(?:_team(?:nl)?|_buddy)?) (?![!/\\]|{BOT_CLASS} {BOT_CLASS}\b)([^;"]+)')
 CODE = re.compile(rf"\^({COLOR_CHAR})")  # the code's character as group 1
 
 
@@ -304,6 +306,7 @@ def selftest():
     assert render("^1a^3b") == '<span style="color:#ff0000">a</span><span style="color:#ffff00">b</span>'
     assert found('set x "vsay Bye"  // vsay of the menu; say it') == [], found('set x "vsay Bye"  // vsay of the menu; say it')
     assert found('bind 1 "vsay hi Go // now"  // vsay of x') == [("vsay", "hi", "Go // now")]
+    assert found('bind 1 "say_team sol eng; vstr playSelect"') == [] and found('x "say_team sol engines"') == [("say_team", "", "sol engines")]
     print("selftest ok")
 
 

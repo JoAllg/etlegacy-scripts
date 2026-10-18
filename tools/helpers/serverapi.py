@@ -42,9 +42,9 @@ CONFIGS = REPO / PROFILE / "serverconfigs"
 SERVERS = CONFIGS / "servers.tsv"
 HISTORY = CONFIGS / "history.tsv"
 PACKS = CONFIGS / "packs.tsv"  # pk3 of the voice chat files per server, from the game's "which" (tools/serverconfig.py)
-ID = re.compile(r"(?!(?:default|local|current|current_vsay)$)[a-z0-9_]{1,16}")  # part of a file name and of an alias
+ID = re.compile(r"(?!(?:default|local|current|current_vsay|current_bots)$)[a-z0-9_]{1,16}")  # part of a file name and of an alias
 # name; not the name of another file of serverconfigs/
-ID_RULE = "1 to 16 characters of a-z, 0-9, _, not default, local, current, current_vsay"
+ID_RULE = "1 to 16 characters of a-z, 0-9, _, not default, local, current, current_vsay, current_bots"
 Row = collections.namedtuple("Row", "id text mod addresses", defaults=("", ()))
 TIMEOUT = 1.5
 
@@ -93,21 +93,22 @@ def info_dict(line):
 
 
 def parse(packet):
-    """("info" | "status", {key: value}, [player ping]) of a response packet, None for anything else."""
+    """("info" | "status", {key: value}, [player ping], [player name]) of a response packet, None for anything else."""
     lines = packet[4:].decode("latin1").split("\n")
     kind = {"infoResponse": "info", "statusResponse": "status"}.get(lines[0].strip())
     if not packet.startswith(b"\xff\xff\xff\xff") or not kind or len(lines) < 2:
         return None
-    pings = []
+    pings, names = [], []
     for player in lines[2:]:  # score ping "name"
         fields = player.split(" ", 2)
         if len(fields) == 3 and fields[1].lstrip("-").isdigit():
             pings.append(int(fields[1]))
-    return kind, info_dict(lines[1]), pings
+            names.append(fields[2].strip().removeprefix('"').removesuffix('"'))
+    return kind, info_dict(lines[1]), pings, names
 
 
 def query(addrs, cmds=(b"getinfo xxx", b"getstatus")):
-    """{addr: {"info": {...}, "status": {...}, "pings": [...], "rtt": ms}} of the servers that answered; one packet
+    """{addr: {"info": {...}, "status": {...}, "pings": [...], "names": [...], "rtt": ms}} of the servers that answered; one packet
     per command and server."""
     out, socks = {}, {}  # one socket per address family in use
     try:
@@ -138,13 +139,13 @@ def query(addrs, cmds=(b"getinfo xxx", b"getstatus")):
                 parsed, addr = parse(packet), addr[:2]  # IPv6 adds flow info and scope
                 if not parsed or addr not in addrs:
                     continue
-                kind, info, pings = parsed
+                kind, info, pings, names = parsed
                 server = out.setdefault(addr, {})
                 if kind not in server:
                     missing -= 1
                 server[kind] = info
                 if kind == "status":
-                    server["pings"] = pings
+                    server["pings"], server["names"] = pings, names
                 else:
                     server["rtt"] = round((time.monotonic() - sent[addr]) * 1000)
     finally:
@@ -169,6 +170,31 @@ def teams(slots, bots):
     if not slots.strip("-"):
         return None
     return max(sum(c in "12" for c in slots) - bots, 0), sum(c in "30" for c in slots)
+
+
+def team_bots(answer, own):
+    """(bots, True) in the team of the player named in `own` (names, colors and case ignored) from a getstatus answer;
+    (bots of both teams, False) if that player is not found or plays in no team; None without P, or while a player
+    joins or leaves.
+
+    The engine writes the player lines in slot order (src/server/sv_main.c SVC_Status), P has one character per slot:
+    the n-th used slot of P is the team of the n-th line (checked on nitmod, legacy, silEnT, jaymod, etps servers). A bot
+    has ping 0; the own line is left out, a local game shows ping 0 for its host."""
+    slots = [c for c in (answer or {}).get("status", {}).get("P", "") if c != "-"]
+    pings, names = (answer or {}).get("pings", []), (answer or {}).get("names", [])
+    if not slots or len(slots) != len(pings) or len(names) != len(pings):
+        return None
+    own = {strip_colors(n).strip().lower() for n in own}
+    mine = [strip_colors(n).strip().lower() in own for n in names]
+    teams = {t for t, m in zip(slots, mine) if m and t in "12"}
+    bots = [t for t, p, m in zip(slots, pings, mine) if p == 0 and not m and t in "12"]
+    return (sum(t in teams for t in bots), True) if len(teams) == 1 else (len(bots), False)
+
+
+def own_team_bots(address, own):
+    """team_bots() of the server "host[:port]", asked once; None if it doesn't answer."""
+    addr = resolve(address)
+    return team_bots(query([addr], (b"getstatus",)).get(addr), own) if addr else None
 
 
 def summarize(address, answer):
@@ -352,10 +378,16 @@ def selftest():
     info = b'\xff\xff\xff\xffinfoResponse\n\\challenge\\xxx\\hostname\\^1[^7xY^1] FRAGHOUSE ^324MAPS ^2NOL\\mapname\\radar\\clients\\19\\humans\\17\\sv_maxclients\\40\\game\\nitmod'
     status_packet = b'\xff\xff\xff\xffstatusResponse\n\\sv_hostname\\Old "Server"; x\\mapname\\oasis\\gamename\\jaymod\\sv_maxclients\\32\\sv_privateClients\\2\n0 0 "^o[BOT]^7Bean"\n12 48 "Pl ayer"\n3 0 "Bot"\n-5 999 "Joining"\n'
     assert parse(b"\xff\xff\xff\xffprint\nhi") is None and parse(b"garbage") is None
-    kind, kv, pings = parse(info)
-    assert kind == "info" and kv["humans"] == "17" and pings == []
-    kind, kv, pings = parse(status_packet)
-    assert kind == "status" and kv["gamename"] == "jaymod" and pings == [0, 48, 0, 999]
+    kind, kv, pings, names = parse(info)
+    assert kind == "info" and kv["humans"] == "17" and pings == names == []
+    kind, kv, pings, names = parse(status_packet)
+    assert kind == "status" and kv["gamename"] == "jaymod" and pings == [0, 48, 0, 999] and names == ["^o[BOT]^7Bean", "Pl ayer", "Bot", "Joining"]
+    lines = {"pings": [0, 48, 0, 0, 999, 0], "names": ["B1", "^1M^7e", "B2", "B3", "Joining", "Spec bot"]}
+    assert team_bots(dict(lines, status={"P": "1-21-2-03"}), ["me"]) == (1, True)  # own team 2: B3
+    assert team_bots(dict(lines, status={"P": "1-21-2-03"}), ["Other"]) == (3, False)  # not found: both teams
+    assert team_bots(dict(lines, status={"P": "1-31-2-03"}), ["ME"]) == (3, False)  # own player spectates
+    assert team_bots(dict(lines, status={"P": "1-21-2-0"}), ["Me"]) is None and team_bots(dict(lines, status={}), ["Me"]) is None
+    assert team_bots({"status": {"P": "21"}, "pings": [0, 0], "names": ["Host", "B"]}, ["host"]) == (0, True)  # local game: own ping 0, bot in the other team
 
     etl = summarize("192.0.2.1:27960", {"info": parse(info)[1], "status": {}, "pings": [0] * 5 + [50] * 14, "rtt": 48})
     assert (etl["playing"], etl["spec"], etl["bots"], etl["slots"], etl["mod"], etl["map"]) == (17, None, 2, 40, "nitmod", "radar")  # humans key wins over pings

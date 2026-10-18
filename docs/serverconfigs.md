@@ -40,6 +40,7 @@ All in `default/serverconfigs/`; only `default.cfg` and `servers.example.tsv` ar
 | `default.cfg` | you | normal value of everything a server cfg sets |
 | `current.cfg` | tool | execs `default.cfg` and the `<id>.cfg` of the server the game is on |
 | `current_vsay.cfg` | tool | puts that server's voice chat on `TAB` of the voice chat |
+| `current_bots.cfg` | tool | what `MODE` opens: dev mode or the bot class switch ([Bot class switch](#bot-class-switch)) |
 | `history.tsv` | tool | `<ip:port><TAB><server name><TAB><mod>` of the servers seen |
 | `packs.tsv` | tool | `<ip:port><TAB><file><TAB><pk3><TAB><date>`: the pk3 the game loaded each voice chat file from on that server ([Voice chat pk3s](#voice-chat-pk3s)) |
 
@@ -184,3 +185,9 @@ set chatServerGlobal "execq profile/serverconfigs/vsays/xy/override/global.cfg"
 - The sound restart (a short black screen) comes with the first event after the tool wrote, usually the map load. `F2` does it by hand.
 - Without the tool (`tools/serverconfig.py`, started by `./launcher.sh`) no server's settings apply: when it ends (Ctrl+C, the `SIGTERM` of `./launcher.sh`) it writes both files for "no server". Only a tool that is killed hard (`SIGKILL`, power loss) leaves the files of its last server, until it starts again. Tested on 2026-10-02 without a game: start with an old log and `SIGTERM` both wrote the "no server" files.
 - A failed write or query is reported and tried again with the pauses above; the tool keeps running.
+
+## Bot class switch
+
+`MODE` (`scripts/devmode.cfg`) opens the dev mode unless `current_bots.cfg` says otherwise, so it works without the tool too. On a local game or without a server the file is empty: dev mode (cheats, location editor, bot class switch on page 3). On a server, where cheats don't work, it opens the bot class switch alone (`devmode/bots.cfg`) while omni-bots play in your team, with their number in its title (`botModeHead`; "on the server" when your line isn't found, below), else it only echoes that there are none (error sound). The switch asks for the class a bot has now, then for the class it should take (`devmode/bots_<class>.cfg`), and sends `say_teamnl <from> <to>` (e.g. `sol eng`): omni-bot switches one bot of that class at its next spawn. The choice closes the bot class switch; in the dev mode it goes back to page 3. The text must be exactly these 7 plain characters, so it gets no colors (`tools/vsaycolors.py` skips it).
+
+`tools/serverconfig.py` asks the server for its status every 10 seconds (`getstatus`, `serverapi.team_bots`): the player lines come in slot order and the slot string `P` holds each slot's team, so every line gets its team; bots have ping 0. Your line is found by the names in `user.cfg` and `etconfig.cfg`; if it isn't (a name the server changed), bots of both teams count. While a player joins or leaves, lines and `P` differ for a moment and the file stays as it was.
