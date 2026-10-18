@@ -8,6 +8,7 @@ All Python tools are standard library only and read the game paths from `setting
   - [dumps/](#dumps)
   - [locations/](#locations)
   - [decompile/](#decompile)
+  - [cpspawns/](#cpspawns)
   - [omnibot/, maps/](#omnibot-maps)
 
 
@@ -32,6 +33,10 @@ Requirements: Python 3.9+, standard library only; the scripts run from any worki
 `decompile.sh <binary> <func,func,...> <out.c>`: decompiles named functions of a mod binary with Ghidra headless (`DecompileFunctions.java` is its script). The binary needs symbols (nitmod has them). Output convention: `decompile/<mod>_<version>/decompiled/<binary>_<topic>.c`, one `// ==== <name>` header per function.
 
 Requirements: Ghidra and its JDK (Ghidra 11 and newer: JDK 21), found through `GHIDRA_HOME`, else the install folder of `ghidra` on `PATH`; runs outside the sandbox because Ghidra writes its settings to `~/.config/ghidra`.
+
+## cpspawns/
+
+`cpspawns.py [--all] [map ...]`: spawnpoints a command post opens, per team, from the map scripts of the map pk3s and legacy's replacement scripts. The chain starts at every event with `sethqstatus <team> 1` and every event that triggers one (a constructible's `built final`), and follows `trigger`, `trigger_if_*` and `alertentity` to `setstate <objective> default` or spawn spots without STARTACTIVE. The team comes from the entity and event names (`axis`, `allied`/`allies`), the `sethqstatus` number only without one: mappers copy it wrongly (stock radar). Prints map, team, objective, check and chain of the CP spawns whose name has neither `CP` nor `Command Post` in it (`--all`: every CP spawn). `check` names why a hit may be wrong (objective guessed from the spots' position, `alertentity` that may turn spots off, a chain through a flag capture, `force` or `detonator` event); hits with an empty `check` get a `// spawnname:<team>` line in their map autoexec (without the team when both teams have it) (`tools/spawnpoints/`), the others need a look at the script. It finds about three in four CP spawns (measured on the spawns with `CP` in their name); a spawn opened outside the chain is not found, and maps without a script in their pk3 are listed as `no script`.
 
 ## omnibot/, maps/
 

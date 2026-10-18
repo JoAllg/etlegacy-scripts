@@ -11,8 +11,12 @@ setspawnpt 3 = Allied Entrance, closest axis spot is in the west tunnel room).
 Per team: spots are grouped into rooms, each room belongs to the objective closest to it. A room is
 selectable when it holds the closest spot for some N (the room's own objective preferred). Spots are taken
 as all enabled, so the entry is the first choice while that room is active; the others are listed as a comment.
+Entries follow the objective order (setspawnpt N, the game's limbo order); objectives of one name are kept together.
 Labels: the objective description in Title Case, _ as space (helpers.common fix_name), plus the room's location name
-when an objective has several selectable rooms. Location: nearest entry of default/maps/<map>_loc_override.dat, else of a pk3's
+when an objective has several selectable rooms. A "// spawnname[:axis|:allies] <description> = <name>" line in the
+settings block of the map's autoexec replaces that objective's description in that team's menu and announcement (no team:
+both), e.g. "(CP)" for a spawn only a command post opens (research/cpspawns/cpspawns.py); the template's are not taken over.
+Location: nearest entry of default/maps/<map>_loc_override.dat, else of a pk3's
 maps/<map>_loc_override.dat or _loc.dat, else target_location entities; coordinates if none within LOC_RANGE.
 Each file defines its own menu (spawnpsr/-psb: echo list + binds of exactly its keys), so a previous map's
 spawnpoints are on no key and no generic list has to be exec'd first.
@@ -55,6 +59,7 @@ KEYS = [*"1234567890", "US_MINUS", "US_EQUALS"]
 MENU_NOTE = "// - spawnpsr/-psb bind only this map's keys: spawnpoints left over from the previous map are on no key"
 OWN_BONUS = 256        # see menu()
 TEAMS = (("r", "team_ctf_redspawn", MENU["axis"], 1), ("b", "team_ctf_bluespawn", MENU["allies"], 2))  # color of the spawn name, objective spawnflag of the team
+SPAWNNAME = re.compile(r"//\s*spawnname(?::(axis|allies))?\s+(.+?)\s*=\s*(.+?)\s*$", re.I)  # settings block: own name of a spawn in menu and announcement
 
 
 def entities(bsp):
@@ -164,9 +169,25 @@ def location(locs, point):
     return " ".join(str(round(c)) for c in point)
 
 
-def analyse(ents, locs):
-    """{team letter: ([(N, label, objective description)], [objective description of each unselectable room])}, None if the map has no spawn objectives."""
-    objs = [e for e in ents if e.get("classname", "").lower() == "team_wolf_objective"]
+def spawnnames(settings):
+    """{(team or None, description lowercased): name} of the "// spawnname[:axis|:allies] <description> = <name>" lines
+    of the settings block; without a team for both."""
+    return {((m[1] or "").lower() or None, m[2].lower()): label(m[3]) for m in map(SPAWNNAME.match, settings) if m}
+
+
+def objectives(ents):
+    return [e for e in ents if e.get("classname", "").lower() == "team_wolf_objective"]
+
+
+def description(objs, o):
+    """Name of the o-th objective as the game's limbo menu shows it."""
+    return fix_name(label(objs[o].get("description", "").replace("_", " "))) or f"Spawn {o + 1}"
+
+
+def analyse(ents, locs, names={}):
+    """{team letter: ([(N, label, objective description)], [objective description of each unselectable room])}, None if the map has no spawn objectives.
+    names: spawnnames(), replace descriptions (the team's own line first)."""
+    objs = objectives(ents)
     origins = [vec(e.get("origin", "")) or (0.0, 0.0, 0.0) for e in objs]
     if not objs:
         return None
@@ -181,10 +202,16 @@ def analyse(ents, locs):
             continue
         chosen, missed = menu(origins, spots, {i for i, e in enumerate(objs) if int(e.get("spawnflags", "0") or 0) & flag})
         owners = [o for _, o, _ in chosen]
-        desc = lambda o: fix_name(label(objs[o].get("description", "").replace("_", " "))) or f"Spawn {o + 1}"
+        own = "axis" if team == "r" else "allies"
+        desc = lambda o: names.get((own, description(objs, o).lower())) or names.get((None, description(objs, o).lower()), description(objs, o))
         labels = [f"{desc(o)} - {location(locs, centre(g))}" if owners.count(o) > 1 else desc(o) for _, o, g in chosen]
         labels = disambiguate(labels, [centre(g) for _, _, g in chosen])
-        result[team] = ([(n, label, desc(o)) for (n, o, _), label in zip(chosen, labels)][:MAX_ENTRIES - 1],
+        entries = [(n, label, desc(o)) for (n, o, _), label in zip(chosen, labels)]
+        first = {}
+        for i, (_, _, d) in enumerate(entries):
+            first.setdefault(d, i)
+        entries.sort(key=lambda e: first[e[2]])  # objectives of one name next to each other, else in the game's order
+        result[team] = (entries[:MAX_ENTRIES - 1],
                         list(dict.fromkeys(desc(o) for o, _ in missed)))
     return result
 
@@ -243,7 +270,8 @@ def parts(own, template):
         says = [i for i, l in enumerate(lines) if re.match(r"\s*set\s+spawnsay", l)]
         ends = [i for i, l in enumerate(lines) if l.startswith("// Spawnpoints")]
         if "// Settings" in lines and ends and says:
-            settings = lines[lines.index("// Settings") + 1:ends[0]]
+            settings = [line for line in lines[lines.index("// Settings") + 1:ends[0]]
+                        if lines is own or not SPAWNNAME.match(line)]  # spawn names belong to their map only
             return with_map_color(settings, map_color(own)) or with_map_color(settings, None), lines[says[-1] + 1:]
     sys.exit(f"{TEMPLATE} lacks the // Settings, // Spawnpoints or spawnsay lines")
 
@@ -253,11 +281,10 @@ def menu_line(team, count):
     return f'set spawnps{team:<5}"vstr echosp{team}; ' + "; ".join(f"bind {KEYS[k]} vstr spawnp{k}{team}" for k in range(count)) + '"'
 
 
-def render(mapname, title, pk3name, result):
+def render(title, pk3name, result, settings, tail):
     head = [f"Map name       {title}", "Generated by   Taranis with https://github.com/JoAllg/etlegacy-scripts/blob/main/tools/spawnpoints/spawnpoints.py", f"From           {clean(pk3name)}",
             f"Last edited    {date.today():%d.%m.%Y}"]
     width = max(59, *map(len, head))
-    settings, tail = template_parts(mapname)
     lines = ["/" * (width + 6), *(f"// {h:<{width}} //" for h in head), "/" * (width + 6), "",
              "// Settings", *settings]
     says = {"Default Spawn": 0}  # one per objective: rooms of one objective announce the same spawnpoint
@@ -311,6 +338,18 @@ def selftest():
     assert parts(stub, full)[0][:2] == ["exec autoexec_mod.cfg", "vstr crosshairColorCyan" + common.MAP_COLOR_NOTE]  # the stub's color, the template's settings
     assert parts([], full) == (["exec autoexec_mod.cfg", ""], ["echo end"])  # the template's color stays there
     assert parts(full, [])[0] == ["exec autoexec_mod.cfg", "vstr crosshairColorRed" + common.MAP_COLOR_NOTE, ""]
+    named = ["// Settings", "set spawnSelectorMap x", "// spawnname backspawn = Backspawn (CP)", "// Spawnpoints", "set spawnsay0 a"]
+    assert spawnnames(parts(named, [])[0]) == {(None, "backspawn"): "Backspawn (CP)"}
+    assert spawnnames(["// spawnname:Allies Axis East = Axis East (CP)"]) == {("allies", "axis east"): "Axis East (CP)"}
+    assert spawnnames(parts([], named)[0]) == {}  # not from the template
+    ents = [{"classname": "team_WOLF_objective", "description": "back_spawn", "origin": "0 0 0"},
+            {"classname": "team_CTF_redspawn", "spawnflags": "2", "origin": "8 0 0"}]
+    assert analyse(ents, [], {(None, "back spawn"): "Back Spawn (CP)"})["r"][0] == [(1, "Back Spawn (CP)", "Back Spawn (CP)")]
+    assert analyse(ents, [], {("allies", "back spawn"): "Back Spawn (CP)"})["r"][0] == [(1, "Back Spawn", "Back Spawn")]
+    twins = [{"classname": "team_WOLF_objective", "description": d, "spawnflags": "1", "origin": o}
+             for d, o in (("Barracks", "0 0 0"), ("Hut", "2000 0 0"), ("Barracks", "0 2000 0"))]
+    twins += [{"classname": "team_CTF_redspawn", "spawnflags": "2", "origin": o} for o in ("8 0 0", "2008 0 0", "8 2000 0")]
+    assert [(n, l) for n, l, _ in analyse(twins, [])["r"][0]] == [(1, "Barracks (south)"), (3, "Barracks (north)"), (2, "Hut")]
     assert stamp(Path(__file__).with_name("missing")) is None and read_cache(["other generator"]) == {}
     print("selftest ok")
 
@@ -344,10 +383,15 @@ def generate(mapname, pk3, loc_text, path):
     else:
         loc = [(vec(e["origin"]), label(e.get("message", ""))) for e in ents
                if e.get("classname", "").lower() == "target_location" and vec(e.get("origin", ""))]
-    result = analyse(ents, loc)
+    settings, tail = template_parts(mapname)
+    names = spawnnames(settings)
+    known = {description(objectives(ents), o).lower() for o in range(len(objectives(ents)))}
+    for _, name in {k for k in names if k[1] not in known}:
+        print(f"{mapname}: spawnname '{name}' matches no spawn objective", file=sys.stderr)
+    result = analyse(ents, loc, names)
     if result is None or not any(result[t][0] for t, *_ in TEAMS):
         return None
-    new = render(mapname, title, pk3.name, result)
+    new = render(title, pk3.name, result, settings, tail)
     old = path.read_text(encoding="latin1") if path.exists() else None
     if old is not None and undated(old) == undated(new):
         return None

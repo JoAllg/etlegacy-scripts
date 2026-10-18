@@ -39,6 +39,9 @@ research/omnibot/*
 !research/maps/
 research/maps/*
 !research/maps/download.py
+!research/cpspawns/
+research/cpspawns/*
+!research/cpspawns/cpspawns.py
 TODO.md
 
 .claude/settings.local.json
