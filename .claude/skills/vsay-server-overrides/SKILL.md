@@ -36,7 +36,7 @@ Don't read any override file in this step.
 - Stock vsays: the pages `default/scripts/vsays/chat/*.cfg` without `*_shortcuts.cfg` (Fireteam pages only if chosen in step 1), the class vsays of `chat.cfg` (`vsay<Class>`) and the vsays of the other cfgs in `default/scripts/vsays/` (e.g. `vsays_custom.cfg`). Never `chat_shortcuts.cfg` (its texts are the stock text on nitmod/etps, see above) or `chat_function.cfg` (not live). Ids and meanings: `default/scripts/vsays/README.MD`.
 - Mod of the server: the mod column of the id's row in `default/serverconfigs/servers.tsv`; if empty, the mod in `default/serverconfigs/history.tsv` of the row's addresses, else `cd tools && python3 -m helpers.serverapi <address>` (needs the network: outside the sandbox). nitmod/etps: the shortcut texts apply.
 - For each stock key, the server sounds whose meaning fits it (greeting for Hi, "Nein!" for No, "Run!" for Move, ...). Judge the sound by its text; a joke that still says the same thing fits.
-- Class vsays of `vsays_custom.cfg` (`vsayGrenade`, `vsaySatchel`, ...) inform the teammates of what the class script just did: only sounds that name that action unmistakably (grenade, dynamite, satchel, airstrike, ...). A sound that hides it ("Surprise!", "Say hello to my little friend!") is no candidate, however well it fits the mood.
+- Class vsays of `vsays_custom.cfg` (`vsayGrenade`, `vsayDynamiteCoverMe`, ...) inform the teammates of what the class script just did: only sounds that name that action unmistakably (grenade, dynamite, revive, undercover, ...). A sound that hides it ("Surprise!", "Say hello to my little friend!") is no candidate, however well it fits the mood.
 
 ## 4. Existing choices
 
