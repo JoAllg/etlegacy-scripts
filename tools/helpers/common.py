@@ -193,10 +193,11 @@ SERVER_COPY = ("_cslhd", "_leo")
 
 
 def rank(pk3, compiled):
-    """Newest compiled bsp first; same bsp: a "fix" in the name, the original over a server
-    re-pack, then the newest file in the pk3 (fixed versions usually only change scripts or textures)."""
+    """A pk3 with one map over a map collection (z_maps3.pk3: bsp without script), then the newest compiled bsp;
+    same bsp: a "fix" in the name, the original over a server re-pack, then the newest file in the pk3 (fixed
+    versions usually only change scripts or textures)."""
     name = pk3.stem.lower()
     server_copy = name.endswith(SERVER_COPY) or name[:1] in "~`"
     with zipfile.ZipFile(pk3) as z:
         newest = max(i.date_time for i in z.infolist())
-    return compiled, "fix" in name, not server_copy, newest
+    return len(maps(pk3) or {}) == 1, compiled, "fix" in name, not server_copy, newest

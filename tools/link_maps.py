@@ -8,7 +8,7 @@ local server started from the menu sees just pak0-2.
 Skipped: pk3s without a map, pk3s containing a stock map or a map already provided by a real pk3
 in etmain/ (they would override it in every mod), and pk3s with a shader file that replaces a
 stock one with other content or breaks the shader parser (see shader_problem).
-Several pk3s with the same map: the newest wins, originals over server re-packs.
+Several pk3s with the same map: a single-map pk3 over a map collection, then the newest, originals over server re-packs.
 Rerunnable: all symlinks from etmain/ into dlcache/ are replaced.
 A pure server mounts every pk3 of etmain/ and dlcache/, each keeps a file open: if the pk3s after linking
 come near the open files soft limit ("Invalid game folder", docs/limitations.md), it asks before linking.
