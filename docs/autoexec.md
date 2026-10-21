@@ -44,7 +44,7 @@ Details for legacy (source-verified):
 - `F3` runs `vstr reloadDefinitions` (defined in `definitions.cfg`), so only the definitions and `user.cfg`. Toggles, class binds, team and brightness survive.
 - `F1` runs `exec autoexec.cfg`: full reset of the state.
 - Both end with `vstr serverForce`: the settings of the server the game is on override the chain ([Server configs](serverconfigs.md)). A server change itself is detected by `tools/serverconfig.py`, not by the scripts.
-- A mod switch goes through `autoexec.cfg` as well, so it resets state.
+- A mod switch goes through `autoexec.cfg` as well, so it resets state, except the chat toggles (server say, class report, spawn report, class vsays): only game start and `F1` reset those.
 - `F3` keeps the state of every toggle and cycle and resets only the class toggles (`resetToggles`, `.claude/rules/exec-chain.md`).
 
 ## How this repo uses them
