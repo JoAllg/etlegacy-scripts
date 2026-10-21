@@ -90,14 +90,16 @@ In-game test on 2026-10-18 (legacy, local host of de_dust): the map autoexec app
 
 The engine keeps every loaded sound by its file name until `snd_restart` (`src/client/snd_dma.c` `S_FindName`, `S_Base_BeginRegistration`), also across servers. Vsay packs of different servers use the same names (`sound/chat/allies/21c.wav`), so after a server change the voices of the last server's pack play, even on a pure server that doesn't load that pack. `vid_restart` keeps the cache; `snd_restart` empties it and runs `vid_restart` itself (`src/client/cl_main.c` `CL_Snd_Restart_f`).
 
-**Workaround for an engine bug: remove it once ET: Legacy empties the sound cache itself** ([etlegacy PR #3639](https://github.com/etlegacy/etlegacy/pull/3639)). Then remove (keep the `which` part, [Voice chat pk3s](#voice-chat-pk3s)): the guard lines and `RESTART` in `tools/serverconfig.py` (`settings_cfg`, `write`, selftest), the `serverRestart*` lines in `default/state.cfg`, the `set serverRestartModSwitch ...;` part of `modIs_<mod>` in every `mods/<mod>/autoexec_mod.cfg`, this section and its mentions in `docs/limitations.md`, `tools/README.md`, `CLAUDE.md` and `.claude/rules/serverconfigs.md`.
+The restart runs at the first team join on a new server address, together with the `vid_restart` the team brightness needs anyway: `setBrightnessAxis`/`setBrightnessAllies` (`scripts/classcript.cfg`) run `snd_restart`, and the guard below runs `brightnessArm`, which arms both teams again, so the join restarts also into the same team as on the last server. Not on connect: a restart while the map loads stalls the client until the server's queue of unacknowledged commands overflows and it drops the client with `Server command overflow` (`src/server/sv_main.c` `SV_AddServerCommand`; console log of 2026-10-21, first join of a nitmod server). Until the first team join, a spectator hears the last server's sounds.
+
+**Workaround for an engine bug: remove it once ET: Legacy empties the sound cache itself** ([etlegacy PR #3639](https://github.com/etlegacy/etlegacy/pull/3639)). Then remove (keep the `which` part, [Voice chat pk3s](#voice-chat-pk3s)): `snd_restart` in `setBrightness<Team>` goes back to `vid_restart`, `brightnessArm` stays for `state.cfg`; the guard lines and `RESTART` in `tools/serverconfig.py` (`settings_cfg`, `write`, selftest), the `serverRestart*` lines in `default/state.cfg`, the `set serverRestartModSwitch ...;` part of `modIs_<mod>` in every `mods/<mod>/autoexec_mod.cfg`, this section and its mentions in `docs/limitations.md`, `tools/README.md`, `CLAUDE.md` and `.claude/rules/serverconfigs.md`.
 
 `current.cfg` therefore ends with a second guard of the same kind, for the address instead of the id:
 
 ```
 // Address: 192.0.2.1:27960 b
 set serverRestartAdopt "set serverRestartLast vstr serverRestart_b; which ui/wm_quickmessageAlt.menu; which scripts/wm_allies_chat.voice; which scripts/wm_axis_chat.voice"
-set serverRestart "vstr serverRestartAdopt; snd_restart"
+set serverRestart "vstr serverRestartAdopt; vstr brightnessArm"
 set serverRestart_b "vstr null"
 vstr serverRestartLast
 set serverRestart_b "vstr serverRestart"
@@ -125,7 +127,7 @@ set serverRestartModSwitch "vstr null"
 |---|---|---|
 | game start | not defined yet: nothing | takes the key, no restart (no sounds loaded yet) |
 | `F1` | `vstr null` | takes the key, no restart (the sounds are of this server) |
-| mod switch | arms the restart | `snd_restart` |
+| mod switch | arms the restart | `brightnessArm` |
 
 A mod switch only restarts the file system (`src/qcommon/files.c` `FS_ConditionalRestart`), so the last mod's sounds stay. The mod switch guard of every `mods/<mod>/autoexec_mod.cfg` ([Autoexec behavior](autoexec.md)) sets the flag before it execs `autoexec.cfg`:
 
@@ -133,7 +135,7 @@ A mod switch only restarts the file system (`src/qcommon/files.c` `FS_Conditiona
 set modIs_nitmod "set serverRestartModSwitch set serverRestartLast vstr serverRestart; exec autoexec.cfg"
 ```
 
-`modIs_<mod>` runs only on a mod switch (`modLast` holds the alias of the mod whose `autoexec.cfg` ran last, the current mod's own alias is `vstr null`), never on `F1` or game start, which exec `autoexec.cfg` directly. `state.cfg` then runs the flag, which arms the restart, and `vstr serverForce` at the end of `autoexec.cfg` restarts. A new mod folder copies this line from `mods/example/autoexec_mod.cfg`. jaymod runs no map autoexecs and has no `autoexec_mod.cfg`: a switch to jaymod does not restart, `F2` does it by hand.
+`modIs_<mod>` runs only on a mod switch (`modLast` holds the alias of the mod whose `autoexec.cfg` ran last, the current mod's own alias is `vstr null`), never on `F1` or game start, which exec `autoexec.cfg` directly. `state.cfg` then runs the flag, which arms the restart, and `vstr serverForce` at the end of `autoexec.cfg` runs `brightnessArm` (`state.cfg` already armed both teams, so the next team join restarts either way). A new mod folder copies this line from `mods/example/autoexec_mod.cfg`. jaymod runs no map autoexecs and has no `autoexec_mod.cfg`: a switch to jaymod does not restart, `F2` does it by hand.
 
 `F3` and `autoexec.cfg` (game start, mod switch, `F1`) overwrite the server's values with the definitions, so both end with `vstr serverForce`, which applies `current.cfg` regardless of the guard.
 

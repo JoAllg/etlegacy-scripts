@@ -12,8 +12,8 @@ only while a game runs (profile.pid), and the tool leaves the files for "no serv
 without it applies no server's settings. Written to default/serverconfigs/:
 - current.cfg: execs default.cfg, then <id>.cfg if the id has one. Its guard applies them only when another id was
   applied last, so the game execs it on many events (map load, team and class change, voice chat) and catches up
-  whenever this tool was slower than the game. A second guard runs snd_restart once after every change of the
-  address: the engine keeps loaded sounds by file name across servers (src/client/snd_dma.c S_FindName), so the vsay
+  whenever this tool was slower than the game. A second guard arms the snd_restart of the next team join
+  (brightnessArm, scripts/classcript.cfg) once after every change of the address: the engine keeps loaded sounds by file name across servers (src/client/snd_dma.c S_FindName), so the vsay
   sounds of the last server's packs would play on the next one where both use the same names. The same guard runs
   "which" for the voice chat files: the pk3s they come from on that server (the pure server's versions) go into
   packs.tsv (address, file, pk3 relative to fs_homepath or "" for none, date), read by tools/voicemenu.py --find.
@@ -138,9 +138,11 @@ def settings_cfg(server, address="-", key="a"):
     """current.cfg of a settings id. serverLast runs the alias of the id applied last, which is null while this file
     runs if that is this id; else it applies. scripts set serverLast to "vstr serverApply" to force it (serverForce).
     execq: a key press can apply them (class key, voice chat), which prints no "execing" line.
-    The same guard with two keys that swap on every new address runs snd_restart once per server (one alias per
-    address would fill MAX_CVARS); serverRestartLast starts as "vstr serverRestartAdopt" (state.cfg): the first server
-    after game start takes the key without a restart, its sounds are fresh. Taking the key also asks the game which pk3
+    The same guard with two keys that swap on every new address arms the snd_restart of the next team join once per
+    server (one alias per address would fill MAX_CVARS); not snd_restart itself: on connect it stalls the client while
+    the map loads, until the server drops it (Server command overflow). serverRestartLast starts as
+    "vstr serverRestartAdopt" (state.cfg): the first server after game start takes the key without arming, its sounds
+    are fresh. Taking the key also asks the game which pk3
     the voice chat files come from (which: the pk3s the server allows), see on_which()."""
     own = "" if server == "default" else f"execq {EXEC}/{server}.cfg; "
     return "\n".join([
@@ -151,7 +153,7 @@ def settings_cfg(server, address="-", key="a"):
         f'set serverIs_{server} "vstr serverApply"',
         f"// Address: {address} {key}",
         f'set serverRestartAdopt "set serverRestartLast vstr serverRestart_{key}; {"; ".join(f"which {p}" for p in PACK_FILES)}"',
-        'set serverRestart "vstr serverRestartAdopt; snd_restart"',
+        'set serverRestart "vstr serverRestartAdopt; vstr brightnessArm"',
         f'set serverRestart_{key} "vstr null"',
         "vstr serverRestartLast",
         f'set serverRestart_{key} "vstr serverRestart"',
@@ -444,7 +446,7 @@ def selftest():
     assert xy[2:5] == ['set serverIs_xy "vstr null"', "vstr serverLast", 'set serverIs_xy "vstr serverApply"']
     assert xy[5:] == ["// Address: - a", 'set serverRestartAdopt "set serverRestartLast vstr serverRestart_a; which ui/wm_quickmessageAlt.menu; '
                                              'which scripts/wm_allies_chat.voice; which scripts/wm_axis_chat.voice"',
-                      'set serverRestart "vstr serverRestartAdopt; snd_restart"', 'set serverRestart_a "vstr null"',
+                      'set serverRestart "vstr serverRestartAdopt; vstr brightnessArm"', 'set serverRestart_a "vstr null"',
                       "vstr serverRestartLast", 'set serverRestart_a "vstr serverRestart"', 'echo "^5Server: xy -"']
     assert f'set serverApply "execq {EXEC}/default.cfg; set serverLast vstr serverIs_default"' in settings_cfg("default")
     assert vsay_cfg(None, None).count("\n") == 1 and vsay_cfg(None, None).startswith("//")
