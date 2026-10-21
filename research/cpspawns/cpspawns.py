@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Spawnpoints that a command post turns on, from the map scripts of the map pk3s (and legacy's replacement scripts).
 
+Purpose: find most CP spawns whose name doesn't say so, to give them a "(CP)" hint in the spawn menu through a
+"// spawnname[:axis|:allies] <description> = <name> (CP)" line in default/autoexecs/autoexec_<map>.cfg
+(tools/spawnpoints/spawnpoints.py). Spawns named "CP" or "Command Post" need no hint and are skipped.
+
 A CP is built where a script event runs "sethqstatus <team> 1". Its team comes from the names of that event, its
 entity and their callers ("axis", "allied"/"allies"): mappers copy the number wrongly (stock radar: "sethqstatus 0 1" for
 the allied CP); the number (0 axis, 1 allies) only without a name. From every such event, and every event that triggers
